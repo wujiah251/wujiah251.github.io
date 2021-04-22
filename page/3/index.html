@@ -160,6 +160,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/07/MySQL%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/07/MySQL%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" class="post-title-link" itemprop="url">MySQL体系结构和存储引擎</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-07 18:55:00" itemprop="dateCreated datePublished" datetime="2021-03-07T18:55:00+08:00">2021-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MySQL体系结构"><a href="#MySQL体系结构" class="headerlink" title="MySQL体系结构"></a>MySQL体系结构</h1><p>首先我们需要理解一点，MySQL既是数据库也是数据库实例，前者强调数据库是很多文件的集合，后者指的是一个程序，是位于用户和操作系统之间的一层数据库管理软件，用户对数据库的任何操作，包括数据库定义、数据查询、数据维护、数据库运行控制等都是在数据库实例下进行。  </p>
+<p>MySQL由以下部分组成：  </p>
+<ol>
+<li>连接池组件；  </li>
+<li>管理服务和工具组件；  </li>
+<li>SQL接口组件；  </li>
+<li>查询和分析器组件；  </li>
+<li>优化器组件；  </li>
+<li>缓冲（Cache）组件；  </li>
+<li>插件式存储引擎；  </li>
+<li>物理文件。  </li>
+</ol>
+<h1 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h1><h2 id="InnoDB存储引擎"><a href="#InnoDB存储引擎" class="headerlink" title="InnoDB存储引擎"></a>InnoDB存储引擎</h2><p>InnoDB存储引擎支持事务，其设计目标主要是面向在线事务处理的应用，其特点是行锁设计、支持外键。<br>InnoDB存储引擎讲数据放在一个逻辑的表空间种，这个表空间就像黑盒一样由InnoDB自身进行管理。<br>InnoDB通过使用MVCC（多版本并发控制）来获得高并发性。并实现了SQL标准的4种隔离级别，默认为可重复读（REPEATABLE）级别。<br>对于表中数据的存储，InnoDB采用了聚集（clustered）的方式，按照主键的顺序存放。</p>
+<h2 id="MyISAM存储引擎"><a href="#MyISAM存储引擎" class="headerlink" title="MyISAM存储引擎"></a>MyISAM存储引擎</h2><p>MyISAM存储引擎不支持事务、表锁设计，支持全文索引。MyISAM一个与众不同的地方是它的缓冲池只缓存（cache）索引文件，而不缓冲数据文件。<br>MyISAM存储引擎表由MYD和MYI组成，MYD用来存放数据文件，MYI用来存放索引文件。</p>
+<h2 id="Memory存储引擎"><a href="#Memory存储引擎" class="headerlink" title="Memory存储引擎"></a>Memory存储引擎</h2><p>Memory存储引擎将表中的数据存放在内存种，如果数据库重启或发生崩溃，表中的数据都将消失。它非常适合用于存储临时数据的临时表。Memory存储引擎默认使用哈希索引，而不是我们熟知的B+树。<br>由于数据全部存放在内存种，所以Memory速度非常快，但是在使用上还是有一定的限制。比如，只支持表锁，并发性能较差，并且不支持TEXT和BLOB列类型。最重要的是，存储变长字段（varchar）是按照定常字段的方式进行的，会浪费内存。<br>MySQL使用Memory存储引擎作为临时表存放查询的中间结果集。但是如果这个规模超过了Memory的最大容量，泽会把其转换为MyISAM存储引擎表而存放在磁盘中，这会损失查询性能。  </p>
+<h1 id="连接MySQL"><a href="#连接MySQL" class="headerlink" title="连接MySQL"></a>连接MySQL</h1><p>连接MySQL操作时一个连接进程和MySQL数据库实例进行通信。从程序设计的角度看，本质上时进程通信。所以通信方式也有TCP/IP、命名管道、共享内存、UNIX域套接字的办法。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/06/lab1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -951,134 +1040,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E9%94%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/25/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E9%94%81/" class="post-title-link" itemprop="url">MySQL事务隔离级别和锁</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-25 17:36:00" itemprop="dateCreated datePublished" datetime="2021-02-25T17:36:00+08:00">2021-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h1><ol>
-<li>可串行化；  </li>
-<li>可重复读，只允许读取已提交数据，而且在一个事务两次读取同一数据之间，其他事务不能更新该数据；    </li>
-<li>已提交读，只允许读取已经提交的数据；  </li>
-<li>未提交读，允许读取未提交的数据。  </li>
-</ol>
-<p>以上隔离性级别都不允许脏写，即如果一个数据项已经被另一个尚未提交或终止的事务写入，则不允许对该数据项执行写操作。  </p>
-<table>
-<tr>
-    <th>隔离级别</th>
-    <th>脏读</th>
-    <th>不可重复读</th>
-    <th>幻读</th>
-</tr>
-<tr>
-    <td>未提交读</td>
-    <td>可能</td>
-    <td>可能</td>
-    <td>可能</td>
-</tr>
-<tr>
-    <td>已提交读</td>
-    <td>不可能</td>
-    <td>可能</td>
-    <td>可能</td>
-</tr>
-<tr>
-    <td>可重复读</td>
-    <td>不可能</td>
-    <td>不可能</td>
-    <td>可能</td>
-</tr>
-<tr>
-    <td>可串行化</td>
-    <td>不可能</td>
-    <td>不可能</td>
-    <td>不可能</td>
-</tr>
-</table>
-
-
-<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><p>DBMS中的并发控制的任务是确保在多个事务同时存取数据库中统一数据时不破坏事务的隔离性和一致性。常见的控制手段是乐观并发控制（乐观锁）和悲观并发控制（悲观锁）。  </p>
-<h2 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h2><p>假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。<br>使用方法：  </p>
-<ol>
-<li>对任意数据进行修改时，先尝试为该记录加上排他锁。  </li>
-<li>如果加锁失败就说明该记录正在被修改，等待锁被释放。  </li>
-<li>成功加锁后就可以对记录做修改，事务完成后就会解锁。  </li>
-</ol>
-<p>悲观锁适用于数据竞争激烈的环境，以及发生并发冲突时使用锁保护数据的成本低于回滚事务的成本的环境中。</p>
-<h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>假定不会发生并发冲突，只在提交操作时检查是否违反了数据完整性。在提交数据更新之前，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据。如果其他事务有更新的话，正在提交的事务会进行回滚。<br>使用方法：  </p>
-<ol>
-<li>在对数据库进行处理的时候，乐观锁并不会使用数据库提供的锁机制。一般的实现乐观锁的方式就是记录数据版本。  </li>
-<li>数据版本,为数据增加的一个版本标识。当读取数据时，将版本标识的值一同读出，数据每更新一次，同时对版本标识进行更新。</li>
-<li>当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的版本标识进行比对，如果数据库表当前版本号与第一次取出来的版本标识值相等，则予以更新，否则认为是过期数据。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1148,14 +1109,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">112</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

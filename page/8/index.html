@@ -160,6 +160,104 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E5%88%9B%E5%BB%BA%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/28/%E5%88%9B%E5%BB%BA%E8%A1%A8/" class="post-title-link" itemprop="url">创建表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-28 11:14:44" itemprop="dateCreated datePublished" datetime="2021-01-28T11:14:44+08:00">2021-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h1><h2 id="创建表基础"><a href="#创建表基础" class="headerlink" title="创建表基础"></a>创建表基础</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table customers(</span><br><span class="line">   -&gt; cust_id		int			NOT NULL AUTO_INCREMENT,</span><br><span class="line">   -&gt; cust_name		char(50)	NOT NULL ,</span><br><span class="line">   -&gt; cust_address	char(50)	NULL,</span><br><span class="line">   -&gt; cust_city		char(50)	NULL,</span><br><span class="line">   -&gt; cust_state	char(5)		NULL,</span><br><span class="line">   -&gt; cust_zip		char(10)	NULL,</span><br><span class="line">   -&gt; cust_country	char(50)	NULL,</span><br><span class="line">   -&gt; cust_contact	char(50)	NULL,</span><br><span class="line">   -&gt; cust_email	char(255)	NULL,</span><br><span class="line">   -&gt; PRIMARY KEY (cust_id)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用NULL值"><a href="#使用NULL值" class="headerlink" title="使用NULL值"></a>使用NULL值</h2><p>NULL值就是没有值或缺值，运行NULL值得列也允许在插入行时，不给出该列得值。</p>
+<h2 id="主键介绍"><a href="#主键介绍" class="headerlink" title="主键介绍"></a>主键介绍</h2><p>表中每个行都必须具有唯一的主键值。主键用下列语句定义：<br><code>PRIMARY KEY (vend_id)</code><br>当然也可以用多个作为主键，举例：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table orderitems(</span><br><span class="line">   -&gt; order_num		int		   NOT NULL ,</span><br><span class="line">   -&gt; order_item	   int		   NOT NULL ,</span><br><span class="line">   -&gt; prod_id		  char(10)      NOT NULL ,</span><br><span class="line">   -&gt; quantity		 int		   NOT NULL ,</span><br><span class="line">   -&gt; item_price	   decimal(8,2)  NOT NULL ,</span><br><span class="line">   -&gt; PRIMARY KEY (order_num, order_item)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用AUTO-INCREMENT"><a href="#使用AUTO-INCREMENT" class="headerlink" title="使用AUTO_INCREMENT"></a>使用AUTO_INCREMENT</h2><p><code>AUTO_INCREMENT</code>告诉MySQL，本列每当增加一行时自动增量。每次执行一个INSERT操作时，MySQL自动对该列增量。</p>
+<h2 id="指定默认值"><a href="#指定默认值" class="headerlink" title="指定默认值"></a>指定默认值</h2><p>如果在插入行时没有给出值，MySQL允许使用默认值，默认值用CREATE TABLE语句得列定义中的DEFAULT关键字指定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table orderitems(</span><br><span class="line">   -&gt; order_num		int		   NOT NULL ,</span><br><span class="line">   -&gt; order_item	   int		   NOT NULL ,</span><br><span class="line">   -&gt; prod_id		  char(10)      NOT NULL ,</span><br><span class="line">   -&gt; quantity		 int		   NOT NULL DEFAULT 1,</span><br><span class="line">   -&gt; item_price	   decimal(8,2)  NOT NULL ,</span><br><span class="line">   -&gt; PRIMARY KEY (order_num, order_item)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
+
+<h2 id="引擎类型"><a href="#引擎类型" class="headerlink" title="引擎类型"></a>引擎类型</h2><p>MySQL（其他DBMS也一样）有一个具体管理和处理数据的内部引擎。在你使用<code>create table</code>语句时，该引擎具体创建表，而在你使用select或进行其他数据库处理时，该引擎在内部处理你的请求。以下几个是需要知道的引擎：  </p>
+<ul>
+<li>InnoDB是一个可靠的事务处理引擎，它不支持全文本搜索。  </li>
+<li>MEMORY在功能商等同于MyISAM，但由于数据存储在内存中，速度很快。  </li>
+<li>MyISAM是一个性能极高的引擎，它支持全文本搜索，但不支持事务处理。  </li>
+</ul>
+<h1 id="更新表"><a href="#更新表" class="headerlink" title="更新表"></a>更新表</h1><p>为更新表定义，可使用ALTER TABLE语句（理想情况下表一旦被创建就不应该被更新）。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER TABLE vendors</span><br><span class="line">    -&gt; ADD vend_phone CHAR(20);</span><br></pre></td></tr></table></figure>
+
+<p>如果想删除刚刚添加的列：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER TABLE vendors </span><br><span class="line">    -&gt; DROP column vend_phone;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>ALTER TABLE的一种常见用途是定义外键。具体细节不做展开。</p>
+<h1 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h1><p>非常简单：<br><code>DROP TABLE customers2;</code></p>
+<h1 id="重命名表"><a href="#重命名表" class="headerlink" title="重命名表"></a>重命名表</h1><p>使用<code>RENAME TABLE</code>语句可以重新命名一张表：<br><code>RENAME TABLE customers2 TO customers;</code></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -965,91 +1063,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">使用数据处理函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 14:56:30" itemprop="dateCreated datePublished" datetime="2021-01-27T14:56:30+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="使用数据处理函数"><a href="#使用数据处理函数" class="headerlink" title="使用数据处理函数"></a>使用数据处理函数</h1><h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p>大多数SQL实现支持以下类型的函数。</p>
-<ul>
-<li>用于处理文本串  </li>
-<li>用于在数值数据上进行算术操作  </li>
-<li>用于处理日期和时间并从这些值中提取特定成分的日期和时间函数  </li>
-<li>返回DBMS正在使用的特殊信息的系统函数</li>
-</ul>
-<h3 id="文本处理函数"><a href="#文本处理函数" class="headerlink" title="文本处理函数"></a>文本处理函数</h3><p>使用Upper()将文本转换为大写。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_name, upper(vend_name) as vend_name_upcase</span><br><span class="line">    -&gt; from vendors order by vend_name;</span><br><span class="line">+----------------+------------------+</span><br><span class="line">| vend_name      | vend_name_upcase |</span><br><span class="line">+----------------+------------------+</span><br><span class="line">| ACME           | ACME             |</span><br><span class="line">| Anvils R Us    | ANVILS R US      |</span><br><span class="line">| Furball Inc.   | FURBALL INC.     |</span><br><span class="line">| Jet Set        | JET SET          |</span><br><span class="line">| Jouets Et Ours | JOUETS ET OURS   |</span><br><span class="line">| LT Supplies    | LT SUPPLIES      |</span><br><span class="line">+----------------+------------------+</span><br></pre></td></tr></table></figure>
-<p>常用的文本处理函数有<code>Left()</code>、<code>Length()</code>等等，具体使用查阅相关资料。</p>
-<h3 id="日期和时间处理函数"><a href="#日期和时间处理函数" class="headerlink" title="日期和时间处理函数"></a>日期和时间处理函数</h3><p>函数较多，具体查阅相关资料。</p>
-<h3 id="数值处理函数"><a href="#数值处理函数" class="headerlink" title="数值处理函数"></a>数值处理函数</h3><p>有<code>Abs()</code>、<code>Cos()</code>、<code>Exp()</code>等许多数值处理函数。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1119,14 +1132,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">112</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
