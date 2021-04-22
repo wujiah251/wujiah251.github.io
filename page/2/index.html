@@ -160,88 +160,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/15/lab2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/15/lab2/" class="post-title-link" itemprop="url">lab2</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-03-15 09:43:00 / 修改时间：09:44:48" itemprop="dateCreated datePublished" datetime="2021-03-15T09:43:00+08:00">2021-03-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%BE%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">操作系统课程</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="lab2"><a href="#lab2" class="headerlink" title="lab2"></a>lab2</h1><h2 id="makefile"><a href="#makefile" class="headerlink" title="makefile"></a>makefile</h2><ol>
-<li>本程序的编译使用哪个编译器？<br>本程序使用的编译器是<code>gcc</code>。  </li>
-<li>采用哪个命令，可以将所有程序全部编译？<br>使用<code>make</code>或<code>make all</code>命令可以全部编译。  </li>
-<li>采用哪个命令，可以将所有上次编译的结果全部删除？<br>使用<code>make clean</code>可以讲编译结果全部删除。  </li>
-<li>文件中第几行生成 btest 的目标文件？<br>在文件的地10-11行：  <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">btest: btest.c bits.c decl.c tests.c btest.h bits.h</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> <span class="variable">$(LIBS)</span> -o btest bits.c btest.c decl.c tests.c</span><br></pre></td></tr></table></figure></li>
-<li>文件中第几行生成 fshow 的目标文件？<br>在文件的第13-14行：  <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">fshow: fshow.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o fshow fshow.c</span><br></pre></td></tr></table></figure></li>
-<li>如果在 Makefile 文件中用要引用变量“FOO“， 怎么表示？<br>只需要<code>$(FOO)</code>即可。  </li>
-</ol>
-<h2 id="位级运算、数的编码"><a href="#位级运算、数的编码" class="headerlink" title="位级运算、数的编码"></a>位级运算、数的编码</h2><h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab2&#x2F;datalab$ .&#x2F;btest</span><br><span class="line">Score	Rating	Errors	Function</span><br><span class="line"> 2	2	0	allOddBits</span><br><span class="line"> 4	4	0	isLessOrEqual</span><br><span class="line"> 4	4	0	logicalNeg</span><br><span class="line"> 5	5	0	floatScale2</span><br><span class="line"> 5	5	0	floatFloat2Int</span><br><span class="line">Total points: 20&#x2F;20</span><br></pre></td></tr></table></figure>
-<p>5个函数：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">allOddBits</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">int</span> num = <span class="number">0xAAAAAAAA</span>;</span><br><span class="line">   <span class="keyword">return</span> !((num &amp; x) ^ num);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">isLessOrEqual</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">int</span> a = x &gt;&gt; <span class="number">31</span>;</span><br><span class="line">   <span class="keyword">int</span> b = y &gt;&gt; <span class="number">31</span>;</span><br><span class="line">   <span class="keyword">return</span> (!((!a) &amp; b)) &amp; ((a &amp; !b) | !((y + (~x + <span class="number">1</span>)) &amp; (<span class="number">1</span> &lt;&lt; <span class="number">31</span>)));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">logicalNeg</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">return</span> ((~(~x + <span class="number">1</span>) &amp; ~x) &gt;&gt; <span class="number">31</span>) &amp; <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="title">floatScale2</span><span class="params">(<span class="keyword">unsigned</span> uf)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">unsigned</span> frac = uf &amp; <span class="number">0x007fffff</span>;</span><br><span class="line">   <span class="keyword">unsigned</span> exp = (uf &gt;&gt; <span class="number">23</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line">   <span class="keyword">unsigned</span> s = uf &gt;&gt; <span class="number">31</span>;</span><br><span class="line">   <span class="keyword">if</span> (!exp)</span><br><span class="line">   &#123;</span><br><span class="line">      frac &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">      <span class="keyword">if</span> (frac &gt;&gt; <span class="number">23</span>)</span><br><span class="line">      &#123;</span><br><span class="line">         frac = frac &amp; <span class="number">0x007fffff</span>;</span><br><span class="line">         exp++;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span> <span class="keyword">if</span> (exp != <span class="number">0xff</span>)</span><br><span class="line">   &#123;</span><br><span class="line">      exp++;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> (s &lt;&lt; <span class="number">31</span>) | (exp &lt;&lt; <span class="number">23</span>) | frac;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">floatFloat2Int</span><span class="params">(<span class="keyword">unsigned</span> uf)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="comment">//unsigned frac = uf &amp; 0x007fffff;</span></span><br><span class="line">   <span class="keyword">int</span> frac = (uf &amp; <span class="number">0x007fffff</span>) | <span class="number">0x00800000</span>;</span><br><span class="line">   <span class="keyword">int</span> exp = ((uf &gt;&gt; <span class="number">23</span>) &amp; <span class="number">0xff</span>) - <span class="number">127</span>;</span><br><span class="line">   <span class="keyword">int</span> s = uf &gt;&gt; <span class="number">31</span>;</span><br><span class="line">   <span class="keyword">int</span> tar = <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">if</span> (s)</span><br><span class="line">      s = <span class="number">-1</span>;</span><br><span class="line">   <span class="keyword">else</span></span><br><span class="line">      s = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (exp &gt; <span class="number">31</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0x80000000</span>;</span><br><span class="line">   <span class="keyword">if</span> (exp &lt; <span class="number">0</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">if</span> (exp &gt; <span class="number">23</span>)</span><br><span class="line">      tar = s * (frac &lt;&lt; (exp - <span class="number">23</span>));</span><br><span class="line">   <span class="keyword">else</span> <span class="keyword">if</span> (exp &lt; <span class="number">23</span>)</span><br><span class="line">      tar = s * (frac &gt;&gt; (<span class="number">23</span> - exp));</span><br><span class="line">   <span class="keyword">return</span> tar;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/14/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -265,10 +183,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-03-14 12:14:00 / 修改时间：14:43:50" itemprop="dateCreated datePublished" datetime="2021-03-14T12:14:00+08:00">2021-03-14</time>
+              <time title="创建时间：2021-03-14 12:14:00" itemprop="dateCreated datePublished" datetime="2021-03-14T12:14:00+08:00">2021-03-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -335,10 +259,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-03-13 20:17:00 / 修改时间：20:54:04" itemprop="dateCreated datePublished" datetime="2021-03-13T20:17:00+08:00">2021-03-13</time>
+              <time title="创建时间：2021-03-13 20:17:00" itemprop="dateCreated datePublished" datetime="2021-03-13T20:17:00+08:00">2021-03-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -420,7 +350,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-14 12:14:08" itemprop="dateModified" datetime="2021-03-14T12:14:08+08:00">2021-03-14</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -526,7 +456,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-18 08:45:22" itemprop="dateModified" datetime="2021-03-18T08:45:22+08:00">2021-03-18</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -619,10 +549,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-03-12 10:20:00 / 修改时间：14:43:34" itemprop="dateCreated datePublished" datetime="2021-03-12T10:20:00+08:00">2021-03-12</time>
+              <time title="创建时间：2021-03-12 10:20:00" itemprop="dateCreated datePublished" datetime="2021-03-12T10:20:00+08:00">2021-03-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -733,7 +669,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-18 09:52:04" itemprop="dateModified" datetime="2021-03-18T09:52:04+08:00">2021-03-18</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -843,10 +779,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-03-07 20:15:00 / 修改时间：23:02:02" itemprop="dateCreated datePublished" datetime="2021-03-07T20:15:00+08:00">2021-03-07</time>
+              <time title="创建时间：2021-03-07 20:15:00" itemprop="dateCreated datePublished" datetime="2021-03-07T20:15:00+08:00">2021-03-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -936,10 +878,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-03-07 18:55:00 / 修改时间：20:09:32" itemprop="dateCreated datePublished" datetime="2021-03-07T18:55:00+08:00">2021-03-07</time>
+              <time title="创建时间：2021-03-07 18:55:00" itemprop="dateCreated datePublished" datetime="2021-03-07T18:55:00+08:00">2021-03-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -1027,7 +975,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-15 09:45:06" itemprop="dateModified" datetime="2021-03-15T09:45:06+08:00">2021-03-15</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1092,6 +1040,103 @@
 
 <p>结果如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ .&#x2F;wc wc.c</span><br><span class="line">	29	49	616</span><br><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ wc wc.c</span><br><span class="line"> 29  49 616 wc.c</span><br><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ wc</span><br><span class="line">123123 123123</span><br><span class="line">1231</span><br><span class="line">123</span><br><span class="line">123123 123123 123123</span><br><span class="line">123 1231 </span><br><span class="line">      5       9      53</span><br><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ .&#x2F;wc</span><br><span class="line">123123 123123</span><br><span class="line">1231</span><br><span class="line">123</span><br><span class="line">123123 123123 123123</span><br><span class="line">123 1231</span><br><span class="line">	5	9	53</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8/" class="post-title-link" itemprop="url">计算机网络中的安全</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-03 09:29:00" itemprop="dateCreated datePublished" datetime="2021-03-03T09:29:00+08:00">2021-03-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="什么是网络安全"><a href="#什么是网络安全" class="headerlink" title="什么是网络安全"></a>什么是网络安全</h1><p>安全通信的特性：  </p>
+<ol>
+<li>机密性；  </li>
+<li>报文完整性；  </li>
+<li>端点鉴别；  </li>
+<li>运行安全性。  </li>
+</ol>
+<h1 id="密码学的原则"><a href="#密码学的原则" class="headerlink" title="密码学的原则"></a>密码学的原则</h1><h2 id="凯撒密码"><a href="#凯撒密码" class="headerlink" title="凯撒密码"></a>凯撒密码</h2><p>用字母表后的第k个字母替代当前字母。但是如果知道是凯撒密码之后，很容易破解，因为可能性只有25种。另一种方法是单码代替密码，用字母表中的一个字母题代另一个，保证一一对应，这有26!种可能。但是这些方法都可以通过统计词频来判断。  </p>
+<h2 id="多玛代替密码"><a href="#多玛代替密码" class="headerlink" title="多玛代替密码"></a>多玛代替密码</h2><p>可以用多玛代替密码的方式来解决上述问题，即每个字母对应关系都是k偏移的，但是我们使用多个不同的k值进些加密，比如C1代表k=3，C2代表k=5，用这两种方法加密，然后以C1、C2的某种排列对每个字母加密，然后只要保留这个排列即可知道加密、解密方式。  </p>
+<h2 id="块密码"><a href="#块密码" class="headerlink" title="块密码"></a>块密码</h2><p>上述都是古代的加密方式，我们回到现代社会，考察对称加密技术有两种宽泛的类型，流密码和块密码。块密码用在多种因特网协议的加密种，包括PCG（用于安全电子邮件）、SSL（用于使TCP连接更安全）、IPsec（用于使网络层传输更安全）。<br>在块密码中，要加密的的报文被处理为k比特的块，每个块采取一一映射，将k比特的明文映射为k比特的密文。但是如果这个k比较小，则能够蛮力破解所有可能。但是如果k比较大，需要维护的这张密码表非非常庞大。<br>取而代之的是，块密码通常使用函数模拟随机排列表。</p>
+<h2 id="密码块链接"><a href="#密码块链接" class="headerlink" title="密码块链接"></a>密码块链接</h2><p>由于同样的明文必然对应的相同的密文，而有些内容是重复出现的，比如”HTTP/1.1”这些，攻击者看到重复的密码块，参考报文的结构，它可能猜出其明文。所以我们需要在其中添加某些随机性。我们将具有密钥S的块密码加密算法称为KS。我们每次为第i个明文块Mi随机生成一个r(i)，并且计算第i个密码块Ci=KS(Mi^r(i))。这样子接收方可以先通过密钥还原出随机化后的明文块和随机数，然后再利用随机块还原明文。  </p>
+<h2 id="公开密钥加密"><a href="#公开密钥加密" class="headerlink" title="公开密钥加密"></a>公开密钥加密</h2><p>加密通信需要通信双方共享一个秘密。</p>
+<h2 id="RSA"><a href="#RSA" class="headerlink" title="RSA"></a>RSA</h2><p>RSA加密过程：  </p>
+<ol>
+<li>找到两个大素数p和q；  </li>
+<li>计算n=pq，z=(p-1)(q-1)；  </li>
+<li>选择小于n的一个数e使得e、z互素；  </li>
+<li>求一个数d，使得ed-1可以被z整除。  </li>
+<li>Bob使外界可用的公钥KB+是一对数（n,e），其私钥KB-是一对数（n,d）。</li>
+<li>对一个由整数m表示的比特组合（待加密字符串），且满足m&lt;n，计算加密值c=(m^e)%n；  </li>
+<li>收到对应密文报文c解密，m=(c^d)%n。</li>
+</ol>
+<h2 id="会话密钥"><a href="#会话密钥" class="headerlink" title="会话密钥"></a>会话密钥</h2><p>由于RSA中的指数运算相当耗时，所以实际应用中，我们常常会把RSA和对称密钥结合起来使用。首先选择一方选择一个会话密钥，然后使用对方的RSA公钥要加密该会话密钥，然后将会话密钥的密文发送过去，对方接收到以后就能够使用会话密钥来通信了。</p>
+<h1 id="报文完整性和数字签名"><a href="#报文完整性和数字签名" class="headerlink" title="报文完整性和数字签名"></a>报文完整性和数字签名</h1><p>假定Bob接收到一个报文，并且他认为这个报文时由Alice发送的。为了鉴别这个报文，Bob需要证实：<br>1）该报文的确源自Alice。<br>2）该报文在到Bob的途中没有被篡改。  </p>
+
       
     </div>
 
@@ -1175,7 +1220,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">109</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

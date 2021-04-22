@@ -160,84 +160,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/%E7%BA%A2%E9%BB%91%E6%A0%91%E4%B8%8EAVL%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/15/%E7%BA%A2%E9%BB%91%E6%A0%91%E4%B8%8EAVL%E6%A0%91/" class="post-title-link" itemprop="url">红黑树与AVL树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-02-15 10:57:00 / 修改时间：15:15:42" itemprop="dateCreated datePublished" datetime="2021-02-15T10:57:00+08:00">2021-02-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a>AVL树</h1><p>AVL树也称平衡二叉树，是一种特殊的二叉查找树。它满足性质，左右子树都是AVL树，左右子树高度之差不超过1。<br>AVL树的定义非常简单，通过限制左右子树的高度之差能够保证AVL树的平衡性，避免一头太大。  </p>
-<h1 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h1><p>红黑树是一种二叉查找树，但在每个节点增加一个存储位表示节点的颜色，可以是红或黑（非红即黑）。通过对任何一条从根到叶子的路径上各个节点着色的方式的限制，红黑树确保没有一条路径会比其它路径长出两倍，因此，红黑树是一种弱平衡二叉树，相对于要求严格的AVL树来说，它的旋转次数少，所以对于搜索，插入，删除操作较多的情况下，通常使用红黑树。  </p>
-<p>性质：  </p>
-<ol>
-<li>每个节点非红即黑；  </li>
-<li>根节点是黑的；  </li>
-<li>每个叶节点（叶节点即树尾端NULL指针或NULL节点）都是黑的；  </li>
-<li>如果一个节点是红色的，则它的子节点必须是黑色的；  </li>
-<li>对于任意节点而言，其到叶子点树NULL指针的每条路径都包含相同数目的黑节点。  </li>
-</ol>
-<h2 id="为什么map底层要用红黑树"><a href="#为什么map底层要用红黑树" class="headerlink" title="为什么map底层要用红黑树"></a>为什么map底层要用红黑树</h2><p>AVL 树是高度平衡的，频繁的插入和删除，会引起频繁的rebalance，导致效率下降；红黑树不是高度平衡的，算是一种折中，插入最多两次旋转，删除最多三次旋转。所以红黑树在查找，插入删除的性能都是O(logn)，且性能稳定，所以STL里面很多结构包括map底层实现都是使用的红黑树。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/14/GET%E5%92%8CPOST%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -269,7 +191,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-19 21:53:46" itemprop="dateModified" datetime="2021-02-19T21:53:46+08:00">2021-02-19</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -342,10 +264,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-02-14 17:14:26 / 修改时间：17:29:16" itemprop="dateCreated datePublished" datetime="2021-02-14T17:14:26+08:00">2021-02-14</time>
+              <time title="创建时间：2021-02-14 17:14:26" itemprop="dateCreated datePublished" datetime="2021-02-14T17:14:26+08:00">2021-02-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
 
           
 
@@ -408,10 +336,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-02-13 22:18:46 / 修改时间：22:53:50" itemprop="dateCreated datePublished" datetime="2021-02-13T22:18:46+08:00">2021-02-13</time>
+              <time title="创建时间：2021-02-13 22:18:46" itemprop="dateCreated datePublished" datetime="2021-02-13T22:18:46+08:00">2021-02-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
 
           
 
@@ -506,7 +440,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-22 15:22:12" itemprop="dateModified" datetime="2021-02-22T15:22:12+08:00">2021-02-22</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -636,7 +570,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-11 17:33:20" itemprop="dateModified" datetime="2021-03-11T17:33:20+08:00">2021-03-11</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -934,7 +868,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-13 22:14:52" itemprop="dateModified" datetime="2021-02-13T22:14:52+08:00">2021-02-13</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
 
           
@@ -1004,7 +938,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-11 17:31:56" itemprop="dateModified" datetime="2021-03-11T17:31:56+08:00">2021-03-11</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1167,7 +1101,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-23 00:55:14" itemprop="dateModified" datetime="2021-02-23T00:55:14+08:00">2021-02-23</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
 
           
@@ -1263,7 +1197,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-27 13:24:28" itemprop="dateModified" datetime="2021-03-27T13:24:28+08:00">2021-03-27</time>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1297,6 +1231,113 @@
 <li>异步I/O模型<br>调用aio_read，让内核等数据准本好，并且复制到用户进程空间后执行实现指定好的函数。这样子省去了进程等待读数据的事件。这是真正的异步I/O。</li>
 <li>I/O的两个阶段<br>内核数据的准备阶段和内核数据复制到用户缓冲区阶段。只有进程不用等待这两个阶段，才是真正的异步I/O。</li>
 </ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/04/%E6%AD%BB%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/04/%E6%AD%BB%E9%94%81/" class="post-title-link" itemprop="url">死锁</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-04 18:37:00" itemprop="dateCreated datePublished" datetime="2021-02-04T18:37:00+08:00">2021-02-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h1><h2 id="可抢占资源和不可抢占资源"><a href="#可抢占资源和不可抢占资源" class="headerlink" title="可抢占资源和不可抢占资源"></a>可抢占资源和不可抢占资源</h2><ul>
+<li>可抢占资源：可以从拥有它的进程中抢占而不会产生任何副作用<br>可抢占资源不易产生死锁，因为这种潜在风险可以由进程之间资源的重新分配来化解。  </li>
+<li>不可抢占资源：无法把它从占有它的进程处抢占过来。  </li>
+</ul>
+<h2 id="资源获取"><a href="#资源获取" class="headerlink" title="资源获取"></a>资源获取</h2><p>一种允许用户管理资源的方式是为每个资源配置一个信号量，我们看下面两个例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> semaphore;</span><br><span class="line">	semaphore resource_1;</span><br><span class="line">	semaphore resource_2;</span><br><span class="line">	</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_A</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_B</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>上面这个例子，不会发生死锁，而下面这个例子有可能出现死锁：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> semaphore;</span><br><span class="line">	semaphore resource_1;</span><br><span class="line">	semaphore resource_2;</span><br><span class="line">	</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_A</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_B</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="死锁概述"><a href="#死锁概述" class="headerlink" title="死锁概述"></a>死锁概述</h1><p>死锁的规范定义：<strong>如果一个进程集合中的每个进程集合都在等待只能由该进程集合中的其他进程才能引发的事件，那么该进程集合就是死锁的</strong>。  </p>
+<h2 id="资源死锁的条件"><a href="#资源死锁的条件" class="headerlink" title="资源死锁的条件"></a>资源死锁的条件</h2><ol>
+<li>互斥条件：每个资源要么已经分配给一个进程，要么可用；  </li>
+<li>占有和等待条件：已经得到某个资源的进程可以再请求新的资源；  </li>
+<li>不可抢占条件：一个资源已经分配给某个进程，那么只能由这个进程释放这个资源；  </li>
+<li>环路等待条件：死锁发生时，系统中一定有两个或两个以上进程组成了一条环路，这个环路上每个进程都在等待下一个进程释放资源。  </li>
+</ol>
+<p>所以如果想避免死锁发生，我们可以从破坏这四个条件入手。  </p>
+<h1 id="死锁检测和死锁恢复"><a href="#死锁检测和死锁恢复" class="headerlink" title="死锁检测和死锁恢复"></a>死锁检测和死锁恢复</h1><h2 id="每种类型一个资源的死锁检测"><a href="#每种类型一个资源的死锁检测" class="headerlink" title="每种类型一个资源的死锁检测"></a>每种类型一个资源的死锁检测</h2><p>用普通的检测有向图是否有环路的算法即可检测死锁。</p>
+<h2 id="每种类型多个资源的死锁检测"><a href="#每种类型多个资源的死锁检测" class="headerlink" title="每种类型多个资源的死锁检测"></a>每种类型多个资源的死锁检测</h2><p>假设两个矩阵C、R，C(i,j)代表当前第i个进程对第j种资源占有个数，R(i,j)代表第i个进程还需要多少个j类资源。然后假设两个向量E、A，E(i)代表资源类型1的个数，A(i)代表资源类型i总共可用个数。那么我们可以用如下算法检测死锁：<br>死锁检测算法如下：<br>1）寻找一个没有标记的进程Pi，对于R矩阵而言第i行向量小于等于A；<br>2）如果找到了这样一个进程，那么将C矩阵的第i行向量加到A中，标记该进程，并转到第一步（可以理解为这个进程可以被分配资源然后完成再释放资源）；<br>3）如果没有找到这样的进程，算法终止。<br>算法结束时，没有被标记的进程都是死锁进程（如果有的话）。</p>
+<h2 id="从死锁中恢复"><a href="#从死锁中恢复" class="headerlink" title="从死锁中恢复"></a>从死锁中恢复</h2><ol>
+<li>利用抢占恢复：这通常需要人工干预。  </li>
+<li>利用回滚恢复：周期性对进程进行检查，并将检查点检查也就是进程的状态写入一个文件以备以后重启（类似于日志）。一旦检测到死锁，那么就很容易发现需要哪些资源。为了进行恢复，要从一个较早的检查点开始，这样所有需要资源的进程会回滚到一个时间点，在此时间点之前该进程获得了一些其他的资源。在检查点之后的所有工作都会丢失。  </li>
+<li>通过杀死进程恢复：注意不要杀死环外的进程。  </li>
+</ol>
+<h1 id="死锁避免"><a href="#死锁避免" class="headerlink" title="死锁避免"></a>死锁避免</h1><h2 id="安全状态和不完全状态"><a href="#安全状态和不完全状态" class="headerlink" title="安全状态和不完全状态"></a>安全状态和不完全状态</h2><p>如果没有死锁发生，且即使所有进程突然请求对资源的最大需求，也仍然存在某种调度次序能够使得每一个进程运行完毕，则称状态是安全的。  </p>
+<p>安全状态下，系统能保证不发生死锁。不安全状态则没有这个保证。  </p>
+<h2 id="单个资源的银行家算法"><a href="#单个资源的银行家算法" class="headerlink" title="单个资源的银行家算法"></a>单个资源的银行家算法</h2><p>算法：判断对请求的满足是否会导致进入不安全状态。如果是，就拒绝请求，如果满足请求后仍是安全的，就予以分配。  </p>
+<h2 id="多个资源的银行家算法"><a href="#多个资源的银行家算法" class="headerlink" title="多个资源的银行家算法"></a>多个资源的银行家算法</h2><p>和单个资源类似，用前面所说的多个资源的死锁检测来判断是否安全。<br>但是值得一提的是银行家算法并不实用，一方面很难一开始就知道这个进程所需要的最大资源数目，另一方面系统中进程的数目不是固定的，这可能导致原本可用的资源也变得不可用起来。  </p>
+<h1 id="死锁预防"><a href="#死锁预防" class="headerlink" title="死锁预防"></a>死锁预防</h1><h2 id="破坏互斥条件"><a href="#破坏互斥条件" class="headerlink" title="破坏互斥条件"></a>破坏互斥条件</h2><p>如果一个资源不会被一个进程独占，那么死锁肯定不会发生。  </p>
+<h2 id="破坏占有和等待条件"><a href="#破坏占有和等待条件" class="headerlink" title="破坏占有和等待条件"></a>破坏占有和等待条件</h2><p>只要在一开始将所有需要的资源都读入即可，但是判断需要多少资源时间麻烦事。  </p>
+<h2 id="破坏不可抢占条件"><a href="#破坏不可抢占条件" class="headerlink" title="破坏不可抢占条件"></a>破坏不可抢占条件</h2><p>但是并不是所有资源的都可以修改为可抢占。  </p>
+<h2 id="破坏环路等待条件"><a href="#破坏环路等待条件" class="headerlink" title="破坏环路等待条件"></a>破坏环路等待条件</h2><p>对资源编号，要求进程按照顺序来请求资源。  </p>
+<h1 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h1><h2 id="饥饿"><a href="#饥饿" class="headerlink" title="饥饿"></a>饥饿</h2><p>饥饿是指系统不能保证某个进程的等待时间上界，从而使该进程长时间等待，当等待时间给进程推进和响应带来明显影响时，称发生了进程饥饿。当饥饿到一定程度的进程所赋予的任务即使完成也不再具有实际意义时称该进程被饿死。</p>
 
       
     </div>
@@ -1381,7 +1422,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">109</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
