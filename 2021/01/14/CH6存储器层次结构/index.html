@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="存储器层次结构存储技术随机访问存储器（Random-Access Memory,RAM）分为静态和动态两类（SRAM、DRAM）。SRAM比DRAM更快但更贵。    SRAM：用作高速缓存存储器   DRAM：用于主存及图形系统的帧缓存区内存系统必须周期性地通过读出，然后重写来刷新内存的每一位。有些系统会使用纠错码。   传统的DRAM每个DRAM芯片被连接到某个称为内存控制器的电路，这个电路用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CH6存储器层次结构">
+<meta property="og:url" content="http://example.com/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="存储器层次结构存储技术随机访问存储器（Random-Access Memory,RAM）分为静态和动态两类（SRAM、DRAM）。SRAM比DRAM更快但更贵。    SRAM：用作高速缓存存储器   DRAM：用于主存及图形系统的帧缓存区内存系统必须周期性地通过读出，然后重写来刷新内存的每一位。有些系统会使用纠错码。   传统的DRAM每个DRAM芯片被连接到某个称为内存控制器的电路，这个电路用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-14T07:37:41.000Z">
+<meta property="article:modified_time" content="2021-01-27T13:11:38.000Z">
+<meta property="article:author" content="乡村程序员">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CH6存储器层次结构 | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CH6存储器层次结构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:37:41" itemprop="dateCreated datePublished" datetime="2021-01-14T15:37:41+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-27 21:11:38" itemprop="dateModified" datetime="2021-01-27T21:11:38+08:00">2021-01-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="存储器层次结构"><a href="#存储器层次结构" class="headerlink" title="存储器层次结构"></a><strong>存储器层次结构</strong></h1><h2 id="存储技术"><a href="#存储技术" class="headerlink" title="存储技术"></a><strong>存储技术</strong></h2><h3 id="随机访问存储器（Random-Access-Memory-RAM）"><a href="#随机访问存储器（Random-Access-Memory-RAM）" class="headerlink" title="随机访问存储器（Random-Access Memory,RAM）"></a><strong>随机访问存储器（Random-Access Memory,RAM）</strong></h3><p>分为静态和动态两类（SRAM、DRAM）。SRAM比DRAM更快但更贵。  </p>
+<ol>
+<li>SRAM：用作高速缓存存储器  </li>
+<li>DRAM：用于主存及图形系统的帧缓存区<br>内存系统必须周期性地通过读出，然后重写来刷新内存的每一位。有些系统会使用纠错码。  </li>
+<li>传统的DRAM<br>每个DRAM芯片被连接到某个称为内存控制器的电路，这个电路用来传送$\omega$位到每个DRAM芯片或者一次从每个DRAM芯片传出$\omega$位。  </li>
+<li>内存模块<br>DRAM芯片封装在内存模块中，可以多个DRAM芯片同时读取和写入一个字节（举例8个DRAM芯片），合并后即为一个64位字，然后返回给内存控制器。  </li>
+<li>增强的DRAM  </li>
+</ol>
+<ul>
+<li>快页模式DRAM（Fast Page Model DRAM,FPM DRAM）</li>
+<li>扩展数据输出DRAM（Extended Data Out DRAM，EDO DRAM）</li>
+<li>同步DRAM（Synchronous DRAM，SDRAM）</li>
+<li>双倍数据速率同步DRAM（Double Data-Rate Synchronous）</li>
+<li>视频RAM（Video RAM，VRAM）</li>
+</ul>
+<ol start="6">
+<li>非易失性存储器（nonvolatile memory）<br>DRAM和SRAM在断电的情况都会丧失它们的信息。只读存储器（read-only Memory）中有的类型可以读也可以写，但整齐称为ROM。<br>PROM(Programmable ROM，可编程ROM)只能被编程一次，还有很多。。。<br>还有可擦写可编程ROM(Erasable Programmable ROM，EPROM)、闪存(flash memory)。存储在ROM设备中的程序通常被称为固件（firmware）。</li>
+<li>访问主存<br>总线(bus)，数据流通过总线在处理器和DRAM主存之间来来回回。</li>
+</ol>
+<h3 id="磁盘存储"><a href="#磁盘存储" class="headerlink" title="磁盘存储"></a><strong>磁盘存储</strong></h3><ol>
+<li>磁盘构造<br>主轴、盘片、磁道、扇区、柱面等概念。</li>
+<li>磁盘容量</li>
+<li>磁盘操作  </li>
+</ol>
+<ul>
+<li>寻道时间</li>
+<li>旋转时间</li>
+<li>传送时间</li>
+</ul>
+<ol start="4">
+<li>逻辑磁盘块<br>为了对操作系统隐藏磁盘的复杂性，现代磁盘将为它们的构造呈现一个简单的视图，一个B个扇区大小的逻辑块的序列。磁盘块封装中有一个效得硬件/固件设备，称为磁盘控制器，维护着逻辑块号和实际（物理）磁盘山去之间的映射关系。</li>
+<li>连接I/O设备<br>慢于系统总线和内存总线。</li>
+<li>访问磁盘<br>I/O端口、直接内存访问（Direct Memory Access，DMA）、DMA传送（DMA transfer）</li>
+</ol>
+<h3 id="固态硬盘（Solid-State-Disk，SSD）"><a href="#固态硬盘（Solid-State-Disk，SSD）" class="headerlink" title="固态硬盘（Solid State Disk，SSD）"></a><strong>固态硬盘（Solid State Disk，SSD）</strong></h3><p>这是一种基于闪存的存储技术。</p>
+<h2 id="局部性"><a href="#局部性" class="headerlink" title="局部性"></a><strong>局部性</strong></h2><p>通常表现为时间局部性（在一个具有良好的时间局部性程序中，被引用过一次的内存位置很可能在不远的将来再被多次引用）和空间局部性（在一个具有良好空间局部性的程序中，如果一个内存位置被引用了一次，那么程序很可能在不远的将来引用附件的一个内存位置）。</p>
+<h2 id="存储器层次结构（memery-hierarchy）"><a href="#存储器层次结构（memery-hierarchy）" class="headerlink" title="存储器层次结构（memery hierarchy）"></a><strong>存储器层次结构（memery hierarchy）</strong></h2><ol start="0">
+<li>寄存器（CPU寄存器保存着从高速缓存存储器去除的字）  </li>
+<li>L1高速缓存（SRAM）（L1&lt;-L2，保存取出的缓存行）  </li>
+<li>L2高速缓存（SRAM）（L2&lt;-L3，保存取出的缓存行）  </li>
+<li>L3高速缓存（SRAM）（L3&lt;-主存，保存取出的缓存行）  </li>
+<li>主存（DRAM）（主存&lt;-本地磁盘，保存着取出的磁盘块）  </li>
+<li>本地二级存储（本地磁盘）（保存从远程网络服务器取出的文件）  </li>
+<li>远程二级存储（分布式文件系统、Web服务器）  </li>
+</ol>
+<h3 id="存储器层次结构中的缓存"><a href="#存储器层次结构中的缓存" class="headerlink" title="存储器层次结构中的缓存"></a><strong>存储器层次结构中的缓存</strong></h3><p>高速缓存（cache）是一个小而快的存储设备，它作为存储在更大、也更慢的设备中的数据对象的缓冲区域。使用高速缓存的过程称为<strong>缓存（caching）</strong>。  </p>
+<ol>
+<li>缓存命中：当程序需要第$k+1$层的一个数据对象d时，优先在第$k$层查找d，如果d刚好存储在第$k$层，那么直接读取，这就是我们说的缓存命中。  </li>
+<li>缓存不命中：如果第$k$层没有缓存数据对象d，那么就是我们说的缓存不命中。当发生缓存不命中时，第$k$层的缓存从第k+1层缓存取出包含d的那个块，如果第k层缓存已经满了，可能就会覆盖现存的一个块（牺牲块）。  </li>
+<li>缓存不命中的种类：强制性不命中、冲突不命中、容量不命中。  </li>
+<li>缓存管理：编译器管理寄存器文件；L1、L2和L3层的缓存完全有内置在缓存中的硬件逻辑来管理；在一个有虚拟内存的系统中，DRAM主存作为存储在磁盘上的数据块的缓存，是由操作系统软件和CPU上的地址翻译硬件共同管理的。  </li>
+</ol>
+<h3 id="存储器层次结构概念小结"><a href="#存储器层次结构概念小结" class="headerlink" title="存储器层次结构概念小结"></a><strong>存储器层次结构概念小结</strong></h3><p>概括来说，基于缓存的存储器层次结构行之有效，是因为较慢的存储设备比较快的存储设备更便宜，还因为程序倾向于展示局部性（可以补偿不命中的代价）</p>
+<h2 id="高速缓存存储器"><a href="#高速缓存存储器" class="headerlink" title="高速缓存存储器"></a><strong>高速缓存存储器</strong></h2><p>原来存储器层次结构只有三层：寄存器、主存、磁盘；随着CPU和主存之间逐渐增大的差距，系统设<br>计者被迫在CPU寄存器文件和主存之间插入了一个小的SRAM高速缓存存储器，称为L1高速缓存，后来又插入了L2、L3。</p>
+<h3 id="通用的高速缓存存储器组织结构"><a href="#通用的高速缓存存储器组织结构" class="headerlink" title="通用的高速缓存存储器组织结构"></a><strong>通用的高速缓存存储器组织结构</strong></h3><p>高速缓存的结构可以用元组（S，E，B，m）来描述。S：$S=2^s$个高速缓存组；E：每个组包含E个高速缓存行；B：每个行由$B=2^b$字节的数据块组成的，一个有效位指明这个行是否包含有意义的信息，还有t个标记位来唯一的标识这个块。$t+s+b=m$，t位标记块，s位组索引，b位时块偏移。容量$C=S\times E\times B$。</p>
+<h3 id="直接映射高速缓存"><a href="#直接映射高速缓存" class="headerlink" title="直接映射高速缓存"></a><strong>直接映射高速缓存</strong></h3><p>每个组只有一行  </p>
+<ol>
+<li>直接映射高速缓存中的组选择  </li>
+<li>直接映射高速缓存中的行匹配  </li>
+<li>直接映射高速缓存中的字选择  </li>
+<li>直接映射高速缓存不命中时的行替换  </li>
+<li>综合：运行中的直接映射高速缓存  </li>
+</ol>
+<h3 id="组相联高速缓存"><a href="#组相联高速缓存" class="headerlink" title="组相联高速缓存"></a><strong>组相联高速缓存</strong></h3><ol>
+<li>组相联高速缓存中的组选择  </li>
+<li>组相联高速缓存中的行匹配和字选择：搜索组中的每一行来匹配标记，命中后块偏移从这个块中选择字  </li>
+<li>组相联高速缓存中的不命中的行替换：若无空行，则采用替换策略，有LFU（Least-Frequently-Used，最不常使用）、LRU（Least-Recently-USed，最近最少使用）等。  </li>
+</ol>
+<h3 id="全相联高速缓存"><a href="#全相联高速缓存" class="headerlink" title="全相联高速缓存"></a><strong>全相联高速缓存</strong></h3><p>$E=C/B$，S=1，仅有一个组。</p>
+<ol>
+<li>组选择  </li>
+<li>行匹配和字选择<br>因为高速缓存电路必须并行地搜索许多相匹配的标记，构造一个又大又快的相联高速缓存很困难，而且昂贵。因此全相联高速缓存只适合做小的高速缓存，例如虚拟内存系统中翻译备用缓冲器（TLB），它缓存页表项。</li>
+</ol>
+<h3 id="有关写的问题"><a href="#有关写的问题" class="headerlink" title="有关写的问题"></a><strong>有关写的问题</strong></h3><p>如果命中，更新了副本之后，如何更新在低一层中的副本。  </p>
+<ul>
+<li>直写：最简单的方法，立即写回到下一级。  </li>
+<li>写回：等待替换算法要驱逐这个更新过的块的时候，才把它紧接着写到低一层（需要在每个高速缓存行中额外保留一个修改位来标识该行是否被修改过）。<br>如果不命中：  </li>
+<li>写分配：加载相应的低一层中的块到高速缓存行中，然后更新这个高速缓存块  </li>
+<li>非写分配：避开高速缓存，直接写到低一层</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="prev" title="网络编程">
+      <i class="fa fa-chevron-left"></i> 网络编程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/14/CH7%E9%93%BE%E6%8E%A5/" rel="next" title="CH7链接">
+      CH7链接 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">存储器层次结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E6%8A%80%E6%9C%AF"><span class="nav-number">1.1.</span> <span class="nav-text">存储技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E8%AE%BF%E9%97%AE%E5%AD%98%E5%82%A8%E5%99%A8%EF%BC%88Random-Access-Memory-RAM%EF%BC%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">随机访问存储器（Random-Access Memory,RAM）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E5%AD%98%E5%82%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">磁盘存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98%EF%BC%88Solid-State-Disk%EF%BC%8CSSD%EF%BC%89"><span class="nav-number">1.1.3.</span> <span class="nav-text">固态硬盘（Solid State Disk，SSD）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">局部性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%EF%BC%88memery-hierarchy%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">存储器层次结构（memery hierarchy）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98"><span class="nav-number">1.3.1.</span> <span class="nav-text">存储器层次结构中的缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E6%A6%82%E5%BF%B5%E5%B0%8F%E7%BB%93"><span class="nav-number">1.3.2.</span> <span class="nav-text">存储器层次结构概念小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E5%AD%98%E5%82%A8%E5%99%A8"><span class="nav-number">1.4.</span> <span class="nav-text">高速缓存存储器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E7%9A%84%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E5%AD%98%E5%82%A8%E5%99%A8%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84"><span class="nav-number">1.4.1.</span> <span class="nav-text">通用的高速缓存存储器组织结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E6%98%A0%E5%B0%84%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98"><span class="nav-number">1.4.2.</span> <span class="nav-text">直接映射高速缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E7%9B%B8%E8%81%94%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98"><span class="nav-number">1.4.3.</span> <span class="nav-text">组相联高速缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E7%9B%B8%E8%81%94%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98"><span class="nav-number">1.4.4.</span> <span class="nav-text">全相联高速缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%85%B3%E5%86%99%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.5.</span> <span class="nav-text">有关写的问题</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

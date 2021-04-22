@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="为什么要使用虚拟地址空间？ 程序大小的增长速度总是很快，使用虚拟地址空间可以扩大地址空间。   如果使用物理地址空间，进程之间共享物理内存，容易造成竞争和程序的崩溃，使用虚拟地址空间还可以增加程序的安全性。   使用物理地址空间，同时运行多个程序是困难的。    地址空间地址空间的概念地址空间 是一个进程可用于寻址内存的一套地址集合。每个进程都有自己的地址空间，并且这个地址空间独立于其他进程的地址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="存储管理">
+<meta property="og:url" content="http://example.com/2021/01/29/%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="为什么要使用虚拟地址空间？ 程序大小的增长速度总是很快，使用虚拟地址空间可以扩大地址空间。   如果使用物理地址空间，进程之间共享物理内存，容易造成竞争和程序的崩溃，使用虚拟地址空间还可以增加程序的安全性。   使用物理地址空间，同时运行多个程序是困难的。    地址空间地址空间的概念地址空间 是一个进程可用于寻址内存的一套地址集合。每个进程都有自己的地址空间，并且这个地址空间独立于其他进程的地址">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-29T15:22:49.000Z">
+<meta property="article:modified_time" content="2021-02-02T09:44:04.000Z">
+<meta property="article:author" content="乡村程序员">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/01/29/%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>存储管理 | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/29/%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          存储管理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-29 23:22:49" itemprop="dateCreated datePublished" datetime="2021-01-29T23:22:49+08:00">2021-01-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-02 17:44:04" itemprop="dateModified" datetime="2021-02-02T17:44:04+08:00">2021-02-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="为什么要使用虚拟地址空间？"><a href="#为什么要使用虚拟地址空间？" class="headerlink" title="为什么要使用虚拟地址空间？"></a>为什么要使用虚拟地址空间？</h1><ol>
+<li>程序大小的增长速度总是很快，使用虚拟地址空间可以扩大地址空间。  </li>
+<li>如果使用物理地址空间，进程之间共享物理内存，容易造成竞争和程序的崩溃，使用虚拟地址空间还可以增加程序的安全性。  </li>
+<li>使用物理地址空间，同时运行多个程序是困难的。  </li>
+</ol>
+<h1 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h1><h2 id="地址空间的概念"><a href="#地址空间的概念" class="headerlink" title="地址空间的概念"></a>地址空间的概念</h2><p><strong>地址空间</strong> 是一个进程可用于寻址内存的一套地址集合。每个进程都有自己的地址空间，并且这个地址空间独立于其他进程的地址空间。</p>
+<h3 id="基址寄存器和界限寄存器"><a href="#基址寄存器和界限寄存器" class="headerlink" title="基址寄存器和界限寄存器"></a>基址寄存器和界限寄存器</h3><p>经典的重定位方法。基址寄存器存储程序的起始物理地址，界限寄存器存储程序长度。<br>每次一个进程进行访问内存，取一条指令、读取或写一个数据字，CPU会把地址发送到内存总线前，自动把基址值加到进程发出的地址值之上。<br>这个方法比较容易，但是由于每次访问内存都需要进行加法和比较运算，会消耗很多时间。</p>
+<h2 id="交换技术"><a href="#交换技术" class="headerlink" title="交换技术"></a>交换技术</h2><p>现实中我们常常要打开多个程序，每个进程都需要占据一定的内存，如果打开程序比较多，会造成内存不足的问题，有一种简单的处理内存超载的方法，<strong>交换（swapping）技术</strong>。当一个进程空闲时，存放在磁盘上，所以它不运行时不占用内存。另一个方法是<strong>虚拟内存</strong>，虚拟内存使得程序可以只有在一部分被读入内存时运行。  </p>
+<p>交换技术很好理解，我们讨论一下其可能面临的一些问题，我们知道很多程序设计语言都可以动态地分配内存，那么当进程空间视图增大的时候，就会出现问题：  </p>
+<ul>
+<li>有相邻空闲区：将相邻空闲区分配给进程；  </li>
+<li>没有相邻空闲区：把一个或多个进程换出，以便生成足够大的空闲区。<br>如果大部分进程运行时都需要增长，为了减少换入换出的开销，我们在最开始的时候为进程额外分配一些内存，这个预留空间位于堆栈和数据段之间，他们都可以使用其。</li>
+</ul>
+<h2 id="空闲内存管理"><a href="#空闲内存管理" class="headerlink" title="空闲内存管理"></a>空闲内存管理</h2><h3 id="位图"><a href="#位图" class="headerlink" title="位图"></a>位图</h3><p>我们可以把内存划分为小到几个字达到几千字的内存单元，然后用位图来记录使用情况。<br>问题：当我们需要分配占k个单位内存时，，需要在位图中匹配长度为k的0串，这是一个耗时操作。  </p>
+<h3 id="使用链表的存储管理"><a href="#使用链表的存储管理" class="headerlink" title="使用链表的存储管理"></a>使用链表的存储管理</h3><p>维护一个记录已分配内存段和空闲内存段的链表。链表一个结点或者包含一个进程，或者包含一个位于两个进程之间的空闲区。  </p>
+<p>如果按照地址顺序来存放进程和空闲区时，有几种算法可以来为进程分配内存：  </p>
+<ul>
+<li>首次适配算法；  </li>
+<li>下次适配算法；</li>
+<li>最佳适配算法；  </li>
+<li>最差适配算法。  </li>
+</ul>
+<p>如果单独维护空闲区链表和进程链表，可以提高以上四个算法的速度，但是释放内存将内存从进程表中删除并插入到空闲区链表的时间成本高昂。  </p>
+<p>当然如果我们单独维护空闲区链表和进程链表，可以按照大小升序排列，这样可以提高最佳适配的效率。  </p>
+<p>还有一种分配算法叫做<strong>快速适配</strong>，为空闲区维护一个单独的链表。例如，这个表的第一项指向一个大小为4KB的空闲区，第二项指向一个大小为8KB的空闲区，第三项指向一个大小为12KB的空闲区。这样子寻找一个指定大小的空闲区是非常迅速的，但是缺点是合并空闲区相当费时。  </p>
+<h1 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h1><p>尽管基址寄存器和界限寄存器可以用于创建地址空间的抽象，但无法解决程序大小的膨胀问题。虚拟内存的基本思想是每个程序都拥有自己的地址空间，空间被分为多个块，每一块称作一页。  </p>
+<h2 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h2><p>内存管理单元（Memory Management Unit，MMU），MMU把虚拟地址映射为物理内存地址。  </p>
+<p>访问虚拟内存，首先查询页表项（以一级页表为例），如果页表项显示不存在（缓存为命中），则引起缺页中断，陷入内核，由内核将需要的页写入到内存中（如果内存已满，会替换掉一个不常用的页，然后将被替换页写入磁盘）；如果显示存在，从页表项索引到页所在位置；找到物理内存的页后，根据虚拟地址的偏移量来确定最终物理地址。<br>注：页表项还可以添加其他信息，比如读写控制等。  </p>
+<h2 id="转换检测缓冲区（TLB）"><a href="#转换检测缓冲区（TLB）" class="headerlink" title="转换检测缓冲区（TLB）"></a>转换检测缓冲区（TLB）</h2><p>每次内存访问都需要多次访问页表也就是多次访问内存，为了节约时间，使用一种缓存技术TLB，TLB通常在MMU中（硬件实现，所以快），包含少量的表项，每个表项记录一个页面信息，包括虚拟页号，页面的修改位、保护码和该页所对应的物理页框。在每次内存访问时，都会首先访问TLB，寻找匹配表项，如果TLB命中，则不再访问页表，如果不命中，再访问页表，然后再将这次表项读入到TLB（也会淘汰一个TLB表项），下次再访问这个页表，自然会命中了。  </p>
+<h1 id="页面置换算法"><a href="#页面置换算法" class="headerlink" title="页面置换算法"></a>页面置换算法</h1><h2 id="最优页面置换算法"><a href="#最优页面置换算法" class="headerlink" title="最优页面置换算法"></a>最优页面置换算法</h2><p>选择最晚将被使用的页面被置换，这个算法很好理解，而且被证明时最优的，但是问题在于我们无法预测页面何时将再被使用。当然可以跟踪页面使用情况来预测，但是这样是不划算的。  </p>
+<h2 id="最近未使用页面置换算法"><a href="#最近未使用页面置换算法" class="headerlink" title="最近未使用页面置换算法"></a>最近未使用页面置换算法</h2><p>最近未使用也很好理解，而且容易实现，性能也够用。  </p>
+<h2 id="先进先出页面置换算法"><a href="#先进先出页面置换算法" class="headerlink" title="先进先出页面置换算法"></a>先进先出页面置换算法</h2><p>还有很多其他页面置换算法，比如时钟页面置换算法，最近最少使用页面置换算法等等，不做赘述。</p>
+<h1 id="分页系统中的设计问题"><a href="#分页系统中的设计问题" class="headerlink" title="分页系统中的设计问题"></a>分页系统中的设计问题</h1><h2 id="局部分配策略和全局分配策略"><a href="#局部分配策略和全局分配策略" class="headerlink" title="局部分配策略和全局分配策略"></a>局部分配策略和全局分配策略</h2><p>局部就是指页面置换时只考虑同一进程的内存，而全局就是考虑所有进程的内存。一般来说，全局的性能更优，而且可以避免一个需要较大内存的进程只被分配了少量物理内存。<br>还有一些动态的分配策略，会实时参考缺页中断率来分配内存。</p>
+<h2 id="负载控制"><a href="#负载控制" class="headerlink" title="负载控制"></a>负载控制</h2><p>即使使用最优页面置换算法，系统也可能发生“抖动”，这在于每个进程都在渴求更多的内存，导致进程不断被频繁换入换出，解决方案是暂时从内存中去掉一些进程。  </p>
+<h3 id="共享页面"><a href="#共享页面" class="headerlink" title="共享页面"></a>共享页面</h3><p>如果不同进程之间共享某页面，可以让他们都指向同一个页面集合，然后当读的时候并不进行页面复制，仅有写发生时进行页面复制，这称为写时复制。  </p>
+<h3 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h3><p>通过一个系统调用把文件映射到虚拟地址空间的一部分。这样可以把文件当作一个大型的字符数组来访问，而且这样子可以通过共享内存来通信，一个进程在共享内存上完成了写操作，另一个进程在映射到这个文件的虚拟地址空间之上指向读操作时，它就可以立即看到上一个进程写操作了。这个机制为进程之间提供了一个高带宽通道。</p>
+<h1 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h1><p>一个编译器在编译过程中会创建许多表，其中可能包括：  </p>
+<ol>
+<li>被保存起来供打印清单用的程序正文；  </li>
+<li>符号表，包含变量的名字和属性；  </li>
+<li>包含用到的所有整型量和浮点常量的表；  </li>
+<li>语法分析树，包含程序语法分析的结果；  </li>
+<li>编译器内部过程调用使用的堆栈。  </li>
+</ol>
+<p>我们需要一个能够把程序员从管理表的扩张和收缩工作中解出来的方法，就像虚拟内存使程序员不用再为怎么样把程序划分称覆盖块担心一样。<br>一个直观并且通用的方法是在机器上提供多个互相独立的称为段的地址空间。<br>一个段一般不包含不通类型的内容。在分段系统中，修改一个过程不会影响其他无关的过程的起始地址。<br>分段是一个逻辑实体，程序员知道这一点并把它作为一个逻辑实体来使用。<br>页面的内容从某种意义上是随机的，程序员甚至察觉不到分页的事实，而分段对程序员是已知的。</p>
+<h2 id="分段和分页的结合"><a href="#分段和分页的结合" class="headerlink" title="分段和分页的结合"></a>分段和分页的结合</h2><p>分段和分页可以结合起来使用，一个例子就是MULTICS。具体细节参考《现代操作系统》P134-P135。  </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/28/%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/" rel="prev" title="管理事务处理">
+      <i class="fa fa-chevron-left"></i> 管理事务处理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/02/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/" rel="next" title="进程和线程">
+      进程和线程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">为什么要使用虚拟地址空间？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="nav-number">2.</span> <span class="nav-text">地址空间</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.</span> <span class="nav-text">地址空间的概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E5%9D%80%E5%AF%84%E5%AD%98%E5%99%A8%E5%92%8C%E7%95%8C%E9%99%90%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">2.1.1.</span> <span class="nav-text">基址寄存器和界限寄存器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E6%8A%80%E6%9C%AF"><span class="nav-number">2.2.</span> <span class="nav-text">交换技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E9%97%B2%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">2.3.</span> <span class="nav-text">空闲内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E5%9B%BE"><span class="nav-number">2.3.1.</span> <span class="nav-text">位图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E9%93%BE%E8%A1%A8%E7%9A%84%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86"><span class="nav-number">2.3.2.</span> <span class="nav-text">使用链表的存储管理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">虚拟内存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%B5"><span class="nav-number">3.1.</span> <span class="nav-text">分页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E6%A3%80%E6%B5%8B%E7%BC%93%E5%86%B2%E5%8C%BA%EF%BC%88TLB%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">转换检测缓冲区（TLB）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">页面置换算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">最优页面置换算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E8%BF%91%E6%9C%AA%E4%BD%BF%E7%94%A8%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">最近未使用页面置换算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E9%A1%B5%E9%9D%A2%E7%BD%AE%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">先进先出页面置换算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">分页系统中的设计问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5%E5%92%8C%E5%85%A8%E5%B1%80%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="nav-number">5.1.</span> <span class="nav-text">局部分配策略和全局分配策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E6%8E%A7%E5%88%B6"><span class="nav-number">5.2.</span> <span class="nav-text">负载控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E9%A1%B5%E9%9D%A2"><span class="nav-number">5.2.1.</span> <span class="nav-text">共享页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6"><span class="nav-number">5.2.2.</span> <span class="nav-text">内存映射文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%AE%B5"><span class="nav-number">6.</span> <span class="nav-text">分段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%AE%B5%E5%92%8C%E5%88%86%E9%A1%B5%E7%9A%84%E7%BB%93%E5%90%88"><span class="nav-number">6.1.</span> <span class="nav-text">分段和分页的结合</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="MySQL引擎MySQL存储引擎有InnoDB、MyISAM、MEMORY。 InnoDBInnoDB是事务型数据库的首选引擎，支持事务安全（ACID），支持行锁定和外键，InnoDB是MySQL默认的引擎。主要特性：  InnoDB提供了具有提交、回滚和崩溃恢复的事务安全存储引擎。   InnoDB存储引擎在主内存中缓存数据和索引而维持它的缓冲池。它表和索引放在一个逻辑表空间中，而MyISAM表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL引擎和索引">
+<meta property="og:url" content="http://example.com/2021/02/24/MySQL%E5%BC%95%E6%93%8E%E5%92%8C%E7%B4%A2%E5%BC%95/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="MySQL引擎MySQL存储引擎有InnoDB、MyISAM、MEMORY。 InnoDBInnoDB是事务型数据库的首选引擎，支持事务安全（ACID），支持行锁定和外键，InnoDB是MySQL默认的引擎。主要特性：  InnoDB提供了具有提交、回滚和崩溃恢复的事务安全存储引擎。   InnoDB存储引擎在主内存中缓存数据和索引而维持它的缓冲池。它表和索引放在一个逻辑表空间中，而MyISAM表">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-24T13:29:00.000Z">
+<meta property="article:modified_time" content="2021-02-24T13:36:22.000Z">
+<meta property="article:author" content="乡村程序员">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/02/24/MySQL%E5%BC%95%E6%93%8E%E5%92%8C%E7%B4%A2%E5%BC%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MySQL引擎和索引 | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/24/MySQL%E5%BC%95%E6%93%8E%E5%92%8C%E7%B4%A2%E5%BC%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL引擎和索引
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-24 21:29:00 / 修改时间：21:36:22" itemprop="dateCreated datePublished" datetime="2021-02-24T21:29:00+08:00">2021-02-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="MySQL引擎"><a href="#MySQL引擎" class="headerlink" title="MySQL引擎"></a>MySQL引擎</h1><p>MySQL存储引擎有InnoDB、MyISAM、MEMORY。</p>
+<h2 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h2><p>InnoDB是事务型数据库的首选引擎，支持事务安全（ACID），支持行锁定和外键，InnoDB是MySQL默认的引擎。<br>主要特性：</p>
+<ol>
+<li>InnoDB提供了具有提交、回滚和崩溃恢复的事务安全存储引擎。  </li>
+<li>InnoDB存储引擎在主内存中缓存数据和索引而维持它的缓冲池。它表和索引放在一个逻辑表空间中，而MyISAM表中每个表被存放在分离的文件中。  </li>
+<li>InnoDB支持外键完整性约束。  </li>
+</ol>
+<h2 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h2><p>MyISAM基于ISAM，是在Web、数据仓储和其他应用环境下最常使用的存储引擎之一。MyISAM拥有较高的插入、查询，但不支持事务。<br>主要特性：  </p>
+<ol>
+<li>查询、插入效率高；  </li>
+<li>可以把数据文件和索引文件放在不同的目录中；  </li>
+<li>对事务的支持不好。  </li>
+</ol>
+<h2 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h2><p>MEMORY存储引擎将表中的数据存储到内存中，为查询和引用其他表数据提供快速访问。  </p>
+<p>DBMS中的并发控制的任务是确保在多个事务同时存取数据库中统一数据时不破坏事务的隔离性和一致性。常见的控制手段是乐观并发控制（乐观锁）和悲观并发控制（悲观锁）。  </p>
+<h1 id="悲观锁和乐观锁"><a href="#悲观锁和乐观锁" class="headerlink" title="悲观锁和乐观锁"></a>悲观锁和乐观锁</h1><h2 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h2><p>假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。<br>使用方法：  </p>
+<ol>
+<li>对任意数据进行修改时，先尝试为该记录加上排他锁。  </li>
+<li>如果加锁失败就说明该记录正在被修改，等待锁被释放。  </li>
+<li>成功加锁后就可以对记录做修改，事务完成后就会解锁。  </li>
+</ol>
+<p>悲观锁适用于数据竞争激烈的环境，以及发生并发冲突时使用锁保护数据的成本低于回滚事务的成本的环境中。</p>
+<h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>假定不会发生并发冲突，只在提交操作时检查是否违反了数据完整性。在提交数据更新之前，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据。如果其他事务有更新的话，正在提交的事务会进行回滚。<br>使用方法：  </p>
+<ol>
+<li>在对数据库进行处理的时候，乐观锁并不会使用数据库提供的锁机制。一般的实现乐观锁的方式就是记录数据版本。  </li>
+<li>数据版本,为数据增加的一个版本标识。当读取数据时，将版本标识的值一同读出，数据每更新一次，同时对版本标识进行更新。</li>
+<li>当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的版本标识进行比对，如果数据库表当前版本号与第一次取出来的版本标识值相等，则予以更新，否则认为是过期数据。</li>
+</ol>
+<h1 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h1><ol>
+<li>可串行化；  </li>
+<li>可重复读，只允许读取已提交数据，而且在一个事务两次读取同一数据之间，其他事务不能更新该数据；    </li>
+<li>已提交读，只允许读取已经提交的数据；  </li>
+<li>未提交读，允许读取未提交的数据。  </li>
+</ol>
+<p>以上隔离性级别都不允许脏写，即如果一个数据项已经被另一个尚未提交或终止的事务写入，则不允许对该数据项执行写操作。  </p>
+<table>
+<tr>
+    <th>隔离级别</th>
+    <th>脏读</th>
+    <th>不可重复读</th>
+    <th>幻读</th>
+</tr>
+<tr>
+    <td>未提交读</td>
+    <td>可能</td>
+    <td>可能</td>
+    <td>可能</td>
+</tr>
+<tr>
+    <td>已提交读</td>
+    <td>不可能</td>
+    <td>可能</td>
+    <td>可能</td>
+</tr>
+<tr>
+    <td>可重复读</td>
+    <td>不可能</td>
+    <td>不可能</td>
+    <td>可能</td>
+</tr>
+<tr>
+    <td>可串行化</td>
+    <td>不可能</td>
+    <td>不可能</td>
+    <td>不可能</td>
+</tr>
+</table>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/19/URL%E7%9A%84%E8%BE%93%E5%85%A5%E9%81%93%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%8E%B0/" rel="prev" title="从URL的输入道页面展现">
+      <i class="fa fa-chevron-left"></i> 从URL的输入道页面展现
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/24/C++%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" rel="next" title="C++构造函数">
+      C++构造函数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E5%BC%95%E6%93%8E"><span class="nav-number">1.</span> <span class="nav-text">MySQL引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB"><span class="nav-number">1.1.</span> <span class="nav-text">InnoDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyISAM"><span class="nav-number">1.2.</span> <span class="nav-text">MyISAM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MEMORY"><span class="nav-number">1.3.</span> <span class="nav-text">MEMORY</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%82%B2%E8%A7%82%E9%94%81%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-number">2.</span> <span class="nav-text">悲观锁和乐观锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%82%B2%E8%A7%82%E9%94%81"><span class="nav-number">2.1.</span> <span class="nav-text">悲观锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-number">2.2.</span> <span class="nav-text">乐观锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">3.</span> <span class="nav-text">事务隔离级别</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

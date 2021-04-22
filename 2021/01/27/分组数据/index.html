@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="分组数据创建分组分组是在SELECT语句的GROUP BY子句中创建的。 1234567891011mysql&gt; select vend_id, count(*) as num_prods    -&gt; from products    -&gt; group by vend_id;+---------+-----------+| vend_id | num_prods |+------">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分组数据">
+<meta property="og:url" content="http://example.com/2021/01/27/%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="分组数据创建分组分组是在SELECT语句的GROUP BY子句中创建的。 1234567891011mysql&gt; select vend_id, count(*) as num_prods    -&gt; from products    -&gt; group by vend_id;+---------+-----------+| vend_id | num_prods |+------">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-27T07:21:35.000Z">
+<meta property="article:modified_time" content="2021-01-27T16:04:18.000Z">
+<meta property="article:author" content="乡村程序员">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/01/27/%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>分组数据 | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          分组数据
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 15:21:35" itemprop="dateCreated datePublished" datetime="2021-01-27T15:21:35+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-28 00:04:18" itemprop="dateModified" datetime="2021-01-28T00:04:18+08:00">2021-01-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="分组数据"><a href="#分组数据" class="headerlink" title="分组数据"></a>分组数据</h1><h2 id="创建分组"><a href="#创建分组" class="headerlink" title="创建分组"></a>创建分组</h2><p>分组是在<code>SELECT</code>语句的GROUP BY子句中创建的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, count(*) as num_prods</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; group by vend_id;</span><br><span class="line">+---------+-----------+</span><br><span class="line">| vend_id | num_prods |</span><br><span class="line">+---------+-----------+</span><br><span class="line">|    1001 |         3 |</span><br><span class="line">|    1002 |         2 |</span><br><span class="line">|    1003 |         7 |</span><br><span class="line">|    1005 |         2 |</span><br><span class="line">+---------+-----------+</span><br></pre></td></tr></table></figure>
+<p><code>GROUP BY</code>按照<code>vend_id</code>排序并分组数据。这导致对每个vend_id而不是整个表计算<code>num_prods</code>计算一次。</p>
+<h2 id="过滤分组"><a href="#过滤分组" class="headerlink" title="过滤分组"></a>过滤分组</h2><p>这里不能使用<code>WHERE</code>来过滤分组（where过滤的是行）。而实使用<code>HAVING</code>来过滤分组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_id,count(*) as orders</span><br><span class="line">    -&gt; from orders</span><br><span class="line">    -&gt; group by cust_id</span><br><span class="line">    -&gt; having count(*)&gt;&#x3D;2;</span><br><span class="line">+---------+--------+</span><br><span class="line">| cust_id | orders |</span><br><span class="line">+---------+--------+</span><br><span class="line">|   10001 |      2 |</span><br><span class="line">+---------+--------+</span><br></pre></td></tr></table></figure>
+<p>同时使用<code>WHERE</code>和<code>HAVING</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, count(*) as num_prods</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price &gt;&#x3D; 10</span><br><span class="line">    -&gt; group by vend_id</span><br><span class="line">    -&gt; having count(*)&gt;&#x3D;2;</span><br><span class="line">+---------+-----------+</span><br><span class="line">| vend_id | num_prods |</span><br><span class="line">+---------+-----------+</span><br><span class="line">|    1003 |         4 |</span><br><span class="line">|    1005 |         2 |</span><br><span class="line">+---------+-----------+</span><br></pre></td></tr></table></figure>
+<p>这条语句中，第一行使用了聚集函数的基本<code>SELECT</code>。<code>WHERE</code>先过滤所有prod_price至少为10的行。然后按照vend_id分组数据，<code>having</code>子句过滤计数为2或2以上的分组。</p>
+<h2 id="分组和排序"><a href="#分组和排序" class="headerlink" title="分组和排序"></a>分组和排序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select order_num, SUM(quantity*item_price) as ordertotal</span><br><span class="line">    -&gt; from orderitems</span><br><span class="line">    -&gt; group by order_num</span><br><span class="line">    -&gt; having sum(quantity*item_price) &gt;&#x3D; 50</span><br><span class="line">    -&gt; order by ordertotal;</span><br><span class="line">+-----------+------------+</span><br><span class="line">| order_num | ordertotal |</span><br><span class="line">+-----------+------------+</span><br><span class="line">|     20006 |      55.00 |</span><br><span class="line">|     20008 |     125.00 |</span><br><span class="line">|     20005 |     149.87 |</span><br><span class="line">|     20007 |    1000.00 |</span><br><span class="line">+-----------+------------+</span><br></pre></td></tr></table></figure>
+
+<h2 id="SELECT子句顺序"><a href="#SELECT子句顺序" class="headerlink" title="SELECT子句顺序"></a>SELECT子句顺序</h2><table>
+  <tr>
+    <td>子句</td>
+    <td>说明</td>
+    <td>是否必须使用</td>
+  </tr>
+  <tr>
+    <td>SELECT</td>
+    <td>要返回的列或表达式</td>
+    <td>是</td>
+  </tr>
+  <tr>
+    <td>FROM</td>
+    <td>从中检索数据的表</td>
+    <td>仅在从表选择数据时候用到</td>
+  </tr>
+  <tr>
+    <td>WHERE</td>
+    <td>行级过滤</td>
+    <td>否</td>
+  </tr>
+  <tr>
+    <td>GROUP BY</td>
+    <td>大分组说明</td>
+    <td>仅在按组计算聚集时使用</td>
+  </tr>
+  <tr>
+    <td>HAVING</td>
+    <td>组级过滤</td>
+    <td>否</td>
+  </tr>
+  <tr>
+    <td>ORDER BY</td>
+    <td>输出排序顺序</td>
+    <td>否</td>
+  </tr>
+  <tr>
+    <td>LIMIT</td>
+    <td>要检索的行数</td>
+    <td>否</td>
+  </tr>
+</table>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/27/%E6%B1%87%E6%80%BB%E6%95%B0%E6%8D%AE/" rel="prev" title="汇总数据">
+      <i class="fa fa-chevron-left"></i> 汇总数据
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/27/%E4%BD%BF%E7%94%A8%E5%AD%90%E6%9F%A5%E8%AF%A2/" rel="next" title="使用子查询">
+      使用子查询 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.</span> <span class="nav-text">分组数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E7%BB%84"><span class="nav-number">1.1.</span> <span class="nav-text">创建分组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%88%86%E7%BB%84"><span class="nav-number">1.2.</span> <span class="nav-text">过滤分组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E5%92%8C%E6%8E%92%E5%BA%8F"><span class="nav-number">1.3.</span> <span class="nav-text">分组和排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SELECT%E5%AD%90%E5%8F%A5%E9%A1%BA%E5%BA%8F"><span class="nav-number">1.4.</span> <span class="nav-text">SELECT子句顺序</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

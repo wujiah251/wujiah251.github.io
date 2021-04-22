@@ -226,8 +226,740 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/21/TINY%20Web%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/21/TINY%20Web%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="post-title-link" itemprop="url">TinyWeb 服务器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-21 20:29:14" itemprop="dateCreated datePublished" datetime="2021-03-21T20:29:14+08:00">2021-03-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-15 23:56:28" itemprop="dateModified" datetime="2021-01-15T23:56:28+08:00">2021-01-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="TinyWeb-服务器"><a href="#TinyWeb-服务器" class="headerlink" title="TinyWeb 服务器"></a>TinyWeb 服务器</h1><p>我针对原来提供的代码，仔细阅读，附上注释版（每个函数的功能书中有阐释，就不细讲，可以结合着看）：</p>
+<h2 id="main函数及其他函数定义"><a href="#main函数及其他函数定义" class="headerlink" title="main函数及其他函数定义"></a>main函数及其他函数定义</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这是一个微型Web服务器，能够提供5种常见类型的静态内容：HTML文集爱你、无格式的&gt;文本文件、以及编码为GIF、PNG和JPG格式的图片</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数库csapp.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;csapp.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doit</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br><span class="line"><span class="comment">// 这是函数负责处理HTTP事务</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">read_requesthdrs</span><span class="params">(<span class="keyword">rio_t</span> *rp)</span></span>;</span><br><span class="line"><span class="comment">// 读取报头</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">parse_uri</span><span class="params">(<span class="keyword">char</span>* uri,<span class="keyword">char</span> *filename,<span class="keyword">char</span> *cgiargs)</span></span>;</span><br><span class="line"><span class="comment">// 解析uri</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">serve_static</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *filename,<span class="keyword">int</span> filesize)</span></span>;</span><br><span class="line"><span class="comment">// 静态内容服务</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get_filetype</span><span class="params">(<span class="keyword">char</span>* filename,<span class="keyword">char</span>* filetype)</span></span>;</span><br><span class="line"><span class="comment">// 获得文件类型，html、plain、jpg、png、gif</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">serve_dynamic</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *filename, <span class="keyword">char</span> *cgiargs)</span></span>;</span><br><span class="line"><span class="comment">// 动态内容服务</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clienterror</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *cause, <span class="keyword">char</span> *errnum, <span class="keyword">char</span> *shortmsg, <span class="keyword">char</span>* longmsg)</span></span>;</span><br><span class="line"><span class="comment">// 向客户端报错</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> listenfd, connfd, port, clientlen;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientaddr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(argc!=<span class="number">2</span>)&#123;</span><br><span class="line">        <span class="comment">// argc==2表示输入为文件名 和 端口号</span></span><br><span class="line">        <span class="comment">// 调用方式为 &gt;./mytiny 1024</span></span><br><span class="line">        <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;usage: %s&lt;port&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    port = <span class="built_in">atoi</span>(argv[<span class="number">1</span>]);<span class="comment">//字符串转数字</span></span><br><span class="line">    listenfd = <span class="built_in">Open_listenfd</span>(port);</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        clientlen = <span class="built_in"><span class="keyword">sizeof</span></span>(clientaddr); <span class="comment">//地址结构体的字节数</span></span><br><span class="line">        connfd = <span class="built_in">Accept</span>(listenfd,(SA*)&amp;clientaddr, &amp;clientlen); <span class="comment">//产生一个已连接</span></span><br><span class="line">套接字</span><br><span class="line">        <span class="built_in">doit</span>(connfd);<span class="comment">//执行http事务处理函数</span></span><br><span class="line">        <span class="built_in">Close</span>(connfd);<span class="comment">//关闭已连接套接字connfd-关闭连接</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="doit函数"><a href="#doit函数" class="headerlink" title="doit函数"></a>doit函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doit</span><span class="params">(<span class="keyword">int</span> fd)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 输入fd是一个已连接套接字描述符</span></span><br><span class="line">    <span class="keyword">int</span> is_static;</span><br><span class="line">    <span class="keyword">char</span> filename[MAXLINE],cgiargs[MAXLINE];</span><br><span class="line">    <span class="comment">// uri解析出来的路径和cgi参数</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">sbuf</span>;</span> <span class="comment">// stat结构体是用于存储文件信息的类型</span></span><br><span class="line">    <span class="keyword">char</span> buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];</span><br><span class="line">    <span class="comment">// buf-缓冲区，method-方法(比如GET)，uri-URI，version-http的版本</span></span><br><span class="line">    <span class="keyword">rio_t</span> rio;</span><br><span class="line">    <span class="built_in">Rio_readinitb</span>(&amp;rio, fd); <span class="comment">// 初始化创建一个空的读缓冲区并且和套接字描述符fd关</span></span><br><span class="line">联起来</span><br><span class="line">    <span class="built_in">Rio_readlineb</span>(&amp;rio, buf, MAXLINE); <span class="comment">//读取一行</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Request headser\n:&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,buf);</span><br><span class="line">    <span class="built_in">sscanf</span>(buf,<span class="string">&quot;%s %s %s&quot;</span>,method, uri,version);</span><br><span class="line">    <span class="comment">// 从缓冲区去读命令到变量</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">strcasecmp</span>(method,<span class="string">&quot;GET&quot;</span>))&#123;</span><br><span class="line">        <span class="comment">// 不想等返回非0值</span></span><br><span class="line">        <span class="comment">// 调用clienterror向客户端返回错误，不支持非GET方法</span></span><br><span class="line">        <span class="built_in">clienterror</span>(fd, method, <span class="string">&quot;501&quot;</span>, <span class="string">&quot;Not Implemented&quot;</span>, <span class="string">&quot;Tiny does not implement this method&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">read_requesthdrs</span>(&amp;rio); <span class="comment">//读取请求报文</span></span><br><span class="line"></span><br><span class="line">    is_static = <span class="built_in">parse_uri</span>(uri, filename, cgiargs);</span><br><span class="line">    <span class="comment">// 如果请求的是静态内容返回1，否则返回0</span></span><br><span class="line">    <span class="comment">// filename用来存储解析出来的路径</span></span><br><span class="line">    <span class="comment">//  cgiargs是一个可选的CGI参数字符串，如果是静态内容则清空</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">stat</span>(filename,&amp;sbuf)&lt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="comment">// 文件信息获取成功返回0，失败返回-1</span></span><br><span class="line">        <span class="built_in">clienterror</span>(fd, filename, <span class="string">&quot;404&quot;</span>, <span class="string">&quot;Not found&quot;</span>,<span class="string">&quot;Tiny couldn&#x27;t find this file&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(is_static)&#123;</span><br><span class="line">        <span class="keyword">if</span>(!(<span class="built_in">S_ISREG</span>(sbuf.st_mode)) || !(S_IRUSR &amp; sbuf.st_mode))&#123;</span><br><span class="line">            <span class="comment">// st_mode：保护模式</span></span><br><span class="line">            <span class="comment">// S_ISREG(st_mode)用于判断是不是一个常规文件</span></span><br><span class="line">            <span class="comment">// S_IPUSR用户读权限</span></span><br><span class="line">            <span class="built_in">clienterror</span>(fd,filename, <span class="string">&quot;403&quot;</span>, <span class="string">&quot;Forbidden&quot;</span>, <span class="string">&quot;Tiny couldn&#x27;t read the file&quot;</span>);</span><br><span class="line">            <span class="comment">// 403：服务器无权访问所请求程序</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">serve_static</span>(fd, filename, sbuf.st_size);<span class="comment">//提供静态响应函数</span></span><br><span class="line">        <span class="comment">// st_size：文件大小</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!(<span class="built_in">S_ISREG</span>(sbuf.st_mode)) || !(S_IXUSR &amp; sbuf.st_mode))&#123;</span><br><span class="line">            <span class="built_in">clienterror</span>(fd, filename, <span class="string">&quot;403&quot;</span>, <span class="string">&quot;Forbidden&quot;</span>, <span class="string">&quot;Tiny couldn&#x27;t read the file&quot;</span>);</span><br><span class="line">            <span class="comment">// 无权访问</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">serve_dynamic</span>(fd,filename,cgiargs); <span class="comment">//提供动态响应的函数</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="read-requesthdrs函数"><a href="#read-requesthdrs函数" class="headerlink" title="read_requesthdrs函数"></a>read_requesthdrs函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">read_requesthdrs</span><span class="params">(<span class="keyword">rio_t</span> *rp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">char</span> buf[MAXLINE];</span><br><span class="line">   <span class="built_in">Rio_readlineb</span>(rp,buf,MAXLINE);</span><br><span class="line">   <span class="keyword">while</span>(<span class="built_in">strcmp</span>(buf, <span class="string">&quot;\r\n&quot;</span>))&#123;</span><br><span class="line">        <span class="comment">//终止请求报头是\r\n组成的，相等返回0，否则返回非0</span></span><br><span class="line">        <span class="built_in">Rio_readlineb</span>(rp,buf,MAXLINE);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,buf);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="parse-uri函数"><a href="#parse-uri函数" class="headerlink" title="parse_uri函数"></a>parse_uri函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">parse_uri</span><span class="params">(<span class="keyword">char</span> *uri,<span class="keyword">char</span> *filename, <span class="keyword">char</span> *cgiargs)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *ptr;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strstr</span>(uri,<span class="string">&quot;cgi-bin&quot;</span>))&#123;</span><br><span class="line">        <span class="comment">// 没有匹配到则返回null</span></span><br><span class="line">        <span class="built_in">strcpy</span>(cgiargs, <span class="string">&quot;&quot;</span>); <span class="comment">//清空cgiargs</span></span><br><span class="line">        <span class="built_in">strcpy</span>(filename,<span class="string">&quot;.&quot;</span>); <span class="comment">// 变成相对路径</span></span><br><span class="line">        <span class="built_in">strcat</span>(filename,uri); <span class="comment">// 比如./intex.html</span></span><br><span class="line">        <span class="keyword">if</span>(uri[<span class="built_in">strlen</span>(uri)<span class="number">-1</span>]==<span class="string">&#x27;/&#x27;</span>)<span class="comment">//如果uri以/为结尾，则在路径末尾再添加home.html</span></span><br><span class="line">            <span class="built_in">strcat</span>(filename,<span class="string">&quot;home.html&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        ptr = <span class="built_in">index</span>(uri,<span class="string">&#x27;?&#x27;</span>);</span><br><span class="line">        <span class="comment">// 索引到?，?之后是参数</span></span><br><span class="line">        <span class="keyword">if</span>(ptr)&#123;</span><br><span class="line">            <span class="built_in">strcpy</span>(cgiargs,ptr+<span class="number">1</span>); <span class="comment">//将参数读入cgiargs</span></span><br><span class="line">            *ptr = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">//避免把参数读入到filename</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">strcpy</span>(cgiargs,<span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">strcpy</span>(filename,<span class="string">&quot;.&quot;</span>);</span><br><span class="line">        <span class="built_in">strcat</span>(filename,uri);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="serve-static函数"><a href="#serve-static函数" class="headerlink" title="serve_static函数"></a>serve_static函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">serve_static</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *filename, <span class="keyword">int</span> filesize)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 提供5种常见类型的静态内容：HTML文件、无格式文本文件、编码为GIF、PNG、JPG&gt;格式的图片文件</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> srcfd;</span><br><span class="line">    <span class="keyword">char</span> *srcp, filetype[MAXLINE], buf[MAXBUF];</span><br><span class="line">    <span class="comment">// 发送响应到客户端</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">get_filetype</span>(filename, filetype); <span class="comment">//获得文件类型</span></span><br><span class="line">    <span class="comment">// 将HTTP报文写到buf缓存区</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;HTTP/1.0 200 OK\r\n&quot;</span>); <span class="comment">//初始状态行</span></span><br><span class="line">    <span class="comment">// 首部行</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;%sServer: Tiny Web Server\r\n&quot;</span>,buf);</span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;%sContent-length: %d\r\n&quot;</span>, buf, filesize); <span class="comment">//长度</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;%sContent-type: %s\r\n\r\n&quot;</span>, buf, filetype); <span class="comment">//类型</span></span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Response headers:\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,buf);</span><br><span class="line"></span><br><span class="line">    srcfd = <span class="built_in">Open</span>(filename, O_RDONLY, <span class="number">0</span>);<span class="comment">//只读打开文件</span></span><br><span class="line">    srcp = <span class="built_in">Mmap</span>(<span class="number">0</span>, filesize, PROT_READ, MAP_PRIVATE, srcfd, <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// Mmap函数在csapp.h、csapp.c中定义、实现</span></span><br><span class="line">    <span class="comment">// 这只是mmap的一个包装函数</span></span><br><span class="line">    <span class="comment">// 功能是将分见映射到内存，用内存读写取代I/O读写</span></span><br><span class="line">    <span class="comment">// 第1个变量void* start，指向内存起始的位置，通常设为NULL(其实就是(void*)0)&gt;，代表让系统自动选定地址</span></span><br><span class="line">    <span class="comment">// 第2个变量size_t length，将文件多大部分映射到内存中</span></span><br><span class="line">    <span class="comment">// 第3个变量int prot，表示映射区域的保护方式，这里使用可读</span></span><br><span class="line">    <span class="comment">// 第4个变量int flags，表示影响映射区域的各种特性，MAX_PRIVATE是私人的写时复</span></span><br><span class="line">制</span><br><span class="line">    <span class="comment">// 第5个变量int fd，文件描述符</span></span><br><span class="line">    <span class="comment">// 第6个变量off_t offsize文件映射的偏移量，0表示从文件的最前方开始</span></span><br><span class="line">    <span class="comment">// 返回值为映射区的内存起始位置</span></span><br><span class="line">    <span class="built_in">Close</span>(srcfd); <span class="comment">//关闭打开文件</span></span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, srcp, filesize);</span><br><span class="line">    <span class="built_in">Munmap</span>(srcp, filesize);<span class="comment">//解除内存映射</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="get-filetype函数"><a href="#get-filetype函数" class="headerlink" title="get_filetype函数"></a>get_filetype函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get_filetype</span><span class="params">(<span class="keyword">char</span> *filename, <span class="keyword">char</span> *filetype)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 获取文件类型</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">strstr</span>(filename, <span class="string">&quot;.html&quot;</span>))<span class="built_in">strcpy</span>(filetype, <span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">strstr</span>(filename, <span class="string">&quot;.gif&quot;</span>))<span class="built_in">strcpy</span>(filetype, <span class="string">&quot;image/gif&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">strstr</span>(filename, <span class="string">&quot;.png&quot;</span>))<span class="built_in">strcpy</span>(filetype, <span class="string">&quot;image/png&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">strstr</span>(filename, <span class="string">&quot;.jpg&quot;</span>))<span class="built_in">strcpy</span>(filetype, <span class="string">&quot;image/jpeg&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">strcpy</span>(filetype, <span class="string">&quot;text/plain&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="serve-dynamic函数"><a href="#serve-dynamic函数" class="headerlink" title="serve_dynamic函数"></a>serve_dynamic函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">serve_dynamic</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *filename, <span class="keyword">char</span> *cgiargs)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[MAXLINE], *emptylist[]=&#123;<span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="comment">// 响应报文</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;HTTP/1.0 200 OK\r\n&quot;</span>);</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;Server: Tiny Wev Server\r\n&quot;</span>);</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">Fork</span>()==<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">setenv</span>(<span class="string">&quot;QUERY_STRING&quot;</span>, cgiargs, <span class="number">1</span>);</span><br><span class="line">        <span class="comment">//int setenv(const char *name,const char * value,int overwrite);</span></span><br><span class="line">        <span class="comment">//setenv()用来改变或增加环境变量的内容</span></span><br><span class="line">        <span class="comment">//参数name为环境变量名称字符串；value为变量内容，参数overwrite用来决定是否要改变已存在的环境变量。如果 overwrite不为0，而该环境变量原已有内容，则原内容&gt;会被改为参数value所指的变量内容。如果overwrite为0，且该环境变量已有内容，则参数value会被忽略。</span></span><br><span class="line">        <span class="comment">//执行成功返回0，否则-1</span></span><br><span class="line">        <span class="built_in">Dup2</span>(fd, STDOUT_FILENO);</span><br><span class="line">        <span class="comment">// Dup2是csapp对dup2的封装，原型dup2(int oldfd,int newfd)</span></span><br><span class="line">        <span class="comment">// 复制文件描述符oldfd，并且指定新的文件描述符数值为newfd</span></span><br><span class="line">        <span class="comment">// STDOUT_FILENO是linux提供的用于标准出入的文件描述符</span></span><br><span class="line">        <span class="built_in">Execve</span>(filename, emptylist, environ);</span><br><span class="line">        <span class="comment">// 对execve的包装，原型：execve(const char *filename, cahr *const argv[],char *const envp[]);</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">Wait</span>(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="clienterror函数"><a href="#clienterror函数" class="headerlink" title="clienterror函数"></a>clienterror函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clienterror</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *cause, <span class="keyword">char</span> *errnum, <span class="keyword">char</span> *shortmsg, <span class="keyword">char</span> *longmsg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[MAXLINE], body[MAXBUF];</span><br><span class="line">    <span class="comment">// 直接复制了，懒得写</span></span><br><span class="line">    <span class="comment">/* Build the HTTP response body */</span></span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;&lt;html&gt;&lt;title&gt;Tiny Error&lt;/title&gt;&quot;</span>);</span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;%s&lt;body bgcolor=&quot;</span><span class="string">&quot;ffffff&quot;</span><span class="string">&quot;&gt;\r\n&quot;</span>, body);</span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;%s%s: %s\r\n&quot;</span>, body, errnum, shortmsg);</span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;%s&lt;p&gt;%s: %s\r\n&quot;</span>, body, longmsg, cause);</span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;%s&lt;hr&gt;&lt;em&gt;The Tiny Web server&lt;/em&gt;\r\n&quot;</span>, body);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Print the HTTP response */</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;HTTP/1.0 %s %s\r\n&quot;</span>, errnum, shortmsg);</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;Content-type: text/html\r\n&quot;</span>);</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;Content-length: %d\r\n\r\n&quot;</span>, (<span class="keyword">int</span>)<span class="built_in">strlen</span>(body));</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, body, <span class="built_in">strlen</span>(body));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>首先创建一个目录：mytiny，然后在mytiny中创建一个文件mytiny.c，然后将csapp.h(在include中)、csappp.c(在src中)复制到此目录中。<br>首先<code>gcc -c csapp.c</code>获得csapp.o文件，然后<code>ar -rc csapp.a csapp.o</code>生成静态库文件。<br>生成可执行文件<code>gcc -o mytiny mytiny.c csapp.a</code>。<br>在mytiny中创建目录cgi-bin，将<code>netp/tiny/cgi-bin/adder.c</code>复制到此目录中，然后csapp.a、csapp.h也复制一份到其中。<br>然后运行命令<code>gcc -o adder adder.c csapp.a</code>生成可执行文件。<br>为了测试对图片的请求，我们添加文件test.jpg在mytiny中。<br>我们最终的目录结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mytiny&#x2F;</span><br><span class="line">    mytiny.c</span><br><span class="line">    csapp.h</span><br><span class="line">    csapp.c</span><br><span class="line">    csapp.o</span><br><span class="line">    csapp.a</span><br><span class="line">    mytiny.o</span><br><span class="line">    test.jpg</span><br><span class="line">    cgi-bin&#x2F;</span><br><span class="line">        adder.c</span><br><span class="line">        csapp.h</span><br><span class="line">        csapp.a</span><br><span class="line">        adder.o</span><br></pre></td></tr></table></figure>
+<h3 id="telnet测试"><a href="#telnet测试" class="headerlink" title="telnet测试"></a>telnet测试</h3><p>首先：<code>linux&gt; ./mytiny 12000</code><br>首先使用TELNET测试，打开另一个shell，<code>linux&gt; telnet localhost 12000</code><br>然后输入HTTP请求行：<code>GET /cgi-bin/adder?100&amp;20 HTTP/1.0</code>。输完后需要先后回车两次。<br>然后我们可以看到HTTP响应。</p>
+<h3 id="浏览器测试"><a href="#浏览器测试" class="headerlink" title="浏览器测试"></a>浏览器测试</h3><p>照样先运行服务器：<code>linux&gt; ./mytiny 12000</code>。<br>在浏览器中输入<code>http://localhost:12000/test.jpg</code>，然后我们可以看到图片。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/19/ICMP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/19/ICMP/" class="post-title-link" itemprop="url">ICMP</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-19 23:39:00 / 修改时间：23:52:34" itemprop="dateCreated datePublished" datetime="2021-03-19T23:39:00+08:00">2021-03-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h1><h2 id="ICMP定义和功能"><a href="#ICMP定义和功能" class="headerlink" title="ICMP定义和功能"></a>ICMP定义和功能</h2><p>ICMP是基于IP协议工作的，但是它并不是传输层的功能，因此仍然把它归结为网络层协议。它的功能是：  </p>
+<ol>
+<li>确认IP包是否成功到达目标地址；  </li>
+<li>通知发送过程中IP包被丢弃的原因。  </li>
+</ol>
+<h2 id="ICMP报文格式"><a href="#ICMP报文格式" class="headerlink" title="ICMP报文格式"></a>ICMP报文格式</h2><p>0-7bytes：类型；<br>8-15bytes：代码；<br>15-31bytes：校验和。<br>剩下是内容。<br>不同类型的报文，内容不同。<br>有如下不同类型及含义：  </p>
+<table>
+  <th>类型</th>
+  <th>内容</th>
+  <tr>
+  <td>0</td>
+  <td>回送应答</td>
+  <tr>
+  <td>3</td>
+  <td>目标不可达</td>
+  <tr>
+  <td>4</td>
+  <td>原点抑制</td>
+  <tr>
+  <td>5</td>
+  <td>重定向</td>
+  <tr>
+  <td>8</td>
+  <td>回送请求</td>
+  <tr>
+  <td>9</td>
+  <td>路由器公告</td>
+  <tr>
+  <td>10</td>
+  <td>路由器请求</td>
+  <tr>
+  <td>11</td>
+  <td>超时</td>
+  <tr>
+  <td>17</td>
+  <td>地址子网请求</td>
+  <tr>
+  <td>18</td>
+  <td>地址子网应答</td>
+</table>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/18/C++11%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%AD%90%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/18/C++11%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%AD%90%E7%B1%BB/" class="post-title-link" itemprop="url">C++11中的原子类</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-18 16:51:00 / 修改时间：17:00:46" itemprop="dateCreated datePublished" datetime="2021-03-18T16:51:00+08:00">2021-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>如果我们需要实现复杂的原子操作，通常需要利用互斥锁来构建临界区，保证操作的原子性。加锁和解锁有很大的开销。C++11中提供了内置的原子类，保证对这些类的操作都是原子的。我们以atomic_int64_t为例：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;atomic&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">atomic_int64_t</span> atomic_total;</span><br><span class="line"><span class="keyword">int</span> total = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">threadFunc1</span><span class="params">(<span class="keyword">int64_t</span> endNum)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int64_t</span> i = <span class="number">1</span>; i &lt;= endNum; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        atomic_total += i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">threadFunc2</span><span class="params">(<span class="keyword">int64_t</span> endNum)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int64_t</span> i = <span class="number">1</span>; i &lt;= endNum; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        total += i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int64_t</span> endNum = <span class="number">100000</span>;</span><br><span class="line">    atomic_total = <span class="number">0</span>;</span><br><span class="line">    <span class="function">thread <span class="title">t11</span><span class="params">(threadFunc1, endNum)</span></span>;</span><br><span class="line">    <span class="function">thread <span class="title">t12</span><span class="params">(threadFunc1, endNum)</span></span>;</span><br><span class="line">    <span class="function">thread <span class="title">t21</span><span class="params">(threadFunc2, endNum)</span></span>;</span><br><span class="line">    <span class="function">thread <span class="title">t22</span><span class="params">(threadFunc2, endNum)</span></span>;</span><br><span class="line"></span><br><span class="line">    t11.<span class="built_in">join</span>();</span><br><span class="line">    t12.<span class="built_in">join</span>();</span><br><span class="line">    t21.<span class="built_in">join</span>();</span><br><span class="line">    t22.<span class="built_in">join</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;total=&quot;</span> &lt;&lt; total &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;atomic_total=&quot;</span> &lt;&lt; atomic_total &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 结果（total的值不稳定）：</span></span><br><span class="line">total=<span class="number">1193227575</span></span><br><span class="line">atomic_total=<span class="number">10000100000</span></span><br></pre></td></tr></table></figure>
+
+<p>原子类型C++11中通过<code>atomic&lt;T&gt;</code>类模板来定义，比如<code>atomic_int64_t</code>是通过<code>typedef atomic&lt;int64_t&gt; atomic_int64_t</code>实现的，使用时需包含头文件<code>&lt;atomic&gt;</code>。除了提供<code>atomic_int64_t</code>，还提供了其它的原子类型。常见的原子类型有：<br>atomic_bool、atomic_char、atomic_uchar、atomic_short、atomic_ushort、atomic_int、atomic_uint、atomic_long、atomic_ulong、atomic_llong、atomic_ullong、atomic_ullong、atomic_char16_t、atomic_char32_t、char32_t、atomic_wchar_t。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/18/%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/18/%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" class="post-title-link" itemprop="url">异常控制流</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-18 16:08:00 / 修改时间：16:28:56" itemprop="dateCreated datePublished" datetime="2021-03-18T16:08:00+08:00">2021-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="异常控制流"><a href="#异常控制流" class="headerlink" title="异常控制流"></a>异常控制流</h1><p>最近看中断、异常好像不同的地方的定义不太一样，这里总结一下，以免自己以后又忘记了。<br>首先我们根据CSAPP来定义，有4中不同的异常，分别是中断、陷阱、故障、终止。  </p>
+<ol>
+<li><strong>中断</strong><br>这里的中断我们可以称为硬中断，它是异步的，是来自处理器外部IO设备的信号导致的。硬件中断不是任何一条指令导致的，从这个意义上来说，它是异步的。中断一般由中断处理程序处理。<br>每当中断被激活时，都会跳转到中断向量表（由CPU定义），这中间保存了各种中断的中断处理函数的地址，然后找到对应的中断处理函数，进行处理。<br>注：这里的中断指的是硬中断，还有一种软中断，即由指令导致的中断，但是我们不将它归类为中断。  </li>
+<li><strong>陷阱（系统调用）</strong><br>陷阱是有意的异常，提供了用户态到内核态之间的接口，叫做系统调用，通过syscall指令来实现。执行syscall会跳转到异常处理程序（陷阱处理程序），执行相关的系统调用，然后再将控制返回到调用处。<br>具体：根据系统调用号，从系统调用表中找到对应的系统调用函数，然后执行相应操作。  </li>
+<li><strong>故障</strong><br>故障是由错误引起的，但是程序能够处理的一种异常。当发生故障时候，控制权通常交由故障处理程序，如果能够处理这个故障，执行完毕后控制权返回到触发故障的指令；如果不能修复这个故障，处理程序返回到内核的abort例程，abort例程会终止引起故障的程序。<br>缺页异常就是常见的故障。  </li>
+<li><strong>终止</strong><br>终止是不可恢复的致命错误造成的结果，通常是一些硬件错误。  </li>
+</ol>
+<p>上述只有中断时异步的，其他都是同步的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/18/%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/18/%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">零拷贝技术</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-18 09:53:00 / 修改时间：15:53:22" itemprop="dateCreated datePublished" datetime="2021-03-18T09:53:00+08:00">2021-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>服务端中通常需要传输文件，即将磁盘中的文件不做修改的通过socket发送出去。比如下面的代码：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>((n=<span class="built_in">read</span>(disk_fd,buf,BUG_SIZE))&gt;<span class="number">0</span>)</span><br><span class="line">	<span class="built_in">write</span>(sock_fd,buf,n);</span><br></pre></td></tr></table></figure>
+
+<p>基本操作就是从磁盘循环读取字符到用户缓冲区buf，发送到Socket。但是由于Linux的I/O操作默认是缓冲I/O。这里面主要使用的也就是 Read 和 Write 两个系统调用，我们并不知道操作系统在其中做了什么。实际上在以上 I/O 操作中，发生了多次的数据拷贝。 当应用程序访问某块数据时，操作系统首先会检查，是不是最近访问过此文件，文件内容是否缓存在内核缓冲区。如果是，操作系统则直接根据 Read 系统调用提供的 buf 地址，将内核缓冲区的内容拷贝到 buf 所指定的用户空间缓冲区中去。 如果不是，操作系统则首先将磁盘上的数据拷贝的内核缓冲区，这一步目前主要依靠 DMA 来传输，然后再把内核缓冲区上的内容拷贝到用户缓冲区中。 接下来，Write 系统调用再把用户缓冲区的内容拷贝到网络堆栈相关的内核缓冲区中，最后 Socket 再把内核缓冲区的内容发送到网卡上。<br>这种数据拷贝方式总共需要拷贝4次，分别是:  </p>
+<ol>
+<li>磁盘拷贝进内核缓冲区（DMA copy）；  </li>
+<li>内核缓冲区拷贝进用户缓冲区（read：CPU copy）；  </li>
+<li>用户缓冲区拷贝进内核socket缓冲区（write：CPU copy）；  </li>
+<li>socket内核缓冲区拷贝进网络（DMA copy）。  </li>
+</ol>
+<p>拷贝次数不但多，而且CPU负担重，故我们引入零拷贝技术来优化。零拷背用mmap+write的方式替代了read+write的方式。mmap的使用方式大致如下：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">buf = <span class="built_in">mmap</span>(diskfd, len);</span><br><span class="line"><span class="built_in">write</span>(sockfd, buf, len);</span><br></pre></td></tr></table></figure>
+<p>应用程序调用 mmap()，磁盘上的数据会通过 DMA 被拷贝的内核缓冲区，接着操作系统会把这段内核缓冲区与应用程序共享，这样就不需要把内核缓冲区的内容往用户空间拷贝。 应用程序再调用 write()，操作系统直接将内核缓冲区的内容拷贝到 Socket 缓冲区中，这一切都发生在内核态，最后，Socket 缓冲区再把数据发到网卡去。<br>注：mmap想当于建立文件和虚拟内存的映射关系，使得能够像操作数组一样访问文件，但是调用mmap不会立刻将磁盘文件换入到物理内存而是设置了相应的访问标识，如果访问的话，会触发缺页异常，然后将文件换入到物理内存中。<br>零拷贝技术中总共发生了三次拷贝：<br>1.磁盘拷贝进内核缓冲区（DMA copy）；<br>2.内核缓冲区拷贝进socket缓冲区（CPU copy）；<br>3.socket缓冲区拷贝进网络（DMA copy）。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/17/%E6%97%A0%E9%94%81%E5%90%8C%E6%AD%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/17/%E6%97%A0%E9%94%81%E5%90%8C%E6%AD%A5/" class="post-title-link" itemprop="url">无锁同步</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-17 18:01:00 / 修改时间：23:42:40" itemprop="dateCreated datePublished" datetime="2021-03-17T18:01:00+08:00">2021-03-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="无锁同步"><a href="#无锁同步" class="headerlink" title="无锁同步"></a>无锁同步</h1><h2 id="锁的代价"><a href="#锁的代价" class="headerlink" title="锁的代价"></a>锁的代价</h2><p>锁是用来实现并发最简单的方式，但是其代价也是最高的。内核态的锁的时候需要操作系统进行一次上下文切换，加锁、释放锁会导致比较多的上下文切换和调度延时，等待锁的线程会被挂起直至锁释放。在上下文切换的时候，cpu之前缓存的指令和数据都将失效，对性能有很大的损失。  </p>
+<h2 id="CAS无锁算法"><a href="#CAS无锁算法" class="headerlink" title="CAS无锁算法"></a>CAS无锁算法</h2><p>要实现无锁的非阻塞算法有多种实现，其中CAS（比较与交换，Compare and swap）是一种有名的无锁算法。CAS, CPU指令，在大多数处理器架构，包括IA32、Space中采用的都是CAS指令，CAS的语义是“我认为V的值应该为A，如果是，那么将V的值更新为B，否则不修改并告诉V的值实际为多少”，CAS是项乐观锁技术，当多个线程尝试使用CAS同时更新同一个变量时，只有其中一个线程能更新变量的值，而其它线程都失败，失败的线程并不会被挂起，而是被告知这次竞争中失败，并可以再次尝试。CAS有3个操作数，内存值V，旧的预期值A，要修改的新值B。当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么都不做。CAS无锁算法的C实现如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">compare_and_swap</span> <span class="params">(<span class="keyword">int</span>* reg, <span class="keyword">int</span> oldval, <span class="keyword">int</span> newval)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">ATOMIC</span>();</span><br><span class="line">  <span class="keyword">int</span> old_reg_val = *reg;</span><br><span class="line">  <span class="keyword">if</span> (old_reg_val == oldval) </span><br><span class="line">     *reg = newval;</span><br><span class="line">  <span class="built_in">END_ATOMIC</span>();</span><br><span class="line">  <span class="keyword">return</span> old_reg_val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>就是指当两者进行比较时，如果相等，则证明共享数据没有被修改，替换成新值，然后继续往下运行；如果不相等，说明共享数据已经被修改，放弃已经所做的操作，然后重新执行刚才的操作。容易看出 CAS 操作是基于共享数据不会被修改的假设，采用了类似于数据库的 commit-retry 的模式。当同步冲突出现的机会很少时，这种假设能带来较大的性能提升。<br>原子性加减通常是用CAS(Compare and Swap)完成的，与平台相关。CAS的基本形式是：CAS(addr,old,new),当addr中存放的值等于old时，用new对其替换。<br>C++中：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compare_exchange_weak</span> <span class="params">(T&amp; expected, T val,</span></span></span><br><span class="line"><span class="function"><span class="params">           memory_order sync = memory_order_seq_cst)</span> <span class="keyword">volatile</span> <span class="keyword">noexcept</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compare_exchange_weak</span> <span class="params">(T&amp; expected, T val,</span></span></span><br><span class="line"><span class="function"><span class="params">           memory_order sync = memory_order_seq_cst)</span> <span class="keyword">noexcept</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compare_exchange_weak</span> <span class="params">(T&amp; expected, T val,</span></span></span><br><span class="line"><span class="function"><span class="params">           memory_order success, memory_order failure)</span> <span class="keyword">volatile</span> <span class="keyword">noexcept</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compare_exchange_weak</span> <span class="params">(T&amp; expected, T val,</span></span></span><br><span class="line"><span class="function"><span class="params">           memory_order success, memory_order failure)</span> <span class="keyword">noexcept</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>当前值与期望值相等时，修改当前值为设定值，返回true，当前值与期望值不等时，将期望值修改为当前值，返回false。  我们可以用CAS算法来实现一个无锁链表。  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span>       <span class="comment">// std::cout</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;atomic&gt;</span>         <span class="comment">// std::atomic</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span>         <span class="comment">// std::thread</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span>         <span class="comment">// std::vector</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// a simple global linked list:</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span> <span class="keyword">int</span> value; Node* next; &#125;;</span><br><span class="line"><span class="function">std::atomic&lt;Node*&gt; <span class="title">list_head</span> <span class="params">(<span class="literal">nullptr</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">append</span> <span class="params">(<span class="keyword">int</span> val)</span> </span>&#123;     <span class="comment">// append an element to the list</span></span><br><span class="line">  Node* oldHead = list_head;</span><br><span class="line">  Node* newNode = <span class="keyword">new</span> Node &#123;val,oldHead&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//如果list_head还是oldHead，就更新位newNode，否则就返回false</span></span><br><span class="line">  <span class="keyword">while</span> (!list_head.<span class="built_in">compare_exchange_weak</span>(oldHead,newNode)) &#123;</span><br><span class="line">    newNode-&gt;next = oldHead;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CAS的开销"><a href="#CAS的开销" class="headerlink" title="CAS的开销"></a>CAS的开销</h3><p>CAS的开销相对锁来说小很多，但是具体细节涉及到很多计算机组成原理的知识，笔者还没学过计算机组成原理，等学一下再补上。可以参考<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Mainz/p/3546347.html">https://www.cnblogs.com/Mainz/p/3546347.html</a>  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/16/ARP%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/16/ARP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">ARP协议</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-16 23:10:53 / 修改时间：23:29:28" itemprop="dateCreated datePublished" datetime="2021-03-16T23:10:53+08:00">2021-03-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h1><h2 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h2><p>并不是所有的主机或者路由器都有链路层地址，而是他们的适配器（网络接口）具有链路层地址，这个地址一般称为MAC地址。这个地址具有唯一性，通过IEEE分配其前24位保证。格式为：<br><code>8bit:8bit:8bit:8bit:8bit:8bit</code>共计48位。<br>链路层转发帧通过MAC地址来实现。  </p>
+<h2 id="地址解析协议"><a href="#地址解析协议" class="headerlink" title="地址解析协议"></a>地址解析协议</h2><p>因为存在网络层地址（如IP）和链路层地址（MAC），所以需要在它们之间进行转换。对于因特网而言，这就是地址解析协议（ARP）。<br>和DNS协议不同，ARP协议只会在当前子网内解析MAC地址，如果试图解析其他子网的主机名，ARP协议会返回一个错误。<br>每台主机或者路由器在其内存中有一张ARP表，假设主机要发送一个数据报，发送主机需要获得目的主机IP地址对应的MAC地址，如果发送方的ARP表具有该目的主机的结点的表项，这个任务很容易完成。如果没有发送方会构造一个称为ARP分组的特殊分组，用广播地址作为目的地址，相当于去询问IP地址对应的MAC，每个适配器收到该帧会向上传递到ARP模块，如果自己有这个IP地址对应的MAC地址，就发送给源主机，然后源主机更新它的ARP表，并发送它的数据报。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/16/Keep-Alive%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/16/Keep-Alive%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">Keep-Alive模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-16 22:36:00 / 修改时间：22:39:04" itemprop="dateCreated datePublished" datetime="2021-03-16T22:36:00+08:00">2021-03-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Keep-Alive模式"><a href="#Keep-Alive模式" class="headerlink" title="Keep-Alive模式"></a>Keep-Alive模式</h1><p>非KeepAlive模式时，每个请求/应答客户和服务器都要新建一个连接，完成 之后立即断开连接（HTTP协议为无连接的协议）；当使用Keep-Alive模式（又称持久连接、连接重用）时，Keep-Alive功能使客户端到服 务器端的连接持续有效，当出现对服务器的后继请求时，Keep-Alive功能避免了建立或者重新建立连接。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>http 1.0中默认是关闭的，如果客户端浏览器支持Keep-Alive，那么就在HTTP请求头中添加一个字段 Connection: Keep-Alive，当服务器收到附带有Connection: Keep-Alive的请求时，它也会在响应头中添加一个同样的字段来使用Keep-Alive。这样一来，客户端和服务器之间的HTTP连接就会被保持，不会断开（超过Keep-Alive规定的时间，意外断电等情况除外），当客户端发送另外一个请求时，就使用这条已经建立的连接。  </p>
+<p>http 1.1中默认启用Keep-Alive， 默认情况下所在HTTP1.1中所有连接都被保持，除非在请求头或响应头中指明要关闭：Connection: Close ，这也就是为什么Connection: Keep-Alive字段再没有意义的原因。另外，还添加了一个新的字段Keep-Alive:，因为这个字段并没有详细描述用来做什么，可忽略它。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/16/TCP%E9%80%9A%E4%BF%A1%E7%9A%84%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/16/TCP%E9%80%9A%E4%BF%A1%E7%9A%84%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5/" class="post-title-link" itemprop="url">TCP通信的异常情况</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-16 21:56:00 / 修改时间：22:33:50" itemprop="dateCreated datePublished" datetime="2021-03-16T21:56:00+08:00">2021-03-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="TCP通信的异常情况"><a href="#TCP通信的异常情况" class="headerlink" title="TCP通信的异常情况"></a>TCP通信的异常情况</h1><h2 id="试图与一个不存在的端口建立连接"><a href="#试图与一个不存在的端口建立连接" class="headerlink" title="试图与一个不存在的端口建立连接"></a>试图与一个不存在的端口建立连接</h2><p>服务器端口还没有监听，我们的客户端就调用connect，视图与其建立连接。这时会发生什么呢？这符合触发RST分节的条件，目的为某端口的SYN分节到达，而端口没有监听，那么内核会立即响应一个RST，表示出错。客户端TCP收到这个RST之后则放弃这次连接的建立，并且返回给应用程序一个错误。正如上面所说，建立连接的过程对应用程序来说是不可见的，这是操作系统帮我们来完成的，所以即使进程没有启动，也可以响应客户端。  </p>
+<h2 id="试图与一个不存在的主机上面的某个端口建立连接"><a href="#试图与一个不存在的主机上面的某个端口建立连接" class="headerlink" title="试图与一个不存在的主机上面的某个端口建立连接"></a>试图与一个不存在的主机上面的某个端口建立连接</h2><p>这也是一种比较常见的情况，当某台服务器主机宕机了，而客户端并不知道，仍然尝试去与其建立连接。这个时候由于宕机，操作系统帮不上忙，服务器处于一种完全没有响应的状态。那么此时客户端的TCP会怎么办呢？客户端不会收到任何响应，那么等待6s之后再发一个SYN，若无响应则等待24s之后再发一个，若总共等待了75s后仍未收到响应就会返回ETIMEDOUT错误。这是TCP建立连接自己的一个保护机制，但是我们要等待75s才能知道这个连接无法建立，对于我们所有服务来说都太长了。更好的做法是在代码中给connect设置一个超时时间。  </p>
+<h2 id="Server进程被阻塞"><a href="#Server进程被阻塞" class="headerlink" title="Server进程被阻塞"></a>Server进程被阻塞</h2><p>由于某些情况，服务器端进程无法响应任何请求，比如所在主机的硬盘满了，导致进程处于完全阻塞，通常我们测试时会用gdb模拟这种情况。上面提到过，建立连接的过程对应用程序是不可见的，那么，这时连接可以正常建立。当然，客户端进程也可以通过这个连接给服务器端发送请求，服务器端TCP会应答ACK表示已经收到这个分节（这里的收到指的是数据已经在内核的缓冲区里准备好，由于进程被阻塞，无法将数据从内核的缓冲区复制到应用程序的缓冲区），但永远不会返回结果。  </p>
+<h2 id="我们杀死了server"><a href="#我们杀死了server" class="headerlink" title="我们杀死了server"></a>我们杀死了server</h2><p>这是线上最常见的操作，当一个模块上线时，OP同学总是会先把旧的进程杀死，然后再启动新的进程。那么在这个过程中TCP连接发生了什么呢。在进程正常退出时会自动调用close函数来关闭它所打开的文件描述符，这相当于服务器端来主动关闭连接——会发送一个FIN分节给客户端TCP；客户端要做的就是配合对端关闭连接，TCP会自动响应一个ACK，然后再由客户端应用程序调用close函数，也就是我们上面所描述的关闭连接的4次挥手过程。接下来，客户端还需要定时去重连，以便当服务器端进程重新启动好时客户端能够继续与之通信。</p>
+<h2 id="Server进程所在的主机宕机"><a href="#Server进程所在的主机宕机" class="headerlink" title="Server进程所在的主机宕机"></a>Server进程所在的主机宕机</h2><p>客户端向服务器端发送分节，由于服务器端宕机，不会有任何响应，客户端持续重传，然而服务器始终不能应答，重传数次之后，大约4~10分钟才停止，之后返回一个ETIMEDOUT错误。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -292,9 +1024,15 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
 </div>

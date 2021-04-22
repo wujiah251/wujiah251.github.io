@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文主要总结C++网络编程中关于套接字编程的相关函数。   TCP创建一个套接字：socket()int socket(int family, int type, int protocol);其中family指明协议族，IPV4是AF_INET，IPv6AF_INET6；type指明套接字类型，TCP为SOCK_STREAM，UDP是SOCK_DGRAM。protocol参数设为某个协议的类型常值">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络编程">
+<meta property="og:url" content="http://example.com/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="本文主要总结C++网络编程中关于套接字编程的相关函数。   TCP创建一个套接字：socket()int socket(int family, int type, int protocol);其中family指明协议族，IPV4是AF_INET，IPv6AF_INET6；type指明套接字类型，TCP为SOCK_STREAM，UDP是SOCK_DGRAM。protocol参数设为某个协议的类型常值">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-13T14:29:00.000Z">
+<meta property="article:modified_time" content="2021-02-23T02:12:52.000Z">
+<meta property="article:author" content="乡村程序员">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>网络编程 | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网络编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 22:29:00" itemprop="dateCreated datePublished" datetime="2021-01-13T22:29:00+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-23 10:12:52" itemprop="dateModified" datetime="2021-02-23T10:12:52+08:00">2021-02-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文主要总结C++网络编程中关于套接字编程的相关函数。  </p>
+<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="创建一个套接字：socket"><a href="#创建一个套接字：socket" class="headerlink" title="创建一个套接字：socket()"></a>创建一个套接字：<code>socket()</code></h2><p><code>int socket(int family, int type, int protocol);</code><br>其中family指明协议族，IPV4是<code>AF_INET</code>，IPv6<code>AF_INET6</code>；type指明套接字类型，TCP为<code>SOCK_STREAM</code>，UDP是<code>SOCK_DGRAM</code>。protocol参数设为某个协议的类型常值，或者设为0。</p>
+<h2 id="建立连接：connect"><a href="#建立连接：connect" class="headerlink" title="建立连接：connect()"></a>建立连接：<code>connect()</code></h2><p><code>int connect(int sockfd, const struct sockaddr *serveraddr, socklen_t addrlen);</code><br>sockfd是socket函数返回的套接字描述符，第二个参数是指向一个套接字地址的指针和该结构大小。连接成功返回0，否则-1。</p>
+<p>实际使用中，我们一般传入sockaddr_in指针，进行类型转换为sockaddr，sockaddr_in结构如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span>&#123;</span></span><br><span class="line">	<span class="keyword">short</span> <span class="keyword">int</span> sin_family;	<span class="comment">//协议族</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> <span class="keyword">int</span> sin_port;	<span class="comment">//存储端口号，只能用网络字顺序</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> <span class="title">sin_addr</span>;</span>	<span class="comment">//存储IP地址</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="绑定端口：bind"><a href="#绑定端口：bind" class="headerlink" title="绑定端口：bind()"></a>绑定端口：<code>bind()</code></h2><p><code>int bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen);</code><br>将一个本地协议地址和套接字描述符绑定起来。  </p>
+<p>一般来说，端口我们可以自己指定或者使用0让内核自己选择一个临时端口；IP地址可以选择统配地址让内核等套接字已连接再选择一个本地地址。  </p>
+<h2 id="监听：listen"><a href="#监听：listen" class="headerlink" title="监听：listen()"></a>监听：<code>listen()</code></h2><p>一般来说，服务器会打开一个监听套接字，用来等待来自client的连接请求：<br><code>int listen(int sockfd,int backlog);</code><br>sockfd是socket函数创建的套接字，然后backlog是为这个监听套接字维护的队列长度，队列包括已连接队列（established状态）和未连接队列（syn_recv状态）。  </p>
+<h2 id="生成已连接套接字：accept"><a href="#生成已连接套接字：accept" class="headerlink" title="生成已连接套接字：accept()"></a>生成已连接套接字：<code>accept()</code></h2><p><code>int accept(int sockfd, struct sockaddr *cliaddr, socklen_t * addrlen);</code><br>该函数会从监听套接字sockfd的已连接队列中取出一个连接，返回一个已连接套接字描述符，并且返回另一方套接字地址和地址结字节数。  </p>
+<h2 id="关闭套接字：close"><a href="#关闭套接字：close" class="headerlink" title="关闭套接字：close()"></a>关闭套接字：<code>close()</code></h2><p><code>int close(int sockfd);</code><br>该函数可以关闭一个套接字描述符，不过如果该套接字使用引用计数，如果被多个进程拥有，则只会计数-1，当计数为0时候才会真正的关闭。  </p>
+<h2 id="设置套接字参数：getsockopt-和setsockopt"><a href="#设置套接字参数：getsockopt-和setsockopt" class="headerlink" title="设置套接字参数：getsockopt()和setsockopt()"></a>设置套接字参数：<code>getsockopt()</code>和<code>setsockopt()</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen);</span><br><span class="line">int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);</span><br></pre></td></tr></table></figure>
+<p>上述两个函数分别用来获得套接字的参数和设置参数，一般情况下先获得已有参数，然后将想要加入的参数和以后参数做或运算，然后再设置参数即可。函数的各个参数具体使用建议参考《UNIX网络编程 卷1：套接字联网API》。  </p>
+<h1 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h1><h2 id="创建套接字：socket"><a href="#创建套接字：socket" class="headerlink" title="创建套接字：socket()"></a>创建套接字：<code>socket()</code></h2><p>创建套接字的方法上一章已经说过了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> family, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>不加赘述了。  </p>
+<h2 id="接收数据：recvfrom"><a href="#接收数据：recvfrom" class="headerlink" title="接收数据：recvfrom()"></a>接收数据：<code>recvfrom()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recvfrom</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *from, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
+<p>参数sockfd是套接字描述符，buff是指向读缓冲区的指针，btybes是最大读入的字节数（避免缓冲区溢出）。 最后两个参数数数据发送方的套接字地址和结构字节数。  </p>
+<h2 id="发送数据：sendto"><a href="#发送数据：sendto" class="headerlink" title="发送数据：sendto()"></a>发送数据：<code>sendto()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">sendto</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *to, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
+<p>发送数据，buff为写缓冲区，btybe是待写入的字节数，后面是发送的目的地套接字地址和地址结构的字节数。</p>
+<h1 id="读写函数"><a href="#读写函数" class="headerlink" title="读写函数"></a>读写函数</h1><h2 id="recv-和send"><a href="#recv-和send" class="headerlink" title="recv()和send()"></a><code>recv()</code>和<code>send()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recv</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">send</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>前面3参数很好理解，flags是一个额外的参数，具体可看《UNIX网络编程 卷一：套接字联网API》。  </p>
+<h2 id="readv-和writev"><a href="#readv-和writev" class="headerlink" title="readv()和writev()"></a><code>readv()</code>和<code>writev()</code></h2><p>readv和writev允许单个系统调用读入到或写出自一个或多个缓冲区。这些操作被称为分散度和集中写。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readv</span><span class="params">(<span class="keyword">int</span> sockfd, cosnt struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">writev</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这两个函数的第2个参数都是指向某个iovec结构数组的一个指针，其中iovec结构再头文件&lt;sys/uio.h&gt;中定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iovec</span>&#123;</span></span><br><span class="line">	<span class="keyword">void</span> *iov_base;	<span class="comment">//内存起始地址</span></span><br><span class="line">   <span class="keyword">size_t</span> iov_len;	<span class="comment">//内存大小</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个函数可以用于任何描述符，而不仅仅限于套接字。另外writev是一个原子操作，意味着对于一个基于记录的协议而言，一次writev调用只产生单个UDP数据报。</p>
+<h1 id="获取地址"><a href="#获取地址" class="headerlink" title="获取地址"></a>获取地址</h1><h2 id="gethostbyname"><a href="#gethostbyname" class="headerlink" title="gethostbyname()"></a><code>gethostbyname()</code></h2><p>gethostbyname()函数主要作用：用域名或者主机名获取地址，操作系统提供的库函数。以下的讨论基于linux环境。<br>域名系统（Domain Name System, DNS）主要用于主机名字与IP地址之间的映射。每个组织机构往往运行一个或多个名字服务器（name server），我们编写的客户端和服务器等应用程序通过调用解析器（resolver）的函数库中的函数接触DNS服务器。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyname</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果成功则返回一个hostent指针，否则返回NULL。当发生错误时，它不设置errno变量，设置全局整数变量h_errno。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> &#123;</span></span><br><span class="line">	<span class="keyword">char</span>  *h_name;            <span class="comment">/*主机规范名*/</span></span><br><span class="line">	<span class="keyword">char</span> **h_aliases;         <span class="comment">/*主机别名列表*/</span></span><br><span class="line">   <span class="keyword">int</span>	h_addrtype;        <span class="comment">/*地址类型，只能是IPv4，本函数无法解决IPv6*/</span></span><br><span class="line">   <span class="keyword">int</span> 	h_length;          <span class="comment">/*IP地址字节数*/</span></span><br><span class="line">   <span class="keyword">char</span> **h_addr_list;</span><br><span class="line">   <span class="comment">/*主机的IP地址，是网络字节序，需要通过inet_ntop函数转换*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="gethostbyaddr"><a href="#gethostbyaddr" class="headerlink" title="gethostbyaddr()"></a><code>gethostbyaddr()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyaddr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *addr, <span class="keyword">socklen_t</span> len, <span class="keyword">int</span> type)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>根据地址和地址类型来获得主机名。返回类型和gethostbyname一样。注意addr是网络字节序。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/13/%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97/" rel="prev" title="最长上升子序列">
+      <i class="fa fa-chevron-left"></i> 最长上升子序列
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" rel="next" title="CH6存储器层次结构">
+      CH6存储器层次结构 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP"><span class="nav-number">1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%A5%97%E6%8E%A5%E5%AD%97%EF%BC%9Asocket"><span class="nav-number">1.1.</span> <span class="nav-text">创建一个套接字：socket()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%EF%BC%9Aconnect"><span class="nav-number">1.2.</span> <span class="nav-text">建立连接：connect()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%91%E5%AE%9A%E7%AB%AF%E5%8F%A3%EF%BC%9Abind"><span class="nav-number">1.3.</span> <span class="nav-text">绑定端口：bind()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E5%90%AC%EF%BC%9Alisten"><span class="nav-number">1.4.</span> <span class="nav-text">监听：listen()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%B7%B2%E8%BF%9E%E6%8E%A5%E5%A5%97%E6%8E%A5%E5%AD%97%EF%BC%9Aaccept"><span class="nav-number">1.5.</span> <span class="nav-text">生成已连接套接字：accept()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E5%A5%97%E6%8E%A5%E5%AD%97%EF%BC%9Aclose"><span class="nav-number">1.6.</span> <span class="nav-text">关闭套接字：close()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%A5%97%E6%8E%A5%E5%AD%97%E5%8F%82%E6%95%B0%EF%BC%9Agetsockopt-%E5%92%8Csetsockopt"><span class="nav-number">1.7.</span> <span class="nav-text">设置套接字参数：getsockopt()和setsockopt()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UDP"><span class="nav-number">2.</span> <span class="nav-text">UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%A5%97%E6%8E%A5%E5%AD%97%EF%BC%9Asocket"><span class="nav-number">2.1.</span> <span class="nav-text">创建套接字：socket()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E6%94%B6%E6%95%B0%E6%8D%AE%EF%BC%9Arecvfrom"><span class="nav-number">2.2.</span> <span class="nav-text">接收数据：recvfrom()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE%EF%BC%9Asendto"><span class="nav-number">2.3.</span> <span class="nav-text">发送数据：sendto()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">读写函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#recv-%E5%92%8Csend"><span class="nav-number">3.1.</span> <span class="nav-text">recv()和send()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readv-%E5%92%8Cwritev"><span class="nav-number">3.2.</span> <span class="nav-text">readv()和writev()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%9C%B0%E5%9D%80"><span class="nav-number">4.</span> <span class="nav-text">获取地址</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gethostbyname"><span class="nav-number">4.1.</span> <span class="nav-text">gethostbyname()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gethostbyaddr"><span class="nav-number">4.2.</span> <span class="nav-text">gethostbyaddr()</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

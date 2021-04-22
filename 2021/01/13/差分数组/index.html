@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="题目1674使数组互补的最少操作次数链接 暴力破解保存一个数组记录目标值为$2-&gt;2limit$的总操作数，然后遍历找到最小值。 1234567891011121314151617181920212223242526class Solution &amp;#123;public:    int minMoves(vector&lt;int&gt;&amp;&amp; nums, int limit)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="差分数组">
+<meta property="og:url" content="http://example.com/2021/01/13/%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="题目1674使数组互补的最少操作次数链接 暴力破解保存一个数组记录目标值为$2-&gt;2limit$的总操作数，然后遍历找到最小值。 1234567891011121314151617181920212223242526class Solution &amp;#123;public:    int minMoves(vector&lt;int&gt;&amp;&amp; nums, int limit)">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-13T12:22:49.000Z">
+<meta property="article:modified_time" content="2021-01-27T13:06:50.000Z">
+<meta property="article:author" content="乡村程序员">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/01/13/%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>差分数组 | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          差分数组
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:22:49" itemprop="dateCreated datePublished" datetime="2021-01-13T20:22:49+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-27 21:06:50" itemprop="dateModified" datetime="2021-01-27T21:06:50+08:00">2021-01-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="题目1674使数组互补的最少操作次数"><a href="#题目1674使数组互补的最少操作次数" class="headerlink" title="题目1674使数组互补的最少操作次数"></a>题目1674使数组互补的最少操作次数</h1><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-moves-to-make-array-complementary/">链接</a></p>
+<h2 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h2><p>保存一个数组记录目标值为$2-&gt;2limit$的总操作数，然后遍历找到最小值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minMoves</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp;&amp; nums, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">sum</span><span class="params">(<span class="number">2</span>*limit+<span class="number">1</span>,<span class="number">0</span>)</span></span>;<span class="comment">//0-limit*2</span></span><br><span class="line">        <span class="keyword">int</span> n=nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> Max,Min;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>,j;i&lt;n/<span class="number">2</span>;i++)&#123;</span><br><span class="line">            j=n-i<span class="number">-1</span>;</span><br><span class="line">            cout &lt;&lt; nums[i] &lt;&lt; nums[j] &lt;&lt; limit &lt;&lt; endl;</span><br><span class="line">            Max=<span class="built_in">max</span>(nums[i]+limit,limit+nums[j]);</span><br><span class="line">            Min=<span class="built_in">min</span>(nums[i]+<span class="number">1</span>,<span class="number">1</span>+nums[j]);</span><br><span class="line">            <span class="comment">// [Min,Max]这个范围是可以只操作一次达到得</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">2</span>;k&lt;=limit*<span class="number">2</span>;k++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(k==nums[i]+nums[j])<span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(k&lt;=Max&amp;&amp;k&gt;=Min)sum[k]++;</span><br><span class="line">                <span class="keyword">else</span> sum[k]+=<span class="number">2</span>;</span><br><span class="line">            </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res=INT_MAX;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">2</span>;k&lt;=limit*<span class="number">2</span>;k++)&#123;</span><br><span class="line">            res=<span class="built_in">min</span>(sum[k],res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：$O(n*limit)$</p>
+<h2 id="差分数组的利用"><a href="#差分数组的利用" class="headerlink" title="差分数组的利用"></a>差分数组的利用</h2><p>在暴力破解中，针对每组数，我们需要修改整个记录数组sum，修改形式其实是对五个连续区间$[2,Min-1],[Min,Sum-1],[Sum],[Sum+1,Max],[Max+1,2*limit]$进行一些修改，我们发现这些其实是对连续区间进行统一的修改，这是我们可以考虑使用差分数组diff，diff[i]维护sum[i]-sum[i-1]的信息，那么当我们需要对区间$[i,j]$整体加上一个k时，只需要</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">diff[i]+=k;</span><br><span class="line">diff[j+<span class="number">1</span>]=k;</span><br></pre></td></tr></table></figure>
+<p>整个复杂度降低到了一个常数级别。<br>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minMoves</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp;&amp; nums, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">diff</span><span class="params">(<span class="number">2</span>*limit+<span class="number">2</span>,<span class="number">0</span>)</span></span>;<span class="comment">//0-limit*2+1</span></span><br><span class="line">        <span class="keyword">int</span> n=nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> Max,Min,Sum;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>,j;i&lt;n/<span class="number">2</span>;i++)&#123;</span><br><span class="line">            j=n-i<span class="number">-1</span>;</span><br><span class="line">            Max=<span class="built_in">max</span>(nums[i]+limit,limit+nums[j]);</span><br><span class="line">            Min=<span class="built_in">min</span>(nums[i]+<span class="number">1</span>,<span class="number">1</span>+nums[j]);</span><br><span class="line">            <span class="comment">// [Min,Max]这个范围是可以只操作一次达到得</span></span><br><span class="line">            diff[<span class="number">2</span>]+=<span class="number">2</span>;</span><br><span class="line">            diff[Min]-=<span class="number">2</span>;</span><br><span class="line">            diff[Min]+=<span class="number">1</span>;</span><br><span class="line">            diff[Sum]-=<span class="number">1</span>;</span><br><span class="line">            diff[Sum+<span class="number">1</span>]+=<span class="number">1</span>;</span><br><span class="line">            diff[Max+<span class="number">1</span>]-=<span class="number">1</span>;</span><br><span class="line">            diff[Max+<span class="number">1</span>]+=<span class="number">2</span>;</span><br><span class="line">            diff[<span class="number">2</span>*limit+<span class="number">1</span>]+=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res=INT_MAX,temp=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">2</span>;k&lt;=limit*<span class="number">2</span>;k++)&#123;</span><br><span class="line">            temp+=diff[k];</span><br><span class="line">            res=<span class="built_in">min</span>(temp,res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度为$O(max(limit,n))$。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/13/%E6%9C%80%E5%B0%8F%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%80%A7/" rel="prev" title="最小不兼容性">
+      <i class="fa fa-chevron-left"></i> 最小不兼容性
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/13/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/" rel="next" title="打乱数组">
+      打乱数组 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE1674%E4%BD%BF%E6%95%B0%E7%BB%84%E4%BA%92%E8%A1%A5%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">题目1674使数组互补的最少操作次数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="nav-number">1.1.</span> <span class="nav-text">暴力破解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%A9%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">差分数组的利用</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
