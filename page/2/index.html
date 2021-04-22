@@ -190,6 +190,156 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/17/%E6%97%A0%E9%94%81%E5%90%8C%E6%AD%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/17/%E6%97%A0%E9%94%81%E5%90%8C%E6%AD%A5/" class="post-title-link" itemprop="url">无锁同步</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-17 18:01:00" itemprop="dateCreated datePublished" datetime="2021-03-17T18:01:00+08:00">2021-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="无锁同步"><a href="#无锁同步" class="headerlink" title="无锁同步"></a>无锁同步</h1><h2 id="锁的代价"><a href="#锁的代价" class="headerlink" title="锁的代价"></a>锁的代价</h2><p>锁是用来实现并发最简单的方式，但是其代价也是最高的。内核态的锁的时候需要操作系统进行一次上下文切换，加锁、释放锁会导致比较多的上下文切换和调度延时，等待锁的线程会被挂起直至锁释放。在上下文切换的时候，cpu之前缓存的指令和数据都将失效，对性能有很大的损失。  </p>
+<h2 id="CAS无锁算法"><a href="#CAS无锁算法" class="headerlink" title="CAS无锁算法"></a>CAS无锁算法</h2><p>要实现无锁的非阻塞算法有多种实现，其中CAS（比较与交换，Compare and swap）是一种有名的无锁算法。CAS, CPU指令，在大多数处理器架构，包括IA32、Space中采用的都是CAS指令，CAS的语义是“我认为V的值应该为A，如果是，那么将V的值更新为B，否则不修改并告诉V的值实际为多少”，CAS是项乐观锁技术，当多个线程尝试使用CAS同时更新同一个变量时，只有其中一个线程能更新变量的值，而其它线程都失败，失败的线程并不会被挂起，而是被告知这次竞争中失败，并可以再次尝试。CAS有3个操作数，内存值V，旧的预期值A，要修改的新值B。当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么都不做。CAS无锁算法的C实现如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">compare_and_swap</span> <span class="params">(<span class="keyword">int</span>* reg, <span class="keyword">int</span> oldval, <span class="keyword">int</span> newval)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">ATOMIC</span>();</span><br><span class="line">  <span class="keyword">int</span> old_reg_val = *reg;</span><br><span class="line">  <span class="keyword">if</span> (old_reg_val == oldval) </span><br><span class="line">     *reg = newval;</span><br><span class="line">  <span class="built_in">END_ATOMIC</span>();</span><br><span class="line">  <span class="keyword">return</span> old_reg_val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>就是指当两者进行比较时，如果相等，则证明共享数据没有被修改，替换成新值，然后继续往下运行；如果不相等，说明共享数据已经被修改，放弃已经所做的操作，然后重新执行刚才的操作。容易看出 CAS 操作是基于共享数据不会被修改的假设，采用了类似于数据库的 commit-retry 的模式。当同步冲突出现的机会很少时，这种假设能带来较大的性能提升。<br>原子性加减通常是用CAS(Compare and Swap)完成的，与平台相关。CAS的基本形式是：CAS(addr,old,new),当addr中存放的值等于old时，用new对其替换。<br>C++中：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compare_exchange_weak</span> <span class="params">(T&amp; expected, T val,</span></span></span><br><span class="line"><span class="function"><span class="params">           memory_order sync = memory_order_seq_cst)</span> <span class="keyword">volatile</span> <span class="keyword">noexcept</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compare_exchange_weak</span> <span class="params">(T&amp; expected, T val,</span></span></span><br><span class="line"><span class="function"><span class="params">           memory_order sync = memory_order_seq_cst)</span> <span class="keyword">noexcept</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compare_exchange_weak</span> <span class="params">(T&amp; expected, T val,</span></span></span><br><span class="line"><span class="function"><span class="params">           memory_order success, memory_order failure)</span> <span class="keyword">volatile</span> <span class="keyword">noexcept</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">compare_exchange_weak</span> <span class="params">(T&amp; expected, T val,</span></span></span><br><span class="line"><span class="function"><span class="params">           memory_order success, memory_order failure)</span> <span class="keyword">noexcept</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>当前值与期望值相等时，修改当前值为设定值，返回true，当前值与期望值不等时，将期望值修改为当前值，返回false。  我们可以用CAS算法来实现一个无锁链表。  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span>       <span class="comment">// std::cout</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;atomic&gt;</span>         <span class="comment">// std::atomic</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span>         <span class="comment">// std::thread</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span>         <span class="comment">// std::vector</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// a simple global linked list:</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span> <span class="keyword">int</span> value; Node* next; &#125;;</span><br><span class="line"><span class="function">std::atomic&lt;Node*&gt; <span class="title">list_head</span> <span class="params">(<span class="literal">nullptr</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">append</span> <span class="params">(<span class="keyword">int</span> val)</span> </span>&#123;     <span class="comment">// append an element to the list</span></span><br><span class="line">  Node* oldHead = list_head;</span><br><span class="line">  Node* newNode = <span class="keyword">new</span> Node &#123;val,oldHead&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//如果list_head还是oldHead，就更新位newNode，否则就返回false</span></span><br><span class="line">  <span class="keyword">while</span> (!list_head.<span class="built_in">compare_exchange_weak</span>(oldHead,newNode)) &#123;</span><br><span class="line">    newNode-&gt;next = oldHead;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CAS的开销"><a href="#CAS的开销" class="headerlink" title="CAS的开销"></a>CAS的开销</h3><p>CAS的开销相对锁来说小很多，但是具体细节涉及到很多计算机组成原理的知识，笔者还没学过计算机组成原理，等学一下再补上。可以参考<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Mainz/p/3546347.html">https://www.cnblogs.com/Mainz/p/3546347.html</a>  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/16/ARP%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/16/ARP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">ARP协议</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-16 23:10:53" itemprop="dateCreated datePublished" datetime="2021-03-16T23:10:53+08:00">2021-03-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h1><h2 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h2><p>并不是所有的主机或者路由器都有链路层地址，而是他们的适配器（网络接口）具有链路层地址，这个地址一般称为MAC地址。这个地址具有唯一性，通过IEEE分配其前24位保证。格式为：<br><code>8bit:8bit:8bit:8bit:8bit:8bit</code>共计48位。<br>链路层转发帧通过MAC地址来实现。  </p>
+<h2 id="地址解析协议"><a href="#地址解析协议" class="headerlink" title="地址解析协议"></a>地址解析协议</h2><p>因为存在网络层地址（如IP）和链路层地址（MAC），所以需要在它们之间进行转换。对于因特网而言，这就是地址解析协议（ARP）。<br>和DNS协议不同，ARP协议只会在当前子网内解析MAC地址，如果试图解析其他子网的主机名，ARP协议会返回一个错误。<br>每台主机或者路由器在其内存中有一张ARP表，假设主机要发送一个数据报，发送主机需要获得目的主机IP地址对应的MAC地址，如果发送方的ARP表具有该目的主机的结点的表项，这个任务很容易完成。如果没有发送方会构造一个称为ARP分组的特殊分组，用广播地址作为目的地址，相当于去询问IP地址对应的MAC，每个适配器收到该帧会向上传递到ARP模块，如果自己有这个IP地址对应的MAC地址，就发送给源主机，然后源主机更新它的ARP表，并发送它的数据报。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/16/Keep-Alive%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -906,223 +1056,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/11/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/11/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">多进程和多线程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-03-11 08:46:00" itemprop="dateCreated datePublished" datetime="2021-03-11T08:46:00+08:00">2021-03-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="多进程和多线程分析"><a href="#多进程和多线程分析" class="headerlink" title="多进程和多线程分析"></a>多进程和多线程分析</h1><p>最近面试的时候常常被问一个问题，多进程好还是多线程好？具体的使用场景是什么？笔者在这方面的知识储备不多也不够系统，所以在这里总结一下：  </p>
-<h2 id="多进程和多线程特性"><a href="#多进程和多线程特性" class="headerlink" title="多进程和多线程特性"></a>多进程和多线程特性</h2><table>
-  <tr>
-  <th>属性</th>
-  <th>多进程</th>
-  <th>多线程</th>
-  <th>总结</th>
-  <tr>
-  <td>数据同步</td>
-  <td>数据共享复杂，需要使用IPC；数据是分开的，同步简单</td>
-  <td>因为共享进程的内存，数据共享简单，但是同步复杂</td>
-  <td>各有优势</td>
-  <tr>
-  <td>内存、CPU</td>
-  <td>占用内存多，切换复杂，CPU利用率低</td>
-  <td>占用内存少，切换简单，CPU利用率高</td>
-  <td>线程占优</td>
-  <tr>
-  <td>创建销毁、切换</td>
-  <td>创建、销毁、切换复杂，速度慢</td>
-  <td>创建销毁、切换简单，速度很快</td>
-  <td>线程占优</td>
-  <tr>
-  <td>编程、调试</td>
-  <td>编程简单、调试简单</td>
-  <td>编程复杂、调试复杂</td>
-  <td>进程占优</td>
-  <tr>
-  <td>可靠性</td>
-  <td>进程之间不会相互影响</td>
-  <td>一个线程挂掉将导致整个进程挂掉</td>
-  <td>进程占优</td>
-  <tr>
-  <td>分布式</td>
-  <td>适应于多核、多机分布式系统，扩展机器比较简单</td>
-  <td>适应于多核分布式</td>
-  <td>进程占优</td>
-</table>
-
-<h2 id="不同场景下的选择"><a href="#不同场景下的选择" class="headerlink" title="不同场景下的选择"></a>不同场景下的选择</h2><ol>
-<li>需要频繁创建销毁的优先用线程：<br>这种情况最常见的就是Web服务器了，来了一个连接建立一个线程，断了就销毁线程，要是用进程，创建和销毁的代价是很难承受的。  </li>
-<li>需要进行大量计算的优先使用线程：<br>大量计算即CPU开销比较大，切换频繁了，这种情况下线程最合适。  </li>
-<li>强相关的处理用线程，弱相关的处理用进程：<br>首先什么叫强相关，什么叫弱相关？举个例子，一般的server需要完成如下任务：消息收发、消息处理。这就叫弱相关的任务。而“消息处理”里面可能又分为“消息解码”、“业务处理”，这两个任务相对来说相关性就要强多了。因此“消息收发”和“消息处理”可以分进程设计，“消息解码”、“业务处理”可以分线程设计。  </li>
-<li>可能要扩展到多机分布的用进程，多核分布的用线程  </li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/07/InnoDB%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/07/InnoDB%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">InnoDB体系结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-03-07 20:15:00" itemprop="dateCreated datePublished" datetime="2021-03-07T20:15:00+08:00">2021-03-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="InnoDB体系结构"><a href="#InnoDB体系结构" class="headerlink" title="InnoDB体系结构"></a>InnoDB体系结构</h1><ol>
-<li>后台线程；  </li>
-<li>InnoDB存储引擎内存池（所有进程、线程需要访问的多个内部数据结构；缓存磁盘上的数据，方便快速读取；重做日志缓冲）。  </li>
-</ol>
-<p>后台线程的主要作用是刷新内存池种的数据，保证缓存池中的内存缓存的时最近的数据。此外将已修复的数据文件刷新到磁盘文件，同时保证在数据库发生异常的情况下InnoDB能恢复到正常运行状态。  </p>
-<h2 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h2><ol>
-<li>Master Thread<br>这是一个非常核心的后台线程，主要负责将缓冲池中的数据异步刷新到磁盘，保证数据的一致性，包括脏页的刷新，合并插入缓冲等。  </li>
-<li>IO Thread<br>在InnoDB存储引擎中大量使用了AIO（Async IO）来处理写IO请求，这样可以极大提高数据库性能。而IO Thread的工作主要是负责这些IO请求的回调处理。  </li>
-<li>Purge Thread<br>事务被提交后，其所使用的undolog可能不再需要，因此需要PurgeThread来回收已经使用并分配的undo页。  </li>
-<li>Page Cleaner Thread<br>将之前版本中脏页的刷新操作都放入到单独的线程中来完成。  </li>
-</ol>
-<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ol>
-<li>缓冲池<br>缓冲池使用来减少磁盘IO的消耗而存在的，对于数据库中的页的修改操作，则首先修改在缓冲池中页，然后再以一定的频率刷新到磁盘。<br>具体来看缓存池中缓存了数据页、索引页、插入缓存、undo页、自适应哈希索引、InnoDB存储的锁消息、数据字典信息等。  </li>
-<li>LRU List、Free List和Flush List<br>缓存池是通过LRU算法管理的。LRU列表中的页被修改后，称该页为脏页（dirty page）。而Flush列表中的页即为脏页列表。  </li>
-<li>重做日志缓冲<br>InnoDB存储引擎首先将重做日志信息放入到这个混缓冲区，然后按一定频率将其刷新到重做日志文件。重做日志缓冲一般不需要设置得很大，因为一般情况下每一秒会将重做日志缓冲刷新到日志文件，因此用户只要保证每秒产生得事务量在这个缓冲大小之内即可。  </li>
-<li>额外的内存池  </li>
-</ol>
-<h1 id="Master-Thread工作方式"><a href="#Master-Thread工作方式" class="headerlink" title="Master Thread工作方式"></a>Master Thread工作方式</h1><p>Master Thread具有最高界别的线程优先级。其内部由多个循环组成：主循环（loop）、后台循环（background loop）、刷新循环（flush loop）、暂停循环。Master Thread会根据数据库运行状态在多个循环中切换。  </p>
-<h1 id="InnoDB关键特性"><a href="#InnoDB关键特性" class="headerlink" title="InnoDB关键特性"></a>InnoDB关键特性</h1><p>InnoDB存储引擎的关键特性包括：  </p>
-<ol>
-<li>插入缓存；  </li>
-<li>两次写；  </li>
-<li>自适应哈希索引；  </li>
-<li>异步IO；  </li>
-<li>刷新邻接页。  </li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1194,7 +1127,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">112</span>
+          <span class="site-state-item-count">114</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

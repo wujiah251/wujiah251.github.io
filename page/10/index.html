@@ -190,6 +190,179 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/%E4%BD%BF%E7%94%A8MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/26/%E4%BD%BF%E7%94%A8MySQL/" class="post-title-link" itemprop="url">使用MySQL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-26 23:15:17" itemprop="dateCreated datePublished" datetime="2021-01-26T23:15:17+08:00">2021-01-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用MySQL"><a href="#使用MySQL" class="headerlink" title="使用MySQL"></a>使用MySQL</h1><h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; mysql -u xxx -p</span><br><span class="line">&#x2F;&#x2F;xxx是用户名</span><br></pre></td></tr></table></figure>
+<p>然后再输入密码，就可以连接上本地的MySQL服务器了。端口使用默认端口3306。  </p>
+<h2 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h2><p><strong>关键字（key word）</strong>作为MySQL语言组织的一个保留字。不要用关键字命名一个表或列。常见的关键字有<code>use</code>、<code>select</code>、<code>where</code>等等。<br>选择数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use crashcource;</span><br><span class="line">Database changed</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="了解数据库和表"><a href="#了解数据库和表" class="headerlink" title="了解数据库和表"></a>了解数据库和表</h2><p>以下命令可以用来展示当前MySQL服务器中有哪些数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mydb               |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| study              |</span><br><span class="line">| sys                |</span><br><span class="line">| webserver_database |</span><br><span class="line">+--------------------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>以下命令可以用来查询当前数据中有哪些表（前提是你已经连接上了数据库）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show tables;</span><br><span class="line">+-----------------+</span><br><span class="line">| Tables_in_study |</span><br><span class="line">+-----------------+</span><br><span class="line">| customers       |</span><br><span class="line">| orderitems      |</span><br><span class="line">| orders          |</span><br><span class="line">| productnotes    |</span><br><span class="line">| products        |</span><br><span class="line">| vendors         |</span><br><span class="line">+-----------------+</span><br></pre></td></tr></table></figure>
+<p>这个数据库内的表是用<a target="_blank" rel="noopener" href="https://forta.com/books/0672327120/">MySQL必知必会官方网站</a>上提供的sql脚本<code>create.sql</code>、<code>populate.sql</code>生成的。生成方式如下（你需要先将文件下载下来）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create database XXX;</span><br><span class="line">&#x2F;&#x2F; XXX是你创建的数据库，名字你可以任意定义</span><br><span class="line">mysql&gt; use XXX;</span><br><span class="line">mysql&gt; source create.sql;</span><br><span class="line">&#x2F;&#x2F; 此文件创建表</span><br><span class="line">mysql&gt; source populate.sql; </span><br><span class="line">&#x2F;&#x2F; 创建完成了</span><br></pre></td></tr></table></figure>
+<p>如下方法可以显示表中所有可用的列，以及相关参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show columns from customers;</span><br><span class="line">+--------------+-----------+------+-----+---------+----------------+</span><br><span class="line">| Field        | Type      | Null | Key | Default | Extra          |</span><br><span class="line">+--------------+-----------+------+-----+---------+----------------+</span><br><span class="line">| cust_id      | int(11)   | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| cust_name    | char(50)  | NO   |     | NULL    |                |</span><br><span class="line">| cust_address | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_city    | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_state   | char(5)   | YES  |     | NULL    |                |</span><br><span class="line">| cust_zip     | char(10)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_country | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_contact | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_email   | char(255) | YES  |     | NULL    |                |</span><br><span class="line">+--------------+-----------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/23/Makefile%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/23/Makefile%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Makefile学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-23 20:27:27" itemprop="dateCreated datePublished" datetime="2021-01-23T20:27:27+08:00">2021-01-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Linux编译过程"><a href="#Linux编译过程" class="headerlink" title="Linux编译过程"></a>Linux编译过程</h1><ol>
+<li>-E 预处理：把 .h、.c文件展开形成一个个文件。宏定义直接替换头文件、库文件。最后生成.i文件。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -E hello.c -o hello.i</span></span><br></pre></td></tr></table></figure></li>
+<li>-S 汇编： .i文件生成一个汇编代码文件 .s<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -S hello.i -o hello.s</span></span><br></pre></td></tr></table></figure></li>
+<li>-c 编译： .s文件生成一个.o文件<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -C hello.s -o hello.o</span></span><br></pre></td></tr></table></figure></li>
+<li>-o 链接：生成可运行文件 hello<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc hello.o hello</span></span><br></pre></td></tr></table></figure></li>
+<li>也可以直接来<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc hello.c -o hello</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="脚本语言：Makefile"><a href="#脚本语言：Makefile" class="headerlink" title="脚本语言：Makefile"></a>脚本语言：Makefile</h1><p>Linux C/C++ 必须要使用的一个编译脚本。<br>Makefile 大型项目开发。</p>
+<ol>
+<li>第一层：显示规则<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#是注释</span></span><br><span class="line"><span class="comment">#第一层：显示规则</span></span><br><span class="line"><span class="comment">#目标文件：依赖文件</span></span><br><span class="line"><span class="comment">#[TAB]指令</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#第一个目标文件应该是我的最终文件！！！（递归思维）</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#rm -rf hello.o hello.S hello.i hello</span></span><br><span class="line"><span class="comment">#伪目标：.PHONY</span></span><br><span class="line"><span class="section">hello:hello.o</span></span><br><span class="line">	gcc hello.o -o hello</span><br><span class="line"><span class="section">hello.o:hello.S</span></span><br><span class="line">	gcc -c hello.S -o hello.o</span><br><span class="line"><span class="section">hello.S:hello.i</span></span><br><span class="line">	gcc -S hello.i -o hello.S</span><br><span class="line"><span class="section">hello.i:hello.c</span></span><br><span class="line">	gcc -E hello.c -o hello.i</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:</span></span><br><span class="line"><span class="section">clearall:</span></span><br><span class="line">	rm -rf hello.o hello.S hello.i hello</span><br><span class="line"><span class="section">clear:</span></span><br><span class="line">    rm -rf hello.o hello.S hello.i</span><br></pre></td></tr></table></figure></li>
+<li>第二层<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#变量 =(替换)  +=(追加)  :=(常量)</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">    <span class="variable">$(CC)</span> -o <span class="variable">$(TAR)</span></span><br><span class="line"></span><br><span class="line"><span class="section">circle.o:circle.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c circle.c -o circle.o</span><br><span class="line"><span class="section">cube.o:cube.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c cube.c -o cube.o</span><br><span class="line"><span class="section">main.o:main.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c main.c -o main.o</span><br></pre></td></tr></table></figure></li>
+<li>第三层：隐含规则<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># %.c $.o 任意的.c或者.o   *.c *.o所有的.c .o</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(OBJ)</span> -o <span class="variable">$(TAR)</span></span><br><span class="line"></span><br><span class="line"><span class="section">%.o:%.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c %.c -o %.o </span><br></pre></td></tr></table></figure></li>
+<li>第四层：通配符<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># $@所有的目标文件</span></span><br><span class="line"><span class="comment"># $^所有的依赖文件</span></span><br><span class="line"><span class="comment"># $&lt;所有的依赖文件的第一个文件</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line">RMRF := rm -rf</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">%.o:%.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c <span class="variable">$^</span> -o <span class="variable">$@</span> </span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:</span></span><br><span class="line"><span class="section">clearall:</span></span><br><span class="line">    <span class="variable">$(RMRF)</span> <span class="variable">$(OBJ)</span> <span class="variable">$(TAR)</span></span><br><span class="line"><span class="section">clear:</span></span><br><span class="line">    <span class="variable">$(RMRF)</span> <span class="variable">$(OBJ)</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/22/MySQL-API/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1195,267 +1368,6 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">CH6存储器层次结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-14 15:37:41" itemprop="dateCreated datePublished" datetime="2021-01-14T15:37:41+08:00">2021-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="存储器层次结构"><a href="#存储器层次结构" class="headerlink" title="存储器层次结构"></a><strong>存储器层次结构</strong></h1><h2 id="存储技术"><a href="#存储技术" class="headerlink" title="存储技术"></a><strong>存储技术</strong></h2><h3 id="随机访问存储器（Random-Access-Memory-RAM）"><a href="#随机访问存储器（Random-Access-Memory-RAM）" class="headerlink" title="随机访问存储器（Random-Access Memory,RAM）"></a><strong>随机访问存储器（Random-Access Memory,RAM）</strong></h3><p>分为静态和动态两类（SRAM、DRAM）。SRAM比DRAM更快但更贵。  </p>
-<ol>
-<li>SRAM：用作高速缓存存储器  </li>
-<li>DRAM：用于主存及图形系统的帧缓存区<br>内存系统必须周期性地通过读出，然后重写来刷新内存的每一位。有些系统会使用纠错码。  </li>
-<li>传统的DRAM<br>每个DRAM芯片被连接到某个称为内存控制器的电路，这个电路用来传送$\omega$位到每个DRAM芯片或者一次从每个DRAM芯片传出$\omega$位。  </li>
-<li>内存模块<br>DRAM芯片封装在内存模块中，可以多个DRAM芯片同时读取和写入一个字节（举例8个DRAM芯片），合并后即为一个64位字，然后返回给内存控制器。  </li>
-<li>增强的DRAM  </li>
-</ol>
-<ul>
-<li>快页模式DRAM（Fast Page Model DRAM,FPM DRAM）</li>
-<li>扩展数据输出DRAM（Extended Data Out DRAM，EDO DRAM）</li>
-<li>同步DRAM（Synchronous DRAM，SDRAM）</li>
-<li>双倍数据速率同步DRAM（Double Data-Rate Synchronous）</li>
-<li>视频RAM（Video RAM，VRAM）</li>
-</ul>
-<ol start="6">
-<li>非易失性存储器（nonvolatile memory）<br>DRAM和SRAM在断电的情况都会丧失它们的信息。只读存储器（read-only Memory）中有的类型可以读也可以写，但整齐称为ROM。<br>PROM(Programmable ROM，可编程ROM)只能被编程一次，还有很多。。。<br>还有可擦写可编程ROM(Erasable Programmable ROM，EPROM)、闪存(flash memory)。存储在ROM设备中的程序通常被称为固件（firmware）。</li>
-<li>访问主存<br>总线(bus)，数据流通过总线在处理器和DRAM主存之间来来回回。</li>
-</ol>
-<h3 id="磁盘存储"><a href="#磁盘存储" class="headerlink" title="磁盘存储"></a><strong>磁盘存储</strong></h3><ol>
-<li>磁盘构造<br>主轴、盘片、磁道、扇区、柱面等概念。</li>
-<li>磁盘容量</li>
-<li>磁盘操作  </li>
-</ol>
-<ul>
-<li>寻道时间</li>
-<li>旋转时间</li>
-<li>传送时间</li>
-</ul>
-<ol start="4">
-<li>逻辑磁盘块<br>为了对操作系统隐藏磁盘的复杂性，现代磁盘将为它们的构造呈现一个简单的视图，一个B个扇区大小的逻辑块的序列。磁盘块封装中有一个效得硬件/固件设备，称为磁盘控制器，维护着逻辑块号和实际（物理）磁盘山去之间的映射关系。</li>
-<li>连接I/O设备<br>慢于系统总线和内存总线。</li>
-<li>访问磁盘<br>I/O端口、直接内存访问（Direct Memory Access，DMA）、DMA传送（DMA transfer）</li>
-</ol>
-<h3 id="固态硬盘（Solid-State-Disk，SSD）"><a href="#固态硬盘（Solid-State-Disk，SSD）" class="headerlink" title="固态硬盘（Solid State Disk，SSD）"></a><strong>固态硬盘（Solid State Disk，SSD）</strong></h3><p>这是一种基于闪存的存储技术。</p>
-<h2 id="局部性"><a href="#局部性" class="headerlink" title="局部性"></a><strong>局部性</strong></h2><p>通常表现为时间局部性（在一个具有良好的时间局部性程序中，被引用过一次的内存位置很可能在不远的将来再被多次引用）和空间局部性（在一个具有良好空间局部性的程序中，如果一个内存位置被引用了一次，那么程序很可能在不远的将来引用附件的一个内存位置）。</p>
-<h2 id="存储器层次结构（memery-hierarchy）"><a href="#存储器层次结构（memery-hierarchy）" class="headerlink" title="存储器层次结构（memery hierarchy）"></a><strong>存储器层次结构（memery hierarchy）</strong></h2><ol start="0">
-<li>寄存器（CPU寄存器保存着从高速缓存存储器去除的字）  </li>
-<li>L1高速缓存（SRAM）（L1&lt;-L2，保存取出的缓存行）  </li>
-<li>L2高速缓存（SRAM）（L2&lt;-L3，保存取出的缓存行）  </li>
-<li>L3高速缓存（SRAM）（L3&lt;-主存，保存取出的缓存行）  </li>
-<li>主存（DRAM）（主存&lt;-本地磁盘，保存着取出的磁盘块）  </li>
-<li>本地二级存储（本地磁盘）（保存从远程网络服务器取出的文件）  </li>
-<li>远程二级存储（分布式文件系统、Web服务器）  </li>
-</ol>
-<h3 id="存储器层次结构中的缓存"><a href="#存储器层次结构中的缓存" class="headerlink" title="存储器层次结构中的缓存"></a><strong>存储器层次结构中的缓存</strong></h3><p>高速缓存（cache）是一个小而快的存储设备，它作为存储在更大、也更慢的设备中的数据对象的缓冲区域。使用高速缓存的过程称为<strong>缓存（caching）</strong>。  </p>
-<ol>
-<li>缓存命中：当程序需要第$k+1$层的一个数据对象d时，优先在第$k$层查找d，如果d刚好存储在第$k$层，那么直接读取，这就是我们说的缓存命中。  </li>
-<li>缓存不命中：如果第$k$层没有缓存数据对象d，那么就是我们说的缓存不命中。当发生缓存不命中时，第$k$层的缓存从第k+1层缓存取出包含d的那个块，如果第k层缓存已经满了，可能就会覆盖现存的一个块（牺牲块）。  </li>
-<li>缓存不命中的种类：强制性不命中、冲突不命中、容量不命中。  </li>
-<li>缓存管理：编译器管理寄存器文件；L1、L2和L3层的缓存完全有内置在缓存中的硬件逻辑来管理；在一个有虚拟内存的系统中，DRAM主存作为存储在磁盘上的数据块的缓存，是由操作系统软件和CPU上的地址翻译硬件共同管理的。  </li>
-</ol>
-<h3 id="存储器层次结构概念小结"><a href="#存储器层次结构概念小结" class="headerlink" title="存储器层次结构概念小结"></a><strong>存储器层次结构概念小结</strong></h3><p>概括来说，基于缓存的存储器层次结构行之有效，是因为较慢的存储设备比较快的存储设备更便宜，还因为程序倾向于展示局部性（可以补偿不命中的代价）</p>
-<h2 id="高速缓存存储器"><a href="#高速缓存存储器" class="headerlink" title="高速缓存存储器"></a><strong>高速缓存存储器</strong></h2><p>原来存储器层次结构只有三层：寄存器、主存、磁盘；随着CPU和主存之间逐渐增大的差距，系统设<br>计者被迫在CPU寄存器文件和主存之间插入了一个小的SRAM高速缓存存储器，称为L1高速缓存，后来又插入了L2、L3。</p>
-<h3 id="通用的高速缓存存储器组织结构"><a href="#通用的高速缓存存储器组织结构" class="headerlink" title="通用的高速缓存存储器组织结构"></a><strong>通用的高速缓存存储器组织结构</strong></h3><p>高速缓存的结构可以用元组（S，E，B，m）来描述。S：$S=2^s$个高速缓存组；E：每个组包含E个高速缓存行；B：每个行由$B=2^b$字节的数据块组成的，一个有效位指明这个行是否包含有意义的信息，还有t个标记位来唯一的标识这个块。$t+s+b=m$，t位标记块，s位组索引，b位时块偏移。容量$C=S\times E\times B$。</p>
-<h3 id="直接映射高速缓存"><a href="#直接映射高速缓存" class="headerlink" title="直接映射高速缓存"></a><strong>直接映射高速缓存</strong></h3><p>每个组只有一行  </p>
-<ol>
-<li>直接映射高速缓存中的组选择  </li>
-<li>直接映射高速缓存中的行匹配  </li>
-<li>直接映射高速缓存中的字选择  </li>
-<li>直接映射高速缓存不命中时的行替换  </li>
-<li>综合：运行中的直接映射高速缓存  </li>
-</ol>
-<h3 id="组相联高速缓存"><a href="#组相联高速缓存" class="headerlink" title="组相联高速缓存"></a><strong>组相联高速缓存</strong></h3><ol>
-<li>组相联高速缓存中的组选择  </li>
-<li>组相联高速缓存中的行匹配和字选择：搜索组中的每一行来匹配标记，命中后块偏移从这个块中选择字  </li>
-<li>组相联高速缓存中的不命中的行替换：若无空行，则采用替换策略，有LFU（Least-Frequently-Used，最不常使用）、LRU（Least-Recently-USed，最近最少使用）等。  </li>
-</ol>
-<h3 id="全相联高速缓存"><a href="#全相联高速缓存" class="headerlink" title="全相联高速缓存"></a><strong>全相联高速缓存</strong></h3><p>$E=C/B$，S=1，仅有一个组。</p>
-<ol>
-<li>组选择  </li>
-<li>行匹配和字选择<br>因为高速缓存电路必须并行地搜索许多相匹配的标记，构造一个又大又快的相联高速缓存很困难，而且昂贵。因此全相联高速缓存只适合做小的高速缓存，例如虚拟内存系统中翻译备用缓冲器（TLB），它缓存页表项。</li>
-</ol>
-<h3 id="有关写的问题"><a href="#有关写的问题" class="headerlink" title="有关写的问题"></a><strong>有关写的问题</strong></h3><p>如果命中，更新了副本之后，如何更新在低一层中的副本。  </p>
-<ul>
-<li>直写：最简单的方法，立即写回到下一级。  </li>
-<li>写回：等待替换算法要驱逐这个更新过的块的时候，才把它紧接着写到低一层（需要在每个高速缓存行中额外保留一个修改位来标识该行是否被修改过）。<br>如果不命中：  </li>
-<li>写分配：加载相应的低一层中的块到高速缓存行中，然后更新这个高速缓存块  </li>
-<li>非写分配：避开高速缓存，直接写到低一层</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">网络编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 22:29:00" itemprop="dateCreated datePublished" datetime="2021-01-13T22:29:00+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文主要总结C++网络编程中关于套接字编程的相关函数。  </p>
-<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="创建一个套接字：socket"><a href="#创建一个套接字：socket" class="headerlink" title="创建一个套接字：socket()"></a>创建一个套接字：<code>socket()</code></h2><p><code>int socket(int family, int type, int protocol);</code><br>其中family指明协议族，IPV4是<code>AF_INET</code>，IPv6<code>AF_INET6</code>；type指明套接字类型，TCP为<code>SOCK_STREAM</code>，UDP是<code>SOCK_DGRAM</code>。protocol参数设为某个协议的类型常值，或者设为0。</p>
-<h2 id="建立连接：connect"><a href="#建立连接：connect" class="headerlink" title="建立连接：connect()"></a>建立连接：<code>connect()</code></h2><p><code>int connect(int sockfd, const struct sockaddr *serveraddr, socklen_t addrlen);</code><br>sockfd是socket函数返回的套接字描述符，第二个参数是指向一个套接字地址的指针和该结构大小。连接成功返回0，否则-1。</p>
-<p>实际使用中，我们一般传入sockaddr_in指针，进行类型转换为sockaddr，sockaddr_in结构如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span>&#123;</span></span><br><span class="line">	<span class="keyword">short</span> <span class="keyword">int</span> sin_family;	<span class="comment">//协议族</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> <span class="keyword">int</span> sin_port;	<span class="comment">//存储端口号，只能用网络字顺序</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> <span class="title">sin_addr</span>;</span>	<span class="comment">//存储IP地址</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="绑定端口：bind"><a href="#绑定端口：bind" class="headerlink" title="绑定端口：bind()"></a>绑定端口：<code>bind()</code></h2><p><code>int bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen);</code><br>将一个本地协议地址和套接字描述符绑定起来。  </p>
-<p>一般来说，端口我们可以自己指定或者使用0让内核自己选择一个临时端口；IP地址可以选择统配地址让内核等套接字已连接再选择一个本地地址。  </p>
-<h2 id="监听：listen"><a href="#监听：listen" class="headerlink" title="监听：listen()"></a>监听：<code>listen()</code></h2><p>一般来说，服务器会打开一个监听套接字，用来等待来自client的连接请求：<br><code>int listen(int sockfd,int backlog);</code><br>sockfd是socket函数创建的套接字，然后backlog是为这个监听套接字维护的队列长度，队列包括已连接队列（established状态）和未连接队列（syn_recv状态）。  </p>
-<h2 id="生成已连接套接字：accept"><a href="#生成已连接套接字：accept" class="headerlink" title="生成已连接套接字：accept()"></a>生成已连接套接字：<code>accept()</code></h2><p><code>int accept(int sockfd, struct sockaddr *cliaddr, socklen_t * addrlen);</code><br>该函数会从监听套接字sockfd的已连接队列中取出一个连接，返回一个已连接套接字描述符，并且返回另一方套接字地址和地址结字节数。  </p>
-<h2 id="关闭套接字：close"><a href="#关闭套接字：close" class="headerlink" title="关闭套接字：close()"></a>关闭套接字：<code>close()</code></h2><p><code>int close(int sockfd);</code><br>该函数可以关闭一个套接字描述符，不过如果该套接字使用引用计数，如果被多个进程拥有，则只会计数-1，当计数为0时候才会真正的关闭。  </p>
-<h2 id="设置套接字参数：getsockopt-和setsockopt"><a href="#设置套接字参数：getsockopt-和setsockopt" class="headerlink" title="设置套接字参数：getsockopt()和setsockopt()"></a>设置套接字参数：<code>getsockopt()</code>和<code>setsockopt()</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen);</span><br><span class="line">int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);</span><br></pre></td></tr></table></figure>
-<p>上述两个函数分别用来获得套接字的参数和设置参数，一般情况下先获得已有参数，然后将想要加入的参数和以后参数做或运算，然后再设置参数即可。函数的各个参数具体使用建议参考《UNIX网络编程 卷1：套接字联网API》。  </p>
-<h1 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h1><h2 id="创建套接字：socket"><a href="#创建套接字：socket" class="headerlink" title="创建套接字：socket()"></a>创建套接字：<code>socket()</code></h2><p>创建套接字的方法上一章已经说过了：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> family, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>不加赘述了。  </p>
-<h2 id="接收数据：recvfrom"><a href="#接收数据：recvfrom" class="headerlink" title="接收数据：recvfrom()"></a>接收数据：<code>recvfrom()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recvfrom</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *from, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
-<p>参数sockfd是套接字描述符，buff是指向读缓冲区的指针，btybes是最大读入的字节数（避免缓冲区溢出）。 最后两个参数数数据发送方的套接字地址和结构字节数。  </p>
-<h2 id="发送数据：sendto"><a href="#发送数据：sendto" class="headerlink" title="发送数据：sendto()"></a>发送数据：<code>sendto()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">sendto</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *to, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
-<p>发送数据，buff为写缓冲区，btybe是待写入的字节数，后面是发送的目的地套接字地址和地址结构的字节数。</p>
-<h1 id="读写函数"><a href="#读写函数" class="headerlink" title="读写函数"></a>读写函数</h1><h2 id="recv-和send"><a href="#recv-和send" class="headerlink" title="recv()和send()"></a><code>recv()</code>和<code>send()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recv</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">send</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>前面3参数很好理解，flags是一个额外的参数，具体可看《UNIX网络编程 卷一：套接字联网API》。  </p>
-<h2 id="readv-和writev"><a href="#readv-和writev" class="headerlink" title="readv()和writev()"></a><code>readv()</code>和<code>writev()</code></h2><p>readv和writev允许单个系统调用读入到或写出自一个或多个缓冲区。这些操作被称为分散度和集中写。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readv</span><span class="params">(<span class="keyword">int</span> sockfd, cosnt struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">writev</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>这两个函数的第2个参数都是指向某个iovec结构数组的一个指针，其中iovec结构再头文件&lt;sys/uio.h&gt;中定义：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iovec</span>&#123;</span></span><br><span class="line">	<span class="keyword">void</span> *iov_base;	<span class="comment">//内存起始地址</span></span><br><span class="line">   <span class="keyword">size_t</span> iov_len;	<span class="comment">//内存大小</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这两个函数可以用于任何描述符，而不仅仅限于套接字。另外writev是一个原子操作，意味着对于一个基于记录的协议而言，一次writev调用只产生单个UDP数据报。</p>
-<h1 id="获取地址"><a href="#获取地址" class="headerlink" title="获取地址"></a>获取地址</h1><h2 id="gethostbyname"><a href="#gethostbyname" class="headerlink" title="gethostbyname()"></a><code>gethostbyname()</code></h2><p>gethostbyname()函数主要作用：用域名或者主机名获取地址，操作系统提供的库函数。以下的讨论基于linux环境。<br>域名系统（Domain Name System, DNS）主要用于主机名字与IP地址之间的映射。每个组织机构往往运行一个或多个名字服务器（name server），我们编写的客户端和服务器等应用程序通过调用解析器（resolver）的函数库中的函数接触DNS服务器。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyname</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>如果成功则返回一个hostent指针，否则返回NULL。当发生错误时，它不设置errno变量，设置全局整数变量h_errno。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> &#123;</span></span><br><span class="line">	<span class="keyword">char</span>  *h_name;            <span class="comment">/*主机规范名*/</span></span><br><span class="line">	<span class="keyword">char</span> **h_aliases;         <span class="comment">/*主机别名列表*/</span></span><br><span class="line">   <span class="keyword">int</span>	h_addrtype;        <span class="comment">/*地址类型，只能是IPv4，本函数无法解决IPv6*/</span></span><br><span class="line">   <span class="keyword">int</span> 	h_length;          <span class="comment">/*IP地址字节数*/</span></span><br><span class="line">   <span class="keyword">char</span> **h_addr_list;</span><br><span class="line">   <span class="comment">/*主机的IP地址，是网络字节序，需要通过inet_ntop函数转换*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="gethostbyaddr"><a href="#gethostbyaddr" class="headerlink" title="gethostbyaddr()"></a><code>gethostbyaddr()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyaddr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *addr, <span class="keyword">socklen_t</span> len, <span class="keyword">int</span> type)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>根据地址和地址类型来获得主机名。返回类型和gethostbyname一样。注意addr是网络字节序。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1527,7 +1439,7 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">112</span>
+          <span class="site-state-item-count">114</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
