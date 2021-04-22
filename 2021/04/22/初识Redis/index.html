@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="初认识RedisRedis简介Redis与其他数据库和软件对比Redis属于人们常说的NoSQL数据库或者非关系型数据库。它常被拿来和memcached比较，这两者都可用于存储键值映射，彼此的性能相差无几，但是redis能够自动以不同的方式写入硬盘。并且Redis除了能存储普通字符串键之外，还可以存储其他4种数据结构。memcached只能存储普通的字符串键。Redis存储的类型包括字符串、列表、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识Redis">
+<meta property="og:url" content="http://example.com/2021/04/22/%E5%88%9D%E8%AF%86Redis/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="初认识RedisRedis简介Redis与其他数据库和软件对比Redis属于人们常说的NoSQL数据库或者非关系型数据库。它常被拿来和memcached比较，这两者都可用于存储键值映射，彼此的性能相差无几，但是redis能够自动以不同的方式写入硬盘。并且Redis除了能存储普通字符串键之外，还可以存储其他4种数据结构。memcached只能存储普通的字符串键。Redis存储的类型包括字符串、列表、">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-22T10:31:00.000Z">
+<meta property="article:modified_time" content="2021-04-22T10:32:37.303Z">
+<meta property="article:author" content="乡村程序员">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/04/22/%E5%88%9D%E8%AF%86Redis/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>初识Redis | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/%E5%88%9D%E8%AF%86Redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          初识Redis
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-22 18:31:00 / 修改时间：18:32:37" itemprop="dateCreated datePublished" datetime="2021-04-22T18:31:00+08:00">2021-04-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="初认识Redis"><a href="#初认识Redis" class="headerlink" title="初认识Redis"></a>初认识Redis</h1><h2 id="Redis简介"><a href="#Redis简介" class="headerlink" title="Redis简介"></a>Redis简介</h2><h3 id="Redis与其他数据库和软件对比"><a href="#Redis与其他数据库和软件对比" class="headerlink" title="Redis与其他数据库和软件对比"></a>Redis与其他数据库和软件对比</h3><p>Redis属于人们常说的NoSQL数据库或者非关系型数据库。它常被拿来和memcached比较，这两者都可用于存储键值映射，彼此的性能相差无几，但是redis能够自动以不同的方式写入硬盘。并且Redis除了能存储普通字符串键之外，还可以存储其他4种数据结构。memcached只能存储普通的字符串键。<br>Redis存储的类型包括字符串、列表、集合、散列表、有序集合。<br>常见的非关系型数据库：Redis（存储在内存）、memcached（使用内存存储的键值缓存）、MongoDB（使用硬盘存储的非关系文档存储）。  </p>
+<h3 id="附加特性"><a href="#附加特性" class="headerlink" title="附加特性"></a>附加特性</h3><p>Redis拥有两种不同形式的持久化方法，它们都可以用小而紧凑的格式将存储在内存中的数据写入硬盘：  </p>
+<ol>
+<li>时间点转储，转储操作即可以在“指定时间段内有指定数量的写执行操作”这一条件被满足时执行，又可以通过调用两条转储到硬盘命令中的任何一条来执行；  </li>
+<li>将所有修改了数据库命令都写入一个只追加文件里面，用户可以根据数据的重要程度，将只追加写入设置为从不同步，每秒同步一次或者每写入一个命令就同步一次。  </li>
+</ol>
+<p>Redis提供故障转移支持，Redis实现了主从复制特效：只想复制的从服务器会连接上主服务器，接收主服务器发送来的整个数据库初始副本。之后主服务器执行的写命令，都会被发送给所有连接着的从服务器去执行，从而实时地更新从服务器的数据集。客户端可以向任意一个从服务器发送读请求，以此来避免对主服务器进行集中式的访问。  </p>
+<h2 id="Redis数据结构简介"><a href="#Redis数据结构简介" class="headerlink" title="Redis数据结构简介"></a>Redis数据结构简介</h2><p>5种数据结构：  </p>
+<ol>
+<li>STRING：可以是字符串、整数或者浮点数。  </li>
+<li>LIST：一个链表，链表上的每个节点都包含了一个字符串。  </li>
+<li>SET：包含字符串的无序收集器，并且被包含的每个字符串都是独一无二、各不相同的。  </li>
+<li>HASH：包含键值对的无序散列表。  </li>
+<li>ZSET：字符串成员与浮点数分值之间的有序映射，元素的排列顺序由分支的大小决定。  </li>
+</ol>
+<h3 id="Redis中的字符串"><a href="#Redis中的字符串" class="headerlink" title="Redis中的字符串"></a>Redis中的字符串</h3><p>支持的命令：GET、SET、DEL</p>
+<h3 id="Redis中的列表"><a href="#Redis中的列表" class="headerlink" title="Redis中的列表"></a>Redis中的列表</h3><p>命令：RPUSH、LRANGE（获取指定范围的所有值）、LINDEX（获取指定位置上的单个元素）、LPOP（从左端染出一个值，并返回这个值）。  </p>
+<h3 id="Redis的集合"><a href="#Redis的集合" class="headerlink" title="Redis的集合"></a>Redis的集合</h3><p>命令：SADD（添加给定元素到集合）、SMEMBERS（返回集合所有元素）、SISMEMBER（检查给定元素是否存在于集合中）、SREM（从集合中移除给定元素）。  </p>
+<h3 id="Redis的散列"><a href="#Redis的散列" class="headerlink" title="Redis的散列"></a>Redis的散列</h3><p>命令：HSET（关联起来给定的键值对）、HGET（获取指定散列键的值）、HGETALL（获取所有的键值对）、HDEL（删除指定的键）。  </p>
+<h3 id="Redis的有序集合"><a href="#Redis的有序集合" class="headerlink" title="Redis的有序集合"></a>Redis的有序集合</h3><p>有序集合的键被称为成员，每个成员都是各不相同；而有序集合的值被称为分值，分值必须为浮点数。有序集合是Redis中唯一一个既可以根据成员访问元素又可以根据分值的排列顺序来访问元素的结构。  </p>
+<p>命令：ZADD（将一个带有分值的成员添加到有序集合里面）、ZRANGE（根据元素在有序排列中所处的位置，从有序集合中获取多个元素）、ZRANGEBYSCORE（获取有序集合在给定分值范围内的所有元素）、ZREM（删除指定元素）。  </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/21/TINY%20Web%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="prev" title="TinyWeb 服务器">
+      <i class="fa fa-chevron-left"></i> TinyWeb 服务器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/22/%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="next" title="简单动态字符串">
+      简单动态字符串 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E8%AE%A4%E8%AF%86Redis"><span class="nav-number">1.</span> <span class="nav-text">初认识Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">Redis简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E4%B8%8E%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E8%BD%AF%E4%BB%B6%E5%AF%B9%E6%AF%94"><span class="nav-number">1.1.1.</span> <span class="nav-text">Redis与其他数据库和软件对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%84%E5%8A%A0%E7%89%B9%E6%80%A7"><span class="nav-number">1.1.2.</span> <span class="nav-text">附加特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B"><span class="nav-number">1.2.</span> <span class="nav-text">Redis数据结构简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.2.1.</span> <span class="nav-text">Redis中的字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E4%B8%AD%E7%9A%84%E5%88%97%E8%A1%A8"><span class="nav-number">1.2.2.</span> <span class="nav-text">Redis中的列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E7%9A%84%E9%9B%86%E5%90%88"><span class="nav-number">1.2.3.</span> <span class="nav-text">Redis的集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E7%9A%84%E6%95%A3%E5%88%97"><span class="nav-number">1.2.4.</span> <span class="nav-text">Redis的散列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E7%9A%84%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="nav-number">1.2.5.</span> <span class="nav-text">Redis的有序集合</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

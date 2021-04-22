@@ -160,6 +160,181 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">更新和删除数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 23:56:26" itemprop="dateCreated datePublished" datetime="2021-01-27T23:56:26+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="更新数据"><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h1><p>为了更行（修改）表中的数据可以使用<code>UPDATE</code>语句。举例：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update customers</span><br><span class="line">    -&gt; set cust_email &#x3D; &#39;elmer@fudd.com&#39;</span><br><span class="line">    -&gt; where cust_id &#x3D; 10005;</span><br></pre></td></tr></table></figure>
+<p>基本的update语句由3部分组成：  </p>
+<ul>
+<li>要更新的表  </li>
+<li>列名和它们的新值  </li>
+<li>确定要更新行的过滤条件  </li>
+</ul>
+<p>更新多个列的话：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update customers</span><br><span class="line">    -&gt; set cust_email &#x3D; &#39;elmer@fudd.com&#39;,cust_name &#x3D; &#39;the Fudds&#39;</span><br><span class="line">    -&gt; where cust_id &#x3D; 10005;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h1><p>为了从表中删除数据，使用<code>DELETE</code>语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delete from customers</span><br><span class="line">    -&gt; where cust_id &#x3D; 10006;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">插入数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 23:40:22" itemprop="dateCreated datePublished" datetime="2021-01-27T23:40:22+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数据插入"><a href="#数据插入" class="headerlink" title="数据插入"></a>数据插入</h1><p>插入可以有几种方式：    </p>
+<ol>
+<li>插入完整的行  </li>
+<li>插入行的一部分  </li>
+<li>插入多行  </li>
+<li>插入某些查询结果  </li>
+</ol>
+<h1 id="插入完整的行"><a href="#插入完整的行" class="headerlink" title="插入完整的行"></a>插入完整的行</h1><p>使用基本的<code>INSERT</code>语法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into customers</span><br><span class="line">    -&gt; values(null,&#39;Pep E. LaPew&#39;,</span><br><span class="line">    -&gt; &#39;100 Main Street&#39;,</span><br><span class="line">    -&gt; &#39;Los Angeles&#39;,</span><br><span class="line">    -&gt; &#39;CA&#39;,</span><br><span class="line">    -&gt; &#39;90046&#39;,</span><br><span class="line">    -&gt; &#39;USA&#39;,</span><br><span class="line">    -&gt; NULL,</span><br><span class="line">    -&gt; NULL);</span><br></pre></td></tr></table></figure>
+<p>虽然这种语法很简单，但并不安全，应该尽量避免使用。这高度依赖表中列定义的次序。<br>更安全的方式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into customers</span><br><span class="line">    -&gt; (cust_name,cust_address,cust_city,cust_state,cust_zip,</span><br><span class="line">    -&gt; cust_country,cust_contact,cust_email)</span><br><span class="line">    -&gt; values(&#39;Pep E. LaPew&#39;,&#39;100 Main Street&#39;,&#39;Log Angeles&#39;,</span><br><span class="line">    -&gt; &#39;CA&#39;,&#39;90046&#39;,&#39;USA&#39;,NULL,NULL);</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="插入多个行"><a href="#插入多个行" class="headerlink" title="插入多个行"></a>插入多个行</h1><p>如果我们想插入多个行，可以使用上面的语句，插入一行对应一个<code>values()</code>。</p>
+<h1 id="插入检索出的数据"><a href="#插入检索出的数据" class="headerlink" title="插入检索出的数据"></a>插入检索出的数据</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into customers</span><br><span class="line">    -&gt; (cust_id,cust_contact,cust_email,cust_name,cust_address,</span><br><span class="line">    -&gt; cust_city,cust_state,cust_zip,cust_country)</span><br><span class="line">    -&gt; select cust_id,cust_contact,cust_email,cust_name,cust_address,</span><br><span class="line">    -&gt; cust_city,cust_state,cust_zip,cust_country</span><br><span class="line">    -&gt; from custnew;</span><br></pre></td></tr></table></figure>
+<p>这个例子使用<code>INSERT SELECT</code>从custnew中将所有数据导入custmers中。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%85%A8%E6%96%87%E6%9C%AC%E6%90%9C%E7%B4%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -875,175 +1050,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%88%9B%E5%BB%BA%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E5%88%9B%E5%BB%BA%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5/" class="post-title-link" itemprop="url">创建计算字段</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 14:44:16" itemprop="dateCreated datePublished" datetime="2021-01-27T14:44:16+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="创建计算字段"><a href="#创建计算字段" class="headerlink" title="创建计算字段"></a>创建计算字段</h1><h2 id="拼接字段"><a href="#拼接字段" class="headerlink" title="拼接字段"></a>拼接字段</h2><p><strong>拼接(concatenate)</strong> 将值联结到一起构成单个值。解决办法就是把两个列拼接起来，在MySQL的SELECT语句中，可使用<code>Concat()</code>函数来拼接两个列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select Concat(vend_name,&#39; (&#39;,vend_country, &#39;)&#39;) </span><br><span class="line">    -&gt; from vendors order by vend_name;</span><br><span class="line">+------------------------------------------+</span><br><span class="line">| Concat(vend_name,&#39; (&#39;,vend_country, &#39;)&#39;) |</span><br><span class="line">+------------------------------------------+</span><br><span class="line">| ACME (USA)                               |</span><br><span class="line">| Anvils R Us (USA)                        |</span><br><span class="line">| Furball Inc. (USA)                       |</span><br><span class="line">| Jet Set (England)                        |</span><br><span class="line">| Jouets Et Ours (France)                  |</span><br><span class="line">| LT Supplies (USA)                        |</span><br><span class="line">+------------------------------------------+</span><br></pre></td></tr></table></figure>
-<p>还可以通过删除数据右侧多余的空格来整理数据，比如<code>RTrim()</code>，<code>LTrim()</code>可以删除左边多余的空格。</p>
-<h2 id="执行算术计算"><a href="#执行算术计算" class="headerlink" title="执行算术计算"></a>执行算术计算</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id,</span><br><span class="line">    -&gt; quantity,</span><br><span class="line">    -&gt; item_price,</span><br><span class="line">    -&gt; quantity*item_price as expanded_price</span><br><span class="line">    -&gt; from orderitems</span><br><span class="line">    -&gt; where order_num &#x3D; 20005;</span><br><span class="line">+---------+----------+------------+----------------+</span><br><span class="line">| prod_id | quantity | item_price | expanded_price |</span><br><span class="line">+---------+----------+------------+----------------+</span><br><span class="line">| ANV01   |       10 |       5.99 |          59.90 |</span><br><span class="line">| ANV02   |        3 |       9.99 |          29.97 |</span><br><span class="line">| TNT2    |        5 |      10.00 |          50.00 |</span><br><span class="line">| FB      |        1 |      10.00 |          10.00 |</span><br><span class="line">+---------+----------+------------+----------------+</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%90%9C%E7%B4%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%90%9C%E7%B4%A2/" class="post-title-link" itemprop="url">用正则表达式进行搜索</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 14:16:25" itemprop="dateCreated datePublished" datetime="2021-01-27T14:16:25+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="用正则表达式进行搜索"><a href="#用正则表达式进行搜索" class="headerlink" title="用正则表达式进行搜索"></a>用正则表达式进行搜索</h1><h2 id="正则表达式介绍"><a href="#正则表达式介绍" class="headerlink" title="正则表达式介绍"></a>正则表达式介绍</h2><p>正则表达式是用来匹配文本的特殊的串。如果想要从一个文本文件匹配一个电话号码，就可以使用正则表达式。</p>
-<h2 id="使用MySQL正则表达式"><a href="#使用MySQL正则表达式" class="headerlink" title="使用MySQL正则表达式"></a>使用MySQL正则表达式</h2><h3 id="基本字符匹配"><a href="#基本字符匹配" class="headerlink" title="基本字符匹配"></a>基本字符匹配</h3><p>下面的语句检索列prod_name包含文本1000的所有行。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;1000&#39;</span><br><span class="line">    -&gt; order by prod_name;</span><br><span class="line">+--------------+</span><br><span class="line">| prod_name    |</span><br><span class="line">+--------------+</span><br><span class="line">| JetPack 1000 |</span><br><span class="line">+--------------+</span><br></pre></td></tr></table></figure>
-<p>为什么要费力的使用正则表达式了，我们可以再看看下面这个例子，<code>.</code>标识匹配任意字符，因此1000和2000都匹配返回。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;.000&#39;</span><br><span class="line">    -&gt; order by prod_name</span><br><span class="line">    -&gt; ;</span><br><span class="line">+--------------+</span><br><span class="line">| prod_name    |</span><br><span class="line">+--------------+</span><br><span class="line">| JetPack 1000 |</span><br><span class="line">| JetPack 2000 |</span><br><span class="line">+--------------+</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="进行OR匹配"><a href="#进行OR匹配" class="headerlink" title="进行OR匹配"></a>进行OR匹配</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;1000|2000&#39;</span><br><span class="line">    -&gt; order by prod_name;</span><br><span class="line">+--------------+</span><br><span class="line">| prod_name    |</span><br><span class="line">+--------------+</span><br><span class="line">| JetPack 1000 |</span><br><span class="line">| JetPack 2000 |</span><br><span class="line">+--------------+</span><br></pre></td></tr></table></figure>
-<p>语句中使用了正则表达式<code>1000|2000</code>，其中<code>|</code>表示匹配其中之一。</p>
-<h3 id="匹配几个字符之一"><a href="#匹配几个字符之一" class="headerlink" title="匹配几个字符之一"></a>匹配几个字符之一</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;[123] Ton&#39;;</span><br><span class="line">+-------------+</span><br><span class="line">| prod_name   |</span><br><span class="line">+-------------+</span><br><span class="line">| 1 ton anvil |</span><br><span class="line">| 2 ton anvil |</span><br><span class="line">+-------------+</span><br></pre></td></tr></table></figure>
-<p>这里<code>[123]</code>定义了一组字符，它的意思是匹配1或2或3。<code>[]</code>是另一种形式的OR语句，事实上正则表达式<code>[123]Ton</code>是<code>[1|2|3]Ton</code>的缩写。</p>
-<h3 id="匹配范围"><a href="#匹配范围" class="headerlink" title="匹配范围"></a>匹配范围</h3><p>如果我们要匹配0-9，可以这么写<code>[0123456789]</code>，也可以这么写：<code>[0-9]</code>。</p>
-<h3 id="定位符"><a href="#定位符" class="headerlink" title="定位符"></a>定位符</h3><p>定位符有;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">^:文本的开始</span><br><span class="line">$:文本的结尾</span><br><span class="line">[[:&lt;:]]词的开始</span><br><span class="line">[[:&gt;:]]词的结尾</span><br></pre></td></tr></table></figure>
-<p>可以这样使用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;^[0-9\\.]&#39;</span><br><span class="line">    -&gt; order by prod_name;</span><br><span class="line">+--------------+</span><br><span class="line">| prod_name    |</span><br><span class="line">+--------------+</span><br><span class="line">| .5 ton anvil |</span><br><span class="line">| 1 ton anvil  |</span><br><span class="line">| 2 ton anvil  |</span><br><span class="line">+--------------+</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1109,14 +1119,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-count">111</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
