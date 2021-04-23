@@ -4,7 +4,7 @@
 
 # Site
 title: 码码更健康
-subtitle: ''
+subtitle: 对代码永远保持敬畏
 description: ''
 keywords:
 author: 乡村程序员
@@ -40,7 +40,10 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
+marked:
+  prependRoot: true
+  postAsset: true
 relative_link: false
 future: true
 highlight:
