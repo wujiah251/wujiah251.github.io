@@ -190,6 +190,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/26/%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">检索数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-26 23:42:14" itemprop="dateCreated datePublished" datetime="2021-01-26T23:42:14+08:00">2021-01-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="检索数据"><a href="#检索数据" class="headerlink" title="检索数据"></a>检索数据</h1><h2 id="SELECT语句"><a href="#SELECT语句" class="headerlink" title="SELECT语句"></a>SELECT语句</h2><p>检索一列：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name from products;</span><br><span class="line">+----------------+</span><br><span class="line">| prod_name      |</span><br><span class="line">+----------------+</span><br><span class="line">| .5 ton anvil   |</span><br><span class="line">| 1 ton anvil    |</span><br><span class="line">| 2 ton anvil    |</span><br><span class="line">| Detonator      |</span><br><span class="line">| Bird seed      |</span><br><span class="line">| Carrots        |</span><br><span class="line">| Fuses          |</span><br><span class="line">| JetPack 1000   |</span><br><span class="line">| JetPack 2000   |</span><br><span class="line">| Oil can        |</span><br><span class="line">| Safe           |</span><br><span class="line">| Sling          |</span><br><span class="line">| TNT (1 stick)  |</span><br><span class="line">| TNT (5 sticks) |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
+<p>注：多条sql语句必须以分号（；）分隔。SQL语句不区分大小写，所以SELECT和select是一样的。</p>
+<h2 id="检索多个列"><a href="#检索多个列" class="headerlink" title="检索多个列"></a>检索多个列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id,prod_name,prod_price from products;</span><br><span class="line">+---------+----------------+------------+</span><br><span class="line">| prod_id | prod_name      | prod_price |</span><br><span class="line">+---------+----------------+------------+</span><br><span class="line">| ANV01   | .5 ton anvil   |       5.99 |</span><br><span class="line">| ANV02   | 1 ton anvil    |       9.99 |</span><br><span class="line">| ANV03   | 2 ton anvil    |      14.99 |</span><br><span class="line">| DTNTR   | Detonator      |      13.00 |</span><br><span class="line">| FB      | Bird seed      |      10.00 |</span><br><span class="line">| FC      | Carrots        |       2.50 |</span><br><span class="line">| FU1     | Fuses          |       3.42 |</span><br><span class="line">| JP1000  | JetPack 1000   |      35.00 |</span><br><span class="line">| JP2000  | JetPack 2000   |      55.00 |</span><br><span class="line">| OL1     | Oil can        |       8.99 |</span><br><span class="line">| SAFE    | Safe           |      50.00 |</span><br><span class="line">| SLING   | Sling          |       4.49 |</span><br><span class="line">| TNT1    | TNT (1 stick)  |       2.50 |</span><br><span class="line">| TNT2    | TNT (5 sticks) |      10.00 |</span><br><span class="line">+---------+----------------+------------+</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="检索所有列"><a href="#检索所有列" class="headerlink" title="检索所有列"></a>检索所有列</h2><p>使用通配符*</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from products;</span><br><span class="line">&#x2F;&#x2F;结果比较长不做展示</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="检索不同的行"><a href="#检索不同的行" class="headerlink" title="检索不同的行"></a>检索不同的行</h2><p>如果我们想保证输出是不通的怎么办呢，这是后就需要关键字<code>DISTINCT</code>了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id from products;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1005 |</span><br><span class="line">|    1005 |</span><br><span class="line">+---------+</span><br><span class="line">mysql&gt; select distinct vend_id from products;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1005 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
+<p>可以看出，再添加了<code>distinct</code>之后，输出保证了，<code>vend_id</code>每个取值不重复出现。<br>注：<code>distinct</code>不能部分使用，如果给出<code>select distinct vend_id, prod_price from products;</code>，除非指定的两个列都相同，否则所有行都将被检索出来。</p>
+<h2 id="限制结果"><a href="#限制结果" class="headerlink" title="限制结果"></a>限制结果</h2><p>可以使用<code>limit</code>语句来限制结果输出的行数，举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id from products limit 5;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1002 |</span><br><span class="line">+---------+</span><br><span class="line">mysql&gt; select vend_id from products limit 5,3;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
+<p><code>limit 5</code>限制了只输出前五行，然后第二个sql语句中的<code>limit 5,3</code>是从第5行开始输出3行（前面输出了0-5行，行数从0开始计算）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/%E4%BD%BF%E7%94%A8MySQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1285,89 +1374,6 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH7%E9%93%BE%E6%8E%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/14/CH7%E9%93%BE%E6%8E%A5/" class="post-title-link" itemprop="url">CH7链接</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-14 15:38:00" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:00+08:00">2021-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a><strong>链接</strong></h1><p>链接（linking）是将各种代码和数据片段收集并组合成一个单一文件的过程，这个文件可被加载（复制）到内存并执行。链接可以执行于编译时（compile time），也就是在源代码被翻译成机器代码时；也可以执行于加载时（load time），也就是在程序被加载器（loader）加载到内存系统执行时；甚至执行于运行时（run time），也就是在程序被加载器（loader）加载到内存并执行时；甚至于运行时，也就是由应用程序来执行。在早期的计算机系统中，链接是手动执行的。在现代系统中，链接时由叫做连接器（linker）程序自动执行的。  </p>
-<h2 id="编译器驱动程序"><a href="#编译器驱动程序" class="headerlink" title="编译器驱动程序"></a><strong>编译器驱动程序</strong></h2><p>sum.c、main.c<br>预处理器将main.c翻译成一个ASCII码的中间文件main.i，然后编译器将main.i翻译成ASCII汇编语言文件main.s，然后驱动程序运行汇编器，将main.s翻译成一个可重定位目标文件main.o。<br>sum.c-&gt;sum.i-&gt;sum.s-&gt;sum.o<br>运行链接器程序ld将main.o、sum.o以及一些必要的系统目标文件组合起来，创建一个可执行目标文件prog。</p>
-<h2 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a><strong>静态链接</strong></h2><p>为了构造可执行文件，链接器必须完成两个主要任务：符号解析、重定位。  </p>
-<h2 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a><strong>目标文件</strong></h2><p>三种形式：可重定位目标文件（包含二进制代码和数据，其形式可以在编译时与其他可重定位目标文件合并起来，生成一个可执行目标文件）、可执行目标文件（包含二进制代码和数据，可以直接被复制到内存并执行）、共享目标文件（一种特殊类型的可重定位目标文件，可以在加载或者运行时加载进内存并链接）。</p>
-<h2 id="可重定位目标文件"><a href="#可重定位目标文件" class="headerlink" title="可重定位目标文件"></a><strong>可重定位目标文件</strong></h2><h2 id="符号和符号表"><a href="#符号和符号表" class="headerlink" title="符号和符号表"></a><strong>符号和符号表</strong></h2><p>每个可重定位目标模块m有一个符号表，包含：  </p>
-<ul>
-<li>由m模块定义并能被其他模块引用的全局符号。  </li>
-<li>由其他模块定义并能被模块m引用的全局符号。  </li>
-<li>只被模块m定义和引用的局部符号。  </li>
-</ul>
-<h2 id="符号解析"><a href="#符号解析" class="headerlink" title="符号解析"></a><strong>符号解析</strong></h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1439,14 +1445,14 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

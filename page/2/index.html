@@ -190,6 +190,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/18/%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/18/%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">零拷贝技术</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-18 09:53:00" itemprop="dateCreated datePublished" datetime="2021-03-18T09:53:00+08:00">2021-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>服务端中通常需要传输文件，即将磁盘中的文件不做修改的通过socket发送出去。比如下面的代码：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>((n=<span class="built_in">read</span>(disk_fd,buf,BUG_SIZE))&gt;<span class="number">0</span>)</span><br><span class="line">	<span class="built_in">write</span>(sock_fd,buf,n);</span><br></pre></td></tr></table></figure>
+
+<p>基本操作就是从磁盘循环读取字符到用户缓冲区buf，发送到Socket。但是由于Linux的I/O操作默认是缓冲I/O。这里面主要使用的也就是 Read 和 Write 两个系统调用，我们并不知道操作系统在其中做了什么。实际上在以上 I/O 操作中，发生了多次的数据拷贝。 当应用程序访问某块数据时，操作系统首先会检查，是不是最近访问过此文件，文件内容是否缓存在内核缓冲区。如果是，操作系统则直接根据 Read 系统调用提供的 buf 地址，将内核缓冲区的内容拷贝到 buf 所指定的用户空间缓冲区中去。 如果不是，操作系统则首先将磁盘上的数据拷贝的内核缓冲区，这一步目前主要依靠 DMA 来传输，然后再把内核缓冲区上的内容拷贝到用户缓冲区中。 接下来，Write 系统调用再把用户缓冲区的内容拷贝到网络堆栈相关的内核缓冲区中，最后 Socket 再把内核缓冲区的内容发送到网卡上。<br>这种数据拷贝方式总共需要拷贝4次，分别是:  </p>
+<ol>
+<li>磁盘拷贝进内核缓冲区（DMA copy）；  </li>
+<li>内核缓冲区拷贝进用户缓冲区（read：CPU copy）；  </li>
+<li>用户缓冲区拷贝进内核socket缓冲区（write：CPU copy）；  </li>
+<li>socket内核缓冲区拷贝进网络（DMA copy）。  </li>
+</ol>
+<p>拷贝次数不但多，而且CPU负担重，故我们引入零拷贝技术来优化。零拷背用mmap+write的方式替代了read+write的方式。mmap的使用方式大致如下：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">buf = <span class="built_in">mmap</span>(diskfd, len);</span><br><span class="line"><span class="built_in">write</span>(sockfd, buf, len);</span><br></pre></td></tr></table></figure>
+<p>应用程序调用 mmap()，磁盘上的数据会通过 DMA 被拷贝的内核缓冲区，接着操作系统会把这段内核缓冲区与应用程序共享，这样就不需要把内核缓冲区的内容往用户空间拷贝。 应用程序再调用 write()，操作系统直接将内核缓冲区的内容拷贝到 Socket 缓冲区中，这一切都发生在内核态，最后，Socket 缓冲区再把数据发到网卡去。<br>注：mmap想当于建立文件和虚拟内存的映射关系，使得能够像操作数组一样访问文件，但是调用mmap不会立刻将磁盘文件换入到物理内存而是设置了相应的访问标识，如果访问的话，会触发缺页异常，然后将文件换入到物理内存中。<br>零拷贝技术中总共发生了三次拷贝：<br>1.磁盘拷贝进内核缓冲区（DMA copy）；<br>2.内核缓冲区拷贝进socket缓冲区（CPU copy）；<br>3.socket缓冲区拷贝进网络（DMA copy）。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/17/%E6%97%A0%E9%94%81%E5%90%8C%E6%AD%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -944,118 +1030,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/12/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A6%82%E5%BF%B5%E4%B8%8Etraits%E7%BC%96%E7%A8%8B%E6%8A%80%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/12/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A6%82%E5%BF%B5%E4%B8%8Etraits%E7%BC%96%E7%A8%8B%E6%8A%80%E6%B3%95/" class="post-title-link" itemprop="url">迭代器概念与traits编程技法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-03-12 10:20:00" itemprop="dateCreated datePublished" datetime="2021-03-12T10:20:00+08:00">2021-03-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">STL标准库与泛型编程</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="迭代器（iterators）概念与traits编程技法"><a href="#迭代器（iterators）概念与traits编程技法" class="headerlink" title="迭代器（iterators）概念与traits编程技法"></a>迭代器（iterators）概念与traits编程技法</h1><h2 id="迭代器设计思维-STL关键所在"><a href="#迭代器设计思维-STL关键所在" class="headerlink" title="迭代器设计思维-STL关键所在"></a>迭代器设计思维-STL关键所在</h2><p>STL的中心思想是讲数据容器（containers）和算法（algorithms）分开，最后再以一贴胶着剂将它们撮合在一起。前两者可以通过C++的class templates和function templates来实现，后者如何实现呢。</p>
-<h2 id="迭代器（iterators）是一种smart-pointer"><a href="#迭代器（iterators）是一种smart-pointer" class="headerlink" title="迭代器（iterators）是一种smart pointer"></a>迭代器（iterators）是一种smart pointer</h2><h2 id="迭代器相应型别"><a href="#迭代器相应型别" class="headerlink" title="迭代器相应型别"></a>迭代器相应型别</h2><p>可以利用function template来做类型推导：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func_impl</span><span class="params">(I iter, T t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	T tmp;</span><br><span class="line">   <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="keyword">inline</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(I iter)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">func_impl</span>(iter, *iter);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="built_in">func</span>(&amp;i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Traits编程技法-STL源码门钥"><a href="#Traits编程技法-STL源码门钥" class="headerlink" title="Traits编程技法-STL源码门钥"></a>Traits编程技法-STL源码门钥</h2><p>返回值类型如何推导呢？可以使用内嵌类型：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MyIter</span>&#123;</span></span><br><span class="line">	<span class="keyword">typedef</span> T value_type;</span><br><span class="line">   T* ptr;</span><br><span class="line">   <span class="built_in">MyIter</span>(T* p=<span class="number">0</span>):<span class="built_in">ptr</span>(p)&#123;&#125;</span><br><span class="line">   T&amp; <span class="keyword">operator</span>*()<span class="keyword">const</span>&#123;<span class="keyword">return</span> *ptr;&#125;</span><br><span class="line">   <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="keyword">typename</span> I::value_type</span><br><span class="line"><span class="built_in">func</span>(I ite)</span><br><span class="line">&#123;<span class="keyword">return</span> *ite;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="function">MyIter&lt;<span class="keyword">int</span>&gt; <span class="title">ite</span><span class="params">(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">8</span>))</span></span>;</span><br><span class="line">cout &lt;&lt; <span class="built_in">func</span>(ite);	<span class="comment">//输出：8</span></span><br></pre></td></tr></table></figure>
-
-<p><code>typename</code>可以告诉编译器返回值是一个类型。但是这里有个问题，并不是所有的迭代器都是class type，原生指针就不是。  </p>
-<p>下面这个<code>class template</code>专门用于“萃取”迭代器的特性，而value_type正是迭代器的特性之一：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">I</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iterator_traits</span>&#123;</span></span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> I::value_type value_type;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>我们就可以通过如下方式萃取出I中的value_type了:  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">I</span>&gt;</span></span><br><span class="line"><span class="keyword">typename</span> iterator_traits&lt;I&gt;::value</span><br><span class="line"><span class="built_in">func</span>(I ite)</span><br><span class="line">&#123;<span class="keyword">return</span> *ite;;&#125;</span><br></pre></td></tr></table></figure>
-<p>还可以萃取原生指针中的value_type：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iterator_traits</span>&lt;</span>T*&gt;&#123;</span><br><span class="line">	<span class="keyword">typedef</span> T value_type;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>根据经验，最常用到的迭代器相应类型有五种：<code>value type</code>,<code>difference type</code>,<code>pointer</code>,<code>reference</code>,<code>iterator catagoly</code>。  为了与STL能够水乳交融，一定要定义如下萃取机：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tempalte&lt;<span class="class"><span class="keyword">class</span> <span class="title">I</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iterator_traits</span>&#123;</span></span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> I::iterator_category    iterator_category;</span><br><span class="line">   <span class="keyword">typedef</span> <span class="keyword">typename</span> I::value_type 		   value_type;</span><br><span class="line">   <span class="keyword">typedef</span> <span class="keyword">typename</span> I::difference_type 	  difference_type;</span><br><span class="line">   <span class="keyword">typedef</span> <span class="keyword">typename</span> I::pointer 			  pointer;</span><br><span class="line">   <span class="keyword">typedef</span> <span class="keyword">typename</span> I::reference		     reference</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1127,14 +1101,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

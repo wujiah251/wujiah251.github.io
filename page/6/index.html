@@ -190,6 +190,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%92%8C%E5%8A%A0%E8%BD%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/16/%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%92%8C%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">进程启动和加载</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-16 11:12:00" itemprop="dateCreated datePublished" datetime="2021-02-16T11:12:00+08:00">2021-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h1><p>在Linux系统中，每个进程都有唯一的进程号（PID），方便系统识别和调度进程。通过简单地输出运行程序的程序名，就可以运行该程序，其实也就是启动了一个进程。总地来说，启动一个进程主要有2种途径，手动启动和通过调度启动。  </p>
+<h2 id="手动启动"><a href="#手动启动" class="headerlink" title="手动启动"></a>手动启动</h2><p>指用户通过输入命令启动一个进程，又可以分为前台启动和后台启动。  </p>
+<h3 id="前台启动进程"><a href="#前台启动进程" class="headerlink" title="前台启动进程"></a>前台启动进程</h3><p>这是手动启动进程最常见的方式，在前台输入一个命令并运行，就能够启动一个前台进程。  </p>
+<h3 id="后台启动进程"><a href="#后台启动进程" class="headerlink" title="后台启动进程"></a>后台启动进程</h3><p>进程直接从后台启动用的比较少，大多是进程比较耗时，并且我们不急于看到运行结果，为了不使整个shell处于“被占用”状态，从后台启动这个进程是比较明智的选择。从后台启动进程，其实只要在命令结尾处添加一个“&amp;”符号即可。</p>
+<h2 id="Linux调度启动进程"><a href="#Linux调度启动进程" class="headerlink" title="Linux调度启动进程"></a>Linux调度启动进程</h2><p>在Linux系统种，任务可以被配置在指定的时间、日期或者系统平均负载量低于指定值时自动启动。实现调度启动的方法很多，例如通过crontab、at等命令。</p>
+<h1 id="进程加载"><a href="#进程加载" class="headerlink" title="进程加载"></a>进程加载</h1><p>进程加载需要如下过程：  </p>
+<ol>
+<li>创建一个独立的虚拟地址空间。主要是分配一个页目录。  </li>
+<li>读取可执行文件的头，并且建立虚拟空间和可执行文件的映射关系。主要是把可执行文件映射到虚拟地址空间，即做虚拟页和物理页的映射，以便“缺页”时载入。  </li>
+<li>讲CPU的指令寄存器设置成可执行文件的入口地址，启动运行。  </li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/Linux%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -997,304 +1081,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/12/%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%AB%98%E6%80%A7%E8%83%BDWeb%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/12/%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%AB%98%E6%80%A7%E8%83%BDWeb%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">轻量级高性能Web服务器开发</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-12 21:26:43" itemprop="dateCreated datePublished" datetime="2021-02-12T21:26:43+08:00">2021-02-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>笔者这学期先后学习了《深入理解计算机系统》、《计算机网络：自顶向下方法》、《操作系统概念》，想要做一个项目来巩固这段时间所学的知识，考虑到CSAPP中实现了一个TinyWebServer，我打算开发一个高性能Web服务器。  </p>
-<h1 id="相关环境配置"><a href="#相关环境配置" class="headerlink" title="相关环境配置"></a>相关环境配置</h1><ul>
-<li>服务器测试环境  </li>
-<li>Ubuntu版本16.04</li>
-<li>MySQL版本5.7.32</li>
-<li>浏览器测试</li>
-<li>FireFox</li>
-<li>创建数据库  </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">create database webserver_database;</span><br><span class="line">&#x2F;&#x2F; 创建一个名为webserver_database的数据库</span><br><span class="line">user database webserver_database;</span><br><span class="line">&#x2F;&#x2F; 在这个数据库中创建表user，关系为(username,passwd)</span><br><span class="line">&#x2F;&#x2F; 保存用户名-密码</span><br><span class="line">create table user(</span><br><span class="line">	username char(50) NULL,</span><br><span class="line">   passwd char(50) NULL</span><br><span class="line">);</span><br><span class="line">&#x2F;&#x2F; 添加一条数据，内容可以填上任意的用户名和密码</span><br><span class="line">INSERT INTO user(username, passwd) VALUES(&#39;wujiahao&#39;,&#39;wujiahao&#39;);</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line"></span><br><span class="line">这个数据库只有一个表user，其保存的是用户的用户名、密码。  </span><br><span class="line">- 文件管理  </span><br><span class="line"> - makefile  </span><br><span class="line"> - 运行方式  </span><br><span class="line"> </span><br><span class="line"> &#96;&#96;&#96;shell</span><br><span class="line"> linux&gt; make</span><br><span class="line"> linux&gt; .&#x2F;server</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="知识基础"><a href="#知识基础" class="headerlink" title="知识基础"></a>知识基础</h1><p>本项目中主要涉及以下知识。  </p>
-<ul>
-<li>C++基础  </li>
-<li>数据结构基础  </li>
-<li>计算机网络基础  </li>
-<li>操作系统基础  </li>
-<li>Linux基础  </li>
-<li>服务器开发规范  </li>
-</ul>
-<p>项目中参考的书籍：  </p>
-<ul>
-<li>《深入理解计算机系统》  </li>
-<li>《计算机网络：自顶向下方法》  </li>
-<li>《UNIX环境高级编程》  </li>
-<li>《UNIX网络编程 卷一：套接字联网API》  </li>
-<li>《鸟哥的Linux私房菜：基础篇》  </li>
-<li>《Linux高性能服务器编程》  </li>
-</ul>
-<h2 id="计算机系统"><a href="#计算机系统" class="headerlink" title="计算机系统"></a>计算机系统</h2><p>CSAPP主要是理解进程、线程的相关概念，对多进程、多线程编程有一个基本的认识。其中涉及到的进程、线程、信号量、互斥锁、生产者-消费者模型等概念在本项目中用到最多。重点参考本书的第三部分（第10章系统级I/O、第11章网络编程、第12章并发编程）。另外可以读一读第7章链接和第8章异常控制流，对项目文件的管理和理解用户态/内核态有帮助。 </p>
-<h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><p>《计算机网络：自顶向下方法》本书我实际上只看了前5章，包括应用层、传输层、网络层，由于计算机网络是一个层次结构，所以只需要掌握这部分内容，在进行服务器开发时，就不存在较大的知识盲区了。</p>
-<h2 id="UNIX编程"><a href="#UNIX编程" class="headerlink" title="UNIX编程"></a>UNIX编程</h2><p>《UNIX环境高级编程》、《UNIX网络编程 卷一：套接字联网API》主要是作为字典，遇到需要用的函数或者不理解的知识时进行查询用的。</p>
-<h2 id="Linux基础"><a href="#Linux基础" class="headerlink" title="Linux基础"></a>Linux基础</h2><p>《鸟哥的Linux私房菜：基础篇》比较好的Linux入门书籍，由于笔者时间紧迫，就没有先系统学习了，只在需要的时候查询相关命令。</p>
-<h2 id="服务器开发规范"><a href="#服务器开发规范" class="headerlink" title="服务器开发规范"></a>服务器开发规范</h2><p>主要参考了游双的《Linux高性能服务器编程》，这本书提供了很多服务器开发中运用的技术，并提供了相应的代码（笔者在实际开发中很多代码是基于本书提供的代码所写）：  </p>
-<ul>
-<li><p>主流服务器模型：C/S模型和P2P模型  </p>
-</li>
-<li><p>C/S模型<br>也就是客户端/服务器模型，这个模型很简单，就是所有的资源都被服务器所拥有，客户端需要访问服务器来获取所需的资源。  </p>
-</li>
-<li><p>P2P模型<br>P2P模型比C/S模型更接近网络通信的实际情况，摒弃了以服务器为中心的格局，让网络中所有主机重新回到对等的地位。  </p>
-</li>
-<li><p>比较<br>C/S模型适合资源相对集中的场合，它的实现也更为简单，缺点是当访问量过大的时候，可能所有客户都将得到很慢的响应。P2P模型使得每台机器在消耗服务的同时也给别人提供服务，这样资源能够充分、自由地共享。但是当用户之间传输的请求过多时，网络的负载将会加重。  </p>
-</li>
-<li><p>I/O模型：同步I/O与异步I/O  </p>
-</li>
-<li><p>阻塞I/O<br>当发生系统调用时候，比如recv，用户进程要一直等待到数据拷贝到用户空间，这段时间内进程始终阻塞。它是同步I/O。  </p>
-</li>
-<li><p>非阻塞I/O<br>还是以recv为例子，不管有没有数据都返回，如果没有数据，过一会再调用recv看看，如此循环。但是如果有数据，它要等待数据拷贝到用户空间，因此还是同步I/O。  </p>
-</li>
-<li><p>I/O复用<br>同时监听多个文件描述符，当有可读/可写/异常事件发生的时候，通知进程，进行读写或者处理异常。当没有事件发生时候，正常运行。就当前例子来看还是同步I/O，因为依旧要等待数据读完或者写完才能继续运行。I/O复用可用于同步I/O也可用于异步I/O。  </p>
-</li>
-<li><p>信号驱动的I/O模型<br>通过调用sigaction注册信号函数，等内核数据准备好的时候，系统中断当前程序，执行信号函数（在这里调用recv）。这还是同步I/O。  </p>
-</li>
-<li><p>异步I/O模型<br>调用aio_read，让内核等数据准本好，并且复制到用户进程空间后执行实现指定好的函数。这样子省去了进程等待读数据的事件。这是真正的异步I/O。  </p>
-</li>
-<li><p>I/O的两个阶段<br>内核数据的准备阶段和内核数据复制到用户缓冲区阶段。只有进程不用等待这两个阶段，才是真正的异步I/O。  </p>
-</li>
-<li><p>事件处理模式：Reactor模式/Proactor模式<br>服务器程序通常要处理3类事件，I/O事件、信号和定时事件。在处理事件上有两种高效的事件处理模式：Reactor和Proactor。这两种其实也都是I/O复用模型  </p>
-</li>
-<li><p>Reactor模式<br>Reactor是这样一种模式，它要求主线程只负责监听文件描述上是否有事件发生，有的话就立即将该事件通知工作线程。除此之外，主线程不做任何其他实质性的工作，读写数据、接收新的连接，以及处理客户请求均在工作线程中完成。<br>使用同步I/O模型（以<code>epoll_wait()</code>为例）实现的Reacotr模式的工作流程如下：<br>1）主线程往epoll内核事件表中注册socket上的读就绪事件。<br>2）主线程调用<code>epoll_wait()</code>等待socket上有数据可读。<br>3）当socket上有数据可读时，<code>epoll_wait()</code>通知主线程。主线程将socket可读事件放入请求队列。<br>4）睡眠在请求队列上的某个工作线程被唤醒，它从socket读取数据，并处理客户请求，然后往epoll内核事件表中注册该socket上的写事件。<br>5）主线程调用<code>epoll_wait()</code>等待socket可写。<br>6）当socket可写时，<code>epoll_wait()</code>通知主线程。主线程将socket可写事件放入请求队列。<br>7）睡眠在请求队列上的某个工作线程被唤醒，它往socket上写入服务器处理客户请求的结果。<br>重点：要有一个read/write事件处理器。  </p>
-</li>
-<li><p>Proactor模式<br>与Reactor模式不通，Proactor模式将所有I/O操作都交给主线程和内核来处理，工作线程仅仅负责业务逻辑。<br>使用异步I/O模型（<code>aio_read</code>和<code>aio_write</code>为例）实现得Proactor模式工作流程。<br>1）主线程调用aio_read函数向内核注册socket上的读完成事件，并告诉内核用户读缓冲区的位置，以及读操作完成时如何通知应用程序。（信号）<br>2）主线程继续处理其他逻辑。<br>3）应用程序预先定义好的信号处理函数选择一个工作线程来处理客户请求。工作线程处理完客户请求之后，调用<code>aio_write</code>函数向内核注册socket上的写完成事件，并告诉内核用户缓冲区的位置，以及写操作完成时如何通知应用程序（信号）。<br>4）主线程继续处理其他逻辑。<br>5）当用户缓冲区的数据被写入socket之后，内核将向应用程序发送一个信号，以通知应用程序数据已经发送完毕。<br>6）当用户缓冲区的数据写入socket之后，内核向应用程序发送一个信号，以通知应用程序数据已经传送完毕。<br>7）应用程序预先定义好的信号处理函数选择一个工作线程来做善后处理，比如决定是否关闭socket。  </p>
-</li>
-<li><p>同步模拟Proactor模型<br>《Linux高性能服务器编程》一书中提到了一种用同步I/O来模拟Proactor模式的方法。其原理是：主线程执行数据读写操作，读写完成之后，主线程向工作线程通知这一“完成事件”。那么工作线程直接获得了读写结果，接下来只要做的只是对读写结果的处理。<br>1）主线程调用<code>epoll_wait()</code>内核事件表中注册socket上的读就绪事件。<br>2）主线程调用<code>epoll_wait()</code>等大socket上有数据可读。<br>3）当socket上有数据可读时，<code>epoll_wait()</code>通知主线程。主线程从socket循环读取数据，直到没有更多数据可读，然后将所有数据封装成一个请求对象并插入请求队列。<br>4）睡眠在请求队列中的某个工作流程被唤醒，它获得请求对象并处理客户请求，然后往epoll内核事件表中注册socket上的写就绪事件。<br>5）主线程调用<code>epoll_wait()</code>等待socket可写。<br>6）当socket可写时，<code>epoll_wait()</code>通知主线程。主线程往socket上写入服务器处理客户请求的结果。<br>这里同步模拟和异步模拟Proactor的区别在于，同步模拟是主线程自己进行I/O操作，需要等待读完数据，而异步I/O是通过<code>aio_read()</code>异步读取，主线程不需要等待I/O完成。  </p>
-</li>
-<li><p>总结<br>Reactor和Proactor的本质区别在于谁负责I/O操作，其实它们都可以分别利用同步I/O或者异步I/O来实现。</p>
-</li>
-<li><p>并发模式<br>并发编程的目的是让程序“同时”执行多个任务，如果程序是计算密集型的，并发编程并没有优势，反而由于任务切换使得效率低。但如果程序是I/O密集型，则情况不通。和IO不通的是，在并发模式中，同步指的是程序完全按照代码序列的顺序执行；异步指的是程序的执行需要由系统事件来驱动。同步线程效率低，实时性差，但是逻辑简单，异步线程实时性强，效率高，但是相对复杂难以调试。对于服务器而言，既追求实时性，也要同时处理多个请求，我们应该采用半同步半异步模式。  </p>
-</li>
-<li><p>半同步/半异步模式<br>同步线程处理客户逻辑，异步线程处理I/O事件。  </p>
-</li>
-<li><p>领导者/追随者模式<br>多个工作线程轮流获得事件源，轮流监听、分发并处理事件。在任意时刻，程序都仅有一个领导者线程，它负责监听I/O事件。而其他线程则是追随者，它们休眠在线程池，然后等待处理I/O事件。此时新的领导者等待I/O事件，原来的领导者处理I/O事件，二者实现了并发。  </p>
-</li>
-</ul>
-<p>以上就是《Linux高性能服务器编程》中关于服务器开发的一些重要技术和规范。  </p>
-<h1 id="框架设计"><a href="#框架设计" class="headerlink" title="框架设计"></a>框架设计</h1><h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><p>文件<code>lock/locker.h</code>提供了3类，分别是sem、locker、cond，是对信号量、互斥锁、条件变量的封装。  </p>
-<h2 id="sem类"><a href="#sem类" class="headerlink" title="sem类"></a>sem类</h2><p>信号量，提供函数如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sem</span>();          <span class="comment">//默认构造函数</span></span><br><span class="line"><span class="built_in">sem</span>(<span class="keyword">int</span> num);   <span class="comment">//构造函数，信号量初始为num</span></span><br><span class="line">~<span class="built_in">sem</span>(); <span class="comment">//析构函数</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">wait</span><span class="params">()</span></span>;    <span class="comment">//V操作，信号量-1</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">post</span><span class="params">()</span></span>;    <span class="comment">//P操作，信号+1</span></span><br></pre></td></tr></table></figure>
-
-
-<h2 id="locker类"><a href="#locker类" class="headerlink" title="locker类"></a>locker类</h2><p>互斥锁，提供函数如下：  </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">locker</span>();   <span class="comment">//构造函数</span></span><br><span class="line">~<span class="built_in">locker</span>()； <span class="comment">//析构函数</span></span><br><span class="line"><span class="built_in">lock</span>()；    <span class="comment">//上锁</span></span><br><span class="line"><span class="built_in">unlock</span>()；  <span class="comment">//解锁</span></span><br><span class="line">pthread_mutex_t *get()；    //返回互斥锁指针</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="cond类"><a href="#cond类" class="headerlink" title="cond类"></a>cond类</h2><p>条件变量，提供的函数如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cond</span>();<span class="comment">//构造函数</span></span><br><span class="line">~<span class="built_in">cond</span>();<span class="comment">//析构函数</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">wait</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *m_mutex)</span></span>;<span class="comment">//等待目标条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">timewait</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *m_mutex, struct timespec t)</span></span>;<span class="comment">//等待目标条件变量一定时间</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">signal</span><span class="params">()</span></span>;<span class="comment">//信号唤醒</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">broadcast</span><span class="params">()</span></span>;<span class="comment">//信号唤醒</span></span><br></pre></td></tr></table></figure>
-<p><code>wait(pthread_mutex_t *m_mutex)</code>内部调用<code>pthread_cond_wait()</code>，此函数内部操作分为以下步骤：</p>
-<ul>
-<li>先传入一个互斥锁和条件变量，将线程放在条件变量的请求队列后，内部解锁</li>
-<li>线程等待被pthread_cond_broadcast信号唤醒或者pthread_cond_signal信号唤醒，唤醒后去竞争锁，若竞争到锁，则内部再次加锁。<br>使用方式举例说明，下面这是我们设计的用来处理日志事件的循环队列，利用上述三个类，这个队列实现了线程安全。条件变量这样使用：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">push</span><span class="params">(<span class="keyword">const</span> T &amp;item)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    m_mutex.<span class="built_in">lock</span>();</span><br><span class="line">    <span class="keyword">if</span> (m_size &gt;= m_max_size)</span><br><span class="line">    &#123;</span><br><span class="line">        m_cond.<span class="built_in">broadcast</span>();</span><br><span class="line">        m_mutex.<span class="built_in">unlock</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    m_back = (m_back + <span class="number">1</span>) % m_max_size;</span><br><span class="line">    m_array[m_back] = item;</span><br><span class="line">    m_size++;</span><br><span class="line">    m_cond.<span class="built_in">broadcast</span>();</span><br><span class="line">    m_mutex.<span class="built_in">unlock</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//pop时,如果当前队列没有元素,将会等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">pop</span><span class="params">(T &amp;item)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    m_mutex.<span class="built_in">lock</span>();</span><br><span class="line">    <span class="keyword">while</span> (m_size &lt;= <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!m_cond.<span class="built_in">wait</span>(m_mutex.<span class="built_in">get</span>()))</span><br><span class="line">        &#123;</span><br><span class="line">            m_mutex.<span class="built_in">unlock</span>();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    m_front = (m_front + <span class="number">1</span>) % m_max_size;</span><br><span class="line">    item = m_array[m_front];</span><br><span class="line">    m_size--;</span><br><span class="line">    m_mutex.<span class="built_in">unlock</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-将事件<code>push</code>进队列之前现对互斥锁<code>m_mutex</code>上锁，然后添加成功后，解锁，并广播<code>m_cond.wait()</code>，因为<code>pop</code>可能因为队列为空而被阻塞，广播将唤醒等待队列中的条件变量。<br><code>pop</code>中先将<code>m_mutex</code>上锁，然后<code>m_cond_wait()</code>函数将条件变量添加到等待队列中后，将mutex_解锁（这样条件变量不会错过条件判断和加入等待队列之间的所有变化）。然后当条件变量满足时，将会去竞争互斥锁，然后竞争成功的条件变量加锁并返回（因为会有多个条件变量被满足来竞争互斥锁）。  </li>
-</ul>
-<h1 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h1><p>在<code>log/block_queue.h</code>中实现了一个线程安全的循环队列，其功能和一般的队列区别不大。这个队列用于处理日志事件。<br>在<code>log/log.h,log/log.cc</code>中声明并实现了日志类。</p>
-<h2 id="block-queue类"><a href="#block-queue类" class="headerlink" title="block_queue类"></a>block_queue类</h2><p>一个线程安全的循环队列，操作和普通队列基本一致，不做过多说明。</p>
-<h2 id="log类"><a href="#log类" class="headerlink" title="log类"></a>log类</h2><p>日志类，采用单例模式。<br>单例模式是最常用的设计模式之一，保证一个类只有一个实例，并提供一个访问它的全局访问点，该实例被所有程序模块共享。<br>实现思路：私有化它的构造函数，以防止外界创建单例类的对象；使用类的私有静态指针变量窒息那个类的唯一实例，并用一个公有的静态方法获取该实例。<br>单例模式有两种实现方法，分别是懒汉和饿汉模式。顾名思义，懒汉模式，即非常懒，不用的时候不去初始化，所以在第一次被使用时才进行初始化；饿汉模式，即迫不及待，在程序运行时立即初始化。<br>我的实现是这样的：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Log</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">//C++11以后,使用局部变量懒汉不用加锁</span></span><br><span class="line">    <span class="function"><span class="keyword">static</span> Log *<span class="title">get_instance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> Log instance;</span><br><span class="line">        <span class="keyword">return</span> &amp;instance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//其他</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">Log</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Log</span>();</span><br><span class="line">    <span class="comment">//其他</span></span><br></pre></td></tr></table></figure>
-<p>静态成员instance只会被生成一次保证了单例。不过需要注意的是C++11之前的在创建<code>instance</code>需要加锁，因为编译器不保证内部静态变量的线程安全。C++11之后不需要了。  </p>
-<p>log包含如下变量：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> dir_name[<span class="number">128</span>]; <span class="comment">//路径名</span></span><br><span class="line"><span class="keyword">char</span> log_name[<span class="number">128</span>]; <span class="comment">//log文件名</span></span><br><span class="line"><span class="keyword">int</span> m_split_lines;  <span class="comment">//日志最大行数</span></span><br><span class="line"><span class="keyword">int</span> m_log_buf_size; <span class="comment">//日志缓冲区大小</span></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> m_count;  <span class="comment">//日志行数记录</span></span><br><span class="line"><span class="keyword">int</span> m_today;        <span class="comment">//因为按天分类,记录当前时间是那一天</span></span><br><span class="line">FILE *m_fp;         <span class="comment">//打开log的文件指针</span></span><br><span class="line"><span class="keyword">char</span> *m_buf;</span><br><span class="line">block_queue&lt;string&gt; *m_log_queue;   <span class="comment">//阻塞队列</span></span><br><span class="line">locker m_mutex;                     <span class="comment">//互斥锁</span></span><br><span class="line"><span class="keyword">int</span> m_close_log;                    <span class="comment">//关闭日志</span></span><br></pre></td></tr></table></figure>
-<p>提供了如下成员函数：</p>
-<h3 id="bool-init-const-char-file-name-int-close-log-int-log-buf-size-8192-int-split-lines-int-max-queue-size"><a href="#bool-init-const-char-file-name-int-close-log-int-log-buf-size-8192-int-split-lines-int-max-queue-size" class="headerlink" title="bool init(const char *file_name,int close_log,int log_buf_size=8192,int split_lines,int max_queue_size)"></a><code>bool init(const char *file_name,int close_log,int log_buf_size=8192,int split_lines,int max_queue_size)</code></h3><p>分为异步写入和同步写入两种方式,如果参数max_queue_size&gt;=1表示采取异步。<br>异步模式：<br>初始化阻塞队列，并且创建一个线程（调用flush_log_thread）读取阻塞队列写日志。<br>生成日志文件名（添加时间信息）。<br>创建/打开日志文件。  </p>
-<h3 id="void-write-log-int-level-const-char-format"><a href="#void-write-log-int-level-const-char-format" class="headerlink" title="void write_log(int level, const char *format, ...)"></a><code>void write_log(int level, const char *format, ...)</code></h3><p>生成日志写入条目，包括类型（INFO、ERROR）、时间等信息。<br>判断当前日期和类的日期是否一致，不一致则刷新该文件写入缓冲区并关闭之前的文件描述符，打开新的文件。<br>判断异步写入还是同步写入：<br>如果同步，直接写入文件。<br>如果异步，将代写入信息push进阻塞队列。</p>
-<h3 id="void-flush-void"><a href="#void-flush-void" class="headerlink" title="void flush(void)"></a><code>void flush(void)</code></h3><p>线程安全的刷新文件缓冲区（加互斥锁）。</p>
-<h3 id="static-void-flush-log-thread-void-args"><a href="#static-void-flush-log-thread-void-args" class="headerlink" title="static void *flush_log_thread(void *args)"></a><code>static void *flush_log_thread(void *args)</code></h3><p>提供给写日志工作线程的调用函数。这个函数调用私有成员函数<code>async_write_log()</code></p>
-<h3 id="void-async-write-log"><a href="#void-async-write-log" class="headerlink" title="void *async_write_log()"></a><code>void *async_write_log()</code></h3><p>异步写入日志函数，从阻塞队列取出日志条目，并写入日志。</p>
-<h2 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a>宏定义</h2><p><code>log.h</code>中提供了几个宏定义，实现了对日志写入的包装，让其他函数能够更加轻松的调用日志类：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG_DEBUG(format, ...) <span class="meta-keyword">if</span> (0 == m_close_log)&#123;Log::get_instance()-&gt;write_log(0, format,##__VA_ARGS__);Log::get_instance()-&gt;flush();&#125;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG_INFO(format, ...) <span class="meta-keyword">if</span> (0 == m_close_log)&#123;Log::get_instance()-&gt;write_log(1, format, ##__VA_ARGS__);Log::get_instance()-&gt;flush();&#125;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG_WARN(format, ...) <span class="meta-keyword">if</span> (0 == m_close_log)&#123;Log::get_instance()-&gt;write_log(2, format, ##__VA_ARGS__);Log::get_instance()-&gt;flush();&#125;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG_ERROR(format, ...)<span class="meta-keyword">if</span> (0 == m_close_log)&#123;Log::get_instance()-&gt;write_log(3, format, ##__VA_ARGS__);Log::get_instance()-&gt;flush();&#125;</span></span><br></pre></td></tr></table></figure>
-
-
-<h1 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h1><h2 id="client-data类"><a href="#client-data类" class="headerlink" title="client_data类"></a>client_data类</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">client_data</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    sockaddr_in address;</span><br><span class="line">    <span class="keyword">int</span> sockfd;</span><br><span class="line">    util_timer *timer;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>客户数据类，数据成员有套接字描述符、地址、定时器。  </p>
-<h2 id="util-timer类"><a href="#util-timer类" class="headerlink" title="util_timer类"></a>util_timer类</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">util_timer</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">util_timer</span>() : <span class="built_in">prev</span>(<span class="literal">NULL</span>), <span class="built_in">next</span>(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">time_t</span> expire;  <span class="comment">//定时器终止时间</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span> (*cb_func)(client_data *);</span><br><span class="line">    client_data *user_data;</span><br><span class="line">    util_timer *prev;</span><br><span class="line">    util_timer *next;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>定时器类，数据成员包括前继结点、后继结点、终止时间、客户数据类。此类服务于定时器链表。</p>
-<h3 id="cb-func-client-data"><a href="#cb-func-client-data" class="headerlink" title="cb_func(client_data *)"></a><code>cb_func(client_data *)</code></h3><p>功能：关闭已连接套接字，并设置epoll内核事件注册表（删除套接字）。<br>此函数在定时器超时时候调用。</p>
-<h2 id="sort-timer-lst类"><a href="#sort-timer-lst类" class="headerlink" title="sort_timer_lst类"></a>sort_timer_lst类</h2><p>升序定时器链表。<br>按照终止时间升序排列的定时器双向链表。<br>包括数据成员头指针、尾指针。<br>提供公有成员函数：<br>void add_timer(util_timer*)<br>void adjust_timer(util_timer*)<br>void del_timer(util_timer*)<br>void tick()  </p>
-<h3 id="add-timer-util-timer"><a href="#add-timer-util-timer" class="headerlink" title="add_timer(util_timer*)"></a><code>add_timer(util_timer*)</code></h3><p>添加定时器到链表中</p>
-<h3 id="adjust-timer-util-timer"><a href="#adjust-timer-util-timer" class="headerlink" title="adjust_timer(util_timer*)"></a><code>adjust_timer(util_timer*)</code></h3><p>调整定时器在链表中的位置。由于事件的发生定时器终止时间可能会发生变化，也需要相应的调整其在链表中的位置。同时插入新的定时器，也需要调整位置</p>
-<h3 id="del-timer-utile-timer"><a href="#del-timer-utile-timer" class="headerlink" title="del_timer(utile_timer*)"></a><code>del_timer(utile_timer*)</code></h3><p>删除定时器。</p>
-<h3 id="tick"><a href="#tick" class="headerlink" title="tick()"></a><code>tick()</code></h3><p>可以理解为滴答，即查看当前时间，将定时器链表中超时间的定时器对象删除，并调用<code>cb_func()</code>删除相应的注册事件和关闭套接字描述符。</p>
-<h2 id="Utils类"><a href="#Utils类" class="headerlink" title="Utils类"></a>Utils类</h2><p>这是一个工具类，直接面向服务器类<code>webserver</code>，负责管理连接的定时器链表、通信管道。<br>包含静态数据成员有：<code>int *u_pipefd</code>：这是管道，用于通信；<code>int u_epollfd</code>：这是epoll文件描述符。  包含数据成员：<code>sort_timer_lst m_timer_lst</code>：定时器链表；<code>int m_TIMESLOT</code>：时间间隔。<br>提供的成员函数：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(<span class="keyword">int</span> timeslot)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setnonblocking</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;  </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addfd</span><span class="params">(<span class="keyword">int</span> epollfd, <span class="keyword">int</span> fd, <span class="keyword">bool</span> one_shot, <span class="keyword">int</span> TRIGMode)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sig_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addsig</span><span class="params">(<span class="keyword">int</span> sig, <span class="keyword">void</span>(handler)(<span class="keyword">int</span>), <span class="keyword">bool</span> restart = <span class="literal">true</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">timer_handler</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show_error</span><span class="params">(<span class="keyword">int</span> connfd, <span class="keyword">const</span> <span class="keyword">char</span> *info)</span></span>;</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="void-init-int-timeslot"><a href="#void-init-int-timeslot" class="headerlink" title="void init(int timeslot)"></a><code>void init(int timeslot)</code></h3><p>设置定时器时间间隔</p>
-<h3 id="int-setnonblocking-int-fd"><a href="#int-setnonblocking-int-fd" class="headerlink" title="int setnonblocking(int fd)"></a><code>int setnonblocking(int fd)</code></h3><p>将文件描述符设置为非阻塞，即立即返回，不等待I/O。</p>
-<h3 id="void-addfd-int-epollfd-int-fd-bool-one-shot-int-TRIGMode"><a href="#void-addfd-int-epollfd-int-fd-bool-one-shot-int-TRIGMode" class="headerlink" title="void addfd(int epollfd, int fd, bool one_shot, int TRIGMode)"></a><code>void addfd(int epollfd, int fd, bool one_shot, int TRIGMode)</code></h3><p>向epoll内核注册表注册套接字描述符号，并设置触发模式LT/ET。one_shot用于设置同一套接字能否被多个线程处理。</p>
-<h3 id="void-sig-handler-int-sig"><a href="#void-sig-handler-int-sig" class="headerlink" title="void sig_handler(int sig)"></a><code>void sig_handler(int sig)</code></h3><p>静态成员函数。信号处理函数：设计成将传递信号到管道。</p>
-<h3 id="void-addsig-int-sig-void-handler-int-bool-restart-true"><a href="#void-addsig-int-sig-void-handler-int-bool-restart-true" class="headerlink" title="void addsig(int sig, void(handler)(int), bool restart = true)"></a><code>void addsig(int sig, void(handler)(int), bool restart = true)</code></h3><p>为sig信号设置信号处理函数handler。</p>
-<h3 id="void-timer-handler"><a href="#void-timer-handler" class="headerlink" title="void timer_handler()"></a><code>void timer_handler()</code></h3><p>定时任务处理，包括<code>tick()</code>、和发出SIGALRM信号。</p>
-<h3 id="void-show-error-int-connfd-const-char-info"><a href="#void-show-error-int-connfd-const-char-info" class="headerlink" title="void show_error(int connfd, const char *info)"></a><code>void show_error(int connfd, const char *info)</code></h3><p>向套接字输出错误，一般只用于输出超时信息。</p>
-<h1 id="数据库连接池"><a href="#数据库连接池" class="headerlink" title="数据库连接池"></a>数据库连接池</h1><p><code>mysql/sql_connection_pool.h</code>、<code>mysql/sql_connection_pool.cc</code>申明了数据库连接池类<code>connection_pool</code>、数据库连接类<code>connectionRAII</code>。<br><code>connection_pool</code>提供数据库连接服务，先初始化好数据库连接，<code>connectionRAII</code>可以理解为前者的一个接口，只获得一个数据库连接，当http服务需要进行数据库连接时，只需要创建一个<code>connectionRAII</code>对象并从连接池获取连接即可。  </p>
-<h2 id="connection-pool"><a href="#connection-pool" class="headerlink" title="connection_pool"></a>connection_pool</h2><p>单例模式实现，包含下列数据成员：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> m_MaxConn;  <span class="comment">//最大连接数</span></span><br><span class="line">	<span class="keyword">int</span> m_CurConn;  <span class="comment">//当前已使用的连接数</span></span><br><span class="line">	<span class="keyword">int</span> m_FreeConn; <span class="comment">//当前空闲的连接数</span></span><br><span class="line">	locker lock;    <span class="comment">//互斥锁</span></span><br><span class="line">	list&lt;MYSQL *&gt; connList; <span class="comment">//连接池</span></span><br><span class="line">	sem reserve;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	string m_url;           <span class="comment">//主机地址</span></span><br><span class="line">	string m_Port;	    	<span class="comment">//数据库端口号</span></span><br><span class="line">	string m_User;  		<span class="comment">//登陆数据库用户名</span></span><br><span class="line">	string m_PassWord;	    <span class="comment">//登陆数据库密码</span></span><br><span class="line">	string m_DatabaseName;  <span class="comment">//使用数据库名</span></span><br><span class="line">	<span class="keyword">int</span> m_close_log;	    <span class="comment">//日志开关</span></span><br></pre></td></tr></table></figure>
-<p>提供的成员函数包括：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">MYSQL *<span class="title">GetConnection</span><span class="params">()</span></span>;				 <span class="comment">//返回一个数据库连接</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ReleaseConnection</span><span class="params">(MYSQL *conn)</span></span>; <span class="comment">//释放连接</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">GetFreeConn</span><span class="params">()</span></span>;					 <span class="comment">//获取连接</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DestroyPool</span><span class="params">()</span></span>;					 <span class="comment">//销毁所有连接</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> connection_pool *<span class="title">GetInstance</span><span class="params">()</span></span>;	<span class="comment">//单例模式，获取唯一实例</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(string url, string User, string PassWord, string DataBaseName, <span class="keyword">int</span> Port, <span class="keyword">int</span> MaxConn, <span class="keyword">int</span> close_log)</span></span>; <span class="comment">//初始化连接池</span></span><br></pre></td></tr></table></figure>
-
-
-<h2 id="connectionRAII"><a href="#connectionRAII" class="headerlink" title="connectionRAII"></a>connectionRAII</h2><p>数据成员包括：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	MYSQL *conRAII;<span class="comment">//数据连接</span></span><br><span class="line">	connection_pool *poolRAII;<span class="comment">//数据库连接池</span></span><br></pre></td></tr></table></figure>
-<p>成员函数有：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">connectionRAII</span>(MYSQL **con, connection_pool *connPool); </span><br><span class="line"><span class="comment">//构造时直接从数据库连接池中获取数据库连接</span></span><br><span class="line">~<span class="built_in">connectionRAII</span>();</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="HTTP服务"><a href="#HTTP服务" class="headerlink" title="HTTP服务"></a>HTTP服务</h1><p><code>http_connect.h</code>、<code>http_connect.cc</code>中实现了http服务类-http_connect(为连接提供http服务，一个连接对应一个http_connect对象），还是实现了<code>setnoblocking()</code>、<code>addfd()</code>、<code>removefd()</code>、<code>modfd()</code>等功能函数。<br>上述功能函数用于设置epoll描述符的相关属性、向epoll内核事件表中添加/删除事件的功能。</p>
-<h2 id="http-connect"><a href="#http-connect" class="headerlink" title="http_connect"></a>http_connect</h2><p>本类提供以下成员函数</p>
-<h3 id="void-http-connect-initmysql-result-connection-pool-connPool"><a href="#void-http-connect-initmysql-result-connection-pool-connPool" class="headerlink" title="void http_connect::initmysql_result(connection_pool* connPool)"></a><code>void http_connect::initmysql_result(connection_pool* connPool)</code></h3><p>初始化对象的mysql连接，并将用户数据库数据读入到外部变量查找表users中。  </p>
-<h3 id="void-http-connect-close-conn"><a href="#void-http-connect-close-conn" class="headerlink" title="void http_connect::close_conn()"></a><code>void http_connect::close_conn()</code></h3><p>关闭一个连接</p>
-<h3 id="void-http-connect-init-int-sockfd-const-sockaddr-in-amp-addr-char-root-int-TRIGMode-int-close-log-string-user-string-passwd-string-sqlname"><a href="#void-http-connect-init-int-sockfd-const-sockaddr-in-amp-addr-char-root-int-TRIGMode-int-close-log-string-user-string-passwd-string-sqlname" class="headerlink" title="void http_connect::init(int sockfd, const sockaddr_in &amp;addr, char *root, int TRIGMode,int close_log, string user, string passwd, string sqlname)"></a><code>void http_connect::init(int sockfd, const sockaddr_in &amp;addr, char *root, int TRIGMode,int close_log, string user, string passwd, string sqlname)</code></h3><p>初始化连接：  </p>
-<ol>
-<li>将文件描述符添加到内核事件表中（addfd()）；  </li>
-<li>设置http响应方式；  </li>
-<li>设置日志是否关闭；  </li>
-<li>设置数据库信息；  </li>
-<li>调用init()初始化状态信息以及缓冲区。  </li>
-</ol>
-<h3 id="void-http-connect-init"><a href="#void-http-connect-init" class="headerlink" title="void http_connect::init()"></a><code>void http_connect::init()</code></h3><p>初始化http_connect对象的各种信息以及缓冲区。  </p>
-<h3 id="http-connect-LINE-STATUS-http-connect-parse-line"><a href="#http-connect-LINE-STATUS-http-connect-parse-line" class="headerlink" title="http_connect::LINE_STATUS http_connect::parse_line()"></a><code>http_connect::LINE_STATUS http_connect::parse_line()</code></h3><p>状态机，用于分析出一行内容，返回值为行的读取状态，有LINE_OK,LINE_BAD,LINE_OPEN</p>
-<h3 id="bool-http-connect-read-once"><a href="#bool-http-connect-read-once" class="headerlink" title="bool http_connect::read_once()"></a><code>bool http_connect::read_once()</code></h3><p>读取客户数据，直到数据读取完毕或者无数据可读。  </p>
-<ol>
-<li>读缓冲区用完，返回false；  </li>
-<li>选择读取方式LT或者ET；  </li>
-<li>选择LT模式则只调用一次recv读取数据，并返回；  </li>
-<li>选择ET模式则循环调用recv直到读取完毕或者发生错误；  </li>
-</ol>
-<h3 id="http-connect-HTTP-CODE-http-connect-parse-request-line"><a href="#http-connect-HTTP-CODE-http-connect-parse-request-line" class="headerlink" title="http_connect::HTTP_CODE http_connect::parse_request_line()"></a><code>http_connect::HTTP_CODE http_connect::parse_request_line()</code></h3><p>读取http请求报文，并解析返回状态码。  </p>
-<ol>
-<li>检测是否是有效http请求，否则返回BAD_REQUEST；  </li>
-<li>读取url和http版本；  </li>
-<li>确认是否为主界面url（登陆/注册）；  </li>
-<li>修改请求行状态m_check_state为CHECK_STATE_HEADER并返回NO_REQUEST;</li>
-</ol>
-<h3 id="http-connect-HTTP-CODE-http-connect-parse-headers-char-text"><a href="#http-connect-HTTP-CODE-http-connect-parse-headers-char-text" class="headerlink" title="http_connect::HTTP_CODE http_connect::parse_headers(char *text)"></a><code>http_connect::HTTP_CODE http_connect::parse_headers(char *text)</code></h3><p>解析一个http请求的首部行信息。  </p>
-<ol>
-<li>为空则返回GET_REQUESt；    </li>
-<li>匹配Connection（长连接或者短连接）；    </li>
-<li>匹配Content-length（实体部分长度）；  </li>
-<li>匹配Host（客户主机）；  </li>
-<li>如果前面无法匹配，则向日志写入信息；  </li>
-<li>返回NO_REQUEST。  </li>
-</ol>
-<h3 id="http-connect-HTTP-CODE-http-connect-parse-content-char-text"><a href="#http-connect-HTTP-CODE-http-connect-parse-content-char-text" class="headerlink" title="http_connect::HTTP_CODE http_connect::parse_content(char *text)"></a><code>http_connect::HTTP_CODE http_connect::parse_content(char *text)</code></h3><p>判断http请求是否被完整的读入缓冲区。</p>
-<h3 id="http-connect-HTTP-CODE-http-connect-process-read"><a href="#http-connect-HTTP-CODE-http-connect-process-read" class="headerlink" title="http_connect::HTTP_CODE http_connect::process_read()"></a><code>http_connect::HTTP_CODE http_connect::process_read()</code></h3><ol>
-<li>定位到读缓冲区内开始位置；  </li>
-<li>修改开始位置到m_checked_idx；  </li>
-<li>判断http请求的读取状态；  </li>
-<li>如果是正在解析请求行，则调用parse_request_line()；  </li>
-<li>如果是正在解析首部行，则调用parse_headers(text)，若返回GET_REQUEST则调用do_request()执行响应；  </li>
-<li>如果是正在解析实体，则调用parse_content()，若返回GET_REQUEST则调用do_request()执行响应，者之LINE_OPEN；  </li>
-<li>如果都不是，返回内部错误。  </li>
-</ol>
-<h3 id="void-http-connect-unmap"><a href="#void-http-connect-unmap" class="headerlink" title="void http_connect::unmap()"></a><code>void http_connect::unmap()</code></h3><p>释放读入到内存的被请求资源。</p>
-<h3 id="bool-http-connect-add-reponse-const-char-format"><a href="#bool-http-connect-add-reponse-const-char-format" class="headerlink" title="bool http_connect::add_reponse(const char *format, ...)"></a><code>bool http_connect::add_reponse(const char *format, ...)</code></h3><p>向要返回的报文中添加响应，即写入缓冲区中。<br>还有相关函数<code>add_status_line()</code>、<code>add_headers()</code>、<code>add_content()</code>，分别表示写入状态行，写入首部行，写入实体。</p>
-<h3 id="bool-http-connect-process-write-HTTP-CODE-ret"><a href="#bool-http-connect-process-write-HTTP-CODE-ret" class="headerlink" title="bool http_connect::process_write(HTTP_CODE ret)"></a><code>bool http_connect::process_write(HTTP_CODE ret)</code></h3><p>写事件处理函数，通过调用本函数来实现对返回HTTP报文的写。</p>
-<h3 id="void-http-connect-process"><a href="#void-http-connect-process" class="headerlink" title="void http_connect::process()"></a><code>void http_connect::process()</code></h3><p>读取或写入数据，并向内核事件表注册IO就绪事件。</p>
-<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p><code>threadpool.h</code>实现了threadpool类，该类能够提供多线程的http服务。</p>
-<h2 id="threadpool类"><a href="#threadpool类" class="headerlink" title="threadpool类"></a>threadpool类</h2><p>提供了如下成员函数：</p>
-<h3 id="threadpool-threadpool"><a href="#threadpool-threadpool" class="headerlink" title="threadpool::threadpool(...)"></a><code>threadpool::threadpool(...)</code></h3><p>构造函数，初始化对象参数并且创建线程(将线程设置成分离的)。</p>
-<h3 id="threadpool-threadpool-1"><a href="#threadpool-threadpool-1" class="headerlink" title="threadpool::~threadpool()"></a><code>threadpool::~threadpool()</code></h3><p>释放线程数组资源。</p>
-<h3 id="bool-threadpool-append-reactor-http-connect-request-int-state"><a href="#bool-threadpool-append-reactor-http-connect-request-int-state" class="headerlink" title="bool threadpool::append_reactor(http_connect *request, int state)"></a><code>bool threadpool::append_reactor(http_connect *request, int state)</code></h3><p>将一个http_connect对象添加到请求队列中（Reactor模式）。</p>
-<h3 id="bool-threadpool-append-proactor-http-connect-request"><a href="#bool-threadpool-append-proactor-http-connect-request" class="headerlink" title="bool threadpool::append_proactor(http_connect *request)"></a><code>bool threadpool::append_proactor(http_connect *request)</code></h3><p>将一个http_connect对象添加到请求队列中（Proactor模式）。</p>
-<h3 id="void-threadpool-worker-void-arg"><a href="#void-threadpool-worker-void-arg" class="headerlink" title="void *threadpool::worker(void* arg)"></a><code>void *threadpool::worker(void* arg)</code></h3><p>线程函数，调用run()函数。</p>
-<h3 id="void-threadpool-run"><a href="#void-threadpool-run" class="headerlink" title="void threadpool::run()"></a><code>void threadpool::run()</code></h3><ol>
-<li>从请求队列读取http_connect对象；  </li>
-<li>判断事件处理模式；  </li>
-<li>如果是Reactor模式则进行I/O操作并向内核注册写事件就绪；  </li>
-<li>如果是Proactor模式则调用process()处理。</li>
-</ol>
-<h1 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h1><p><code>webserver.h</code>、<code>webserver.cc</code>定义并且实现了服务器类webserver，该类是本项目最核心的类，所有类围绕webserver提供服务。</p>
-<h1 id="webserver类"><a href="#webserver类" class="headerlink" title="webserver类"></a>webserver类</h1><h3 id="void-init-int-string-string-string-int-int-int-int-int-int-int"><a href="#void-init-int-string-string-string-int-int-int-int-int-int-int" class="headerlink" title="void init(int,string,string,string,int,int,int,int,int,int,int)"></a><code>void init(int,string,string,string,int,int,int,int,int,int,int)</code></h3><p>初始化相关参数，包括服务器端口、数据库用户名、数据库密码等等。</p>
-<h3 id="void-thread-pool"><a href="#void-thread-pool" class="headerlink" title="void thread_pool()"></a><code>void thread_pool()</code></h3><p>初始化线程池</p>
-<h3 id="void-sql-pool"><a href="#void-sql-pool" class="headerlink" title="void sql_pool()"></a><code>void sql_pool()</code></h3><p>初始化数据库连接池</p>
-<h3 id="void-log-write"><a href="#void-log-write" class="headerlink" title="void log_write()"></a><code>void log_write()</code></h3><p>初始化日志类，并且打开一个日志文件</p>
-<h3 id="void-trig-mode"><a href="#void-trig-mode" class="headerlink" title="void trig_mode"></a><code>void trig_mode</code></h3><p>设置监听套接字和已连接套接字的触发模式（LT/ET）</p>
-<h3 id="void-eventListen"><a href="#void-eventListen" class="headerlink" title="void eventListen()"></a><code>void eventListen()</code></h3><p>事件监听函数：<br>1）打开一个监听套接字<br>2）设置这个监听套接字的相关参数<br>3）设置Uilts类成员utils<br>4）创建epoll内核事件表<br>5）向utils添加套接字事件（包括设置定时器和将套接字和epoll关联起来）<br>6）创建通信管道，并将读管道和epoll关联起来<br>7）将管道变量、epoll套接字描述符赋值给Utils<br>8）设置信号SIGPIPE、SIGALRM、SIGTERM的处理<br>9）发出SIGALRM信号</p>
-<h3 id="void-eventLoop"><a href="#void-eventLoop" class="headerlink" title="void eventLoop()"></a><code>void eventLoop()</code></h3><p>事件循环函数。<br>1）调用<code>epoll_wait()</code>等待IO事件发生。<br>2）处理事件：<br>如果是监听套接字，则处理监听数据。<br>如果对应文件描述符断开连接/发生错误，则阐述对应的管理类（定时器），调用deal_timer()。<br>如果是信号管道的读端口且有可读事件发生，则调用信号处理函数，并返回服务器停止、超时信息。<br>如果是读事件，处理客户连接上的读事件（dealwithdata）。<br>如果是写事件，处理客户连接上的写事件（dealwithwrite）。<br>3）如果超时，则调用utils的定时任务，并输出日志信息</p>
-<h3 id="void-timer-int-connfd-struct-sockaddr-in，client-address"><a href="#void-timer-int-connfd-struct-sockaddr-in，client-address" class="headerlink" title="void timer(int connfd, struct sockaddr_in，client_address)"></a><code>void timer(int connfd, struct sockaddr_in，client_address)</code></h3><p>1）初始化套接字对应的http连接类<br>2）初始化定时器，并加入定时器链表</p>
-<h3 id="void-adjust-timer-util-timer-timer"><a href="#void-adjust-timer-util-timer-timer" class="headerlink" title="void adjust_timer(util_timer *timer)"></a><code>void adjust_timer(util_timer *timer)</code></h3><p>修改定时器终止时间，调整定时器在链表中的位置。</p>
-<h3 id="void-deal-timer-util-timer-timer-int-sockfd"><a href="#void-deal-timer-util-timer-timer-int-sockfd" class="headerlink" title="void deal_timer(util_timer *timer, int sockfd)"></a><code>void deal_timer(util_timer *timer, int sockfd)</code></h3><p>删除定时器，关闭套接字。</p>
-<h3 id="bool-dealclinetdata"><a href="#bool-dealclinetdata" class="headerlink" title="bool dealclinetdata()"></a><code>bool dealclinetdata()</code></h3><p>1）接收客户端连接，其中有LT/ET模式可选。<br>2）在http连接管理类、定时器管理类中初始化这个连接。</p>
-<h3 id="bool-dealwithsignal-bool-amp-timeout-bool-amp-stop-server"><a href="#bool-dealwithsignal-bool-amp-timeout-bool-amp-stop-server" class="headerlink" title="bool dealwithsignal(bool &amp;timeout, bool &amp;stop_server)"></a><code>bool dealwithsignal(bool &amp;timeout, bool &amp;stop_server)</code></h3><p>1）从管道读取信号到缓冲区。<br>2）处理SIGARM信号（返回timeout信息）<br>3）处理终止信号（返回stop_server信息）</p>
-<h3 id="void-dealwithread-int-sockfd"><a href="#void-dealwithread-int-sockfd" class="headerlink" title="void dealwithread(int sockfd)"></a><code>void dealwithread(int sockfd)</code></h3><p>提供了Reactor和Proacotr两种事件处理模式。<br>Reactor：<br>调整定时器。<br>将事件放入请求队列。<br>Proactor：<br>读取数据，若读取失败调用deal_timer()，读取成功则将事件添加进入请求队列，调整定时器（adjust_timer）。</p>
-<h3 id="void-dealwithwrite-int-sockfd"><a href="#void-dealwithwrite-int-sockfd" class="headerlink" title="void dealwithwrite(int sockfd)"></a><code>void dealwithwrite(int sockfd)</code></h3><p>提供了Reactor和Proacotr两种事件处理模式。<br>Reactor：<br>调整定时器。<br>将事件放入请求队列。<br>Proactor：<br>读取数据，若读取失败调用deal_timer()，读取成功则将事件添加进入请求队列，调整定时器（adjust_timer）。</p>
-<h1 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h1><p>服务器项目仅仅只是完成项目还是不够的，我们还需要进行压力测试来检验这个服务器的性能如何，只要经过了压力测试，才说说明这个服务器是稳定的。</p>
-<h2 id="Webbench"><a href="#Webbench" class="headerlink" title="Webbench"></a>Webbench</h2><p>在本项目中我使用Webbench来进行压力测试。Webbench是知名的网站压力测试工具，它是由<a target="_blank" rel="noopener" href="http://www.51testing.com/">Lionbridge公司</a>开发。Webbench能测试处在相同硬件上，不同服务的性能以及不同硬件上同一个服务的运行状况。webbench的标准测试可以向我们展示服务器的两项内容：每秒钟相应请求数和每秒钟传输数据量。webbench不但能具有便准静态页面的测试能力，还能对动态页面（ASP,PHP,JAVA,CGI）进 行测试的能力。还有就是他支持对含有SSL的安全网站例如电子商务网站进行静态或动态的性能测试。Webbench最多可以模拟3万个并发连接去测试网站的负载能力。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1366,14 +1152,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

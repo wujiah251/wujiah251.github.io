@@ -190,6 +190,84 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E4%BD%BF%E7%94%A8%E5%AD%90%E6%9F%A5%E8%AF%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E4%BD%BF%E7%94%A8%E5%AD%90%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">使用子查询</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 15:50:31" itemprop="dateCreated datePublished" datetime="2021-01-27T15:50:31+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用子查询"><a href="#使用子查询" class="headerlink" title="使用子查询"></a>使用子查询</h1><h2 id="利用子查询进行过滤"><a href="#利用子查询进行过滤" class="headerlink" title="利用子查询进行过滤"></a>利用子查询进行过滤</h2><p>数据库表常常是关系表，所有数据不会存储在一个数据表中，比如订单存储在两个表中，对于包含订单号、客户ID、订单日期的每个订单，orders表存储一行。各订单的物品存储在相关的orderitems表中，如果我们要查找包含物品TNT2的客户如何做？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_id from orders </span><br><span class="line">    -&gt; where order_num in (select order_num</span><br><span class="line">    -&gt; from orderitems</span><br><span class="line">    -&gt; where prod_id &#x3D; &#39;TNT2&#39;</span><br><span class="line">    -&gt; );</span><br><span class="line">+---------+</span><br><span class="line">| cust_id |</span><br><span class="line">+---------+</span><br><span class="line">|   10001 |</span><br><span class="line">|   10004 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
+<p>括号内的内容就是一个子查询，从orderitems表中查找包含了TNT2的订单，并返回订单号列，然后再从orders表中找到满足订单号的行，并返回客户ID列。<br>子查询可以多层嵌套。</p>
+<h2 id="作为计算字段使用子查询"><a href="#作为计算字段使用子查询" class="headerlink" title="作为计算字段使用子查询"></a>作为计算字段使用子查询</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_name,cust_state,</span><br><span class="line">    -&gt; (select count(*)</span><br><span class="line">    -&gt; from orders </span><br><span class="line">    -&gt; where orders.cust_id &#x3D; customers.cust_id) as orders</span><br><span class="line">    -&gt; from customers</span><br><span class="line">    -&gt; order by cust_name;</span><br><span class="line">+----------------+------------+--------+</span><br><span class="line">| cust_name      | cust_state | orders |</span><br><span class="line">+----------------+------------+--------+</span><br><span class="line">| Coyote Inc.    | MI         |      2 |</span><br><span class="line">| E Fudd         | IL         |      1 |</span><br><span class="line">| Mouse House    | OH         |      0 |</span><br><span class="line">| Wascals        | IN         |      1 |</span><br><span class="line">| Yosemite Place | AZ         |      1 |</span><br><span class="line">+----------------+------------+--------+</span><br></pre></td></tr></table></figure>
+<p>这条<code>SELECT</code>语句对customers表中的每个客户返回3列：cust_name、cust_state、orders。orders是一个计算字段，它是由圆括号中的子查询建立的。该子查询对检索出的每个客户执行一次，再此历次中执行了5次，因为检索出来5各客户。注意我们应该使用完全限定列名，而不应该这样使用：<br><code>cust_id = cust_id</code>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1009,95 +1087,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/26/%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">检索数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-26 23:42:14" itemprop="dateCreated datePublished" datetime="2021-01-26T23:42:14+08:00">2021-01-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="检索数据"><a href="#检索数据" class="headerlink" title="检索数据"></a>检索数据</h1><h2 id="SELECT语句"><a href="#SELECT语句" class="headerlink" title="SELECT语句"></a>SELECT语句</h2><p>检索一列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name from products;</span><br><span class="line">+----------------+</span><br><span class="line">| prod_name      |</span><br><span class="line">+----------------+</span><br><span class="line">| .5 ton anvil   |</span><br><span class="line">| 1 ton anvil    |</span><br><span class="line">| 2 ton anvil    |</span><br><span class="line">| Detonator      |</span><br><span class="line">| Bird seed      |</span><br><span class="line">| Carrots        |</span><br><span class="line">| Fuses          |</span><br><span class="line">| JetPack 1000   |</span><br><span class="line">| JetPack 2000   |</span><br><span class="line">| Oil can        |</span><br><span class="line">| Safe           |</span><br><span class="line">| Sling          |</span><br><span class="line">| TNT (1 stick)  |</span><br><span class="line">| TNT (5 sticks) |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
-<p>注：多条sql语句必须以分号（；）分隔。SQL语句不区分大小写，所以SELECT和select是一样的。</p>
-<h2 id="检索多个列"><a href="#检索多个列" class="headerlink" title="检索多个列"></a>检索多个列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id,prod_name,prod_price from products;</span><br><span class="line">+---------+----------------+------------+</span><br><span class="line">| prod_id | prod_name      | prod_price |</span><br><span class="line">+---------+----------------+------------+</span><br><span class="line">| ANV01   | .5 ton anvil   |       5.99 |</span><br><span class="line">| ANV02   | 1 ton anvil    |       9.99 |</span><br><span class="line">| ANV03   | 2 ton anvil    |      14.99 |</span><br><span class="line">| DTNTR   | Detonator      |      13.00 |</span><br><span class="line">| FB      | Bird seed      |      10.00 |</span><br><span class="line">| FC      | Carrots        |       2.50 |</span><br><span class="line">| FU1     | Fuses          |       3.42 |</span><br><span class="line">| JP1000  | JetPack 1000   |      35.00 |</span><br><span class="line">| JP2000  | JetPack 2000   |      55.00 |</span><br><span class="line">| OL1     | Oil can        |       8.99 |</span><br><span class="line">| SAFE    | Safe           |      50.00 |</span><br><span class="line">| SLING   | Sling          |       4.49 |</span><br><span class="line">| TNT1    | TNT (1 stick)  |       2.50 |</span><br><span class="line">| TNT2    | TNT (5 sticks) |      10.00 |</span><br><span class="line">+---------+----------------+------------+</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="检索所有列"><a href="#检索所有列" class="headerlink" title="检索所有列"></a>检索所有列</h2><p>使用通配符*</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from products;</span><br><span class="line">&#x2F;&#x2F;结果比较长不做展示</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="检索不同的行"><a href="#检索不同的行" class="headerlink" title="检索不同的行"></a>检索不同的行</h2><p>如果我们想保证输出是不通的怎么办呢，这是后就需要关键字<code>DISTINCT</code>了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id from products;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1005 |</span><br><span class="line">|    1005 |</span><br><span class="line">+---------+</span><br><span class="line">mysql&gt; select distinct vend_id from products;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1005 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
-<p>可以看出，再添加了<code>distinct</code>之后，输出保证了，<code>vend_id</code>每个取值不重复出现。<br>注：<code>distinct</code>不能部分使用，如果给出<code>select distinct vend_id, prod_price from products;</code>，除非指定的两个列都相同，否则所有行都将被检索出来。</p>
-<h2 id="限制结果"><a href="#限制结果" class="headerlink" title="限制结果"></a>限制结果</h2><p>可以使用<code>limit</code>语句来限制结果输出的行数，举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id from products limit 5;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1002 |</span><br><span class="line">+---------+</span><br><span class="line">mysql&gt; select vend_id from products limit 5,3;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
-<p><code>limit 5</code>限制了只输出前五行，然后第二个sql语句中的<code>limit 5,3</code>是从第5行开始输出3行（前面输出了0-5行，行数从0开始计算）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1169,14 +1158,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

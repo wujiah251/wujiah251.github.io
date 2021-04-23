@@ -190,6 +190,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH7%E9%93%BE%E6%8E%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH7%E9%93%BE%E6%8E%A5/" class="post-title-link" itemprop="url">CH7链接</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:38:00" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:00+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a><strong>链接</strong></h1><p>链接（linking）是将各种代码和数据片段收集并组合成一个单一文件的过程，这个文件可被加载（复制）到内存并执行。链接可以执行于编译时（compile time），也就是在源代码被翻译成机器代码时；也可以执行于加载时（load time），也就是在程序被加载器（loader）加载到内存系统执行时；甚至执行于运行时（run time），也就是在程序被加载器（loader）加载到内存并执行时；甚至于运行时，也就是由应用程序来执行。在早期的计算机系统中，链接是手动执行的。在现代系统中，链接时由叫做连接器（linker）程序自动执行的。  </p>
+<h2 id="编译器驱动程序"><a href="#编译器驱动程序" class="headerlink" title="编译器驱动程序"></a><strong>编译器驱动程序</strong></h2><p>sum.c、main.c<br>预处理器将main.c翻译成一个ASCII码的中间文件main.i，然后编译器将main.i翻译成ASCII汇编语言文件main.s，然后驱动程序运行汇编器，将main.s翻译成一个可重定位目标文件main.o。<br>sum.c-&gt;sum.i-&gt;sum.s-&gt;sum.o<br>运行链接器程序ld将main.o、sum.o以及一些必要的系统目标文件组合起来，创建一个可执行目标文件prog。</p>
+<h2 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a><strong>静态链接</strong></h2><p>为了构造可执行文件，链接器必须完成两个主要任务：符号解析、重定位。  </p>
+<h2 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a><strong>目标文件</strong></h2><p>三种形式：可重定位目标文件（包含二进制代码和数据，其形式可以在编译时与其他可重定位目标文件合并起来，生成一个可执行目标文件）、可执行目标文件（包含二进制代码和数据，可以直接被复制到内存并执行）、共享目标文件（一种特殊类型的可重定位目标文件，可以在加载或者运行时加载进内存并链接）。</p>
+<h2 id="可重定位目标文件"><a href="#可重定位目标文件" class="headerlink" title="可重定位目标文件"></a><strong>可重定位目标文件</strong></h2><h2 id="符号和符号表"><a href="#符号和符号表" class="headerlink" title="符号和符号表"></a><strong>符号和符号表</strong></h2><p>每个可重定位目标模块m有一个符号表，包含：  </p>
+<ul>
+<li>由m模块定义并能被其他模块引用的全局符号。  </li>
+<li>由其他模块定义并能被模块m引用的全局符号。  </li>
+<li>只被模块m定义和引用的局部符号。  </li>
+</ul>
+<h2 id="符号解析"><a href="#符号解析" class="headerlink" title="符号解析"></a><strong>符号解析</strong></h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1049,81 +1132,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E9%80%92%E5%BD%92/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E9%80%92%E5%BD%92/" class="post-title-link" itemprop="url">递归</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:23:51" itemprop="dateCreated datePublished" datetime="2021-01-13T20:23:51+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h1><h2 id="题目687"><a href="#题目687" class="headerlink" title="题目687"></a>题目687</h2><p>将二叉搜索树变平衡<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-univalue-path/">https://leetcode-cn.com/problems/longest-univalue-path/</a><br>###<br>一条路径中间为包含一个根结点，路径长其实就是该结点左右子树中同元素向下路径的结点数之和<br>设计一个函数dfs(root)，返回root-&gt;val的最长向下路径结点数<br>返回左子树最长路径结点数l<br>返回右子树最长路径结点数r<br>通过判断左右结点是否和root-&gt;val相等计算以root为根结点的最长路径，并更新结果(用类成员保存)<br>计算以root为起点的最长向下路径结点数  </p>
-<h2 id="题目794"><a href="#题目794" class="headerlink" title="题目794"></a>题目794</h2><p>有效的井字游戏<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-tic-tac-toe-state/">https://leetcode-cn.com/problems/valid-tic-tac-toe-state/</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1195,14 +1203,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

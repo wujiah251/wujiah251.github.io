@@ -190,6 +190,109 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/18/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/18/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" class="post-title-link" itemprop="url">TCP三次握手与四次挥手</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-18 11:54:00" itemprop="dateCreated datePublished" datetime="2021-02-18T11:54:00+08:00">2021-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="TCP头部分析"><a href="#TCP头部分析" class="headerlink" title="TCP头部分析"></a>TCP头部分析</h1><p>TCP头部中有几个字段需要重点介绍下：</p>
+<ol>
+<li>序号：Seq序号，占32位，用来标识从TCP源端向目的端发送的字节流，发起方发送数据时对此进行标记；  </li>
+<li>确认序号：Ack序号，占32位，只有ACK标志位为1时，确认序号字段才有效，Ack=Seq+1；  </li>
+<li>标志位：共6个，即URG、ACK、PSH、RST、SYN、FIN等，具体含义如下：</li>
+</ol>
+<ul>
+<li>URG：紧急指针（urgent pointer）有效；  </li>
+<li>ACK：确认序号有效；  </li>
+<li>PSH：接收方应该尽快将这个报文交给应用层；  </li>
+<li>RST：重置连接；  </li>
+<li>SYN：发起一个新连接；  </li>
+<li>FIN：释放一个连接。  </li>
+</ul>
+<p>需要注意的是：<br>（A）不要将确认序号Ack与标志位中的ACK搞混了;<br>（B）确认方Ack=发起方Req+1，两端配对。</p>
+<h1 id="TCP握手协议"><a href="#TCP握手协议" class="headerlink" title="TCP握手协议"></a>TCP握手协议</h1><p>TCP协议通过三次握手来创建一个连接：  </p>
+<ol>
+<li>客户端发送一个SYN包（syn=1，seq=i）到服务器，并进入syn_send状态等待；<br>这个SYN包不包含应用层数据，首部的标志位SYN被置为1，所以称为SYN包，客户随机选择一个序号seq=client_i；  </li>
+<li>服务器在收到SYN包后，会为该连接分配TCP缓存和变量，并发送允许连接的报文段。这个允许连接的报文段也不包含应用层数据，包含以下信息：<code>SYN=1</code>，<code>seq=server_i</code>，<code>ack=client_i+1</code>。<code>server_i</code>是服务器随机选取的报文段序号，<code>ack=client_i+1</code>表示确认<code>client_i+1</code>以前的报文段都已经收到，这个报文段我们称为SYNACK报文段；  </li>
+<li>客户端收到SYNACK报文段后，客户也要给该连接分配缓存和变量。客户的主机则向服务器发送另一个报文段；这最后一个报文段对服务器的允许连接的报文段进行了确认（<code>SYN=0</code>、<code>seq=client_i+1</code>、<code>ack=server_i+1</code>），<code>SYN</code>被置为0是因为连接已经建立了。第三个阶段的报文段已经可以携带客户到服务器的数据了。</li>
+</ol>
+<h1 id="TCP挥手协议"><a href="#TCP挥手协议" class="headerlink" title="TCP挥手协议"></a>TCP挥手协议</h1><p>TCP通过四次挥手来释放一个连接：  </p>
+<ol>
+<li>客户端向服务器发送一个特殊的TCP报文段，其中FIN置为0；  </li>
+<li>服务器收到上述报文段后，回发一个确认报文段ACK；  </li>
+<li>然后服务器发送它自己的终止报文段，其FIN比特被置为1，这个时候在TCP眼中连接已经关闭了；  </li>
+<li>最后，该客户对这个服务器的终止报文段进行确认（ACK），发送之后定时等待关闭连接。  </li>
+</ol>
+<h1 id="为什么要三次握手四次挥手"><a href="#为什么要三次握手四次挥手" class="headerlink" title="为什么要三次握手四次挥手"></a>为什么要三次握手四次挥手</h1><p>用一个易于理解的视角来看为什么要3次握手：<br>客户端和服务端通信前要进行连接，“3次握手”的作用就是双方都能明确自己和对方的收、发能力是正常的。<br>第一次握手，客户端发送网络包，服务端收到了，服务端得到结论：客户端发送能力正常，服务端接受能力正常；<br>第二次握手，服务端发送网络包，客户端收到，客户端得到结论：服务端接收、发送能力正常，客户端发送、接受能力正常；<br>第三次握手，客户端发送网络包，服务端收到，服务端得到结论：客户端接受能力正常，服务端发送能力正常。<br>经过3次握手，客户端、服务端相互之间确认了对方和自己的接收、发收能力正常。  </p>
+<p>用半关闭来解释为什么需要4次挥手：<br><strong>半关闭</strong>：在TCP通信中客户端向服务端发送一条FIN包，当服务端收到FIN信息时就知道接下来客户端就不会再发送数据了，这在TCP协议中被称为半关闭。但是此时，服务端还能向客户端发送网络包，客户端也依然能接收。<br>一个FIN包意味着一方关闭连接，但是另一方可能数据还没有传完，需要传完才会关闭连接。所以需要在中间维持半关闭状态，等到需要关闭连接时，再发送一次FIN包。相当于客户端、服务端各自需要关闭属于自己的一半连接，每次都需要FIN-ACK两次挥手，总共就有4次挥手。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/17/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -968,90 +1071,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%92%8C%E5%8A%A0%E8%BD%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/16/%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%92%8C%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">进程启动和加载</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-16 11:12:00" itemprop="dateCreated datePublished" datetime="2021-02-16T11:12:00+08:00">2021-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h1><p>在Linux系统中，每个进程都有唯一的进程号（PID），方便系统识别和调度进程。通过简单地输出运行程序的程序名，就可以运行该程序，其实也就是启动了一个进程。总地来说，启动一个进程主要有2种途径，手动启动和通过调度启动。  </p>
-<h2 id="手动启动"><a href="#手动启动" class="headerlink" title="手动启动"></a>手动启动</h2><p>指用户通过输入命令启动一个进程，又可以分为前台启动和后台启动。  </p>
-<h3 id="前台启动进程"><a href="#前台启动进程" class="headerlink" title="前台启动进程"></a>前台启动进程</h3><p>这是手动启动进程最常见的方式，在前台输入一个命令并运行，就能够启动一个前台进程。  </p>
-<h3 id="后台启动进程"><a href="#后台启动进程" class="headerlink" title="后台启动进程"></a>后台启动进程</h3><p>进程直接从后台启动用的比较少，大多是进程比较耗时，并且我们不急于看到运行结果，为了不使整个shell处于“被占用”状态，从后台启动这个进程是比较明智的选择。从后台启动进程，其实只要在命令结尾处添加一个“&amp;”符号即可。</p>
-<h2 id="Linux调度启动进程"><a href="#Linux调度启动进程" class="headerlink" title="Linux调度启动进程"></a>Linux调度启动进程</h2><p>在Linux系统种，任务可以被配置在指定的时间、日期或者系统平均负载量低于指定值时自动启动。实现调度启动的方法很多，例如通过crontab、at等命令。</p>
-<h1 id="进程加载"><a href="#进程加载" class="headerlink" title="进程加载"></a>进程加载</h1><p>进程加载需要如下过程：  </p>
-<ol>
-<li>创建一个独立的虚拟地址空间。主要是分配一个页目录。  </li>
-<li>读取可执行文件的头，并且建立虚拟空间和可执行文件的映射关系。主要是把可执行文件映射到虚拟地址空间，即做虚拟页和物理页的映射，以便“缺页”时载入。  </li>
-<li>讲CPU的指令寄存器设置成可执行文件的入口地址，启动运行。  </li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1123,14 +1142,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
