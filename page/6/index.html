@@ -191,6 +191,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/C++%E7%BB%A7%E6%89%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/16/C++%E7%BB%A7%E6%89%BF/" class="post-title-link" itemprop="url">C++继承</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-16 15:33:00" itemprop="dateCreated datePublished" datetime="2021-02-16T15:33:00+08:00">2021-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>考虑继承关系时，我们涉及三种成员，分别是私有成员、公有成员、保护成员，关键字依次是<code>private</code>、<code>public</code>、<code>protected</code>。</p>
+<p>保护成员在类的用户眼中，等价于私有成员，但是保护成员可以被类成员函数调用。  </p>
+<h1 id="公有继承"><a href="#公有继承" class="headerlink" title="公有继承"></a>公有继承</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derive</span>:</span><span class="keyword">public</span> Base</span><br><span class="line"><span class="comment">//public表示公有继承</span></span><br></pre></td></tr></table></figure>
+
+<p>基类的私有成员–&gt;派生类不可见；<br>基类的公有成员–&gt;派生类的公有成员；<br>基类的保护成员–&gt;派生类的保护成员。  </p>
+<h1 id="私有继承"><a href="#私有继承" class="headerlink" title="私有继承"></a>私有继承</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derive</span>:</span><span class="keyword">private</span> Base</span><br><span class="line"><span class="comment">//private表示私有继承</span></span><br><span class="line"><span class="comment">//私有继承也是默认的继承方式</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derive</span>:</span>Base</span><br></pre></td></tr></table></figure>
+
+<p>基类的私有成员–&gt;派生类不可见；<br>基类的公有成员–&gt;派生类的私有成员；<br>基类的保护成员–&gt;派生类的私有成员。 </p>
+<h1 id="保护继承"><a href="#保护继承" class="headerlink" title="保护继承"></a>保护继承</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derive</span>:</span><span class="keyword">protected</span> Base</span><br><span class="line"><span class="comment">//protected表示保护继承</span></span><br></pre></td></tr></table></figure>
+<p>基类的私有成员–&gt;派生类不可见；<br>基类的公有成员–&gt;派生类的保护成员；<br>基类的保护成员–&gt;派生类的保护成员。 </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%92%8C%E5%8A%A0%E8%BD%BD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -952,136 +1035,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/13/TCP%E5%8D%8F%E8%AE%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/13/TCP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">TCP协议</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-13 11:03:00" itemprop="dateCreated datePublished" datetime="2021-02-13T11:03:00+08:00">2021-02-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TCP是可靠传输协议，提供了可靠传输、拥塞控制等服务，接下来我们介绍TCP如何实现这些服务。  </p>
-<h1 id="序列号、确认应答、超时重传"><a href="#序列号、确认应答、超时重传" class="headerlink" title="序列号、确认应答、超时重传"></a>序列号、确认应答、超时重传</h1><p>数据到达接收方后，接收方需要发出一个确认应答，表示已经收到数据号，并且序号指出了下一个需要传入的数据段。如果接收方迟迟没有收到应答，可能是发送的数据丢失，也可能是应答丢失。这时发送方会等待一段时间，然后会进行重传。  </p>
-<h1 id="窗口控制和高速重发控制-快速重传（重复确认应答）"><a href="#窗口控制和高速重发控制-快速重传（重复确认应答）" class="headerlink" title="窗口控制和高速重发控制/快速重传（重复确认应答）"></a>窗口控制和高速重发控制/快速重传（重复确认应答）</h1><p>TCP会利用窗口控制来提高传输速度，意思是在一个窗口大小内，不用一定要等到应答才能发送下一段数据，窗口大小就是无需等待确认而可以继续发送数据的最大值。如果不使用窗口控制，每一个没收到确认应答的数据都要重发。<br>使用窗口控制，如果数据段1001-2000丢失，后面数据每次传输，确认应答都会不停地发送序号为1001的应答，表示我要接收1001开始的数据，发送端如果收到3次相同应答，就会立刻进行重发；但还有种情况有可能是数据都收到了，但是有的应答丢失了，这种情况不会进行重发，因为发送端知道，如果是数据段丢失，接收端不会放过它的，会疯狂向它提醒。  </p>
-<h1 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h1><p>如果把窗口定的很大，发送端连续发送大量的数据，可能会造成网络的拥堵（大家都在用网，你在这狂发，吞吐量就那么大，当然会堵），甚至造成网络的瘫痪。所以TCP在为了防止这种情况而进行了拥塞控制。  </p>
-<h2 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h2><p>定义拥塞窗口，一开始将该窗口大小设为1，之后每次收到确认应答（经过一个rtt），将拥塞窗口大小*2。</p>
-<h2 id="拥塞避免"><a href="#拥塞避免" class="headerlink" title="拥塞避免"></a>拥塞避免</h2><p>设置慢启动阈值，一般开始都设为65536。拥塞避免是指当拥塞窗口大小达到这个阈值，拥塞窗口的值不再指数上升，而是加法增加（每次确认应答/每个rtt，拥塞窗口大小+1），以此来避免拥塞。</p>
-<p>将报文段的超时重传看做拥塞，则一旦发生超时重传，我们需要先将阈值设为当前窗口大小的一半，并且将窗口大小设为初值1，然后重新进入慢启动过程。</p>
-<h2 id="快速重传"><a href="#快速重传" class="headerlink" title="快速重传"></a>快速重传</h2><p>在遇到3次重复确认应答（高速重发控制）时，代表收到了3个报文段，但是这之前的1个段丢失了，便对它进行立即重传。</p>
-<p>然后，先将阈值设为当前窗口大小的一半，然后将拥塞窗口大小设为慢启动阈值+3的大小。</p>
-<p>这样可以达到：在TCP通信时，网络吞吐量呈现逐渐的上升，并且随着拥堵来降低吞吐量，再进入慢慢上升的过程，网络不会轻易的发生瘫痪。  </p>
-<h2 id="TCP协议和UDP协议比较"><a href="#TCP协议和UDP协议比较" class="headerlink" title="TCP协议和UDP协议比较"></a>TCP协议和UDP协议比较</h2><ol>
-<li>TCP是面向连接的协议，UDP是面向报文的协议，不进行连接；  </li>
-<li>TCP是一对一的，UDP支持单播，多播，广播；  </li>
-<li>TCP比UDP可靠，TCP提供了超时重传、拥塞控制等服务，UDP只提供发送报文的功能，并且不保证发送到；  </li>
-<li>UDP的开销比TCP小，UDP头部需要存储的信息较少；  </li>
-<li>UDP由于美誉拥塞控制，所以UDP流量在网络中比TCP流量更危险，举个例子：UDP流量较大，导致网络阻塞，而TCP拥塞控制算法减小了TCP流量，UDP流量占比进一步提高，最后可能整个网络都是TCP流量；</li>
-<li>对于文件等流量更适合TCP协议，而视频、音频等实时性要求高，准确性要求相对低的流量可能适合UDP协议。  </li>
-<li>TCP是全双工的，UDP是单向的。</li>
-</ol>
-<h3 id="TCP协议和UDP协议应用场景"><a href="#TCP协议和UDP协议应用场景" class="headerlink" title="TCP协议和UDP协议应用场景"></a>TCP协议和UDP协议应用场景</h3><table>
-  <tr>
-    <th></th>
-    <th>TCP</th>
-    <th>UDP</th>
-  </tr>
-  <tr>
-    <td>可靠性</td>
-    <td>可靠</td>
-    <td>不可靠</td>
-  </tr>
-  <tr>
-    <td>思想</td>
-    <td>面向字节流</td>
-    <td>面向报文</td>
-  </tr>
-  <tr>
-    <td>拥塞控制</td>
-    <td>慢启动、快速恢复、拥塞避免</td>
-    <td>不提供拥塞控制</td>
-  </tr>
-  <tr>
-    <td>双工性</td>
-    <td>全双工</td>
-    <td>一对一、多对一、一对多、多对多</td>
-  </tr>
-  <tr>
-    <td>效率</td>
-    <td>传输效率低</td>
-    <td>传输效率高</td>
-  </tr>
-  <tr>
-    <td>应用场景</td>
-    <td>准确率要求高，效率要求低</td>
-    <td>效率要求高，准确率要求低</td>
-  </tr>
-  
-  
-</table>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1153,7 +1106,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-count">116</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

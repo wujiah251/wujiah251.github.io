@@ -191,6 +191,176 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH8%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH8%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" class="post-title-link" itemprop="url">CH8异常控制流</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:38:24" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:24+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="异常控制流"><a href="#异常控制流" class="headerlink" title="异常控制流"></a>异常控制流</h1><p>现代系统通过使控制流发生突变来应对这些情况（如程序向磁盘请求数据、子进程终止同制父进程等），一般而言我们把这些突变称为异常控制流（Exceptional Control Folw，ECF）。</p>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p>异常（Exception）就是控制流中的突变。<br>处理器检测到事件发生时，它会通过一张叫做异常表（exception table）<br>的跳转表，进行一个间接过程调用（异常），到一个专门设计用来处理这类事件得操作系统子程序（异常处理程序，exception handler）。当异常处理程序完成处理后，根据引起异常得事件类型，会发生以下3种情况中得一种：  </p>
+<ol>
+<li>处理程序将控制返回给当前指令$I_{curr}$，即当事件发生时正在执行得指令。  </li>
+<li>处理程序将控制返回给$I_{next}$，如果没有发生异常将会执行下一条指令。  </li>
+<li>处理程序终止被终端的程序。  </li>
+</ol>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p>系统中每种可能得异常都分配了唯一的非负整数的异常号（exception number）。其中一些号码是由处理器（CPU）的设计者分配的，其他号码是由操作系统内核的设计者分配的。前者的示例包括零除、缺页、内存访问为例、断点以及算术运算溢出。后者示例包括系统调用和来自外部I/O设备的信号。<br>异常-&gt;异常表基地址寄存器-&gt;异常表-&gt;相应的处理程序。</p>
+<h3 id="异常的类别"><a href="#异常的类别" class="headerlink" title="异常的类别"></a>异常的类别</h3><p>分为四类：中断（interrupt）、陷阱（trap）、故障（fault）和终止（abort）。</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th align="center">原因</th>
+<th>异步/同步</th>
+<th align="right">返回行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>中断</td>
+<td align="center">来自I/O设备的信号</td>
+<td>异步</td>
+<td align="right">总是返回到下一条指令</td>
+</tr>
+<tr>
+<td>陷阱</td>
+<td align="center">有意的异常</td>
+<td>同步</td>
+<td align="right">总是返回到下一条指令</td>
+</tr>
+<tr>
+<td>故障</td>
+<td align="center">潜在可恢复的错误</td>
+<td>同步</td>
+<td align="right">可能返回到当前指令</td>
+</tr>
+<tr>
+<td>终止</td>
+<td align="center">不可恢复的错误</td>
+<td>同步</td>
+<td align="right">不会返回</td>
+</tr>
+</tbody></table>
+<ol>
+<li>中断<br>中断是异步发生的，来自处理器外部的I/O设备信号的结果。硬件中断不是由任何一条专门的指令造成的，从这个意义上说它是异步的。  </li>
+<li>陷阱和系统调用<br>陷阱是有意的异常，陷阱最重要的用途是在用户程序和内核之间提供一个像过程一样的接口，叫做系统调用。为了允许用户程序对内核服务受控的访问，处理器提供了一条特殊的“syscall n”指令，当用户程序想要请求服务n时，可以执行这条指令，执行syscall指令会导致一个到异常处理程序的陷阱，这个处理程序解析参数，并调用适当的内核程序。  </li>
+<li>故障<br>故障时由错误情况引起的，它可能够被故障处理程序修正。当故障发生时，处理器将控制转移给故障处理程序。如果处理程序能够修正这个错误情况，它就将控制返回到引起故障的指令，从而重新执行它。<br>一个经典故障时缺页异常，当指令引用一个虚拟地址，而与地址相对应的物理页面不在内存中，因此必须从磁盘中取出来。  </li>
+<li>终止<br>终止是不可恢复的致命错误造成的结果，通常是一些硬件错误，比如DRAM或者SRAM位被损坏时发生了奇偶错误。终止处理程序从不将控制返回给应用程序。</li>
+</ol>
+<h3 id="Linux-x86-64系统中的异常"><a href="#Linux-x86-64系统中的异常" class="headerlink" title="Linux/x86-64系统中的异常"></a>Linux/x86-64系统中的异常</h3><p>在X86-64系统中，系统调用是通过一条称为syscall的陷阱指令来提供的。C程序用syscall函数可以直接调用任何系统调用，标准C库提供了一组方便的包装函数。这些包装函数将参数打包到一起，以适当的系统调用指令陷入内核，然后将系统调用的返回状态传递回调用程序。系统调用和它们相关的包装函数都成为系统级函数。</p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>经典定义：一个执行中程序的实例。系统中每个进程都运行在某个进程的上下文（context）中。上下文是由程序正确运行所需的状态组成的。这个状态包括存放在内存中的程序的代码和数据，它的栈、通用目的寄存器的内容、程序计数器、环境变量以及打开文件描述符的集合。</p>
+<h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>程序在执行过程中的一系列的程序计数器（PC）的值。</p>
+<h3 id="并发流"><a href="#并发流" class="headerlink" title="并发流"></a>并发流</h3><p>一个逻辑流在执行的时间上和另一个流重叠，称为并发流，这两个流称为并发地运行。<br>多任务：一个进程和其他进程轮流运行的概念称为多任务。<br>两个流并发地运行在不同处理器核或者计算机上，那么我们称它们为并行流，它们并行地运行并且并行地执行。</p>
+<h3 id="私有地址空间"><a href="#私有地址空间" class="headerlink" title="私有地址空间"></a>私有地址空间</h3><p>进程为每个程序提供它自己的私有地址空间，一般来说是不能被其他进程读或写的。</p>
+<h3 id="用户模式核内核模式"><a href="#用户模式核内核模式" class="headerlink" title="用户模式核内核模式"></a>用户模式核内核模式</h3><p>处理器通常是用某个控制寄存器中的一个模式位（mode bit）来限制应用可以执行的指令以及它可以访问的地址空间范围。<br>没有设置模式位时，进程就允许用户模式。<br>进程进入内核模式的唯一方法就算通过中断、故障或者陷入系统调用这样的异常。</p>
+<h3 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h3><p>内核使用一种称为上下文切换的较高层次的异常控制流来实现多任务。<br>内核为每个进程维持一个上下文，这就是内核重新启动一个被抢占的进程所需的状态。它由一些对象的值组成，这些对象包括通用目的寄存器、浮点寄存器、程序计数器、用户栈、状态寄存器、内核栈核各种内核数据结构。</p>
+<h2 id="系统调用错误处理"><a href="#系统调用错误处理" class="headerlink" title="系统调用错误处理"></a>系统调用错误处理</h2><p>当Unix系统级函数遇到错误时，它们通常回返回-1，并设置全局整数变量errno来表示什么出错了。程序员应该总是检查错误，但不信的时，许多人都忽略了错误检查，因为它时代码变得臃肿，而且难以读懂。</p>
+<h2 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h2><p>Unix提供了大量从C程序中操作进程的系统调用。</p>
+<h3 id="获取进程ID"><a href="#获取进程ID" class="headerlink" title="获取进程ID"></a>获取进程ID</h3><p>每个进程都有一个唯一正数进程ID（PID）。<code>getpid</code>函数返回调用进程的PID。<code>getppid</code>返回它的父进程的PID（创建调用进程的进程）。<br>返回类型为pid_t，在Linux系统上它在type.h里被定义为int。</p>
+<h3 id="创建和终止进程"><a href="#创建和终止进程" class="headerlink" title="创建和终止进程"></a>创建和终止进程</h3><p>进程总是处于下面三种状态之一：</p>
+<ul>
+<li>运行：进程要么在CPU上执行，要么在等待被执行且最终会被内核调度。</li>
+<li>停止：进程的执行被挂起（suspended），且不会被调度。</li>
+<li>终止：进程永远的停止了。三个原因：收到一个信号，该信号的默认行为是终止进程；从主程序返回，调用exit函数。<br>父进程通过<code>fork</code>函数创建新的子进程。<br>父进程和子进程有相同但是独立的地址空间，它们共享文件。</li>
+</ul>
+<h3 id="回收子进程"><a href="#回收子进程" class="headerlink" title="回收子进程"></a>回收子进程</h3><p>当一个子进程由于某种原因终止时，内核不是立即把它从系统中清除。相反，进程被保持在一种已终止的状态中，直到被它的父进程回收。当父进程回收已终止的子进程时，内核将子进程的退出状态传递给父进程，然后抛弃已终止的进程，从此时开始，该进程就不存在了。一个终止了但还未被回收的进程称为僵尸进程。如固父进程终止了，内核会安排init进程成为它的孤儿进程的养父。</p>
+<h3 id="让进程休眠"><a href="#让进程休眠" class="headerlink" title="让进程休眠"></a>让进程休眠</h3><p>sleep函数将一个进程挂起一段指定的时间。如固请求的时间量已经达到了，sleep返回0，否则返回还剩下的要休眠的秒数。</p>
+<h3 id="加载并运行程序"><a href="#加载并运行程序" class="headerlink" title="加载并运行程序"></a>加载并运行程序</h3><p>execve函数加载并运行可执行目标文件filename，只要但出现错误，如找不到filename，execve才会返回到调用程序。execve调用一次并从不返回。<br>在execve加载了filename之后，它调用启动代码，启动代码设置栈，并将控制传递给新程序的主函数，该主函数有如下形式的原型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv,<span class="keyword">char</span> **envp)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>或等价的</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[],<span class="keyword">char</span> *envp[])</span></span>;</span><br></pre></td></tr></table></figure>
+<p>argc是命令参数的个数，argv是命令参数数组，<code>argv[0]-&gt;argv[argc-1]</code>，<code>argv[argc]=NULL</code>，envp变量指向一个以null结尾的指针数组，其中每个指针指向一个环境变量字符串，每个串都是形如<code>name=value</code>的名字-值对。<br>Linux提供了几个函数来操作环境数组：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>getenv函数在环境数组中搜索字符串<code>&quot;name=value&quot;</code>。如果找到了就返回一个指向value的指针，否则就返回<code>NULL</code>。<br>还有：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">setenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name,<span class="keyword">const</span> <span class="keyword">char</span> *newvalue,<span class="keyword">int</span> overwrite)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unsetenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果环境数组中包含一个形如<code>&quot;name=oldvalue&quot;</code>的字符串，那么unsetenv就会删除它，而setenv就会用newvalue代替oldvalue，但是只有在overwrite非零时才会这样。如果name不存在，那么setenv就把<code>&quot;name=newvalue&quot;</code>添加到数组中。</p>
+<ul>
+<li>程序和进程<br>fork函数在新的子进程中运行相同的程序，而execve函数在当前进程的上下文加载并运行一个新的程序。它会覆盖当前进程的地址空间，但并没有创建一个新进程，新的程序仍然具有相同的PID，并且继承了execve函数时已打开的所有文件描述符。</li>
+</ul>
+<h3 id="利用fork和execve运行程序"><a href="#利用fork和execve运行程序" class="headerlink" title="利用fork和execve运行程序"></a>利用fork和execve运行程序</h3><p>跳过</p>
+<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><p>Linux信号：一种更高层的软件形式的异常，它允许进程和内核中断其他进程。<br>低层的硬件异常是由内核处理程序处理的，正常情况这些对用户程序来说都是不可见的。信号提供了一种机制，通知用户进程发生了这些异常。</p>
+<h2 id="信号术语"><a href="#信号术语" class="headerlink" title="信号术语"></a>信号术语</h2><p>传送一个目的信号到进程由两个不同步骤组成：  </p>
+<ul>
+<li>发送信号：内核通过更新目的进程的上下文中的某个状态，发送（递送）一个信号给目的进程。发生信号可能有两个原因：内核检测到一个系统事件；一个进程调用了kill函数，显示地要求内核发送信号给目的进程。  </li>
+<li>接收信号：目的进程被内核强迫以某种方式对信号的发送做出反应时，它就接收到了信号。进程可以忽略这个信号，终止或通过执行一个称为信号处理程序的应用层函数来捕获这个信号。<br>一个发错而没有被接收的信号叫做待处理信号，在任何时刻，一种类型至多只有一个待处理信号（如果有一个该类信号，其他会被丢弃）。</li>
+</ul>
+<h3 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h3><ol>
+<li>进程组<br>每个进程都只属于一个进程组，由正整数进程组ID来唯一标识。<code>pid_t getpgrp(void)</code>返回当前进程的进程组ID。<br>子进程和父进程默认情况下属于同一个进程组，一个进程可以通过使用<code>setpgid</code>函数来改变自己或者其他进程的进程组：  </li>
+<li>用/bin/kill程序发送信号    </li>
+<li>从键盘发送信号<br>Unix shell使用作业（job）这个抽象概念来表示对一条命令行求值而创建的进程。在任何时刻至多只有一个前台作业和0个或多个后台作业。在键盘上输入Ctrl+C会导致内核发送一个SIGINT信号到前台进程组中的每一个进程。<br>默认情况下是终止前台作业；Ctrl+Z默认情况下挂起前台作业。  </li>
+<li>用kill函数发送信号<br>进程调用kill函数发送信号给其他进程（包括它们自己）。  </li>
+<li>用alarm函数发送信号<br>进程调用alarm函数发送SIGALRM信号给它自己。  </li>
+</ol>
+<h3 id="接收信号"><a href="#接收信号" class="headerlink" title="接收信号"></a>接收信号</h3><h3 id="阻塞和解除阻塞信号"><a href="#阻塞和解除阻塞信号" class="headerlink" title="阻塞和解除阻塞信号"></a>阻塞和解除阻塞信号</h3><p>隐式阻塞机制（内核默认阻塞任何当前处理程序正在处理信号类型的待处理的信号）、显式阻塞机制</p>
+<h3 id="编写信号处理程序"><a href="#编写信号处理程序" class="headerlink" title="编写信号处理程序"></a>编写信号处理程序</h3><p>跳过</p>
+<h3 id="同步流以避免讨厌的并发错误"><a href="#同步流以避免讨厌的并发错误" class="headerlink" title="同步流以避免讨厌的并发错误"></a>同步流以避免讨厌的并发错误</h3><h3 id="显式等待信号"><a href="#显式等待信号" class="headerlink" title="显式等待信号"></a>显式等待信号</h3><p>有时候主程序必须要显示地等待某个信号处理程序运行。</p>
+<h2 id="非本地跳转"><a href="#非本地跳转" class="headerlink" title="非本地跳转"></a>非本地跳转</h2><p>非本地跳转（nonlocal jump），一种C语言提供的用户及异常控制流形式。它将控制直接由一个函数转移到另一个当前正在执行的函数，而不需要经过正常的调用-返回序列。nonlocal jump通过<code>setjump</code>和<code>longjump</code>来提供。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH7%E9%93%BE%E6%8E%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1051,88 +1221,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E5%BF%AB%E9%80%9F%E5%B9%82/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E5%BF%AB%E9%80%9F%E5%B9%82/" class="post-title-link" itemprop="url">快速幂</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:24:11" itemprop="dateCreated datePublished" datetime="2021-01-13T20:24:11+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="快速幂"><a href="#快速幂" class="headerlink" title="快速幂"></a><strong>快速幂</strong></h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a><strong>描述</strong></h2><p>假设我们要设计一个函数<code>pow(double a,int n)</code>计算a^n。  </p>
-<h2 id="暴力算法"><a href="#暴力算法" class="headerlink" title="暴力算法"></a><strong>暴力算法</strong></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>&gt;)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">double</span> res=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n--)res*=a;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很明显，时间复杂度为O(n)。</p>
-<h2 id="快速幂算法"><a href="#快速幂算法" class="headerlink" title="快速幂算法"></a><strong>快速幂算法</strong></h2><p>我们考虑如下情况，计算3^5，之前的暴力算法需要计算五次，那么我们这样计算：$3^5=3^{2\times2+}={3^2}^2\times3$，我们可以发现只需要计算3次，<br>更加通用的表示如下 $a^n=(a^2)^{\lfloor n/2\rfloor}\times 2(n-\lfloor n/2\rfloor)\times a$<br>那么我们可以递归地设计函数如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> n%<span class="number">2</span>==<span class="number">0</span>? <span class="built_in">pow</span>(a*a,n/<span class="number">2</span>):<span class="built_in">pow</span>(a*a,n/<span class="number">2</span>)*a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们可以啊发现时间复杂度降低为O(logn)。</p>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a><strong>优化</strong></h3><p>可以非递归实现</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">double</span> res=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n)&#123;</span><br><span class="line">        <span class="keyword">if</span>(n%<span class="number">2</span>==<span class="number">0</span>)&#123;</span><br><span class="line">            a=a*a;</span><br><span class="line">            n/=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            res*=a;</span><br><span class="line">            a=a*a;</span><br><span class="line">            n/=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们还可以进一步优化</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">double</span> res=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n)&#123;</span><br><span class="line">        <span class="keyword">if</span>(n%<span class="number">2</span>==<span class="number">0</span>)res*=a;</span><br><span class="line">        a=a*a;</span><br><span class="line">        n/=<span class="number">2</span>; <span class="comment">// or n=n&gt;&gt;2;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1204,7 +1292,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-count">116</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
