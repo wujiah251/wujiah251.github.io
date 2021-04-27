@@ -191,6 +191,174 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/C%E5%92%8CC++%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/16/C%E5%92%8CC++%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">C和C++内存管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-16 17:08:44" itemprop="dateCreated datePublished" datetime="2021-02-16T17:08:44+08:00">2021-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>C语言中我们一般用<code>malloc()</code>函数和<code>free()</code>函数来分配和释放内存。C++中我们一般用关键字<code>new</code>、<code>delete</code>来分配和释放内存。那他们有哪些区别呢？</p>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Test* p_c = (Test*)<span class="built_in">malloc</span>(<span class="built_in"><span class="keyword">sizeof</span></span>(Test));</span><br><span class="line">  Test* p_cpp = <span class="keyword">new</span> Test;</span><br><span class="line">  <span class="built_in">free</span>(p_c);</span><br><span class="line">  <span class="keyword">delete</span> p_cpp;</span><br></pre></td></tr></table></figure>
+
+<h1 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h1><p><code>malloc()</code>以字节为单位分配内存，不会调用构造函数，而<code>new</code>以具体类型为单位分配内存，调用了构造函数。<br><code>free()</code>仅归还内存，析构函数未被调用。<code>delete</code>销毁对象，归还内存，析构函数被调用。  </p>
+<p><code>malloc()</code>和<code>new</code>区别：  </p>
+<ul>
+<li>new 在所有 C++ 编译器中都被支持  </li>
+<li>malloc 在某些系统开发中不能调用  </li>
+<li>new 能够触发构造函数的调用  </li>
+<li>malloc 仅分配需要的内存空间  </li>
+<li>对象的创建只能使用 new  </li>
+<li>malloc 不适合面向对象开发  </li>
+</ul>
+<p><code>free()</code>和<code>delete</code>区别：  </p>
+<ul>
+<li>delete 在所有 C++ 编译器中都被支持  </li>
+<li>free 在某些系统开发中不能调用  </li>
+<li>delete 能够触发析构函数的调用  </li>
+<li>free 仅归还之前分配的内存空间  </li>
+<li>对象的销毁只能使用 delete  </li>
+<li>free 不适合面向对象开发</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/%E8%99%9A%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/16/%E8%99%9A%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">虚函数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-16 16:25:00" itemprop="dateCreated datePublished" datetime="2021-02-16T16:25:00+08:00">2021-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>C++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。</p>
+<h1 id="虚函数表"><a href="#虚函数表" class="headerlink" title="虚函数表"></a>虚函数表</h1><p>对C++ 了解的人都应该知道虚函数（Virtual Function）是通过一张虚函数表（Virtual Table）来实现的。简称为V-Table。在这个表中，主是要一个类的虚函数的地址表，这张表解决了继承、覆盖的问题，保证其容真实反应实际的函数。这样，在有虚函数的类的实例中这个表被分配在了这个实例的内存中，所以，当我们用父类的指针来操作一个子类的时候，这张虚函数表就显得由为重要了，它就像一个地图一样，指明了实际所应该调用的函数。</p>
+<h1 id="一般继承（无函数覆盖）"><a href="#一般继承（无函数覆盖）" class="headerlink" title="一般继承（无函数覆盖）"></a>一般继承（无函数覆盖）</h1><p>这种情况下虚函数表会存储基类和派生类的虚函数，且基类在前。</p>
+<h1 id="一般继承（有函数覆盖）"><a href="#一般继承（有函数覆盖）" class="headerlink" title="一般继承（有函数覆盖）"></a>一般继承（有函数覆盖）</h1><p>派生类重载了基类的虚函数，这时候在虚函数表中派生类的中的函数<code>f()</code>被放到了虚表中原来父类虚函数<code>f()</code>的位置，没有被覆盖的函数依旧。</p>
+<h1 id="多重继承（无函数覆盖）"><a href="#多重继承（无函数覆盖）" class="headerlink" title="多重继承（无函数覆盖）"></a>多重继承（无函数覆盖）</h1><p>会有多个虚函数表，每个基类都有自己的虚函数表，派生类的虚函数放在第一个虚函数表的末尾。</p>
+<h1 id="多重继承（有函数覆盖）"><a href="#多重继承（有函数覆盖）" class="headerlink" title="多重继承（有函数覆盖）"></a>多重继承（有函数覆盖）</h1><p>如果这个函数覆盖了多个基类的函数，则在每个对应的虚函数表中都会覆盖基类的函数。</p>
+<h1 id="纯虚函数"><a href="#纯虚函数" class="headerlink" title="纯虚函数"></a>纯虚函数</h1><p>这里再说一下纯虚函数吧，定义纯虚函数是为了实现一个接口，起到一个规范的作用，规范继承这个类的程序员必须实现这个函数。例子如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">funtion1</span><span class="params">()</span></span>=<span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/C++%E7%BB%A7%E6%89%BF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -867,174 +1035,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/14/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/14/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/" class="post-title-link" itemprop="url">数据库事务</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-14 17:14:26" itemprop="dateCreated datePublished" datetime="2021-02-14T17:14:26+08:00">2021-02-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h1><p>数据库事务(Database Transaction) ，是指作为单个逻辑工作单元执行的一系列操作，要么完全地执行，要么完全地不执行。  </p>
-<p>事务具有4个基本特征：原子性（Automicity）、一致性（Consistency）、隔离性（Isolation）、持久性（Duration），简称ACID。  </p>
-<ol>
-<li>原子性：事务被视为不可分割的最小单元，事物的所有操作要不成功，要不失败回滚，而回滚可以通过日志来实现，日志记录着事务所执行的修改操作，在回滚时反向执行这些修改操作。  </li>
-<li>一致性：数据库在事务执行前后都保持一致性状态，在一致性状态下，所有事务对一个数据的读取结果都是相同的。  </li>
-<li>隔离性：一个事务所做的修改在最终提交以前，对其他事务是可不见的。  </li>
-<li>持久性：一旦事务提交，则其所做的修改将会永远保存到数据库中。  </li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/13/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/13/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">服务器事务处理模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-13 22:18:46" itemprop="dateCreated datePublished" datetime="2021-02-13T22:18:46+08:00">2021-02-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>服务器通常要处理3种类型的事件：IO事件、信号、定时事件。而有两种高效处理时间的方式，分别是Reactor模式与Proactor模式。  </p>
-<h1 id="Reactor"><a href="#Reactor" class="headerlink" title="Reactor"></a>Reactor</h1><p>Reactor模式要求主线程只负责事件监听描述符上是否事件发生，有事件发生后通知工作线程，除此以外，主线程不做任何工作，读写数据、接收新的连接、处理客户请求都在工作线程上完成。<br>使用同步IO（<code>epoll_wait()</code>为例子）实现的Reactor模式的工作流程如下：  </p>
-<ol>
-<li>主线程往epoll内核事件表注册socket上的读就绪时间；  </li>
-<li>主线程调用<code>epoll_wait()</code>等待socket上有数据可读；  </li>
-<li>当socket上数据可读时，<code>epolll_wait()</code>通知主线程。主线程将socket可读事件放入请求队列；  </li>
-<li>睡眠在请求队列上的某个工作线程被唤醒，它从socket读取数据，并处理客户请求，然后往epoll内核事件表中注册该socket上的写事件。  </li>
-<li>主线程调用<code>epoll_wait()</code>等待socket可写；  </li>
-<li>当socket可写时，epoll_wait()通知主线程。主线程将socket可写事件放入请求队列；  </li>
-<li>睡眠在请求队列上的某个工作线程被唤醒，它往socket上写入服务器处理客户请求的结果。  </li>
-</ol>
-<h1 id="Proactor"><a href="#Proactor" class="headerlink" title="Proactor"></a>Proactor</h1><p>与Reactor模式不通，Proactor模式将所有I/O操作都交给主线程和内核来处理，工作线程仅仅负责业务逻辑。  </p>
-<p>使用异步IO（<code>aio_read()</code>和<code>aio_write()</code>为例）实现的Proactor模式工作流程如下：  </p>
-<ol>
-<li>主线程调用<code>aio_read()</code>函数向内核注册socket上的读完成事件，并告诉内核用户读缓冲区的位置，以及读操作完成时候如何通知应用程序（信号机制）；  </li>
-<li>主线程继续处理其他逻辑；  </li>
-<li>应用程序预先定义好信号处理函数并选择一个工作线程来处理客户请求；工作线程处理完客户请求之后，调用<code>aio_write()</code>想内核注册socket上的写完成事件，并告诉内核缓冲区的位置，以及写操作完成时应如何通知应用程序（信号）；  </li>
-<li>主线程继续处理其他逻辑；  </li>
-<li>当用户缓冲区的数据被写入socket之后，内核将向应用程序发送一个信号，以通知程序数据以及传送完毕；  </li>
-<li>应用程序预先定义好的信号处理函数选择一个工作线程来做善后处理，比如是否决定关闭socket。  </li>
-</ol>
-<p>使用同步IO也可以实现的Proactor模式。原理是这样的：主线程执行数据读写操作，读写完成之后，主线程向工作线程通知这一“完成事件”，那么工作线程直接获得了读写结果，接下来要做的只是对读写结果的处理。工作流程如下：  </p>
-<ol>
-<li>主线程调用<code>epoll_ctl()</code>向epoll内核事件表中注册描述符；  </li>
-<li>主线程调用<code>epoll_wait()</code>等待socket上有数据可读；  </li>
-<li>当socket上有数据可读时，epoll_wait()通知主线程。主线程从socket循环读取数据，直到没有更多数据可读，然后将多有数据封装成一个请求对象并插入请求队列中；  </li>
-<li>睡眠在请求队列中的某个工作线程被唤醒，它获得请求对象并处理客户请求，然后往epoll内核事件表中注册socket上的写就绪事件；  </li>
-<li>主线程调用<code>epoll_wait()</code>等待socket可写；  </li>
-<li>当sockt可写时，<code>epoll_wait()</code>通知主线程。主线程往socket上写入服务器处理客户请求的结果。  </li>
-</ol>
-<p>这里同步模拟和异步模拟Proactor的区别在于，同步模拟是主线程自己进行I/O操作，需要等待读完数据，而异步I/O是通过aio_read()异步读取，主线程不需要等待I/O完成。</p>
-<p>其实通过上述描述我们还可以发现同步IO和异步IO的一个区别。同步IO注册的是就绪事件（<code>epoll_wait()</code>），而异步IO是注册完成事件（<code>aio_read()</code>、<code>aio_write()</code>）。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1106,7 +1106,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-count">118</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

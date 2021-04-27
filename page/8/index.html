@@ -191,6 +191,232 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/29/%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/29/%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">存储管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-29 23:22:49" itemprop="dateCreated datePublished" datetime="2021-01-29T23:22:49+08:00">2021-01-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="为什么要使用虚拟地址空间？"><a href="#为什么要使用虚拟地址空间？" class="headerlink" title="为什么要使用虚拟地址空间？"></a>为什么要使用虚拟地址空间？</h1><ol>
+<li>程序大小的增长速度总是很快，使用虚拟地址空间可以扩大地址空间。  </li>
+<li>如果使用物理地址空间，进程之间共享物理内存，容易造成竞争和程序的崩溃，使用虚拟地址空间还可以增加程序的安全性。  </li>
+<li>使用物理地址空间，同时运行多个程序是困难的。  </li>
+</ol>
+<h1 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h1><h2 id="地址空间的概念"><a href="#地址空间的概念" class="headerlink" title="地址空间的概念"></a>地址空间的概念</h2><p><strong>地址空间</strong> 是一个进程可用于寻址内存的一套地址集合。每个进程都有自己的地址空间，并且这个地址空间独立于其他进程的地址空间。</p>
+<h3 id="基址寄存器和界限寄存器"><a href="#基址寄存器和界限寄存器" class="headerlink" title="基址寄存器和界限寄存器"></a>基址寄存器和界限寄存器</h3><p>经典的重定位方法。基址寄存器存储程序的起始物理地址，界限寄存器存储程序长度。<br>每次一个进程进行访问内存，取一条指令、读取或写一个数据字，CPU会把地址发送到内存总线前，自动把基址值加到进程发出的地址值之上。<br>这个方法比较容易，但是由于每次访问内存都需要进行加法和比较运算，会消耗很多时间。</p>
+<h2 id="交换技术"><a href="#交换技术" class="headerlink" title="交换技术"></a>交换技术</h2><p>现实中我们常常要打开多个程序，每个进程都需要占据一定的内存，如果打开程序比较多，会造成内存不足的问题，有一种简单的处理内存超载的方法，<strong>交换（swapping）技术</strong>。当一个进程空闲时，存放在磁盘上，所以它不运行时不占用内存。另一个方法是<strong>虚拟内存</strong>，虚拟内存使得程序可以只有在一部分被读入内存时运行。  </p>
+<p>交换技术很好理解，我们讨论一下其可能面临的一些问题，我们知道很多程序设计语言都可以动态地分配内存，那么当进程空间视图增大的时候，就会出现问题：  </p>
+<ul>
+<li>有相邻空闲区：将相邻空闲区分配给进程；  </li>
+<li>没有相邻空闲区：把一个或多个进程换出，以便生成足够大的空闲区。<br>如果大部分进程运行时都需要增长，为了减少换入换出的开销，我们在最开始的时候为进程额外分配一些内存，这个预留空间位于堆栈和数据段之间，他们都可以使用其。</li>
+</ul>
+<h2 id="空闲内存管理"><a href="#空闲内存管理" class="headerlink" title="空闲内存管理"></a>空闲内存管理</h2><h3 id="位图"><a href="#位图" class="headerlink" title="位图"></a>位图</h3><p>我们可以把内存划分为小到几个字达到几千字的内存单元，然后用位图来记录使用情况。<br>问题：当我们需要分配占k个单位内存时，，需要在位图中匹配长度为k的0串，这是一个耗时操作。  </p>
+<h3 id="使用链表的存储管理"><a href="#使用链表的存储管理" class="headerlink" title="使用链表的存储管理"></a>使用链表的存储管理</h3><p>维护一个记录已分配内存段和空闲内存段的链表。链表一个结点或者包含一个进程，或者包含一个位于两个进程之间的空闲区。  </p>
+<p>如果按照地址顺序来存放进程和空闲区时，有几种算法可以来为进程分配内存：  </p>
+<ul>
+<li>首次适配算法；  </li>
+<li>下次适配算法；</li>
+<li>最佳适配算法；  </li>
+<li>最差适配算法。  </li>
+</ul>
+<p>如果单独维护空闲区链表和进程链表，可以提高以上四个算法的速度，但是释放内存将内存从进程表中删除并插入到空闲区链表的时间成本高昂。  </p>
+<p>当然如果我们单独维护空闲区链表和进程链表，可以按照大小升序排列，这样可以提高最佳适配的效率。  </p>
+<p>还有一种分配算法叫做<strong>快速适配</strong>，为空闲区维护一个单独的链表。例如，这个表的第一项指向一个大小为4KB的空闲区，第二项指向一个大小为8KB的空闲区，第三项指向一个大小为12KB的空闲区。这样子寻找一个指定大小的空闲区是非常迅速的，但是缺点是合并空闲区相当费时。  </p>
+<h1 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h1><p>尽管基址寄存器和界限寄存器可以用于创建地址空间的抽象，但无法解决程序大小的膨胀问题。虚拟内存的基本思想是每个程序都拥有自己的地址空间，空间被分为多个块，每一块称作一页。  </p>
+<h2 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h2><p>内存管理单元（Memory Management Unit，MMU），MMU把虚拟地址映射为物理内存地址。  </p>
+<p>访问虚拟内存，首先查询页表项（以一级页表为例），如果页表项显示不存在（缓存为命中），则引起缺页中断，陷入内核，由内核将需要的页写入到内存中（如果内存已满，会替换掉一个不常用的页，然后将被替换页写入磁盘）；如果显示存在，从页表项索引到页所在位置；找到物理内存的页后，根据虚拟地址的偏移量来确定最终物理地址。<br>注：页表项还可以添加其他信息，比如读写控制等。  </p>
+<h2 id="转换检测缓冲区（TLB）"><a href="#转换检测缓冲区（TLB）" class="headerlink" title="转换检测缓冲区（TLB）"></a>转换检测缓冲区（TLB）</h2><p>每次内存访问都需要多次访问页表也就是多次访问内存，为了节约时间，使用一种缓存技术TLB，TLB通常在MMU中（硬件实现，所以快），包含少量的表项，每个表项记录一个页面信息，包括虚拟页号，页面的修改位、保护码和该页所对应的物理页框。在每次内存访问时，都会首先访问TLB，寻找匹配表项，如果TLB命中，则不再访问页表，如果不命中，再访问页表，然后再将这次表项读入到TLB（也会淘汰一个TLB表项），下次再访问这个页表，自然会命中了。  </p>
+<h1 id="页面置换算法"><a href="#页面置换算法" class="headerlink" title="页面置换算法"></a>页面置换算法</h1><h2 id="最优页面置换算法"><a href="#最优页面置换算法" class="headerlink" title="最优页面置换算法"></a>最优页面置换算法</h2><p>选择最晚将被使用的页面被置换，这个算法很好理解，而且被证明时最优的，但是问题在于我们无法预测页面何时将再被使用。当然可以跟踪页面使用情况来预测，但是这样是不划算的。  </p>
+<h2 id="最近未使用页面置换算法"><a href="#最近未使用页面置换算法" class="headerlink" title="最近未使用页面置换算法"></a>最近未使用页面置换算法</h2><p>最近未使用也很好理解，而且容易实现，性能也够用。  </p>
+<h2 id="先进先出页面置换算法"><a href="#先进先出页面置换算法" class="headerlink" title="先进先出页面置换算法"></a>先进先出页面置换算法</h2><p>还有很多其他页面置换算法，比如时钟页面置换算法，最近最少使用页面置换算法等等，不做赘述。</p>
+<h1 id="分页系统中的设计问题"><a href="#分页系统中的设计问题" class="headerlink" title="分页系统中的设计问题"></a>分页系统中的设计问题</h1><h2 id="局部分配策略和全局分配策略"><a href="#局部分配策略和全局分配策略" class="headerlink" title="局部分配策略和全局分配策略"></a>局部分配策略和全局分配策略</h2><p>局部就是指页面置换时只考虑同一进程的内存，而全局就是考虑所有进程的内存。一般来说，全局的性能更优，而且可以避免一个需要较大内存的进程只被分配了少量物理内存。<br>还有一些动态的分配策略，会实时参考缺页中断率来分配内存。</p>
+<h2 id="负载控制"><a href="#负载控制" class="headerlink" title="负载控制"></a>负载控制</h2><p>即使使用最优页面置换算法，系统也可能发生“抖动”，这在于每个进程都在渴求更多的内存，导致进程不断被频繁换入换出，解决方案是暂时从内存中去掉一些进程。  </p>
+<h3 id="共享页面"><a href="#共享页面" class="headerlink" title="共享页面"></a>共享页面</h3><p>如果不同进程之间共享某页面，可以让他们都指向同一个页面集合，然后当读的时候并不进行页面复制，仅有写发生时进行页面复制，这称为写时复制。  </p>
+<h3 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h3><p>通过一个系统调用把文件映射到虚拟地址空间的一部分。这样可以把文件当作一个大型的字符数组来访问，而且这样子可以通过共享内存来通信，一个进程在共享内存上完成了写操作，另一个进程在映射到这个文件的虚拟地址空间之上指向读操作时，它就可以立即看到上一个进程写操作了。这个机制为进程之间提供了一个高带宽通道。</p>
+<h1 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h1><p>一个编译器在编译过程中会创建许多表，其中可能包括：  </p>
+<ol>
+<li>被保存起来供打印清单用的程序正文；  </li>
+<li>符号表，包含变量的名字和属性；  </li>
+<li>包含用到的所有整型量和浮点常量的表；  </li>
+<li>语法分析树，包含程序语法分析的结果；  </li>
+<li>编译器内部过程调用使用的堆栈。  </li>
+</ol>
+<p>我们需要一个能够把程序员从管理表的扩张和收缩工作中解出来的方法，就像虚拟内存使程序员不用再为怎么样把程序划分称覆盖块担心一样。<br>一个直观并且通用的方法是在机器上提供多个互相独立的称为段的地址空间。<br>一个段一般不包含不通类型的内容。在分段系统中，修改一个过程不会影响其他无关的过程的起始地址。<br>分段是一个逻辑实体，程序员知道这一点并把它作为一个逻辑实体来使用。<br>页面的内容从某种意义上是随机的，程序员甚至察觉不到分页的事实，而分段对程序员是已知的。</p>
+<h2 id="分段和分页的结合"><a href="#分段和分页的结合" class="headerlink" title="分段和分页的结合"></a>分段和分页的结合</h2><p>分段和分页可以结合起来使用，一个例子就是MULTICS。具体细节参考《现代操作系统》P134-P135。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/28/%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">管理事务处理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-28 20:15:45" itemprop="dateCreated datePublished" datetime="2021-01-28T20:15:45+08:00">2021-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="事务处理"><a href="#事务处理" class="headerlink" title="事务处理"></a>事务处理</h1><p>事务处理是一种机制，用来管理成批执行的MySQL操作，以保证数据库不包含不完整的操作结果。利用事务处理，可以保证一组操作不会中途停止，它们或者作为整体执行，或者完全不执行。如果没有错误发生，整租语句提交给数据库表，如果发生错误，则进行回退，以恢复数据库到某个已知的完全的状态。</p>
+<h1 id="控制事务处理"><a href="#控制事务处理" class="headerlink" title="控制事务处理"></a>控制事务处理</h1><p>MySQL使用下面的语句来标识事务的开始：<br><code>START TRANSACTION;</code></p>
+<h2 id="使用ROLLBACK"><a href="#使用ROLLBACK" class="headerlink" title="使用ROLLBACK"></a>使用ROLLBACK</h2><p>MySQL的ROLLBACK命令用来回退（撤销）MySQL语句，举例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from ordertotals;</span><br><span class="line">	&gt; start transaction</span><br><span class="line">	&gt; delete from ordertotals;</span><br><span class="line">	&gt; select * from ordertotals;</span><br><span class="line">	&gt; ROLLBACK;</span><br><span class="line">	&gt; select * from ordertotals;</span><br></pre></td></tr></table></figure>
+<p>ROLLBACK只能在一个事务处理内使用（在执行了一条start transaction命令之后）。</p>
+<h2 id="使用COMMIT"><a href="#使用COMMIT" class="headerlink" title="使用COMMIT"></a>使用COMMIT</h2><p>一般的MySQL语句都是直接针对数据库表执行和编写的。这就是所谓的隐含提交，即提交操作时自动进行的，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">start transaction;</span><br><span class="line">delete from orderitems where order_num &#x3D; 20010;</span><br><span class="line">delete from orders where order_num &#x3D; 20010;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，从系统完全删除订单20010.因为涉及更新两个数据库表orders和orderitems，所以使用事务处理块来保证订单不被部分删除。  </p>
+<h2 id="使用保留点"><a href="#使用保留点" class="headerlink" title="使用保留点"></a>使用保留点</h2><p>简单的ROLLBACK和COMMIT语句就可以写入或撤销整个事务处理。但是，只是对简单的事务处理才能这样做，更复杂的事务处理可能需要部分提交或回退。<br>为了支持回退部分事务处理，必须能在事务处理块中合适的位置防止占位符。这样，如果需要回退，可以回退到某个占位符。这些占位符也被称为保留点，为了创建占位符，可如下使用SAVEPOINT语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SAVEPOINT delete1;</span><br></pre></td></tr></table></figure>
+<p>每个保留点都取标识它的唯一名字，以便在回退时，MySQL知道要回退到何处。为了回退到本例给出的保留点，可如下进行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROLLBACK TO delete1;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E8%A7%A6%E5%8F%91%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -968,172 +1194,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">组合查询</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 20:46:41" itemprop="dateCreated datePublished" datetime="2021-01-27T20:46:41+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="组合查询"><a href="#组合查询" class="headerlink" title="组合查询"></a>组合查询</h1><p>多数SQL查询都只包含从一个或多个表中返回数据的单条SELECT语句。MySQL也允许执行多个查询（多条SELECT语句），并将结果作为单个查询结果集返回。这些组合查询通常称为并（union）或复合查询。</p>
-<h1 id="创建组合查询"><a href="#创建组合查询" class="headerlink" title="创建组合查询"></a>创建组合查询</h1><h2 id="使用UNION"><a href="#使用UNION" class="headerlink" title="使用UNION"></a>使用UNION</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, prod_id,prod_price </span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price &lt;&#x3D; 5</span><br><span class="line">    -&gt; union </span><br><span class="line">    -&gt; select vend_id, prod_id, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id in (1001,1002);</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">| vend_id | prod_id | prod_price |</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">|    1003 | FC      |       2.50 |</span><br><span class="line">|    1002 | FU1     |       3.42 |</span><br><span class="line">|    1003 | SLING   |       4.49 |</span><br><span class="line">|    1003 | TNT1    |       2.50 |</span><br><span class="line">|    1001 | ANV01   |       5.99 |</span><br><span class="line">|    1001 | ANV02   |       9.99 |</span><br><span class="line">|    1001 | ANV03   |      14.99 |</span><br><span class="line">|    1002 | OL1     |       8.99 |</span><br><span class="line">+---------+---------+------------+</span><br></pre></td></tr></table></figure>
-
-<h3 id="包含或取消重复的行"><a href="#包含或取消重复的行" class="headerlink" title="包含或取消重复的行"></a>包含或取消重复的行</h3><p>union会自动去除重复的行，如果需要改变它，返回所有匹配行，则使用UNION ALL。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id,prod_id,prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price &lt;&#x3D; 5</span><br><span class="line">    -&gt; union all</span><br><span class="line">    -&gt; select vend_id, prod_id, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id in (1001,1002);</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">| vend_id | prod_id | prod_price |</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">|    1003 | FC      |       2.50 |</span><br><span class="line">|    1002 | FU1     |       3.42 |</span><br><span class="line">|    1003 | SLING   |       4.49 |</span><br><span class="line">|    1003 | TNT1    |       2.50 |</span><br><span class="line">|    1001 | ANV01   |       5.99 |</span><br><span class="line">|    1001 | ANV02   |       9.99 |</span><br><span class="line">|    1001 | ANV03   |      14.99 |</span><br><span class="line">|    1002 | FU1     |       3.42 |</span><br><span class="line">|    1002 | OL1     |       8.99 |</span><br><span class="line">+---------+---------+------------+</span><br></pre></td></tr></table></figure>
-
-<h3 id="对组合查询结果排序"><a href="#对组合查询结果排序" class="headerlink" title="对组合查询结果排序"></a>对组合查询结果排序</h3><p>在使用<code>union</code>组合查询时，只能使用一条<code>order by</code>子句，它必须出席那在最后一条<code>select</code>语句之后，对于结果集，不存在用一种方式排序一部分，而有用另一种方式排序另一部分的情况，因此不允许使用多条<code>order by</code>子句。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%88%9B%E5%BB%BA%E9%AB%98%E7%BA%A7%E8%81%94%E7%BB%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E5%88%9B%E5%BB%BA%E9%AB%98%E7%BA%A7%E8%81%94%E7%BB%93/" class="post-title-link" itemprop="url">创建高级联结</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 20:16:03" itemprop="dateCreated datePublished" datetime="2021-01-27T20:16:03+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="创建高级联结"><a href="#创建高级联结" class="headerlink" title="创建高级联结"></a>创建高级联结</h1><h2 id="使用表别名"><a href="#使用表别名" class="headerlink" title="使用表别名"></a>使用表别名</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_name, cust_contact</span><br><span class="line">    -&gt; from customers as c, orders as o, orderitems as oi</span><br><span class="line">    -&gt; where c.cust_id &#x3D; o.cust_id and oi.order_num &#x3D; o.order_num </span><br><span class="line">    -&gt; and prod_id &#x3D; &#39;TNT2&#39;;</span><br><span class="line">+----------------+--------------+</span><br><span class="line">| cust_name      | cust_contact |</span><br><span class="line">+----------------+--------------+</span><br><span class="line">| Coyote Inc.    | Y Lee        |</span><br><span class="line">| Yosemite Place | Y Sam        |</span><br><span class="line">+----------------+--------------+</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用不同类型的联结"><a href="#使用不同类型的联结" class="headerlink" title="使用不同类型的联结"></a>使用不同类型的联结</h2><h3 id="自联结"><a href="#自联结" class="headerlink" title="自联结"></a>自联结</h3><p>找到生产prod_id为’DTNTR’的供应商生产的所有产品。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id, prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id &#x3D; (select vend_id </span><br><span class="line">    -&gt; from products where prod_id &#x3D; &#39;DTNTR&#39;);</span><br><span class="line">+---------+----------------+</span><br><span class="line">| prod_id | prod_name      |</span><br><span class="line">+---------+----------------+</span><br><span class="line">| DTNTR   | Detonator      |</span><br><span class="line">| FB      | Bird seed      |</span><br><span class="line">| FC      | Carrots        |</span><br><span class="line">| SAFE    | Safe           |</span><br><span class="line">| SLING   | Sling          |</span><br><span class="line">| TNT1    | TNT (1 stick)  |</span><br><span class="line">| TNT2    | TNT (5 sticks) |</span><br><span class="line">+---------+----------------+</span><br></pre></td></tr></table></figure>
-<p>这是一种解决方案，通过子查询来实现。<br>现在来看使用联结的相同查询：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select p1.prod_id, p1.prod_name</span><br><span class="line">    -&gt; from products as p1, products as p2</span><br><span class="line">    -&gt; where p1.vend_id &#x3D; p2.vend_id</span><br><span class="line">    -&gt; and p2.prod_id &#x3D; &#39;DTNTR&#39;;</span><br><span class="line">+---------+----------------+</span><br><span class="line">| prod_id | prod_name      |</span><br><span class="line">+---------+----------------+</span><br><span class="line">| DTNTR   | Detonator      |</span><br><span class="line">| FB      | Bird seed      |</span><br><span class="line">| FC      | Carrots        |</span><br><span class="line">| SAFE    | Safe           |</span><br><span class="line">| SLING   | Sling          |</span><br><span class="line">| TNT1    | TNT (1 stick)  |</span><br><span class="line">| TNT2    | TNT (5 sticks) |</span><br><span class="line">+---------+----------------+</span><br></pre></td></tr></table></figure>
-
-<h3 id="自然联结"><a href="#自然联结" class="headerlink" title="自然联结"></a>自然联结</h3><p>自然联结排除多次出现，使每个列只返回一次。</p>
-<h3 id="外部联结"><a href="#外部联结" class="headerlink" title="外部联结"></a>外部联结</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select customers.cust_id, orders.order_num </span><br><span class="line">    -&gt; from customers left outer join orders</span><br><span class="line">    -&gt; on customers.cust_id &#x3D; orders.cust_id;</span><br><span class="line">+---------+-----------+</span><br><span class="line">| cust_id | order_num |</span><br><span class="line">+---------+-----------+</span><br><span class="line">|   10001 |     20005 |</span><br><span class="line">|   10001 |     20009 |</span><br><span class="line">|   10002 |      NULL |</span><br><span class="line">|   10003 |     20006 |</span><br><span class="line">|   10004 |     20007 |</span><br><span class="line">|   10005 |     20008 |</span><br><span class="line">+---------+-----------+</span><br></pre></td></tr></table></figure>
-<p>外部联结不同于内部联结的是，除了关联的行，外部联结还会包含没有关联的行。外部联结除了要使用<code>outer</code>之外，还必须要使用是left或者right。使用left代表左边表（customers）中选择所有行，right代表右边表选择所有行。当然，未匹配行但被选择的行的将会被置为NULL。如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select c.cust_id, c.cust_name,o.cust_id, o.order_num</span><br><span class="line">    -&gt; from customers as c left outer join orders as o</span><br><span class="line">    -&gt; on c.cust_id &#x3D; o.cust_id;</span><br><span class="line">+---------+----------------+---------+-----------+</span><br><span class="line">| cust_id | cust_name      | cust_id | order_num |</span><br><span class="line">+---------+----------------+---------+-----------+</span><br><span class="line">|   10001 | Coyote Inc.    |   10001 |     20005 |</span><br><span class="line">|   10001 | Coyote Inc.    |   10001 |     20009 |</span><br><span class="line">|   10002 | Mouse House    |    NULL |      NULL |</span><br><span class="line">|   10003 | Wascals        |   10003 |     20006 |</span><br><span class="line">|   10004 | Yosemite Place |   10004 |     20007 |</span><br><span class="line">|   10005 | E Fudd         |   10005 |     20008 |</span><br><span class="line">+---------+----------------+---------+-----------+</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="使用带聚集函数的联结"><a href="#使用带聚集函数的联结" class="headerlink" title="使用带聚集函数的联结"></a>使用带聚集函数的联结</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select c.cust_name, c.cust_id,count(o.order_num) as num_ord </span><br><span class="line">    -&gt; from customers as c inner join orders as o   </span><br><span class="line">    -&gt; on c.cust_id &#x3D; o.cust_id group by c.cust_id;</span><br><span class="line">+----------------+---------+---------+</span><br><span class="line">| cust_name      | cust_id | num_ord |</span><br><span class="line">+----------------+---------+---------+</span><br><span class="line">| Coyote Inc.    |   10001 |       2 |</span><br><span class="line">| Wascals        |   10003 |       1 |</span><br><span class="line">| Yosemite Place |   10004 |       1 |</span><br><span class="line">| E Fudd         |   10005 |       1 |</span><br><span class="line">+----------------+---------+---------+</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1205,7 +1265,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-count">118</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

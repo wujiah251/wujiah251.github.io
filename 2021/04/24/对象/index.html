@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="对象对象的类型与编码Redis使用对象来表示数据库中的键和值，每次当我们在Redis的数据库中新创建一个键值对时，我们至少会创建两个对象，一个对象用作键值对的键（键对象），另一个对象用作键值对的值（值对象）。   Redis中的每个对象都由一个redisObject结构表示，该结构中和保存数据有关的三个属性分别是type属性、encoding属性和ptr属性：   12345678typedef">
+  <meta name="description" content="本文是《Redis设计与实现》中关于对象的内容的笔记。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="对象">
 <meta property="og:url" content="http://example.com/2021/04/24/%E5%AF%B9%E8%B1%A1/index.html">
 <meta property="og:site_name" content="码码更健康">
-<meta property="og:description" content="对象对象的类型与编码Redis使用对象来表示数据库中的键和值，每次当我们在Redis的数据库中新创建一个键值对时，我们至少会创建两个对象，一个对象用作键值对的键（键对象），另一个对象用作键值对的值（值对象）。   Redis中的每个对象都由一个redisObject结构表示，该结构中和保存数据有关的三个属性分别是type属性、encoding属性和ptr属性：   12345678typedef">
+<meta property="og:description" content="本文是《Redis设计与实现》中关于对象的内容的笔记。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2021/04/24/images/%E5%AF%B9%E8%B1%A1/image-20210424232016862.png">
 <meta property="og:image" content="http://example.com/2021/04/24/images/%E5%AF%B9%E8%B1%A1/image-20210424232122061.png">
@@ -44,7 +44,7 @@
 <meta property="og:image" content="http://example.com/2021/04/24/images/%E5%AF%B9%E8%B1%A1/image-20210425222741769.png">
 <meta property="og:image" content="http://example.com/2021/04/24/images/%E5%AF%B9%E8%B1%A1/image-20210425231121597.png">
 <meta property="article:published_time" content="2021-04-23T16:41:00.000Z">
-<meta property="article:modified_time" content="2021-04-25T15:35:57.880Z">
+<meta property="article:modified_time" content="2021-04-27T15:10:20.725Z">
 <meta property="article:author" content="乡村程序员">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/04/24/images/%E5%AF%B9%E8%B1%A1/image-20210424232016862.png">
@@ -241,7 +241,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-25 23:35:57" itemprop="dateModified" datetime="2021-04-25T23:35:57+08:00">2021-04-25</time>
+                <time title="修改时间：2021-04-27 23:10:20" itemprop="dateModified" datetime="2021-04-27T23:10:20+08:00">2021-04-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -264,7 +264,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><h2 id="对象的类型与编码"><a href="#对象的类型与编码" class="headerlink" title="对象的类型与编码"></a>对象的类型与编码</h2><p>Redis使用对象来表示数据库中的键和值，每次当我们在Redis的数据库中新创建一个键值对时，我们至少会创建两个对象，一个对象用作键值对的键（键对象），另一个对象用作键值对的值（值对象）。  </p>
+        <p>本文是《Redis设计与实现》中关于对象的内容的笔记。<br> <span id="more"></span></p>
+<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><h2 id="对象的类型与编码"><a href="#对象的类型与编码" class="headerlink" title="对象的类型与编码"></a>对象的类型与编码</h2><p>Redis使用对象来表示数据库中的键和值，每次当我们在Redis的数据库中新创建一个键值对时，我们至少会创建两个对象，一个对象用作键值对的键（键对象），另一个对象用作键值对的值（值对象）。  </p>
 <p>Redis中的每个对象都由一个redisObject结构表示，该结构中和保存数据有关的三个属性分别是type属性、encoding属性和ptr属性：  </p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span>&#123;</span></span><br><span class="line">  <span class="comment">//类型</span></span><br><span class="line">  <span class="keyword">unsigned</span> type:<span class="number">4</span>;</span><br><span class="line">  <span class="comment">// 编码</span></span><br><span class="line">  <span class="keyword">unsigned</span> encoding:<span class="number">4</span>;</span><br><span class="line">  <span class="comment">// 指向底层实现数据结构的指针</span></span><br><span class="line">  <span class="keyword">void</span> *ptr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h3><p>type属性记录了对象的类型，这个属性的值可以是表中列出的常量的其中一个。  </p>
@@ -405,7 +406,10 @@
     <a href="/2021/04/23/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/" rel="prev" title="压缩列表">
       <i class="fa fa-chevron-left"></i> 压缩列表
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/27/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="next" title="数据库">
+      数据库 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -480,7 +484,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-count">118</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

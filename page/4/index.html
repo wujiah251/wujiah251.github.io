@@ -191,6 +191,163 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E5%AE%B9%E5%99%A8%E4%B9%8B%E5%88%86%E7%B1%BB%E4%B8%8E%E5%90%84%E7%A7%8D%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/28/%E5%AE%B9%E5%99%A8%E4%B9%8B%E5%88%86%E7%B1%BB%E4%B8%8E%E5%90%84%E7%A7%8D%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">容器之分类</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-28 18:33:00" itemprop="dateCreated datePublished" datetime="2021-02-28T18:33:00+08:00">2021-02-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">STL标准库与泛型编程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>容器分类介绍：</p>
+<h1 id="序列式容器"><a href="#序列式容器" class="headerlink" title="序列式容器"></a>序列式容器</h1><h2 id="数组：array"><a href="#数组：array" class="headerlink" title="数组：array"></a>数组：<code>array</code></h2><h2 id="向量：vector"><a href="#向量：vector" class="headerlink" title="向量：vector"></a>向量：<code>vector</code></h2><h2 id="双向队列：Deque"><a href="#双向队列：Deque" class="headerlink" title="双向队列：Deque"></a>双向队列：<code>Deque</code></h2><h2 id="链表：list"><a href="#链表：list" class="headerlink" title="链表：list"></a>链表：<code>list</code></h2><p>双向环状链表。</p>
+<h2 id="Forward-List"><a href="#Forward-List" class="headerlink" title="Forward-List"></a>Forward-List</h2><p>这是C++11新增的，是单向链表。</p>
+<h1 id="关联式容器"><a href="#关联式容器" class="headerlink" title="关联式容器"></a>关联式容器</h1><h2 id="集合：set-multiset"><a href="#集合：set-multiset" class="headerlink" title="集合：set/multiset"></a>集合：<code>set/multiset</code></h2><p>红黑树实现。<code>set/multiset</code>只保存key。mutiset和set的区别就是前者可以重复，后者不能重复。  </p>
+<h2 id="查找表：map-multimap"><a href="#查找表：map-multimap" class="headerlink" title="查找表：map/multimap"></a>查找表：<code>map/multimap</code></h2><p>红黑树实现。<code>map/multimap</code>保存<code>&lt;key,value&gt;</code>，通过key进行检索，multiset和set的区别在于key是否可以重复。  </p>
+<h1 id="无序容器-Unordered-Containers"><a href="#无序容器-Unordered-Containers" class="headerlink" title="无序容器,Unordered Containers"></a>无序容器,Unordered Containers</h1><h2 id="哈希表：HashTable"><a href="#哈希表：HashTable" class="headerlink" title="哈希表：HashTable"></a>哈希表：HashTable</h2><p>哈希表就是通过hash函数来计算一个哈希值来确定数据放入的位置和查找的位置。理论上我们希望可以通过计算hash值直接找到每个元素的位置，但实际上会有hash冲突，即不同的key有相同的hash值，所以hash表的关键就是如何解决hash冲突，常见的方法有线性探测、二次探测、开链。一般用开链法。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/STL%E5%85%AD%E5%A4%A7%E9%83%A8%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/28/STL%E5%85%AD%E5%A4%A7%E9%83%A8%E4%BB%B6/" class="post-title-link" itemprop="url">STL六大部件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-28 18:02:31" itemprop="dateCreated datePublished" datetime="2021-02-28T18:02:31+08:00">2021-02-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>STL有六大部件（Components）：  </p>
+<ul>
+<li>容器（Containers）  </li>
+<li>分配器（Allocators）  </li>
+<li>算法（Algorithms）  </li>
+<li>迭代器（Iterators）  </li>
+<li>适配器（Adapters）  </li>
+<li>仿函数（Functors）</li>
+</ul>
+<p><strong>前闭后开区间</strong>：<br>标准库规定所有容器都提供<code>begin()</code>、<code>end()</code>两个迭代器，前一个指向第一个元素，后一个指向最后一个元素的下一个位置。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/C++STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -981,164 +1138,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/19/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/19/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81/" class="post-title-link" itemprop="url">用户态和内核态</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-19 20:39:00" itemprop="dateCreated datePublished" datetime="2021-02-19T20:39:00+08:00">2021-02-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>操作系统维护着相当多的资源，而我们不能给每个进程以相同的权限，所以我们分出了内核态和用户态。用以区分进程能够访问的资源权限。  </p>
-<h1 id="划分"><a href="#划分" class="headerlink" title="划分"></a>划分</h1><p>CPU有不同的指令执行级别，再高执行级别下，代码可以执行特权指令，访问任意的物理地址，这种CPU级别就对应着内核态。而在相应的低级别执行状态下，代码的掌握范围会受到限制。只能在对应级别允许的范围内活动。Intel X86CPU有四种不同的执行级别，Linux只是用了其中0和3级分别表示内核态和用户态</p>
-<p>内核态和用户态之间的桥梁是系统调用，或者说系统调用将整个系统分为用户态和内核态。内核就是控制计算机的硬件资源，例如协调CPU资源，分配内存资源，并且提供稳定的环境供应用程序运行。 </p>
-<p>用户态中和系统调用最近的就是库函数和shell。</p>
-<p>库函数是为了封装系统调用的而存在的，将很多复杂操作封装起来，方便用户使用系统资源。比如可以通过open()来轻松打开文件，malloc()来分配内存，实际上，malloc()还是用了mmap()等系统调用。<br>shell顾名思义，就是外壳的意思。就好像把内核包裹起来的外壳。它是一种特殊的应用程序，俗称命令行。为了方便用户和系统交互，一般一个shell对应一个终端，呈现给用户交互窗口。当然shell也是编程的，它有标准的shell语法，符合其语法的文本叫shell脚本。很多人都会用shell脚本实现一些常用的功能，可以提高工作效率。  </p>
-<p>用户态和内核态切换的方法：  </p>
-<ol>
-<li>系统调用；  </li>
-<li>异常：发生异常后CPU会调用异常处理程序，触发切换，比如缺页异常；  </li>
-<li>外设中断：当外设完成用户的请求时，会向CPU发送中断信号。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/19/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/19/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D/" class="post-title-link" itemprop="url">深拷贝和浅拷贝</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-19 20:00:00" itemprop="dateCreated datePublished" datetime="2021-02-19T20:00:00+08:00">2021-02-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>深拷贝和浅拷贝其实关键在于指针。<br>浅拷贝就是遇到指针只拷贝指针的值。深拷贝遇到指针，会去创建新的内存，然后拷贝指针指向的对象的值。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1210,7 +1209,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-count">118</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

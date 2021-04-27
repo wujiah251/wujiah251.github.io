@@ -191,6 +191,172 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">组合查询</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 20:46:41" itemprop="dateCreated datePublished" datetime="2021-01-27T20:46:41+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="组合查询"><a href="#组合查询" class="headerlink" title="组合查询"></a>组合查询</h1><p>多数SQL查询都只包含从一个或多个表中返回数据的单条SELECT语句。MySQL也允许执行多个查询（多条SELECT语句），并将结果作为单个查询结果集返回。这些组合查询通常称为并（union）或复合查询。</p>
+<h1 id="创建组合查询"><a href="#创建组合查询" class="headerlink" title="创建组合查询"></a>创建组合查询</h1><h2 id="使用UNION"><a href="#使用UNION" class="headerlink" title="使用UNION"></a>使用UNION</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, prod_id,prod_price </span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price &lt;&#x3D; 5</span><br><span class="line">    -&gt; union </span><br><span class="line">    -&gt; select vend_id, prod_id, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id in (1001,1002);</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">| vend_id | prod_id | prod_price |</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">|    1003 | FC      |       2.50 |</span><br><span class="line">|    1002 | FU1     |       3.42 |</span><br><span class="line">|    1003 | SLING   |       4.49 |</span><br><span class="line">|    1003 | TNT1    |       2.50 |</span><br><span class="line">|    1001 | ANV01   |       5.99 |</span><br><span class="line">|    1001 | ANV02   |       9.99 |</span><br><span class="line">|    1001 | ANV03   |      14.99 |</span><br><span class="line">|    1002 | OL1     |       8.99 |</span><br><span class="line">+---------+---------+------------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="包含或取消重复的行"><a href="#包含或取消重复的行" class="headerlink" title="包含或取消重复的行"></a>包含或取消重复的行</h3><p>union会自动去除重复的行，如果需要改变它，返回所有匹配行，则使用UNION ALL。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id,prod_id,prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price &lt;&#x3D; 5</span><br><span class="line">    -&gt; union all</span><br><span class="line">    -&gt; select vend_id, prod_id, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id in (1001,1002);</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">| vend_id | prod_id | prod_price |</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">|    1003 | FC      |       2.50 |</span><br><span class="line">|    1002 | FU1     |       3.42 |</span><br><span class="line">|    1003 | SLING   |       4.49 |</span><br><span class="line">|    1003 | TNT1    |       2.50 |</span><br><span class="line">|    1001 | ANV01   |       5.99 |</span><br><span class="line">|    1001 | ANV02   |       9.99 |</span><br><span class="line">|    1001 | ANV03   |      14.99 |</span><br><span class="line">|    1002 | FU1     |       3.42 |</span><br><span class="line">|    1002 | OL1     |       8.99 |</span><br><span class="line">+---------+---------+------------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="对组合查询结果排序"><a href="#对组合查询结果排序" class="headerlink" title="对组合查询结果排序"></a>对组合查询结果排序</h3><p>在使用<code>union</code>组合查询时，只能使用一条<code>order by</code>子句，它必须出席那在最后一条<code>select</code>语句之后，对于结果集，不存在用一种方式排序一部分，而有用另一种方式排序另一部分的情况，因此不允许使用多条<code>order by</code>子句。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%88%9B%E5%BB%BA%E9%AB%98%E7%BA%A7%E8%81%94%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E5%88%9B%E5%BB%BA%E9%AB%98%E7%BA%A7%E8%81%94%E7%BB%93/" class="post-title-link" itemprop="url">创建高级联结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 20:16:03" itemprop="dateCreated datePublished" datetime="2021-01-27T20:16:03+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="创建高级联结"><a href="#创建高级联结" class="headerlink" title="创建高级联结"></a>创建高级联结</h1><h2 id="使用表别名"><a href="#使用表别名" class="headerlink" title="使用表别名"></a>使用表别名</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_name, cust_contact</span><br><span class="line">    -&gt; from customers as c, orders as o, orderitems as oi</span><br><span class="line">    -&gt; where c.cust_id &#x3D; o.cust_id and oi.order_num &#x3D; o.order_num </span><br><span class="line">    -&gt; and prod_id &#x3D; &#39;TNT2&#39;;</span><br><span class="line">+----------------+--------------+</span><br><span class="line">| cust_name      | cust_contact |</span><br><span class="line">+----------------+--------------+</span><br><span class="line">| Coyote Inc.    | Y Lee        |</span><br><span class="line">| Yosemite Place | Y Sam        |</span><br><span class="line">+----------------+--------------+</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用不同类型的联结"><a href="#使用不同类型的联结" class="headerlink" title="使用不同类型的联结"></a>使用不同类型的联结</h2><h3 id="自联结"><a href="#自联结" class="headerlink" title="自联结"></a>自联结</h3><p>找到生产prod_id为’DTNTR’的供应商生产的所有产品。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id, prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id &#x3D; (select vend_id </span><br><span class="line">    -&gt; from products where prod_id &#x3D; &#39;DTNTR&#39;);</span><br><span class="line">+---------+----------------+</span><br><span class="line">| prod_id | prod_name      |</span><br><span class="line">+---------+----------------+</span><br><span class="line">| DTNTR   | Detonator      |</span><br><span class="line">| FB      | Bird seed      |</span><br><span class="line">| FC      | Carrots        |</span><br><span class="line">| SAFE    | Safe           |</span><br><span class="line">| SLING   | Sling          |</span><br><span class="line">| TNT1    | TNT (1 stick)  |</span><br><span class="line">| TNT2    | TNT (5 sticks) |</span><br><span class="line">+---------+----------------+</span><br></pre></td></tr></table></figure>
+<p>这是一种解决方案，通过子查询来实现。<br>现在来看使用联结的相同查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select p1.prod_id, p1.prod_name</span><br><span class="line">    -&gt; from products as p1, products as p2</span><br><span class="line">    -&gt; where p1.vend_id &#x3D; p2.vend_id</span><br><span class="line">    -&gt; and p2.prod_id &#x3D; &#39;DTNTR&#39;;</span><br><span class="line">+---------+----------------+</span><br><span class="line">| prod_id | prod_name      |</span><br><span class="line">+---------+----------------+</span><br><span class="line">| DTNTR   | Detonator      |</span><br><span class="line">| FB      | Bird seed      |</span><br><span class="line">| FC      | Carrots        |</span><br><span class="line">| SAFE    | Safe           |</span><br><span class="line">| SLING   | Sling          |</span><br><span class="line">| TNT1    | TNT (1 stick)  |</span><br><span class="line">| TNT2    | TNT (5 sticks) |</span><br><span class="line">+---------+----------------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="自然联结"><a href="#自然联结" class="headerlink" title="自然联结"></a>自然联结</h3><p>自然联结排除多次出现，使每个列只返回一次。</p>
+<h3 id="外部联结"><a href="#外部联结" class="headerlink" title="外部联结"></a>外部联结</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select customers.cust_id, orders.order_num </span><br><span class="line">    -&gt; from customers left outer join orders</span><br><span class="line">    -&gt; on customers.cust_id &#x3D; orders.cust_id;</span><br><span class="line">+---------+-----------+</span><br><span class="line">| cust_id | order_num |</span><br><span class="line">+---------+-----------+</span><br><span class="line">|   10001 |     20005 |</span><br><span class="line">|   10001 |     20009 |</span><br><span class="line">|   10002 |      NULL |</span><br><span class="line">|   10003 |     20006 |</span><br><span class="line">|   10004 |     20007 |</span><br><span class="line">|   10005 |     20008 |</span><br><span class="line">+---------+-----------+</span><br></pre></td></tr></table></figure>
+<p>外部联结不同于内部联结的是，除了关联的行，外部联结还会包含没有关联的行。外部联结除了要使用<code>outer</code>之外，还必须要使用是left或者right。使用left代表左边表（customers）中选择所有行，right代表右边表选择所有行。当然，未匹配行但被选择的行的将会被置为NULL。如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select c.cust_id, c.cust_name,o.cust_id, o.order_num</span><br><span class="line">    -&gt; from customers as c left outer join orders as o</span><br><span class="line">    -&gt; on c.cust_id &#x3D; o.cust_id;</span><br><span class="line">+---------+----------------+---------+-----------+</span><br><span class="line">| cust_id | cust_name      | cust_id | order_num |</span><br><span class="line">+---------+----------------+---------+-----------+</span><br><span class="line">|   10001 | Coyote Inc.    |   10001 |     20005 |</span><br><span class="line">|   10001 | Coyote Inc.    |   10001 |     20009 |</span><br><span class="line">|   10002 | Mouse House    |    NULL |      NULL |</span><br><span class="line">|   10003 | Wascals        |   10003 |     20006 |</span><br><span class="line">|   10004 | Yosemite Place |   10004 |     20007 |</span><br><span class="line">|   10005 | E Fudd         |   10005 |     20008 |</span><br><span class="line">+---------+----------------+---------+-----------+</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="使用带聚集函数的联结"><a href="#使用带聚集函数的联结" class="headerlink" title="使用带聚集函数的联结"></a>使用带聚集函数的联结</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select c.cust_name, c.cust_id,count(o.order_num) as num_ord </span><br><span class="line">    -&gt; from customers as c inner join orders as o   </span><br><span class="line">    -&gt; on c.cust_id &#x3D; o.cust_id group by c.cust_id;</span><br><span class="line">+----------------+---------+---------+</span><br><span class="line">| cust_name      | cust_id | num_ord |</span><br><span class="line">+----------------+---------+---------+</span><br><span class="line">| Coyote Inc.    |   10001 |       2 |</span><br><span class="line">| Wascals        |   10003 |       1 |</span><br><span class="line">| Yosemite Place |   10004 |       1 |</span><br><span class="line">| E Fudd         |   10005 |       1 |</span><br><span class="line">+----------------+---------+---------+</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E8%81%94%E7%BB%93%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -888,212 +1054,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4/" class="post-title-link" itemprop="url">数据过滤</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 13:51:38" itemprop="dateCreated datePublished" datetime="2021-01-27T13:51:38+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数据过滤"><a href="#数据过滤" class="headerlink" title="数据过滤"></a>数据过滤</h1><h2 id="组合WHERE子句"><a href="#组合WHERE子句" class="headerlink" title="组合WHERE子句"></a>组合WHERE子句</h2><h3 id="AND和OR操作符"><a href="#AND和OR操作符" class="headerlink" title="AND和OR操作符"></a>AND和OR操作符</h3><p>这两个操作符的作用通过名字就可以看出来，如果没有，结合一下例子，一定可以知道：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id &#x3D; 1003 and prod_price &lt;&#x3D; 10;+---------+------------+</span><br><span class="line">| vend_id | prod_price |</span><br><span class="line">+---------+------------+</span><br><span class="line">|    1003 |      10.00 |</span><br><span class="line">|    1003 |       2.50 |</span><br><span class="line">|    1003 |       4.49 |</span><br><span class="line">|    1003 |       2.50 |</span><br><span class="line">|    1003 |      10.00 |</span><br><span class="line">+---------+------------+</span><br><span class="line">&#x2F;&#x2F; 返回了同时满足vend_id&#x3D;1003和prod_price&lt;&#x3D;10的行。</span><br><span class="line">&#x2F;&#x2F; 接下来我们将and换成or试试看</span><br><span class="line">mysql&gt; select vend_id, prod_price from products where vend_id &#x3D; 1003 or prod_price &lt;&#x3D; 10;</span><br><span class="line">+---------+------------+</span><br><span class="line">| vend_id | prod_price |</span><br><span class="line">+---------+------------+</span><br><span class="line">|    1001 |       5.99 |</span><br><span class="line">|    1001 |       9.99 |</span><br><span class="line">|    1003 |      13.00 |</span><br><span class="line">|    1003 |      10.00 |</span><br><span class="line">|    1003 |       2.50 |</span><br><span class="line">|    1002 |       3.42 |</span><br><span class="line">|    1002 |       8.99 |</span><br><span class="line">|    1003 |      50.00 |</span><br><span class="line">|    1003 |       4.49 |</span><br><span class="line">|    1003 |       2.50 |</span><br><span class="line">|    1003 |      10.00 |</span><br><span class="line">+---------+------------+</span><br><span class="line">&#x2F;&#x2F; 这里我们发现返回的行至少满足vend_id&#x3D;1003和prod_price&lt;&#x3D;10两个条件其中之一。</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="计算次序"><a href="#计算次序" class="headerlink" title="计算次序"></a>计算次序</h3><p>如果同时使用and和or操作符，优先计算and（可以结合高级语言的运算符优先级考虑，C语言中&amp;&amp;优先级高于||）。如果我们希望更改操作符被计算的次序，可以使用圆括号：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where (vend_id &#x3D; 1002 or vend_id &#x3D; 1003) and prod_price &gt;&#x3D; 10;</span><br><span class="line">+----------------+------------+</span><br><span class="line">| prod_name      | prod_price |</span><br><span class="line">+----------------+------------+</span><br><span class="line">| Detonator      |      13.00 |</span><br><span class="line">| Bird seed      |      10.00 |</span><br><span class="line">| Safe           |      50.00 |</span><br><span class="line">| TNT (5 sticks) |      10.00 |</span><br><span class="line">+----------------+------------+</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="IN操作符"><a href="#IN操作符" class="headerlink" title="IN操作符"></a>IN操作符</h2><p>IN操作符用来指定条件范围，范围中每个条件都可以进行匹配。IN取合法值的由逗号分隔的清单，全都括在圆括号中。下面的例子说明了这个操作符：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id in (1001,1002,1003)</span><br><span class="line">    -&gt; order by prod_name;</span><br><span class="line">+----------------+------------+</span><br><span class="line">| prod_name      | prod_price |</span><br><span class="line">+----------------+------------+</span><br><span class="line">| .5 ton anvil   |       5.99 |</span><br><span class="line">| 1 ton anvil    |       9.99 |</span><br><span class="line">| 2 ton anvil    |      14.99 |</span><br><span class="line">| Bird seed      |      10.00 |</span><br><span class="line">| Carrots        |       2.50 |</span><br><span class="line">| Detonator      |      13.00 |</span><br><span class="line">| Fuses          |       3.42 |</span><br><span class="line">| Oil can        |       8.99 |</span><br><span class="line">| Safe           |      50.00 |</span><br><span class="line">| Sling          |       4.49 |</span><br><span class="line">| TNT (1 stick)  |       2.50 |</span><br><span class="line">| TNT (5 sticks) |      10.00 |</span><br><span class="line">+----------------+------------+</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="NOT操作符"><a href="#NOT操作符" class="headerlink" title="NOT操作符"></a>NOT操作符</h2><p><strong>NOT</strong> <code>WHERE</code>子句中用来否定后跟条件的关键字。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E8%BF%87%E6%BB%A4%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E8%BF%87%E6%BB%A4%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">过滤数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 13:30:11" itemprop="dateCreated datePublished" datetime="2021-01-27T13:30:11+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="过滤数据"><a href="#过滤数据" class="headerlink" title="过滤数据"></a>过滤数据</h1><h2 id="使用WHERE子句"><a href="#使用WHERE子句" class="headerlink" title="使用WHERE子句"></a>使用WHERE子句</h2><p>在<code>select</code>语句中，数据根据<code>where</code>子句中指定的搜索条件进行过滤。<code>where</code>子句在表名之后给出，如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, prod_price from products where prod_price &#x3D; 2.50;</span><br><span class="line">+---------------+------------+</span><br><span class="line">| prod_name     | prod_price |</span><br><span class="line">+---------------+------------+</span><br><span class="line">| Carrots       |       2.50 |</span><br><span class="line">| TNT (1 stick) |       2.50 |</span><br><span class="line">+---------------+------------+</span><br></pre></td></tr></table></figure>
-<p><strong>SQL过滤与应用过滤</strong> 数据也可以在应用层过滤。为此目的，SQL的SELECT语句为客户机应用检索超出实际所需的数据，然后客户机代码对返回数据进行循环，以提取出需要的行。但是在客户机上过滤数据，服务器将不得不通过网络发送多余的数据，这将导致网络带宽的浪费。<br><strong>WHERE子句的位置</strong> 在同时使用<code>ORDER BY</code>和<code>WHERE</code>子句时，应该让<code>ORDER BY</code>位于<code>WHERE</code>之后，否则将产生错误。</p>
-<h2 id="WHERE子句操作符"><a href="#WHERE子句操作符" class="headerlink" title="WHERE子句操作符"></a>WHERE子句操作符</h2><p><code>where</code>不仅能进行相等测试，还能进行其他测试，如下所示：  </p>
-<table>
-  <tr>
-    <th>操作符</th>
-    <th>说明</th>
-  </tr>
-  <tr>
-    <td>=</td>
-    <td>等于</td>
-  </tr>
-  <tr>
-    <td><\></td>
-    <td>不等于</td>
-  </tr>
-  <tr>
-    <td>!=</td>
-    <td>不等于</td>
-  </tr>
-  <tr>
-    <td>< </td>
-    <td>小于</td>
-  </tr>
-  <tr>
-    <td><= </td>
-    <td>小于等于</td>
-  </tr>
-  <tr>
-    <td>> </td>
-    <td>大于</td>
-  </tr>
-  <tr>
-    <td>>= </td>
-    <td>大于等于</td>
-  </tr>
-  <tr>
-    <td>BETWEEN</td>
-    <td>在指定的两个值之间</td>
-  </tr>
-</table>
-
-<h3 id="范围值检查"><a href="#范围值检查" class="headerlink" title="范围值检查"></a>范围值检查</h3><p>为了检查某个返回，我们使用<code>BETWEEN</code>操作符。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price between 5 and 10;</span><br><span class="line">+----------------+------------+</span><br><span class="line">| prod_name      | prod_price |</span><br><span class="line">+----------------+------------+</span><br><span class="line">| .5 ton anvil   |       5.99 |</span><br><span class="line">| 1 ton anvil    |       9.99 |</span><br><span class="line">| Bird seed      |      10.00 |</span><br><span class="line">| Oil can        |       8.99 |</span><br><span class="line">| TNT (5 sticks) |      10.00 |</span><br><span class="line">+----------------+------------+</span><br></pre></td></tr></table></figure>
-<p>从这个例子中，我们可以看出，在使用<code>between</code>时，必须指定两个值–所需范围的最大值和最小值，然后这两个值要用<code>AND</code>分割开来，<code>between</code>匹配范围中的所有值，包括两个边界值。</p>
-<h3 id="空值检查"><a href="#空值检查" class="headerlink" title="空值检查"></a>空值检查</h3><p><code>IS NULL</code> 可以用于空值检查。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_id from customers</span><br><span class="line">    -&gt; where cust_email is null;</span><br><span class="line">+---------+</span><br><span class="line">| cust_id |</span><br><span class="line">+---------+</span><br><span class="line">|   10002 |</span><br><span class="line">|   10005 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1165,7 +1125,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-count">118</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
