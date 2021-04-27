@@ -29,17 +29,17 @@
 <meta property="og:site_name" content="码码更健康">
 <meta property="og:description" content="本文是《Redis设计与实现》中关于RDB持久化的内容的笔记。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/Users/admin/Desktop/截屏2021-04-27%20下午6.55.30.png">
-<meta property="og:image" content="http://example.com/Users/admin/Desktop/截屏2021-04-27%20下午7.30.04.png">
-<meta property="og:image" content="http://example.com/Users/admin/Desktop/截屏2021-04-27%20下午7.31.37.png">
-<meta property="og:image" content="http://example.com/Users/admin/Desktop/截屏2021-04-27%20下午7.41.55.png">
-<meta property="og:image" content="http://example.com/Users/admin/Desktop/截屏2021-04-27%20下午7.42.17.png">
-<meta property="og:image" content="http://example.com/Users/admin/Library/Application%20Support/typora-user-images/截屏2021-04-27%20下午7.44.33.png">
+<meta property="og:image" content="http://example.com/2021/04/27/images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231327280.png">
+<meta property="og:image" content="http://example.com/2021/04/27/images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231349502.png">
+<meta property="og:image" content="http://example.com/2021/04/27/images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231406992.png">
+<meta property="og:image" content="http://example.com/2021/04/27/images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231426094.png">
+<meta property="og:image" content="http://example.com/2021/04/27/images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231446483.png">
+<meta property="og:image" content="http://example.com/2021/04/27/images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231509645.png">
 <meta property="article:published_time" content="2021-04-27T14:24:00.000Z">
-<meta property="article:modified_time" content="2021-04-27T15:09:50.962Z">
+<meta property="article:modified_time" content="2021-04-27T15:15:13.865Z">
 <meta property="article:author" content="乡村程序员">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/Users/admin/Desktop/截屏2021-04-27%20下午6.55.30.png">
+<meta name="twitter:image" content="http://example.com/2021/04/27/images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231327280.png">
 
 <link rel="canonical" href="http://example.com/2021/04/27/RDB%E6%8C%81%E4%B9%85%E5%8C%96/">
 
@@ -227,7 +227,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-04-27 22:24:00 / 修改时间：23:09:50" itemprop="dateCreated datePublished" datetime="2021-04-27T22:24:00+08:00">2021-04-27</time>
+              <time title="创建时间：2021-04-27 22:24:00 / 修改时间：23:15:13" itemprop="dateCreated datePublished" datetime="2021-04-27T22:24:00+08:00">2021-04-27</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -280,7 +280,7 @@
 <h3 id="检查保存条件是否满足"><a href="#检查保存条件是否满足" class="headerlink" title="检查保存条件是否满足"></a>检查保存条件是否满足</h3><p>Redis的服务器周期性操作函数serverCron默认每隔100毫秒就会执行一次，该函数用于对正在运行的服务器进行维护，它的其中一项工作就是检查save选项所设置的保存条件是否已经满足，如果满足的话，就执行BGSAVE命令。</p>
 <p>程序会遍历saveparams数组中的所有保存条件，只要有任意一个条件被满足，那么服务器就会执行BGSAVE命令。</p>
 <h3 id="RDB文件结构"><a href="#RDB文件结构" class="headerlink" title="RDB文件结构"></a>RDB文件结构</h3><p>下图展示了一个完整的RDB文件所包含的各个部分：</p>
-<p><img src="/Users/admin/Desktop/截屏2021-04-27 下午6.55.30.png" alt="截屏2021-04-27 下午6.55.30"></p>
+<p><img src="../images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231327280.png" alt="image-20210427231327280"></p>
 <p>REDIS部分的长度为5字节，保存着“REDIS”五个字符。通过这五个字符，程序可以在读入的时候判断所载入的文件是否是RDB文件。</p>
 <p>db_version长度为4字节，它的值是一个字符串表示的整数，这个整数记录了RDB文件的版本号。</p>
 <p>databases部分包含了零个或任意多个数据库，以及各个数据库中的键值对数据：</p>
@@ -291,19 +291,19 @@
 <p>EOF常量的长度为1字节，这个常量标志着RDB文件正文内容的结束，当读入程序遇到这个值的时候，它知道所有数据库的所有键值对都已经载入完毕了。</p>
 <p>check_sum是一个8字节长的无符号整数，保存着一个校验和，这个校验和事程序通过对REDIS、db_version、databases、EOF四个部分的内容进行计算得出的。服务器在载入RDB文件时，会将载入数据所计算出的校验和与check_sum所记录校验和进行对比，以此来检查RDB文件是否有出错或者损坏的情况出现。</p>
 <h3 id="databases部分"><a href="#databases部分" class="headerlink" title="databases部分"></a>databases部分</h3><p>如果服务器的0号数据库和3号数据库非空的话，那么服务器将创建一个如图所示的RDB数据库：</p>
-<p><img src="/Users/admin/Desktop/截屏2021-04-27 下午7.30.04.png" alt="截屏2021-04-27 下午7.30.04"></p>
+<p><img src="../images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231349502.png" alt="image-20210427231349502"></p>
 <p>每个非空数据库在RDB文件中都可以保存为SELECTDB、db_number、key_value_pairs三个部分，如图所示：</p>
-<p><img src="/Users/admin/Desktop/截屏2021-04-27 下午7.31.37.png" alt="截屏2021-04-27 下午7.31.37"></p>
+<p><img src="../images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231406992.png" alt="image-20210427231406992"></p>
 <p>SELECTDB常量的长度为1字节，当读入程序遇到这个值的时候，它知道接下来要读入的将是一个数据库号码。</p>
 <p>db_number保存着一个数据库号码，根据号码的大小不同，这个部分的长度可以是1字节、2字节或者5字节。当程序读入db_number部分之后，服务器会调用select命令，根据读入的数据库号码进行数据库切换，使得之后读入的键值对可以载入到正确的数据库中。</p>
 <p>key_value_pairs部分保存了数据库中的所有键值对数据，如果键值对带有过期时间，那么过期时间也会和键值对保存在一起。根据键值对的数量、类型、内容以及是否有过期时间等条件的不同，key_value_pairs部分的长度也会有所不同。</p>
 <h3 id="key-value-pairs部分"><a href="#key-value-pairs部分" class="headerlink" title="key_value_pairs部分"></a>key_value_pairs部分</h3><p>不带过期时间的键值对在RDB文件中由TYPE、key、value三部分组成，如图所示：</p>
-<p><img src="/Users/admin/Desktop/截屏2021-04-27 下午7.41.55.png" alt="截屏2021-04-27 下午7.41.55"></p>
+<p><img src="../images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231426094.png" alt="image-20210427231426094"></p>
 <p>TYPE 记录了value的类型，长度为1字节，值可以是以下常量的其中一个：</p>
-<p><img src="/Users/admin/Desktop/截屏2021-04-27 下午7.42.17.png" alt="截屏2021-04-27 下午7.42.17"></p>
+<p><img src="../images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231446483.png" alt="image-20210427231446483"></p>
 <p>当服务器读入RDB文件中的键值对数据时，程序会根据TYPE的值来决定如何读入和解释value的数据。</p>
 <p>带有过期时间的键值对在RDB文件中的结构如图所示：</p>
-<p><img src="/Users/admin/Library/Application Support/typora-user-images/截屏2021-04-27 下午7.44.33.png" alt="截屏2021-04-27 下午7.44.33"></p>
+<p><img src="../images/RDB%E6%8C%81%E4%B9%85%E5%8C%96/image-20210427231509645.png" alt="image-20210427231509645"></p>
 <h3 id="value的编码"><a href="#value的编码" class="headerlink" title="value的编码"></a>value的编码</h3><p>RDB文件中每个value部分都保存了一个值对象，每个值对象的类型都由与之对应的TYPE记录，根据类型的不同，value部分的结构、长度也会有所不同。</p>
 <h2 id="分析RDB文件"><a href="#分析RDB文件" class="headerlink" title="分析RDB文件"></a>分析RDB文件</h2><p>可以这样分析RDB文件：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> od -c dump.rdb //使用ASCII编码打印RDB文件</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> od -cx dump.rdb //同时以ASCII编码和16进制格式打印RDB文件</span> </span><br></pre></td></tr></table></figure>
