@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/leaf-favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/leaf-favicon-16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="AOF持久化与RDB持久化通过保存数据库中的键值对来记录数据库状态不同，AOF持久化是通过保存Redis服务器所执行的写命令来记录数据库状态的。 AOF持久化的实现当AOF持久化功能处于打开状态时，服务器执行完一个写命令之后，会以协议格式将被执行的写命令追加到服务器状态的aof_buf缓冲区末尾。 AOF文件的写入和同步Redis服务器就是一个时间循环，这个循环中的文件事件负责接收客户端的命令请求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AOF持久化">
+<meta property="og:url" content="http://example.com/2021/04/29/AOF%E6%8C%81%E4%B9%85%E5%8C%96/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="AOF持久化与RDB持久化通过保存数据库中的键值对来记录数据库状态不同，AOF持久化是通过保存Redis服务器所执行的写命令来记录数据库状态的。 AOF持久化的实现当AOF持久化功能处于打开状态时，服务器执行完一个写命令之后，会以协议格式将被执行的写命令追加到服务器状态的aof_buf缓冲区末尾。 AOF文件的写入和同步Redis服务器就是一个时间循环，这个循环中的文件事件负责接收客户端的命令请求">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-29T15:59:00.000Z">
+<meta property="article:modified_time" content="2021-04-29T15:59:57.110Z">
+<meta property="article:author" content="乡村程序员">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/04/29/AOF%E6%8C%81%E4%B9%85%E5%8C%96/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>AOF持久化 | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">对代码永远保持敬畏</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/29/AOF%E6%8C%81%E4%B9%85%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          AOF持久化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-29 23:59:00 / 修改时间：23:59:57" itemprop="dateCreated datePublished" datetime="2021-04-29T23:59:00+08:00">2021-04-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h1><p>与RDB持久化通过保存数据库中的键值对来记录数据库状态不同，AOF持久化是通过保存Redis服务器所执行的写命令来记录数据库状态的。</p>
+<h2 id="AOF持久化的实现"><a href="#AOF持久化的实现" class="headerlink" title="AOF持久化的实现"></a>AOF持久化的实现</h2><p>当AOF持久化功能处于打开状态时，服务器执行完一个写命令之后，会以协议格式将被执行的写命令追加到服务器状态的aof_buf缓冲区末尾。</p>
+<h3 id="AOF文件的写入和同步"><a href="#AOF文件的写入和同步" class="headerlink" title="AOF文件的写入和同步"></a>AOF文件的写入和同步</h3><p>Redis服务器就是一个时间循环，这个循环中的文件事件负责接收客户端的命令请求，以及向客户端发送命令回复，而时间事件则负责执行像serverCron函数这样需要定时运行的函数。</p>
+<p>服务器在每次结束一个时间循环之前，它都会调用flushAppendOnlyFile函数，考虑是否需要将aof_buf缓冲区内容写入和保存在AOF文件里面。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">eventLoop</span>():</span></span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		processFileEvents()</span><br><span class="line">		processTimeEvents()</span><br><span class="line">		flushAppendOnlyFile()</span><br></pre></td></tr></table></figure>
+<p>flushAppendOnlyFile()函数的行为由服务器配置的appendfsync选项的值来决定，各个不同值产生的行为如表所示：</p>
+<h2 id="AOF文件的载入与数据还原"><a href="#AOF文件的载入与数据还原" class="headerlink" title="AOF文件的载入与数据还原"></a>AOF文件的载入与数据还原</h2><p>AOF文件中包含了重建数据库状态的所需所有写命令，所以服务器只需要读入并重新执行一遍AOF文件里面保存的写命令，就可以还原服务器关闭之前的数据库状态。详细步骤：</p>
+<ol>
+<li>创建一个不带网络连接的伪客户端（因为Redis命令只能在客户端上下文中执行）。</li>
+<li>从AOF文件中分析并读取出一条写命令。</li>
+<li>使用伪客户端执行被读出的命令。</li>
+<li>一直执行步骤2和步骤3，直到AOF文件中所有的写命令都被处理完毕为止。</li>
+</ol>
+<h2 id="AOF重写"><a href="#AOF重写" class="headerlink" title="AOF重写"></a>AOF重写</h2><p>为了解决AOF体积膨胀的问题，Redis提供了AOF文件重写功能。通过该功能，Redis服务器可以创建一个新的AOF文件来替代线有的AOF文件，新旧两个AOF文件所保存的数据库状态相同，但新AOF文件不会包含任何浪费空间冗余命令。所以新AOF文件的体积通常会比旧AOF文件的体积要小很多。</p>
+<h3 id="AOF文件重写的实现"><a href="#AOF文件重写的实现" class="headerlink" title="AOF文件重写的实现"></a>AOF文件重写的实现</h3><p>虽然Redis服务器将生成新的AOF文件替换旧的AOF文件的功能命名为AOF重写。但实际上，AOF文件重写并不需要对现有的AOF文件进行任何读取、分析或者写入操作。这个功能实际上是通过读取服务器当前的数据库状态来实现。伪代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">aof_write</span>(<span class="params">new_aof_file_name</span>):</span></span><br><span class="line">  <span class="comment"># 创建新的AOF文件</span></span><br><span class="line">  f = create_file(new_aof_file_name)</span><br><span class="line">  <span class="comment"># 遍历数据库</span></span><br><span class="line">  <span class="keyword">for</span> db <span class="keyword">in</span> redisServer.db:</span><br><span class="line">    <span class="comment"># 忽略空数据库</span></span><br><span class="line">    <span class="keyword">if</span> db.is_empty():<span class="keyword">continue</span></span><br><span class="line">    <span class="comment"># 写入select命令，指定数据库号码</span></span><br><span class="line">    f.write_command(<span class="string">&quot;SELECT&quot;</span> + db.<span class="built_in">id</span>)</span><br><span class="line">    <span class="comment"># 遍历数据库中所有的键</span></span><br><span class="line">   	<span class="keyword">for</span> key <span class="keyword">in</span> db:</span><br><span class="line">      <span class="keyword">if</span> key.is_expired():<span class="keyword">continue</span></span><br><span class="line">      <span class="comment"># 根据键的类型对键进行重写</span></span><br><span class="line">      <span class="keyword">if</span> key.<span class="built_in">type</span> == String:</span><br><span class="line">        rewrite_string(key)</span><br><span class="line">      <span class="keyword">elif</span> key.<span class="built_in">type</span> == <span class="type">List</span>:</span><br><span class="line">        rewrite_list(key)</span><br><span class="line">      <span class="keyword">elif</span> key.<span class="built_in">type</span> == Hash:</span><br><span class="line">        rewrite_hash(key)</span><br><span class="line">      <span class="keyword">elif</span> key.<span class="built_in">type</span> == <span class="type">Set</span>:</span><br><span class="line">        rewrite_set(key)</span><br><span class="line">      <span class="keyword">elif</span> key.<span class="built_in">type</span> == SortedSet:</span><br><span class="line">        rewrite_sorted_set(key)</span><br><span class="line">      <span class="comment"># 如果键带有过期时间，那么过期时间也要被重写</span></span><br><span class="line">      <span class="keyword">if</span> key.have_expire_time():</span><br><span class="line">        rewrite_expire_time(key)</span><br><span class="line"> 	<span class="comment"># 写入完毕，关闭文件</span></span><br><span class="line">  f.close()</span><br></pre></td></tr></table></figure>
+<p>因为aof_rewrite函数所生成的新的AOF文件只包含还原当前数据库状态所必须的命令，所以新的AOF文件不会浪费任何硬盘空间。</p>
+<h3 id="AOF后台重写"><a href="#AOF后台重写" class="headerlink" title="AOF后台重写"></a>AOF后台重写</h3><p>上面介绍的AOF重写程序aof_write函数可以很好地完成创建一个新的AOF文件的任务，但是因为这个函数会进行大量的写入操作，所以调用这个函数的线程将长时间阻塞，因为Redis服务器使用单线程来处理命令请求，所以服务器直接调用aof_rewrite函数的话，那么在重写AOF文件期间，服务将无法处理客户端发来的命令请求。</p>
+<p>很明显作为一种辅佐性的维护手段，Redis不希望AOF重写造成服务器无法处理请求，所以Redis决定将AOF重写程序放在子进程当中。这样可以同时做到两个不同的目的：</p>
+<ul>
+<li>子进程进行AOF重写期间，服务器进程（父进程）可以继续处理命令请求。</li>
+<li>子进程带有服务器进程的数据副本，使用子进程而不是线程，可以避免使用锁的情况下，保证数据的安全性。</li>
+</ul>
+<p>但是这还有一个问题，就是重写过程中，服务器接受到了新的命令，如果不写入新的AOF文件当中，会产生不一致的问题。</p>
+<p>为了解决这种数据不一致的问题，Redis服务器设置了一个AOF重写缓冲区。</p>
+<p>当Redis服务器执行完成一个写命令之后会把这个命令发送给AOF缓冲区和AOF重写缓冲区。</p>
+<h2 id="重点回顾"><a href="#重点回顾" class="headerlink" title="重点回顾"></a>重点回顾</h2><ul>
+<li>AOF文件通过保存所有修改数据库的写命令请求来记录服务器的数据库状态。</li>
+<li>AOF文件中的所有命令都以Redis命令请求协议的格式保存。</li>
+<li>命令请求会先保存到AOF缓冲区里面，之后再定期写入并同步到AOF文件。</li>
+<li>appendfsync选项的不同值对AOF持久化功能的安全性以及Redis服务器的性能有很大影响。</li>
+<li>服务器只要载入并重新执行保存在AOF文件中的命令，就可以还原数据库本来的状态。</li>
+<li>AOF重写可以产生一个新的AOF文件中的命令，这个新的AOF文件的和原来相比保存的数据库状态一样，但体积更小。</li>
+<li>在执行BGREWRITEAOF命令时，Redis服务器会维护一个AOF重写缓冲区，该缓冲区会在子进程创建新的AOF文件期间，记录服务器执行的所有写命令，当子进程创建新AOF文件的工作之后，服务器会将重写缓冲区中的所有内容追加到新AOF文件的末尾，使得新旧两个AOF文件所保存的数据库状态一致。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/27/RDB%E6%8C%81%E4%B9%85%E5%8C%96/" rel="prev" title="RDB持久化">
+      <i class="fa fa-chevron-left"></i> RDB持久化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/30/%E4%BA%8B%E5%8A%A1/" rel="next" title="事务">
+      事务 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AOF%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">AOF持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.</span> <span class="nav-text">AOF持久化的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%99%E5%85%A5%E5%92%8C%E5%90%8C%E6%AD%A5"><span class="nav-number">1.1.1.</span> <span class="nav-text">AOF文件的写入和同步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF%E6%96%87%E4%BB%B6%E7%9A%84%E8%BD%BD%E5%85%A5%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%BF%98%E5%8E%9F"><span class="nav-number">1.2.</span> <span class="nav-text">AOF文件的载入与数据还原</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF%E9%87%8D%E5%86%99"><span class="nav-number">1.3.</span> <span class="nav-text">AOF重写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF%E6%96%87%E4%BB%B6%E9%87%8D%E5%86%99%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">AOF文件重写的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF%E5%90%8E%E5%8F%B0%E9%87%8D%E5%86%99"><span class="nav-number">1.3.2.</span> <span class="nav-text">AOF后台重写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E7%82%B9%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.4.</span> <span class="nav-text">重点回顾</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乡村程序员"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wujiah251" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wujiah251" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/wujiahao.mail@gmail.com" title="E-Mail → wujiahao.mail@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='45,45,200' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

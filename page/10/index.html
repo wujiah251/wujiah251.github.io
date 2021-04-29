@@ -191,6 +191,173 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%90%9C%E7%B4%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%90%9C%E7%B4%A2/" class="post-title-link" itemprop="url">用正则表达式进行搜索</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 14:16:25" itemprop="dateCreated datePublished" datetime="2021-01-27T14:16:25+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="用正则表达式进行搜索"><a href="#用正则表达式进行搜索" class="headerlink" title="用正则表达式进行搜索"></a>用正则表达式进行搜索</h1><h2 id="正则表达式介绍"><a href="#正则表达式介绍" class="headerlink" title="正则表达式介绍"></a>正则表达式介绍</h2><p>正则表达式是用来匹配文本的特殊的串。如果想要从一个文本文件匹配一个电话号码，就可以使用正则表达式。</p>
+<h2 id="使用MySQL正则表达式"><a href="#使用MySQL正则表达式" class="headerlink" title="使用MySQL正则表达式"></a>使用MySQL正则表达式</h2><h3 id="基本字符匹配"><a href="#基本字符匹配" class="headerlink" title="基本字符匹配"></a>基本字符匹配</h3><p>下面的语句检索列prod_name包含文本1000的所有行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;1000&#39;</span><br><span class="line">    -&gt; order by prod_name;</span><br><span class="line">+--------------+</span><br><span class="line">| prod_name    |</span><br><span class="line">+--------------+</span><br><span class="line">| JetPack 1000 |</span><br><span class="line">+--------------+</span><br></pre></td></tr></table></figure>
+<p>为什么要费力的使用正则表达式了，我们可以再看看下面这个例子，<code>.</code>标识匹配任意字符，因此1000和2000都匹配返回。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;.000&#39;</span><br><span class="line">    -&gt; order by prod_name</span><br><span class="line">    -&gt; ;</span><br><span class="line">+--------------+</span><br><span class="line">| prod_name    |</span><br><span class="line">+--------------+</span><br><span class="line">| JetPack 1000 |</span><br><span class="line">| JetPack 2000 |</span><br><span class="line">+--------------+</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="进行OR匹配"><a href="#进行OR匹配" class="headerlink" title="进行OR匹配"></a>进行OR匹配</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;1000|2000&#39;</span><br><span class="line">    -&gt; order by prod_name;</span><br><span class="line">+--------------+</span><br><span class="line">| prod_name    |</span><br><span class="line">+--------------+</span><br><span class="line">| JetPack 1000 |</span><br><span class="line">| JetPack 2000 |</span><br><span class="line">+--------------+</span><br></pre></td></tr></table></figure>
+<p>语句中使用了正则表达式<code>1000|2000</code>，其中<code>|</code>表示匹配其中之一。</p>
+<h3 id="匹配几个字符之一"><a href="#匹配几个字符之一" class="headerlink" title="匹配几个字符之一"></a>匹配几个字符之一</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;[123] Ton&#39;;</span><br><span class="line">+-------------+</span><br><span class="line">| prod_name   |</span><br><span class="line">+-------------+</span><br><span class="line">| 1 ton anvil |</span><br><span class="line">| 2 ton anvil |</span><br><span class="line">+-------------+</span><br></pre></td></tr></table></figure>
+<p>这里<code>[123]</code>定义了一组字符，它的意思是匹配1或2或3。<code>[]</code>是另一种形式的OR语句，事实上正则表达式<code>[123]Ton</code>是<code>[1|2|3]Ton</code>的缩写。</p>
+<h3 id="匹配范围"><a href="#匹配范围" class="headerlink" title="匹配范围"></a>匹配范围</h3><p>如果我们要匹配0-9，可以这么写<code>[0123456789]</code>，也可以这么写：<code>[0-9]</code>。</p>
+<h3 id="定位符"><a href="#定位符" class="headerlink" title="定位符"></a>定位符</h3><p>定位符有;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">^:文本的开始</span><br><span class="line">$:文本的结尾</span><br><span class="line">[[:&lt;:]]词的开始</span><br><span class="line">[[:&gt;:]]词的结尾</span><br></pre></td></tr></table></figure>
+<p>可以这样使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_name regexp &#39;^[0-9\\.]&#39;</span><br><span class="line">    -&gt; order by prod_name;</span><br><span class="line">+--------------+</span><br><span class="line">| prod_name    |</span><br><span class="line">+--------------+</span><br><span class="line">| .5 ton anvil |</span><br><span class="line">| 1 ton anvil  |</span><br><span class="line">| 2 ton anvil  |</span><br><span class="line">+--------------+</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">用通配符进行过滤</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 14:05:37" itemprop="dateCreated datePublished" datetime="2021-01-27T14:05:37+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="用通配符进行过滤"><a href="#用通配符进行过滤" class="headerlink" title="用通配符进行过滤"></a>用通配符进行过滤</h1><h2 id="LIKE操作符"><a href="#LIKE操作符" class="headerlink" title="LIKE操作符"></a>LIKE操作符</h2><h3 id="通配符"><a href="#通配符" class="headerlink" title="%通配符"></a>%通配符</h3><p>在搜索串中<code>%</code>用来标识任何字符出现任意次数。例如为了找到所有以词jet起头的产品，可以使用以下select语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id, prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_name like &quot;jet%&quot;;</span><br><span class="line">+---------+--------------+</span><br><span class="line">| prod_id | prod_name    |</span><br><span class="line">+---------+--------------+</span><br><span class="line">| JP1000  | JetPack 1000 |</span><br><span class="line">| JP2000  | JetPack 2000 |</span><br><span class="line">+---------+--------------+</span><br></pre></td></tr></table></figure>
+<p>可以使用多个通配符，比如”%anvil%”用来搜索所有包括anvil子串的字符串。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id, prod_name from products where prod_name like &quot;%anvil%&quot;;</span><br><span class="line">+---------+--------------+</span><br><span class="line">| prod_id | prod_name    |</span><br><span class="line">+---------+--------------+</span><br><span class="line">| ANV01   | .5 ton anvil |</span><br><span class="line">| ANV02   | 1 ton anvil  |</span><br><span class="line">| ANV03   | 2 ton anvil  |</span><br><span class="line">+---------+--------------+</span><br></pre></td></tr></table></figure>
+<p><code>%</code>可以匹配0到任意个字符。</p>
+<h3 id="下划线（-）通配符"><a href="#下划线（-）通配符" class="headerlink" title="下划线（_）通配符"></a>下划线（_）通配符</h3><p><code>_</code>和<code>%</code>的作用是一样的，不同的是<code>_</code>只能匹配一个字符。<br>就不举例了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -897,277 +1064,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH12%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/14/CH12%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">CH12并发编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-14 15:39:36" itemprop="dateCreated datePublished" datetime="2021-01-14T15:39:36+08:00">2021-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h1><p>现代操作系统提供三种基本的构造并发程序的方法：</p>
-<ul>
-<li>进程</li>
-<li>I/O多路复用</li>
-<li>线程</li>
-</ul>
-<h2 id="基于进程的并发编程"><a href="#基于进程的并发编程" class="headerlink" title="基于进程的并发编程"></a>基于进程的并发编程</h2><p>构造并发进程最简单的方法就是用进程。<br>服务器接受连接请求-&gt;返回一个已连接描述符（假设为4）-&gt;服务器派生一个子进程-&gt;关闭原服务器的已连接描述符4的副本（避免内存崩溃）。</p>
-<h3 id="基于进程的并发服务器"><a href="#基于进程的并发服务器" class="headerlink" title="基于进程的并发服务器"></a>基于进程的并发服务器</h3><ul>
-<li>首先，通常服务器会允许很长时间，所以我们必须要包括一个SIGCHLD处理程序来回收僵死子进程的资源。因为当SIGCHLD处理程序执行时，SIGCHLD信号是阻塞的，而Linux信号是不排队的，所以SIGCHLD处理程序必须准备好回收多个僵尸子进程的资源。</li>
-<li>其次父子进程必须关闭它们各自的connfd副本。就像我们已经提到过的，这对父进程而言尤为重要，它必须关闭它的已连接描述符，以避免内存泄露。</li>
-<li>最后，因为套接字的文件表表项中的引用计数，直到父子进程的connfd都关闭了，到客户端的连接才会终止。</li>
-</ul>
-<h3 id="进程的优劣"><a href="#进程的优劣" class="headerlink" title="进程的优劣"></a>进程的优劣</h3><p>对于在父、子进程间共享状态信息，进程有一个非常清晰的模型：共享文件表，但是不共享用户地址空间。进程有独立的地址空间一方面避免了进程不小心覆盖另一个进程的虚拟内存，另一方面使得进程共享状态信息更加困难。为了共享信息，它们必须使用显式的IPC（进程间通信）机制。</p>
-<h2 id="基于I-O多路复用的并发编程"><a href="#基于I-O多路复用的并发编程" class="headerlink" title="基于I/O多路复用的并发编程"></a>基于I/O多路复用的并发编程</h2><p>假设要求你编写一个echo服务器，它也能对用户从标准输入键入的交互 命令做出响应。在这个情况下服务器必须响应两个互相独立的I/O事件（连接请求何用户在键盘键入命令行），我们先等待哪个事件呢？针对这种问题的一个解决办法是I/O多路复用计数，基本思路就是使用select函数，要求内核挂起进程，只有在一个或多个I/O事件发生后，才将控制返回给相应的应用程序。<br>（<strong>跳过</strong>）</p>
-<h2 id="基于线程的并发编程"><a href="#基于线程的并发编程" class="headerlink" title="基于线程的并发编程"></a>基于线程的并发编程</h2><p>线程（Thread）就是运行在进程上下文中的逻辑流。线程由内核自动调度，每个线程都有它自己的线程上下文，包括一个唯一的整数线程ID（Thread ID，TID）、栈、栈指针、程序计数器、通用目的寄存器何条件码。所有的运行在一个进程里的线程共享该进程的整个虚拟地址空间。</p>
-<h3 id="线程执行模型"><a href="#线程执行模型" class="headerlink" title="线程执行模型"></a>线程执行模型</h3><p>每个进程开始生命周期时都是单一线程，这个线程称为主线程（math thread），在某一时刻主线程创建一个对等线程，从这个时间点开始，两个线程就并发地运行了。最后，因为主线程执行一个慢速系统调用，例如read或者sleep，或者因为被系统的间隔计时器中断，控制就会通过上下文切换传递到对等线程。对等线程会执行一段时间；然后控制传回主线程，依次类推。  </p>
-<h3 id="Posix线程"><a href="#Posix线程" class="headerlink" title="Posix线程"></a>Posix线程</h3><p>Posix线程是在C程序中处理线程的一个标准接口。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*调用命令：gcc main.c -o main -pthread*/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">thread</span><span class="params">(<span class="keyword">void</span> *vargp)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> tid;</span><br><span class="line">    <span class="keyword">int</span> a=<span class="number">2</span>;</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;tid,<span class="literal">NULL</span>,thread,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,a);</span><br><span class="line">    <span class="built_in">pthread_join</span>(tid,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">thread</span><span class="params">(<span class="keyword">void</span> *vargp)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello, world!\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> *(func)(<span class="keyword">void</span> *);</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_create</span><span class="params">(<span class="keyword">pthread_t</span> *tid,<span class="keyword">pthread_attr_t</span> *attr,func *f,<span class="keyword">void</span> *arg)</span></span>;</span><br></pre></td></tr></table></figure>
-<p><code>pthread_create</code>函数创建一个新的进程，并带着一个输入变量arg，在新进程的上下文运行线程例程f。能用attr参数来改变新创建线程的默认属性（已超出范围，在示例中总是用一个为NULL的attr参数来调用pthread_create函数）。<br>当<code>pthread_create</code>函数返回时，参数tid包含新创建线程的ID。新线程可以通过调用<code>pthread_self</code>函数来获得它自己的线程ID。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">pthread_t</span> <span class="title">pthread_self</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<h3 id="终止线程"><a href="#终止线程" class="headerlink" title="终止线程"></a>终止线程</h3><p>一个线程以下列方式之一来终止的：</p>
-<ul>
-<li>当顶层的线程例程返回时，线程会隐式地终止。</li>
-<li>通过调用<code>pthread_exit</code>函数，线程会显式地终止。如果主线程调用<code>pthread_exit</code>，它会等待所有其他对等线程终止，然后再终止主线程和整个进程，返回值为<code>thread_return</code>。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *thread_return)</span></span>;</span><br></pre></td></tr></table></figure></li>
-<li>某个对等线程调用Linux的<code>exit()</code>函数，该函数终止进程以及所有与该进程相关的线程。</li>
-<li>另一个对等线程通过以当前线程ID为参数调用<code>pthread_cancel</code>函数来终止当前进程。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cancel</span><span class="params">(<span class="keyword">pthread_t</span> tid)</span></span>;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="回收已终止线程的资源"><a href="#回收已终止线程的资源" class="headerlink" title="回收已终止线程的资源"></a>回收已终止线程的资源</h3><p>线程通过调用<code>pthread_join</code>函数等待其他线程终止。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> tid,<span class="keyword">void</span> **thread_return)</span></span>;</span><br></pre></td></tr></table></figure>
-<p><code>pthread_join</code>函数会阻塞，直到tid线程终止，然后将线程例程返回的通用<code>(void *)</code>指针赋值为<code>thread_return</code>指向的位置，然后回收已终止线程占用的所有内存资源。</p>
-<h3 id="分离线程"><a href="#分离线程" class="headerlink" title="分离线程"></a>分离线程</h3><p>在任何一个时间点上，线程是<strong>可结合的</strong>或者是<strong>分离的</strong>。一个可结合的线程是能够被其他线程收回和杀死。在被其他线程回收之前，它的内存资源是不释放的。相反，一个分离的线程是不能被其他线程回收或杀死的。它的内存资源在它终止时由系统自动释放。<br>默认情况下，线程被创建为可结合的，为了避免内存泄露，每个可结合线程都应该要么被其他线程显式地收回，要么通过调用<code>pthread_detach</code>函数被分离。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_detach</span><span class="params">(<span class="keyword">pthread_t</span> tid)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<h3 id="初始化线程"><a href="#初始化线程" class="headerlink" title="初始化线程"></a>初始化线程</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">pthread_once_t</span> once_control = PTHREAD_ONCE_INIT;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_once</span><span class="params">(<span class="keyword">pthread_once_t</span> *once_control,<span class="keyword">void</span> (*init_routine)(<span class="keyword">void</span>))</span></span>;</span><br></pre></td></tr></table></figure>
-<p>once_control 变量是一个全局或者静态变量，总是被初始化为PTHREAD_ONCE_INIT。当你第一次用参数once_control调用pthread_once时，它调用init_routine，这是一个没有输入参数、声明也不返回的函数。</p>
-<h3 id="基于线程并发服务器"><a href="#基于线程并发服务器" class="headerlink" title="基于线程并发服务器"></a>基于线程并发服务器</h3><h2 id="基于线程程序中的共享变量"><a href="#基于线程程序中的共享变量" class="headerlink" title="基于线程程序中的共享变量"></a>基于线程程序中的共享变量</h2><h3 id="线程内存模型"><a href="#线程内存模型" class="headerlink" title="线程内存模型"></a>线程内存模型</h3><p>每个线程和其他线程一起共享进程上下文的剩余部分。这包括整个用户虚拟地址空间，它是由只读<br>文本、读/写数据、堆以及所有的共享库代码和数据区域组成的。线程也共享相同的打开文件集合。</p>
-<h3 id="将变量映射到内存"><a href="#将变量映射到内存" class="headerlink" title="将变量映射到内存"></a>将变量映射到内存</h3><ul>
-<li><strong>全局变量</strong><br>定义在函数之外的变量，在运行时，虚拟内存的读/写区域只包含每个全局变量的一个实例，任何线程都可以引用。</li>
-<li><strong>本地自动变量</strong><br>定义在函数内部但是没有static属性的变量。</li>
-<li><strong>本地静态变量</strong><br>定义在函数内部并有static属性的变量。</li>
-</ul>
-<h3 id="共享变量"><a href="#共享变量" class="headerlink" title="共享变量"></a>共享变量</h3><p>我们说一个变量$v$是共享的，当且仅当它的一个实例被一个以上的线程引用。</p>
-<h2 id="用信号量同步线程"><a href="#用信号量同步线程" class="headerlink" title="用信号量同步线程"></a>用信号量同步线程</h2><p>共享变量十分方便，但是它们也引入了同步错误的可能性。</p>
-<h3 id="进度图"><a href="#进度图" class="headerlink" title="进度图"></a>进度图</h3><p><strong>临界区</strong>（在线程中操作共享变量的指令），这个临界区不应该和其他进程的临界区交替执行。我们想要确保每个线程在执行它的临界区中的指令时，拥有对共享变量的互斥的访问，通常这种现象称为<strong>互斥</strong>。<br>在进度图中，两个临界区的交集形成的状态空间称为<strong>不安全区</strong>。  </p>
-<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><p>信号量s是具有非负整数值的全局变量，只能由两种特殊的操作来处理，这两种操作称为P和V：</p>
-<ul>
-<li>P(s)：如果s是非零的，那么P将s减1，并且立即返回。如果S为零，那么就挂起这个线程，直到s变为非零，而一个V操作会重启这个线程。在重启之后，P操作将s减1，并将控制权返回给调用者。</li>
-<li>V(s)：V操作将s加1，如果有任何线程阻塞在P操作等待s变为非零，那么V操作将会重启这些线程中的一个，然后该线程将s减1，完成它的P操作。<br>P中测试和减1操作是不可分割的，也就是说，一旦预测信号量变为非零，那么V操作会重启这些线程中的一个，然后该线程将s减1，完成它的P操作。<br>P中的测试和减1操作是不可分割的。V中的加1操作是不可分割的（也就是加载、加1和存储信号是V必须只能重启一个正在等待的线程）。<br>P和V的定义保证了一个正在运行的程序不可能进入到一种信号量为负值的状态，为控制并发程序的轨迹线提供了强有力的工具。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_init</span><span class="params">(<span class="keyword">sem_t</span> *sem,<span class="number">0</span>,<span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_wait</span><span class="params">(<span class="keyword">sem_t</span> *s)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_post</span><span class="params">(<span class="keyword">sem_t</span> *s)</span></span>;</span><br></pre></td></tr></table></figure>
-sem_init函数将信号量sem初始化为value。每个信号量在使用前必须初始化。针对我们的目的，中间的参数总是为0.程序通过调用sem_wait和sem_post函数来执行P和V操作。</li>
-</ul>
-<h3 id="使用信号量来实现互斥"><a href="#使用信号量来实现互斥" class="headerlink" title="使用信号量来实现互斥"></a>使用信号量来实现互斥</h3><p>基本思想是将每个共享比那辆与一个信号量s联系起来，然后用P(s)和V(s)操作将相应的临界区包围起来。以这种方式保护起来共享变量的信号量叫做二元信号量（因为总是为0/1）。以提供互斥为目的的二元信号量常常也称为互斥锁。在一个互斥锁上执行P操作称为对互斥锁加锁，执行V操作称为对互斥锁解锁。</p>
-<h3 id="利用信号量来调度共享资源"><a href="#利用信号量来调度共享资源" class="headerlink" title="利用信号量来调度共享资源"></a>利用信号量来调度共享资源</h3><ol>
-<li>生产者-消费者问题<br>生产者和消费者进程共享有n个槽的有限缓冲区。生产者线程反复地生成新的项目，并把它们插入到缓冲区中。消费者线程不断地从缓冲区中取出这些项目，然后消费（使用）它们。<br>因为插入和取出都涉及更新共享变量，所以我们必须保证缓冲区的访问时互斥的，但仅仅互斥是不够的，我们还需要调度对缓冲区的访问。如果缓冲区时满的，那么生产者必须等待直到有槽位变为可用。与之相似的，如果缓冲区时空的，消费者必须等待直到有一个项目变为可用。</li>
-</ol>
-<p><strong>例子</strong>：在一个多媒体系统中生产者编码视频帧，而消费者解码并在屏幕中呈现出来，缓冲区的目的时为了减少视频流的抖动。<br>下面是一个简单的用来构造生产者-消费者程序的包:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> *buf;          <span class="comment">/* Buffer array */</span>         </span><br><span class="line">    <span class="keyword">int</span> n;             <span class="comment">/* 规模 */</span></span><br><span class="line">    <span class="keyword">int</span> front;         <span class="comment">/* 记录该数组的第一项，buf[(front+1)%n] is first item */</span></span><br><span class="line">    <span class="keyword">int</span> rear;          <span class="comment">/* 记录该数组的最后一项，buf[rear%n] is last item */</span></span><br><span class="line">    <span class="keyword">sem_t</span> mutex;       <span class="comment">/* 提供互斥的缓冲区访问 */</span></span><br><span class="line">    <span class="keyword">sem_t</span> slots;       <span class="comment">/* 记录空槽位 */</span></span><br><span class="line">    <span class="keyword">sem_t</span> items;       <span class="comment">/* 记录可用项目的数量 */</span></span><br><span class="line">&#125; <span class="keyword">sbuf_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_init</span><span class="params">(<span class="keyword">sbuf_t</span> *sp, <span class="keyword">int</span> n)</span></span>;</span><br><span class="line"><span class="comment">/*为缓冲区分配堆内存，并为三个信号量设置初值*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_deinit</span><span class="params">(<span class="keyword">sbuf_t</span> *sp)</span></span>;</span><br><span class="line"><span class="comment">/*sbuf_deinit函数是当应用程序使用万缓冲区时，释放缓冲区存储的*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_insert</span><span class="params">(<span class="keyword">sbuf_t</span> *sp, <span class="keyword">int</span> item)</span></span>;</span><br><span class="line"><span class="comment">/*sbuf_insert函数等待一个可用的槽位，对互斥锁加锁，添加项目，对互斥锁解锁*/</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sbuf_remove</span><span class="params">(<span class="keyword">sbuf_t</span> *sp)</span></span>;</span><br><span class="line"><span class="comment">/*sbuf_remove函数和sbuf_insert函数是对称的在等待一个可用的缓冲区项目后，</span></span><br><span class="line"><span class="comment">对互斥锁加锁，从缓冲区的前面取出该项目，对互斥锁解锁*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_init</span><span class="params">(<span class="keyword">sbuf_t</span> *sp, <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sp-&gt;buf = <span class="built_in">calloc</span>(n, <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">int</span>)); </span><br><span class="line">    sp-&gt;n = n;                       <span class="comment">/* Buffer holds max of n items */</span></span><br><span class="line">    sp-&gt;front = sp-&gt;rear = <span class="number">0</span>;        <span class="comment">/* Empty buffer iff front == rear */</span></span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;sp-&gt;mutex, <span class="number">0</span>, <span class="number">1</span>);      <span class="comment">/* Binary semaphore for locking */</span></span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;sp-&gt;slots, <span class="number">0</span>, n);      <span class="comment">/* Initially, buf has n empty slots */</span></span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;sp-&gt;items, <span class="number">0</span>, <span class="number">0</span>);      <span class="comment">/* Initially, buf has zero data items */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_deinit</span><span class="params">(<span class="keyword">sbuf_t</span> *sp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">free</span>(sp-&gt;buf);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_insert</span><span class="params">(<span class="keyword">sbuf_t</span> *sp, <span class="keyword">int</span> item)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">sem_wait</span>(&amp;sp-&gt;slots);                          <span class="comment">/* Wait for available slot */</span></span><br><span class="line">    <span class="built_in">sem_wait</span>(&amp;sp-&gt;mutex);                          <span class="comment">/* Lock the buffer */</span></span><br><span class="line">    sp-&gt;buf[(++sp-&gt;rear)%(sp-&gt;n)] = item;   <span class="comment">/* Insert the item */</span></span><br><span class="line">    <span class="built_in">sem_post</span>(&amp;sp-&gt;mutex);                          <span class="comment">/* Unlock the buffer */</span></span><br><span class="line">    <span class="built_in">sem_post</span>(&amp;sp-&gt;items);                          <span class="comment">/* Announce available item */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sbuf_remove</span><span class="params">(<span class="keyword">sbuf_t</span> *sp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> item;</span><br><span class="line">    <span class="built_in">sem_wait</span>(&amp;sp-&gt;items);                          <span class="comment">/* Wait for available item */</span></span><br><span class="line">    <span class="built_in">sem_wait</span>(&amp;sp-&gt;mutex);                          <span class="comment">/* Lock the buffer */</span></span><br><span class="line">    item = sp-&gt;buf[(++sp-&gt;front)%(sp-&gt;n)];  <span class="comment">/* Remove the item */</span></span><br><span class="line">    <span class="built_in">sem_post</span>(&amp;sp-&gt;mutex);                          <span class="comment">/* Unlock the buffer */</span></span><br><span class="line">    <span class="built_in">sem_post</span>(&amp;sp-&gt;slots);                          <span class="comment">/* Announce available slot */</span></span><br><span class="line">    <span class="keyword">return</span> item;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>读者-写者问题<br>这是一个互斥问题的概括，一组并发的程序要访问一个共享对象，例如一个主存中的数据结构，或者一个磁盘上的数据库。有些线程只读对象（读者），而其他线程只修改对象（写者）。<br>读者-写者问题的几个变种：  </li>
-</ol>
-<ul>
-<li>读者优先，要求不让读者等待。</li>
-<li>写者优先，要求一旦一个写者准备好可以写，它就会尽可能快地完成它的写操作。 </li>
-</ul>
-<h3 id="综合：基于预线程化的并发服务器"><a href="#综合：基于预线程化的并发服务器" class="headerlink" title="综合：基于预线程化的并发服务器"></a>综合：基于预线程化的并发服务器</h3><p>（跳过）</p>
-<h2 id="使用线程提高并行性"><a href="#使用线程提高并行性" class="headerlink" title="使用线程提高并行性"></a>使用线程提高并行性</h2><h2 id="其他并发问题"><a href="#其他并发问题" class="headerlink" title="其他并发问题"></a>其他并发问题</h2><h3 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h3><p>四个线程不安全函数类：</p>
-<ol>
-<li>不保护共享变量的函数</li>
-<li>保持跨越多个调用的状态的函数</li>
-<li>返回指向静态变量的指针的函数</li>
-<li>调用线程不安全的函数</li>
-</ol>
-<h3 id="可重入性"><a href="#可重入性" class="headerlink" title="可重入性"></a>可重入性</h3><h3 id="竞争"><a href="#竞争" class="headerlink" title="竞争"></a>竞争</h3><h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>互斥锁加锁顺序规则：给定所有互斥锁操作的一个全序，如果每个线程都是以一种顺序获得互斥锁并以相反的顺序释放，那么这个程序就是无死锁的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH11%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/14/CH11%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">CH11网络编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-14 15:39:18" itemprop="dateCreated datePublished" datetime="2021-01-14T15:39:18+08:00">2021-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="网络编程"><a href="#网络编程" class="headerlink" title="网络编程"></a><strong>网络编程</strong></h1><h2 id="客户端-服务器编程模型"><a href="#客户端-服务器编程模型" class="headerlink" title="客户端-服务器编程模型"></a>客户端-服务器编程模型</h2><p>流程：  </p>
-<ol>
-<li>客户端发送请求  </li>
-<li>服务器处理请求  </li>
-<li>服务器发送响应  </li>
-<li>客户端处理相应   </li>
-</ol>
-<p>值得注意的是：客户端和服务器都是指进程而非主机，一个主机上可以允许多个客户端进程、服务器进程。</p>
-<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p>网络-&gt;网络适配器（网卡）-&gt;I/O和内存总线-&gt;内存。<br>网络是一个按照地理位置远近组成的层次结构，最底层是LAN（Local Area Network，局域网）。最流行的局域网技术是以太网（一个以太网段包含一个些电缆和一个集线器）。使用一个些电缆和叫做网桥（bridge）的小盒子，多个以太网段可以连接成较大的局域网，称为桥连接以太网。<br>在层次的更高级别中，多个不兼容的局域网可以由一个叫做路由器的特殊计算机连接起来，组成一个互联网络（internet）。<br>一般来说，路由器可以用来由各种局域网和广域网（WAN）构建互联网络。<br>互联网至关重要的特性就是它能由采用完全不同和不兼容的计数的各种局域网和广域网组成。但是如何能够让某台源主机跨越所有这些不兼容的网络发送数据位到另一台目的主机呢？解决办法就是一层允许在每台主机和路由器上的协议软件。这种协议必须提供两种基本能力：  </p>
-<ol>
-<li>命名机制：每台主机至少被分配一个这种互联网络地址，这个地址唯一地标识了这台主机。  </li>
-<li>传送机制：互联网络协议通过定义一种把数据捆扎成不连续的片（称为<strong>包</strong>）的统一方式来消除差异。包包括包头和有效载荷，包头包括包的大小以及源主机和目的主机的地址，有效载荷包括从源主机发出的数据位。  </li>
-</ol>
-<h2 id="全球IP因特网"><a href="#全球IP因特网" class="headerlink" title="全球IP因特网"></a>全球IP因特网</h2><p>每台因特网主机都运行实现TCP/IP协议。<br>TCP/IP实际上是一个协议族，其中每个提供不同的功能。例如，IP协议提供基本的命名方法和递送机制（不可靠，如果数据报在网络中丢失并不会试图恢复）。UDP稍微扩展了IP协议，这样一来包可以在进程间而不是主机间传送。TCP是一个建立在IP之上的复杂协议，提供了进程间可靠的全双工（双向）连接。<br>从程序员的角度，我们可以把因特网看做一个世界范围的主机集合，满足一下特性：  </p>
-<ul>
-<li>主机集合被映射为一组32位的IP地址  </li>
-<li>这组IP地址被映射为一组因特网域名的标识符  </li>
-<li>因特网主机上的进程能够通过连接和任何其他因特网主机上的进程通信。    </li>
-</ul>
-<h3 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h3><p>IP地址是大端法存储。<br>IP地址通常使用点分十进制表示法来表示。例如：128.2.194.242就是地址0x8002c2f2的点分十进制表示。</p>
-<h3 id="因特网域名"><a href="#因特网域名" class="headerlink" title="因特网域名"></a>因特网域名</h3><p>域名是一串用句点分隔的单词（字母、数字、和破折号），例如 whaleshark.ics.cs.cmu.edu。<br>域名集合形成了一个层次结构，每个域名编码了它在这个层次中的位置。<br>常见的第一层域名有com、edu、gov、org、net，下一层是二级域名，例如cmu.edu。<br>因特网定义了域名集合和IP集合之间的映射，通过分布在世界范围内的数据库来维护。<br>每台因特网主机都有本地定义的域名，这个域名总是映射为回送地址127.0.0.1，localhost名字为引用运行在同一台机器上的客户端和服务器提供了一种便利的可移植的方式，这对调试相当有用。</p>
-<h3 id="因特网连接"><a href="#因特网连接" class="headerlink" title="因特网连接"></a>因特网连接</h3><p>一个套接字是连接的一个端点，每个套接字都有相应的套接字地址，是有一个因特网地址和一个16位的整数端口组成的，用“地址：端口”来表示。<br>客户端发起连接请求（客户端套接字地址中的端口由内核自动分配，称为临时端口），然而服务端套接字地址的端口通常是某个知名端口，与提供的服务相对应，例如Web服务器通常使用端口80，而电子邮件服务器使用端口25。<br>每个具有知名端口的服务都有一个对应的知名的服务名，例如Web服务的名字为http，email的知名名字为smtp。<br>一个连接是由它两端的套接字地址唯一确定的。这对套接字地址叫做套接字对。</p>
-<h2 id="套接字接口"><a href="#套接字接口" class="headerlink" title="套接字接口"></a>套接字接口</h2><p>套接字接口（socket interface）是一组函数，它们和Unix I/O函数结合起来，用以创建网络应<br>用。大多数现代系统上都实现套接字接口，包括所有Unix变种。</p>
-<h3 id="套接字地址结构"><a href="#套接字地址结构" class="headerlink" title="套接字地址结构"></a>套接字地址结构</h3><p>因特网的套接字地址存放在类型为sockaddr_in的16字结构中。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span>&#123;</span></span><br><span class="line">    uint_16     sin_family; <span class="comment">//通常设为AF_INET，代表是同Internet（TCP/IP）地址族。</span></span><br><span class="line">    uint_16     sin_port;   <span class="comment">//保存端口号</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span>  <span class="title">sin_addr</span>;</span>   <span class="comment">//IP地址</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> sin_zero[<span class="number">8</span>];  <span class="comment">//没有特殊含义，是为了让sockaddr与sockaddr_in两个数据结构保持大小相同而保留的空字节</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr</span>&#123;</span></span><br><span class="line">    uint_16 sa_family;</span><br><span class="line">    <span class="keyword">char</span>    sa_data[<span class="number">14</span>];    <span class="comment">// Address data</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>注：_in后缀是互联网（Internet）的缩写。<br>connect、bind和accept函数要求一个指向与协议相关的套接字地址结构的指针。解决办法是定义套接字函数要求一个指向通用sockaddr结构的指针，然后要求应用程序将与协议特定的结构的指针强制转换成这个通用结构。</p>
-<h3 id="socket函数"><a href="#socket函数" class="headerlink" title="socket函数"></a>socket函数</h3><p>客户端和服务器使用socket函数来创建一个套接字描述符。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> domain,<span class="keyword">int</span> type,<span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="connect函数"><a href="#connect函数" class="headerlink" title="connect函数"></a>connect函数</h3><p>客户端通过调用connect函数来建立和服务器的连接。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> clientfd,<span class="keyword">const</span> struct sockaddr *addr,<span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功则返回0，否则返回-1</span></span><br></pre></td></tr></table></figure>
-<p>connect函数试图与套接字地址为addr的服务器建立一个因特网连接，其中addrlen是sizeof(sockaddr_in)。connect函数会阻塞，一直到连接成功建立或是发生错误。如果成功，clientfd描述符现在就准备好可以读写了，表示连接的套接字对如下：<br>(客户端IP:临时端口,addr.sin_addr:addr.sin_port)<br>临时端口唯一确定了客户端主机上的客户端进程。<br>对于socket，最好的方法是用getaddrinfo来为connect提供参数。</p>
-<h3 id="bind、listen、accept函数"><a href="#bind、listen、accept函数" class="headerlink" title="bind、listen、accept函数"></a>bind、listen、accept函数</h3><p>这些函数被服务器用来和客户端建立连接。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> sockfd,<span class="keyword">const</span> struct sockaddr *addr,<span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> sockfd,<span class="keyword">int</span> backlog)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> listenfd,struct sockaddr *addr,<span class="keyword">int</span> *addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>bind函数告诉内核将addr中的服务器套接字地址和套接字描述符sockfd联系起来。参数addrlen就是sizeof(sockaddr_in)。对于socket和connect，最好的方法是用getaddrinfo来为bind提供参数。（注：绑定的是服务器进程自己的套接字地址、IP地址）<br>客户端时发起请求连接的主动实体，服务器时等待来自客户端的请求连接的被动实体。默认情况下，内核会认为socket函数创建的描述符对应于主动套接字（active socket），它默认存在于一个连接的客户端。服务器调用listen函数告诉内核描述符是被用于服务器而不是客户端使用。<br>服务器调用accept函数来等待来自客户端的连接请求。accept函数等待来自客户端的连接请求到达侦听描述符listenfd，然后在addr中填写客户端的套接字地址，并返回一个已连接描述符，这个描述符可被用来利用UnixI/O函数与客户端通信。  </p>
-<h3 id="主机和服务的转换"><a href="#主机和服务的转换" class="headerlink" title="主机和服务的转换"></a>主机和服务的转换</h3><ol>
-<li>getaddrinfo函数  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys.socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;netdb.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getaddrinfo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* host,<span class="keyword">const</span> <span class="keyword">char</span> *service,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">const</span> struct addrinfo *hints,</span></span></span><br><span class="line"><span class="function"><span class="params">                struct addrinfo **result)</span></span>;</span><br><span class="line">                <span class="comment">//成功则返回 0</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">freeaddrinfo</span><span class="params">(struct addrinfo *result)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> *<span class="title">gai_streroor</span><span class="params">(<span class="keyword">int</span> errcode)</span></span>;</span><br></pre></td></tr></table></figure>
-给定host和service（套接字地址的两个组成部分），getaddrinfo返回result，result一个指向addrinfo结构的链表，其中每个结构指向一个对应于host和service的套接字地址结构。<br>客户端调用getaddrinfo-&gt;遍历列表-&gt;尝试每个套接字地址-&gt;直到调用socket和connect成功，建立起连接。<br>可选参数hints是一个addrinfo结构，它提供对getaddrinfo返回的套接字地址列表的更好的控制。如果要传递hints参数，只能设置下列字段：ai_family、ai_socktype、ai_protocol和ai_flags字段。其他字段必须设置为0。实际中，我们可以用memset将整个结构清零，然后有选择地设置一些字段。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">addrinfo</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span>     ai_flags;</span><br><span class="line">    <span class="keyword">int</span>     ai_family;</span><br><span class="line">    <span class="keyword">int</span>     ai_socktype;</span><br><span class="line">    <span class="keyword">int</span>     ai_protocol;</span><br><span class="line">    <span class="keyword">char</span>    *ai_canonname;</span><br><span class="line">    <span class="keyword">size_t</span>  ai_addrlen;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span>  <span class="title">sockaddr</span> *<span class="title">ai_addr</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span>  <span class="title">addrinfo</span> *<span class="title">ai_next</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
-<li>getnameinfo函数<br>getnameinfo函数和getaddrinfo是相反的，将一个套接字地址结构转换成相应的主机和服务名字符串。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/socket.j&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;netdb.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getnameinfo</span><span class="params">(<span class="keyword">const</span> struct sockaddr *sa,<span class="keyword">socklen_t</span> salen,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">char</span> *host,<span class="keyword">size_t</span> hostlen,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">char</span> *service,<span class="keyword">size_t</span> servlen,<span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
-参数sa指向大小为salen字节的套接字地址结构，host指向大小为hostlen字节的缓冲区，service指向大小为servlen字节的缓冲区。getnameinfo函数将套接字地址结构sa转换成对应的主机和服务名字字符串，并将它们复制到host和service缓冲区。</li>
-</ol>
-<h2 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h2><h3 id="Web基础"><a href="#Web基础" class="headerlink" title="Web基础"></a>Web基础</h3><p>Web客户端和服务器之间的交互用的是一个基于文本的应用级协议，叫做HTTP。Web服务和常规的文件检索服务（例如FTP）有什么区别呢？主要的区别是Web内容可以用一种叫做HTML的语言来编写。</p>
-<h3 id="Web内容"><a href="#Web内容" class="headerlink" title="Web内容"></a>Web内容</h3><p>对于Web客户端和服务器而言，内容是一个MIME（Multipurpose Internet Mail Extensions，多用途的国际邮件扩充协议）类型相关的字节序列。常用的MIME类型如下：<br>text/html：HTML页面<br>text/plain：无格式文本<br>application/postscript：Postscript文档<br>image/gif：GIF格式编码的二进制图像<br>image/png：PNG格式编码的二进制图像<br>image/jpeg：JPEG格式编码的二进制图像<br>Web服务器以两种方式向客户端提供内容：  </p>
-<ul>
-<li>静态内容：取一个磁盘文件返回给客户端  </li>
-<li>动态内容：运行一个可执行文件并将输出返回给客户端。  </li>
-</ul>
-<p>每条由Web服务器返回的内容都是和它管理的某个文件相关联的。这些文件中的每一个都有唯一的名字，叫做URL（通用资源定位符），例如：<br><a target="_blank" rel="noopener" href="http://www.google.com/index.html">http://www.google.com:80/index.html</a><br>表示因特网主机<a target="_blank" rel="noopener" href="http://www.google.com上一个称为/index.html%E7%9A%84HTML%E6%96%87%E4%BB%B6%EF%BC%8C%E5%AE%83%E6%98%AF%E7%94%B1%E4%B8%80%E4%B8%AA%E7%9B%91%E5%90%AC%E7%AB%AF%E5%8F%A380%E7%9A%84Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E7%9A%84%E3%80%82">www.google.com上一个称为/index.html的HTML文件，它是由一个监听端口80的Web服务器管理的。</a></p>
-<h3 id="HTTP事务"><a href="#HTTP事务" class="headerlink" title="HTTP事务"></a>HTTP事务</h3>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1239,7 +1135,7 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-count">120</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

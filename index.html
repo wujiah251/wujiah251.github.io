@@ -191,6 +191,222 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/30/%E4%BA%8B%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/30/%E4%BA%8B%E5%8A%A1/" class="post-title-link" itemprop="url">事务</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-30 00:00:00 / 修改时间：00:01:40" itemprop="dateCreated datePublished" datetime="2021-04-30T00:00:00+08:00">2021-04-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><p>Redis服务器需要处理以下两类事件：</p>
+<ul>
+<li>文件事件：Redis服务器通过套接字与客户端进行连接，而文件事件就是服务器对套接字操作的抽象。服务器与客户端的通信会产生相应的文件事件，而服务器则通过监听并处理这些事件来完成一系列网络通信操作。</li>
+<li>时间事件：Redis服务器中的一些操作需要在给定的时间点执行，而时间事件就是服务器对这类定时操作的抽象。</li>
+</ul>
+<h2 id="文件事件"><a href="#文件事件" class="headerlink" title="文件事件"></a>文件事件</h2><p>Redis基于Reactor模式开发了自己的网络事件处理器：这个处理器被称为文件事件处理器：</p>
+<ul>
+<li>文件事件处理器使用I/O多路复用程序来同时监听多个套接字，并根据套接字目前执行的任务来为套接字关联不同的事件处理器。</li>
+<li>当被监听的套接字准备执行连接应答、读取、写入、关闭等操作时，与操作相对应的文件事件就会产生，这时文件事件处理器就会调用套接字之前关联好的事件处理器来处理这些事件。</li>
+</ul>
+<h3 id="文件事件处理器的构成"><a href="#文件事件处理器的构成" class="headerlink" title="文件事件处理器的构成"></a>文件事件处理器的构成</h3><p>下图展示了文件事件处理器的构成，它们分别是套接字、I/O多路复用程序、文件事件分派器，以及事件处理程序。</p>
+<p><img src="../images/%E4%BA%8B%E5%8A%A1/image-20210430000136863.png" alt="image-20210430000136863"></p>
+<p>I/O多路复用负责监听多个套接字，并向文件事件分派器传送那些产生了事件的套接字。</p>
+<h3 id="I-O多路复用程序的实现"><a href="#I-O多路复用程序的实现" class="headerlink" title="I/O多路复用程序的实现"></a>I/O多路复用程序的实现</h3><p>Redis的多路复用程序所有功能都是通过包装常见的select、epoll、evport和kqueue这些I/O多路复用函数库来实现的。每个I/O多路复用函数库在Redis源码中都对应一个单独的文件，比如ae_select.c、ae_epoll.c、ae_kqueue.c，诸如此类。</p>
+<h3 id="事件类型"><a href="#事件类型" class="headerlink" title="事件类型"></a>事件类型</h3><p>I/O多路复用程序可以监听多个套接字的<strong>ae.h/AE_READABLE事件和ae.h/AE_WRITABLE事件</strong></p>
+<p>I/O多路复用程序运行服务器同时监听套接字的读事件和写事件，如果一个套接字同时产生这两种事件，那么文件事件分派器会优先处理AE_READABLE事件。等AE_READABLE事件处理完才处理AE_WRITABLE事件。</p>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><p>ae.c中提供了这样几个api：</p>
+<p>aeCreateFileEvent（将给定套接字的给定事件加入到I/O多路复用的监听范围之内）。</p>
+<p>aeDeleteFileEvent（取消对给定给定套接字给定事件的监听，并取消事件和事件处理器之间的关联）。</p>
+<p>aeGetFileEvents（返回给定套接字被监听的事件）。</p>
+<p>aeWait（给定定时间内阻塞并等待套接字的给定类型事件的产生，产生或者超时函数返回）。</p>
+<p>aeApiPoll（阻塞指定时间直到至少一个事件产生）。</p>
+<p>aeProcessEvents（这是文件事件分派器，先调用aeApiPoll函数来等待事件产生，然后遍历所有已产生事件，并且调用相关的事件处理函数）。</p>
+<p>aeGetApiName（返回I/O多路复用程序底层所使用的I/O多路复用函数库的名称，比如返回“epoll”、“select”）。</p>
+<h3 id="文件事件的处理器"><a href="#文件事件的处理器" class="headerlink" title="文件事件的处理器"></a>文件事件的处理器</h3><p>连接应答处理器、命令请求处理器、命令回复处理器、复制处理器。</p>
+<h3 id="时间事件"><a href="#时间事件" class="headerlink" title="时间事件"></a>时间事件</h3><p>Redis的时间事件分为定时事件和周期性事件。一个时间事件主要由三个属性组成：id（全局唯一标识）、when（毫秒精度UNIX时间戳）、timeProc（时间事件处理器）。</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>服务器将所有时间事件都放在一个无序链表中，每当时间事件执行器运行时，它就遍历整个链表，查找所有已到达的时间事件，并调用相应的事件处理器。</p>
+<h3 id="时间事件应用实例：serverCron函数"><a href="#时间事件应用实例：serverCron函数" class="headerlink" title="时间事件应用实例：serverCron函数"></a>时间事件应用实例：serverCron函数</h3><p>持续运行的Redis服务器需要定期对自身的资源和状态进行检查和调整，从而确保服务可以长期、稳定地运行，这些定期操作由redis.c/serverCron函数负责执行，它的主要工作包括：</p>
+<ul>
+<li>更新服务器的各类统计信息，比如时间、内存占用、数据库占用情况等。</li>
+<li>清理数据库中的过期键值对。</li>
+<li>关闭和清理连接失效的客户端。</li>
+<li>尝试进行AOF或RDB持久化操作。</li>
+<li>如果服务器是主服务器，那么对从服务器进行定期同步。</li>
+<li>如果处于集群模式，对集群进行定期同步和连接测试。</li>
+</ul>
+<h2 id="事件的调度与执行"><a href="#事件的调度与执行" class="headerlink" title="事件的调度与执行"></a>事件的调度与执行</h2><p>因为服务器中同时存在文件事件和时间事件两种事件类型，所以服务器必须对这两种事件进行调度，决定何时应该处理这些文件事件，何时又该处理时间事件。事件的调度是由ae.c/aeProcessEvents函数负责的。</p>
+<h2 id="重点回顾"><a href="#重点回顾" class="headerlink" title="重点回顾"></a>重点回顾</h2><ul>
+<li>Redis服务器是一个事件驱动程序，服务器处理的事件分为时间事件和文件事件两类。</li>
+<li>文件事件处理器是基于Reactor模式实现的网络通信程序。</li>
+<li>文件事件是对套接字操作的抽象：每次套接字变为可应答（acceptable）、可写（writable）或者可读（readable）时，相应的文件事件就会产生。</li>
+<li>文件事件分为AE_READABLE事件和AE_WRITABLE事件两类。</li>
+<li>时间事件分为定时事件和周期性事件：定时事件只在指定的时间到达一次，而周期性事件每隔一段时间到达一次。</li>
+<li>服务器在一般情况下只执行serverCron函数一个时间事件，并且这个事件是周期性事件。</li>
+<li>文件事件和时间事件之间是合作关系，服务器会轮流处理这两种事件，并且处理事件的过程中也不会进行抢占。</li>
+<li>时间事件的实际处理时间通常会比设定的时间晚一些。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/29/AOF%E6%8C%81%E4%B9%85%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/29/AOF%E6%8C%81%E4%B9%85%E5%8C%96/" class="post-title-link" itemprop="url">AOF持久化</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-29 23:59:00 / 修改时间：23:59:57" itemprop="dateCreated datePublished" datetime="2021-04-29T23:59:00+08:00">2021-04-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h1><p>与RDB持久化通过保存数据库中的键值对来记录数据库状态不同，AOF持久化是通过保存Redis服务器所执行的写命令来记录数据库状态的。</p>
+<h2 id="AOF持久化的实现"><a href="#AOF持久化的实现" class="headerlink" title="AOF持久化的实现"></a>AOF持久化的实现</h2><p>当AOF持久化功能处于打开状态时，服务器执行完一个写命令之后，会以协议格式将被执行的写命令追加到服务器状态的aof_buf缓冲区末尾。</p>
+<h3 id="AOF文件的写入和同步"><a href="#AOF文件的写入和同步" class="headerlink" title="AOF文件的写入和同步"></a>AOF文件的写入和同步</h3><p>Redis服务器就是一个时间循环，这个循环中的文件事件负责接收客户端的命令请求，以及向客户端发送命令回复，而时间事件则负责执行像serverCron函数这样需要定时运行的函数。</p>
+<p>服务器在每次结束一个时间循环之前，它都会调用flushAppendOnlyFile函数，考虑是否需要将aof_buf缓冲区内容写入和保存在AOF文件里面。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">eventLoop</span>():</span></span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		processFileEvents()</span><br><span class="line">		processTimeEvents()</span><br><span class="line">		flushAppendOnlyFile()</span><br></pre></td></tr></table></figure>
+<p>flushAppendOnlyFile()函数的行为由服务器配置的appendfsync选项的值来决定，各个不同值产生的行为如表所示：</p>
+<h2 id="AOF文件的载入与数据还原"><a href="#AOF文件的载入与数据还原" class="headerlink" title="AOF文件的载入与数据还原"></a>AOF文件的载入与数据还原</h2><p>AOF文件中包含了重建数据库状态的所需所有写命令，所以服务器只需要读入并重新执行一遍AOF文件里面保存的写命令，就可以还原服务器关闭之前的数据库状态。详细步骤：</p>
+<ol>
+<li>创建一个不带网络连接的伪客户端（因为Redis命令只能在客户端上下文中执行）。</li>
+<li>从AOF文件中分析并读取出一条写命令。</li>
+<li>使用伪客户端执行被读出的命令。</li>
+<li>一直执行步骤2和步骤3，直到AOF文件中所有的写命令都被处理完毕为止。</li>
+</ol>
+<h2 id="AOF重写"><a href="#AOF重写" class="headerlink" title="AOF重写"></a>AOF重写</h2><p>为了解决AOF体积膨胀的问题，Redis提供了AOF文件重写功能。通过该功能，Redis服务器可以创建一个新的AOF文件来替代线有的AOF文件，新旧两个AOF文件所保存的数据库状态相同，但新AOF文件不会包含任何浪费空间冗余命令。所以新AOF文件的体积通常会比旧AOF文件的体积要小很多。</p>
+<h3 id="AOF文件重写的实现"><a href="#AOF文件重写的实现" class="headerlink" title="AOF文件重写的实现"></a>AOF文件重写的实现</h3><p>虽然Redis服务器将生成新的AOF文件替换旧的AOF文件的功能命名为AOF重写。但实际上，AOF文件重写并不需要对现有的AOF文件进行任何读取、分析或者写入操作。这个功能实际上是通过读取服务器当前的数据库状态来实现。伪代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">aof_write</span>(<span class="params">new_aof_file_name</span>):</span></span><br><span class="line">  <span class="comment"># 创建新的AOF文件</span></span><br><span class="line">  f = create_file(new_aof_file_name)</span><br><span class="line">  <span class="comment"># 遍历数据库</span></span><br><span class="line">  <span class="keyword">for</span> db <span class="keyword">in</span> redisServer.db:</span><br><span class="line">    <span class="comment"># 忽略空数据库</span></span><br><span class="line">    <span class="keyword">if</span> db.is_empty():<span class="keyword">continue</span></span><br><span class="line">    <span class="comment"># 写入select命令，指定数据库号码</span></span><br><span class="line">    f.write_command(<span class="string">&quot;SELECT&quot;</span> + db.<span class="built_in">id</span>)</span><br><span class="line">    <span class="comment"># 遍历数据库中所有的键</span></span><br><span class="line">   	<span class="keyword">for</span> key <span class="keyword">in</span> db:</span><br><span class="line">      <span class="keyword">if</span> key.is_expired():<span class="keyword">continue</span></span><br><span class="line">      <span class="comment"># 根据键的类型对键进行重写</span></span><br><span class="line">      <span class="keyword">if</span> key.<span class="built_in">type</span> == String:</span><br><span class="line">        rewrite_string(key)</span><br><span class="line">      <span class="keyword">elif</span> key.<span class="built_in">type</span> == <span class="type">List</span>:</span><br><span class="line">        rewrite_list(key)</span><br><span class="line">      <span class="keyword">elif</span> key.<span class="built_in">type</span> == Hash:</span><br><span class="line">        rewrite_hash(key)</span><br><span class="line">      <span class="keyword">elif</span> key.<span class="built_in">type</span> == <span class="type">Set</span>:</span><br><span class="line">        rewrite_set(key)</span><br><span class="line">      <span class="keyword">elif</span> key.<span class="built_in">type</span> == SortedSet:</span><br><span class="line">        rewrite_sorted_set(key)</span><br><span class="line">      <span class="comment"># 如果键带有过期时间，那么过期时间也要被重写</span></span><br><span class="line">      <span class="keyword">if</span> key.have_expire_time():</span><br><span class="line">        rewrite_expire_time(key)</span><br><span class="line"> 	<span class="comment"># 写入完毕，关闭文件</span></span><br><span class="line">  f.close()</span><br></pre></td></tr></table></figure>
+<p>因为aof_rewrite函数所生成的新的AOF文件只包含还原当前数据库状态所必须的命令，所以新的AOF文件不会浪费任何硬盘空间。</p>
+<h3 id="AOF后台重写"><a href="#AOF后台重写" class="headerlink" title="AOF后台重写"></a>AOF后台重写</h3><p>上面介绍的AOF重写程序aof_write函数可以很好地完成创建一个新的AOF文件的任务，但是因为这个函数会进行大量的写入操作，所以调用这个函数的线程将长时间阻塞，因为Redis服务器使用单线程来处理命令请求，所以服务器直接调用aof_rewrite函数的话，那么在重写AOF文件期间，服务将无法处理客户端发来的命令请求。</p>
+<p>很明显作为一种辅佐性的维护手段，Redis不希望AOF重写造成服务器无法处理请求，所以Redis决定将AOF重写程序放在子进程当中。这样可以同时做到两个不同的目的：</p>
+<ul>
+<li>子进程进行AOF重写期间，服务器进程（父进程）可以继续处理命令请求。</li>
+<li>子进程带有服务器进程的数据副本，使用子进程而不是线程，可以避免使用锁的情况下，保证数据的安全性。</li>
+</ul>
+<p>但是这还有一个问题，就是重写过程中，服务器接受到了新的命令，如果不写入新的AOF文件当中，会产生不一致的问题。</p>
+<p>为了解决这种数据不一致的问题，Redis服务器设置了一个AOF重写缓冲区。</p>
+<p>当Redis服务器执行完成一个写命令之后会把这个命令发送给AOF缓冲区和AOF重写缓冲区。</p>
+<h2 id="重点回顾"><a href="#重点回顾" class="headerlink" title="重点回顾"></a>重点回顾</h2><ul>
+<li>AOF文件通过保存所有修改数据库的写命令请求来记录服务器的数据库状态。</li>
+<li>AOF文件中的所有命令都以Redis命令请求协议的格式保存。</li>
+<li>命令请求会先保存到AOF缓冲区里面，之后再定期写入并同步到AOF文件。</li>
+<li>appendfsync选项的不同值对AOF持久化功能的安全性以及Redis服务器的性能有很大影响。</li>
+<li>服务器只要载入并重新执行保存在AOF文件中的命令，就可以还原数据库本来的状态。</li>
+<li>AOF重写可以产生一个新的AOF文件中的命令，这个新的AOF文件的和原来相比保存的数据库状态一样，但体积更小。</li>
+<li>在执行BGREWRITEAOF命令时，Redis服务器会维护一个AOF重写缓冲区，该缓冲区会在子进程创建新的AOF文件期间，记录服务器执行的所有写命令，当子进程创建新AOF文件的工作之后，服务器会将重写缓冲区中的所有内容追加到新AOF文件的末尾，使得新旧两个AOF文件所保存的数据库状态一致。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/27/RDB%E6%8C%81%E4%B9%85%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -893,215 +1109,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/17/%E5%88%9D%E8%AF%86Redis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/17/%E5%88%9D%E8%AF%86Redis/" class="post-title-link" itemprop="url">初识Redis</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-04-17 18:31:00" itemprop="dateCreated datePublished" datetime="2021-04-17T18:31:00+08:00">2021-04-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-23 00:29:16" itemprop="dateModified" datetime="2021-04-23T00:29:16+08:00">2021-04-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="初认识Redis"><a href="#初认识Redis" class="headerlink" title="初认识Redis"></a>初认识Redis</h1><h2 id="Redis简介"><a href="#Redis简介" class="headerlink" title="Redis简介"></a>Redis简介</h2><h3 id="Redis与其他数据库和软件对比"><a href="#Redis与其他数据库和软件对比" class="headerlink" title="Redis与其他数据库和软件对比"></a>Redis与其他数据库和软件对比</h3><p>Redis属于人们常说的NoSQL数据库或者非关系型数据库。它常被拿来和memcached比较，这两者都可用于存储键值映射，彼此的性能相差无几，但是redis能够自动以不同的方式写入硬盘。并且Redis除了能存储普通字符串键之外，还可以存储其他4种数据结构。memcached只能存储普通的字符串键。<br>Redis存储的类型包括字符串、列表、集合、散列表、有序集合。<br>常见的非关系型数据库：Redis（存储在内存）、memcached（使用内存存储的键值缓存）、MongoDB（使用硬盘存储的非关系文档存储）。  </p>
-<h3 id="附加特性"><a href="#附加特性" class="headerlink" title="附加特性"></a>附加特性</h3><p>Redis拥有两种不同形式的持久化方法，它们都可以用小而紧凑的格式将存储在内存中的数据写入硬盘：  </p>
-<ol>
-<li>时间点转储，转储操作即可以在“指定时间段内有指定数量的写执行操作”这一条件被满足时执行，又可以通过调用两条转储到硬盘命令中的任何一条来执行；  </li>
-<li>将所有修改了数据库命令都写入一个只追加文件里面，用户可以根据数据的重要程度，将只追加写入设置为从不同步，每秒同步一次或者每写入一个命令就同步一次。  </li>
-</ol>
-<p>Redis提供故障转移支持，Redis实现了主从复制特效：只想复制的从服务器会连接上主服务器，接收主服务器发送来的整个数据库初始副本。之后主服务器执行的写命令，都会被发送给所有连接着的从服务器去执行，从而实时地更新从服务器的数据集。客户端可以向任意一个从服务器发送读请求，以此来避免对主服务器进行集中式的访问。  </p>
-<h2 id="Redis数据结构简介"><a href="#Redis数据结构简介" class="headerlink" title="Redis数据结构简介"></a>Redis数据结构简介</h2><p>5种数据结构：  </p>
-<ol>
-<li>STRING：可以是字符串、整数或者浮点数。  </li>
-<li>LIST：一个链表，链表上的每个节点都包含了一个字符串。  </li>
-<li>SET：包含字符串的无序收集器，并且被包含的每个字符串都是独一无二、各不相同的。  </li>
-<li>HASH：包含键值对的无序散列表。  </li>
-<li>ZSET：字符串成员与浮点数分值之间的有序映射，元素的排列顺序由分支的大小决定。  </li>
-</ol>
-<h3 id="Redis中的字符串"><a href="#Redis中的字符串" class="headerlink" title="Redis中的字符串"></a>Redis中的字符串</h3><p>支持的命令：GET、SET、DEL</p>
-<h3 id="Redis中的列表"><a href="#Redis中的列表" class="headerlink" title="Redis中的列表"></a>Redis中的列表</h3><p>命令：RPUSH、LRANGE（获取指定范围的所有值）、LINDEX（获取指定位置上的单个元素）、LPOP（从左端染出一个值，并返回这个值）。  </p>
-<h3 id="Redis的集合"><a href="#Redis的集合" class="headerlink" title="Redis的集合"></a>Redis的集合</h3><p>命令：SADD（添加给定元素到集合）、SMEMBERS（返回集合所有元素）、SISMEMBER（检查给定元素是否存在于集合中）、SREM（从集合中移除给定元素）。  </p>
-<h3 id="Redis的散列"><a href="#Redis的散列" class="headerlink" title="Redis的散列"></a>Redis的散列</h3><p>命令：HSET（关联起来给定的键值对）、HGET（获取指定散列键的值）、HGETALL（获取所有的键值对）、HDEL（删除指定的键）。  </p>
-<h3 id="Redis的有序集合"><a href="#Redis的有序集合" class="headerlink" title="Redis的有序集合"></a>Redis的有序集合</h3><p>有序集合的键被称为成员，每个成员都是各不相同；而有序集合的值被称为分值，分值必须为浮点数。有序集合是Redis中唯一一个既可以根据成员访问元素又可以根据分值的排列顺序来访问元素的结构。  </p>
-<p>命令：ZADD（将一个带有分值的成员添加到有序集合里面）、ZRANGE（根据元素在有序排列中所处的位置，从有序集合中获取多个元素）、ZRANGEBYSCORE（获取有序集合在给定分值范围内的所有元素）、ZREM（删除指定元素）。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/21/TINY%20Web%E6%9C%8D%E5%8A%A1%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/21/TINY%20Web%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="post-title-link" itemprop="url">TinyWeb 服务器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-03-21 20:29:14" itemprop="dateCreated datePublished" datetime="2021-03-21T20:29:14+08:00">2021-03-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-15 23:56:28" itemprop="dateModified" datetime="2021-01-15T23:56:28+08:00">2021-01-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="TinyWeb-服务器"><a href="#TinyWeb-服务器" class="headerlink" title="TinyWeb 服务器"></a>TinyWeb 服务器</h1><p>我针对原来提供的代码，仔细阅读，附上注释版（每个函数的功能书中有阐释，就不细讲，可以结合着看）：</p>
-<h2 id="main函数及其他函数定义"><a href="#main函数及其他函数定义" class="headerlink" title="main函数及其他函数定义"></a>main函数及其他函数定义</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这是一个微型Web服务器，能够提供5种常见类型的静态内容：HTML文集爱你、无格式的&gt;文本文件、以及编码为GIF、PNG和JPG格式的图片</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数库csapp.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;csapp.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doit</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br><span class="line"><span class="comment">// 这是函数负责处理HTTP事务</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">read_requesthdrs</span><span class="params">(<span class="keyword">rio_t</span> *rp)</span></span>;</span><br><span class="line"><span class="comment">// 读取报头</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">parse_uri</span><span class="params">(<span class="keyword">char</span>* uri,<span class="keyword">char</span> *filename,<span class="keyword">char</span> *cgiargs)</span></span>;</span><br><span class="line"><span class="comment">// 解析uri</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">serve_static</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *filename,<span class="keyword">int</span> filesize)</span></span>;</span><br><span class="line"><span class="comment">// 静态内容服务</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get_filetype</span><span class="params">(<span class="keyword">char</span>* filename,<span class="keyword">char</span>* filetype)</span></span>;</span><br><span class="line"><span class="comment">// 获得文件类型，html、plain、jpg、png、gif</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">serve_dynamic</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *filename, <span class="keyword">char</span> *cgiargs)</span></span>;</span><br><span class="line"><span class="comment">// 动态内容服务</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clienterror</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *cause, <span class="keyword">char</span> *errnum, <span class="keyword">char</span> *shortmsg, <span class="keyword">char</span>* longmsg)</span></span>;</span><br><span class="line"><span class="comment">// 向客户端报错</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> listenfd, connfd, port, clientlen;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientaddr</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(argc!=<span class="number">2</span>)&#123;</span><br><span class="line">        <span class="comment">// argc==2表示输入为文件名 和 端口号</span></span><br><span class="line">        <span class="comment">// 调用方式为 &gt;./mytiny 1024</span></span><br><span class="line">        <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;usage: %s&lt;port&gt;\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    port = <span class="built_in">atoi</span>(argv[<span class="number">1</span>]);<span class="comment">//字符串转数字</span></span><br><span class="line">    listenfd = <span class="built_in">Open_listenfd</span>(port);</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        clientlen = <span class="built_in"><span class="keyword">sizeof</span></span>(clientaddr); <span class="comment">//地址结构体的字节数</span></span><br><span class="line">        connfd = <span class="built_in">Accept</span>(listenfd,(SA*)&amp;clientaddr, &amp;clientlen); <span class="comment">//产生一个已连接</span></span><br><span class="line">套接字</span><br><span class="line">        <span class="built_in">doit</span>(connfd);<span class="comment">//执行http事务处理函数</span></span><br><span class="line">        <span class="built_in">Close</span>(connfd);<span class="comment">//关闭已连接套接字connfd-关闭连接</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<h2 id="doit函数"><a href="#doit函数" class="headerlink" title="doit函数"></a>doit函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doit</span><span class="params">(<span class="keyword">int</span> fd)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 输入fd是一个已连接套接字描述符</span></span><br><span class="line">    <span class="keyword">int</span> is_static;</span><br><span class="line">    <span class="keyword">char</span> filename[MAXLINE],cgiargs[MAXLINE];</span><br><span class="line">    <span class="comment">// uri解析出来的路径和cgi参数</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">sbuf</span>;</span> <span class="comment">// stat结构体是用于存储文件信息的类型</span></span><br><span class="line">    <span class="keyword">char</span> buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];</span><br><span class="line">    <span class="comment">// buf-缓冲区，method-方法(比如GET)，uri-URI，version-http的版本</span></span><br><span class="line">    <span class="keyword">rio_t</span> rio;</span><br><span class="line">    <span class="built_in">Rio_readinitb</span>(&amp;rio, fd); <span class="comment">// 初始化创建一个空的读缓冲区并且和套接字描述符fd关</span></span><br><span class="line">联起来</span><br><span class="line">    <span class="built_in">Rio_readlineb</span>(&amp;rio, buf, MAXLINE); <span class="comment">//读取一行</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Request headser\n:&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,buf);</span><br><span class="line">    <span class="built_in">sscanf</span>(buf,<span class="string">&quot;%s %s %s&quot;</span>,method, uri,version);</span><br><span class="line">    <span class="comment">// 从缓冲区去读命令到变量</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">strcasecmp</span>(method,<span class="string">&quot;GET&quot;</span>))&#123;</span><br><span class="line">        <span class="comment">// 不想等返回非0值</span></span><br><span class="line">        <span class="comment">// 调用clienterror向客户端返回错误，不支持非GET方法</span></span><br><span class="line">        <span class="built_in">clienterror</span>(fd, method, <span class="string">&quot;501&quot;</span>, <span class="string">&quot;Not Implemented&quot;</span>, <span class="string">&quot;Tiny does not implement this method&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">read_requesthdrs</span>(&amp;rio); <span class="comment">//读取请求报文</span></span><br><span class="line"></span><br><span class="line">    is_static = <span class="built_in">parse_uri</span>(uri, filename, cgiargs);</span><br><span class="line">    <span class="comment">// 如果请求的是静态内容返回1，否则返回0</span></span><br><span class="line">    <span class="comment">// filename用来存储解析出来的路径</span></span><br><span class="line">    <span class="comment">//  cgiargs是一个可选的CGI参数字符串，如果是静态内容则清空</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">stat</span>(filename,&amp;sbuf)&lt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="comment">// 文件信息获取成功返回0，失败返回-1</span></span><br><span class="line">        <span class="built_in">clienterror</span>(fd, filename, <span class="string">&quot;404&quot;</span>, <span class="string">&quot;Not found&quot;</span>,<span class="string">&quot;Tiny couldn&#x27;t find this file&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(is_static)&#123;</span><br><span class="line">        <span class="keyword">if</span>(!(<span class="built_in">S_ISREG</span>(sbuf.st_mode)) || !(S_IRUSR &amp; sbuf.st_mode))&#123;</span><br><span class="line">            <span class="comment">// st_mode：保护模式</span></span><br><span class="line">            <span class="comment">// S_ISREG(st_mode)用于判断是不是一个常规文件</span></span><br><span class="line">            <span class="comment">// S_IPUSR用户读权限</span></span><br><span class="line">            <span class="built_in">clienterror</span>(fd,filename, <span class="string">&quot;403&quot;</span>, <span class="string">&quot;Forbidden&quot;</span>, <span class="string">&quot;Tiny couldn&#x27;t read the file&quot;</span>);</span><br><span class="line">            <span class="comment">// 403：服务器无权访问所请求程序</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">serve_static</span>(fd, filename, sbuf.st_size);<span class="comment">//提供静态响应函数</span></span><br><span class="line">        <span class="comment">// st_size：文件大小</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!(<span class="built_in">S_ISREG</span>(sbuf.st_mode)) || !(S_IXUSR &amp; sbuf.st_mode))&#123;</span><br><span class="line">            <span class="built_in">clienterror</span>(fd, filename, <span class="string">&quot;403&quot;</span>, <span class="string">&quot;Forbidden&quot;</span>, <span class="string">&quot;Tiny couldn&#x27;t read the file&quot;</span>);</span><br><span class="line">            <span class="comment">// 无权访问</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">serve_dynamic</span>(fd,filename,cgiargs); <span class="comment">//提供动态响应的函数</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="read-requesthdrs函数"><a href="#read-requesthdrs函数" class="headerlink" title="read_requesthdrs函数"></a>read_requesthdrs函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">read_requesthdrs</span><span class="params">(<span class="keyword">rio_t</span> *rp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">char</span> buf[MAXLINE];</span><br><span class="line">   <span class="built_in">Rio_readlineb</span>(rp,buf,MAXLINE);</span><br><span class="line">   <span class="keyword">while</span>(<span class="built_in">strcmp</span>(buf, <span class="string">&quot;\r\n&quot;</span>))&#123;</span><br><span class="line">        <span class="comment">//终止请求报头是\r\n组成的，相等返回0，否则返回非0</span></span><br><span class="line">        <span class="built_in">Rio_readlineb</span>(rp,buf,MAXLINE);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,buf);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="parse-uri函数"><a href="#parse-uri函数" class="headerlink" title="parse_uri函数"></a>parse_uri函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">parse_uri</span><span class="params">(<span class="keyword">char</span> *uri,<span class="keyword">char</span> *filename, <span class="keyword">char</span> *cgiargs)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *ptr;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strstr</span>(uri,<span class="string">&quot;cgi-bin&quot;</span>))&#123;</span><br><span class="line">        <span class="comment">// 没有匹配到则返回null</span></span><br><span class="line">        <span class="built_in">strcpy</span>(cgiargs, <span class="string">&quot;&quot;</span>); <span class="comment">//清空cgiargs</span></span><br><span class="line">        <span class="built_in">strcpy</span>(filename,<span class="string">&quot;.&quot;</span>); <span class="comment">// 变成相对路径</span></span><br><span class="line">        <span class="built_in">strcat</span>(filename,uri); <span class="comment">// 比如./intex.html</span></span><br><span class="line">        <span class="keyword">if</span>(uri[<span class="built_in">strlen</span>(uri)<span class="number">-1</span>]==<span class="string">&#x27;/&#x27;</span>)<span class="comment">//如果uri以/为结尾，则在路径末尾再添加home.html</span></span><br><span class="line">            <span class="built_in">strcat</span>(filename,<span class="string">&quot;home.html&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        ptr = <span class="built_in">index</span>(uri,<span class="string">&#x27;?&#x27;</span>);</span><br><span class="line">        <span class="comment">// 索引到?，?之后是参数</span></span><br><span class="line">        <span class="keyword">if</span>(ptr)&#123;</span><br><span class="line">            <span class="built_in">strcpy</span>(cgiargs,ptr+<span class="number">1</span>); <span class="comment">//将参数读入cgiargs</span></span><br><span class="line">            *ptr = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">//避免把参数读入到filename</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="built_in">strcpy</span>(cgiargs,<span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">strcpy</span>(filename,<span class="string">&quot;.&quot;</span>);</span><br><span class="line">        <span class="built_in">strcat</span>(filename,uri);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="serve-static函数"><a href="#serve-static函数" class="headerlink" title="serve_static函数"></a>serve_static函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">serve_static</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *filename, <span class="keyword">int</span> filesize)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 提供5种常见类型的静态内容：HTML文件、无格式文本文件、编码为GIF、PNG、JPG&gt;格式的图片文件</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> srcfd;</span><br><span class="line">    <span class="keyword">char</span> *srcp, filetype[MAXLINE], buf[MAXBUF];</span><br><span class="line">    <span class="comment">// 发送响应到客户端</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">get_filetype</span>(filename, filetype); <span class="comment">//获得文件类型</span></span><br><span class="line">    <span class="comment">// 将HTTP报文写到buf缓存区</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;HTTP/1.0 200 OK\r\n&quot;</span>); <span class="comment">//初始状态行</span></span><br><span class="line">    <span class="comment">// 首部行</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;%sServer: Tiny Web Server\r\n&quot;</span>,buf);</span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;%sContent-length: %d\r\n&quot;</span>, buf, filesize); <span class="comment">//长度</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;%sContent-type: %s\r\n\r\n&quot;</span>, buf, filetype); <span class="comment">//类型</span></span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Response headers:\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>,buf);</span><br><span class="line"></span><br><span class="line">    srcfd = <span class="built_in">Open</span>(filename, O_RDONLY, <span class="number">0</span>);<span class="comment">//只读打开文件</span></span><br><span class="line">    srcp = <span class="built_in">Mmap</span>(<span class="number">0</span>, filesize, PROT_READ, MAP_PRIVATE, srcfd, <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// Mmap函数在csapp.h、csapp.c中定义、实现</span></span><br><span class="line">    <span class="comment">// 这只是mmap的一个包装函数</span></span><br><span class="line">    <span class="comment">// 功能是将分见映射到内存，用内存读写取代I/O读写</span></span><br><span class="line">    <span class="comment">// 第1个变量void* start，指向内存起始的位置，通常设为NULL(其实就是(void*)0)&gt;，代表让系统自动选定地址</span></span><br><span class="line">    <span class="comment">// 第2个变量size_t length，将文件多大部分映射到内存中</span></span><br><span class="line">    <span class="comment">// 第3个变量int prot，表示映射区域的保护方式，这里使用可读</span></span><br><span class="line">    <span class="comment">// 第4个变量int flags，表示影响映射区域的各种特性，MAX_PRIVATE是私人的写时复</span></span><br><span class="line">制</span><br><span class="line">    <span class="comment">// 第5个变量int fd，文件描述符</span></span><br><span class="line">    <span class="comment">// 第6个变量off_t offsize文件映射的偏移量，0表示从文件的最前方开始</span></span><br><span class="line">    <span class="comment">// 返回值为映射区的内存起始位置</span></span><br><span class="line">    <span class="built_in">Close</span>(srcfd); <span class="comment">//关闭打开文件</span></span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, srcp, filesize);</span><br><span class="line">    <span class="built_in">Munmap</span>(srcp, filesize);<span class="comment">//解除内存映射</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="get-filetype函数"><a href="#get-filetype函数" class="headerlink" title="get_filetype函数"></a>get_filetype函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get_filetype</span><span class="params">(<span class="keyword">char</span> *filename, <span class="keyword">char</span> *filetype)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 获取文件类型</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">strstr</span>(filename, <span class="string">&quot;.html&quot;</span>))<span class="built_in">strcpy</span>(filetype, <span class="string">&quot;text/html&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">strstr</span>(filename, <span class="string">&quot;.gif&quot;</span>))<span class="built_in">strcpy</span>(filetype, <span class="string">&quot;image/gif&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">strstr</span>(filename, <span class="string">&quot;.png&quot;</span>))<span class="built_in">strcpy</span>(filetype, <span class="string">&quot;image/png&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">strstr</span>(filename, <span class="string">&quot;.jpg&quot;</span>))<span class="built_in">strcpy</span>(filetype, <span class="string">&quot;image/jpeg&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">strcpy</span>(filetype, <span class="string">&quot;text/plain&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="serve-dynamic函数"><a href="#serve-dynamic函数" class="headerlink" title="serve_dynamic函数"></a>serve_dynamic函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">serve_dynamic</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *filename, <span class="keyword">char</span> *cgiargs)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[MAXLINE], *emptylist[]=&#123;<span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="comment">// 响应报文</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;HTTP/1.0 200 OK\r\n&quot;</span>);</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;Server: Tiny Wev Server\r\n&quot;</span>);</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">Fork</span>()==<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">setenv</span>(<span class="string">&quot;QUERY_STRING&quot;</span>, cgiargs, <span class="number">1</span>);</span><br><span class="line">        <span class="comment">//int setenv(const char *name,const char * value,int overwrite);</span></span><br><span class="line">        <span class="comment">//setenv()用来改变或增加环境变量的内容</span></span><br><span class="line">        <span class="comment">//参数name为环境变量名称字符串；value为变量内容，参数overwrite用来决定是否要改变已存在的环境变量。如果 overwrite不为0，而该环境变量原已有内容，则原内容&gt;会被改为参数value所指的变量内容。如果overwrite为0，且该环境变量已有内容，则参数value会被忽略。</span></span><br><span class="line">        <span class="comment">//执行成功返回0，否则-1</span></span><br><span class="line">        <span class="built_in">Dup2</span>(fd, STDOUT_FILENO);</span><br><span class="line">        <span class="comment">// Dup2是csapp对dup2的封装，原型dup2(int oldfd,int newfd)</span></span><br><span class="line">        <span class="comment">// 复制文件描述符oldfd，并且指定新的文件描述符数值为newfd</span></span><br><span class="line">        <span class="comment">// STDOUT_FILENO是linux提供的用于标准出入的文件描述符</span></span><br><span class="line">        <span class="built_in">Execve</span>(filename, emptylist, environ);</span><br><span class="line">        <span class="comment">// 对execve的包装，原型：execve(const char *filename, cahr *const argv[],char *const envp[]);</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">Wait</span>(<span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="clienterror函数"><a href="#clienterror函数" class="headerlink" title="clienterror函数"></a>clienterror函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clienterror</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">char</span> *cause, <span class="keyword">char</span> *errnum, <span class="keyword">char</span> *shortmsg, <span class="keyword">char</span> *longmsg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[MAXLINE], body[MAXBUF];</span><br><span class="line">    <span class="comment">// 直接复制了，懒得写</span></span><br><span class="line">    <span class="comment">/* Build the HTTP response body */</span></span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;&lt;html&gt;&lt;title&gt;Tiny Error&lt;/title&gt;&quot;</span>);</span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;%s&lt;body bgcolor=&quot;</span><span class="string">&quot;ffffff&quot;</span><span class="string">&quot;&gt;\r\n&quot;</span>, body);</span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;%s%s: %s\r\n&quot;</span>, body, errnum, shortmsg);</span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;%s&lt;p&gt;%s: %s\r\n&quot;</span>, body, longmsg, cause);</span><br><span class="line">    <span class="built_in">sprintf</span>(body, <span class="string">&quot;%s&lt;hr&gt;&lt;em&gt;The Tiny Web server&lt;/em&gt;\r\n&quot;</span>, body);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Print the HTTP response */</span></span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;HTTP/1.0 %s %s\r\n&quot;</span>, errnum, shortmsg);</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;Content-type: text/html\r\n&quot;</span>);</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">sprintf</span>(buf, <span class="string">&quot;Content-length: %d\r\n\r\n&quot;</span>, (<span class="keyword">int</span>)<span class="built_in">strlen</span>(body));</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, buf, <span class="built_in">strlen</span>(buf));</span><br><span class="line">    <span class="built_in">Rio_writen</span>(fd, body, <span class="built_in">strlen</span>(body));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>首先创建一个目录：mytiny，然后在mytiny中创建一个文件mytiny.c，然后将csapp.h(在include中)、csappp.c(在src中)复制到此目录中。<br>首先<code>gcc -c csapp.c</code>获得csapp.o文件，然后<code>ar -rc csapp.a csapp.o</code>生成静态库文件。<br>生成可执行文件<code>gcc -o mytiny mytiny.c csapp.a</code>。<br>在mytiny中创建目录cgi-bin，将<code>netp/tiny/cgi-bin/adder.c</code>复制到此目录中，然后csapp.a、csapp.h也复制一份到其中。<br>然后运行命令<code>gcc -o adder adder.c csapp.a</code>生成可执行文件。<br>为了测试对图片的请求，我们添加文件test.jpg在mytiny中。<br>我们最终的目录结构如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mytiny&#x2F;</span><br><span class="line">    mytiny.c</span><br><span class="line">    csapp.h</span><br><span class="line">    csapp.c</span><br><span class="line">    csapp.o</span><br><span class="line">    csapp.a</span><br><span class="line">    mytiny.o</span><br><span class="line">    test.jpg</span><br><span class="line">    cgi-bin&#x2F;</span><br><span class="line">        adder.c</span><br><span class="line">        csapp.h</span><br><span class="line">        csapp.a</span><br><span class="line">        adder.o</span><br></pre></td></tr></table></figure>
-<h3 id="telnet测试"><a href="#telnet测试" class="headerlink" title="telnet测试"></a>telnet测试</h3><p>首先：<code>linux&gt; ./mytiny 12000</code><br>首先使用TELNET测试，打开另一个shell，<code>linux&gt; telnet localhost 12000</code><br>然后输入HTTP请求行：<code>GET /cgi-bin/adder?100&amp;20 HTTP/1.0</code>。输完后需要先后回车两次。<br>然后我们可以看到HTTP响应。</p>
-<h3 id="浏览器测试"><a href="#浏览器测试" class="headerlink" title="浏览器测试"></a>浏览器测试</h3><p>照样先运行服务器：<code>linux&gt; ./mytiny 12000</code>。<br>在浏览器中输入<code>http://localhost:12000/test.jpg</code>，然后我们可以看到图片。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1173,7 +1180,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-count">120</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
