@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/leaf-favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/leaf-favicon-16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文是《Redis设计与实现》中关于服务器的内容的笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务器">
+<meta property="og:url" content="http://example.com/2021/05/01/%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="本文是《Redis设计与实现》中关于服务器的内容的笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/05/01/images/%E6%9C%8D%E5%8A%A1%E5%99%A8/image-20210501211513103.png">
+<meta property="article:published_time" content="2021-05-01T13:11:29.000Z">
+<meta property="article:modified_time" content="2021-05-01T15:10:47.746Z">
+<meta property="article:author" content="乡村程序员">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/05/01/images/%E6%9C%8D%E5%8A%A1%E5%99%A8/image-20210501211513103.png">
+
+<link rel="canonical" href="http://example.com/2021/05/01/%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>服务器 | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">对代码永远保持敬畏</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/01/%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          服务器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-05-01 21:11:29 / 修改时间：23:10:47" itemprop="dateCreated datePublished" datetime="2021-05-01T21:11:29+08:00">2021-05-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文是《Redis设计与实现》中关于服务器的内容的笔记。<br> <span id="more"></span></p>
+<h1 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h1><h1 id="命令的请求过程"><a href="#命令的请求过程" class="headerlink" title="命令的请求过程"></a>命令的请求过程</h1><h3 id="命令请求发送"><a href="#命令请求发送" class="headerlink" title="命令请求发送"></a>命令请求发送</h3><p><img src="../images/%E6%9C%8D%E5%8A%A1%E5%99%A8/image-20210501211513103.png" alt="image-20210501211513103"></p>
+<h3 id="读取命令请求"><a href="#读取命令请求" class="headerlink" title="读取命令请求"></a>读取命令请求</h3><p>客户端和服务器之间的连接套接字变成可读的时候，服务器调用命令请求处理器来执行以下操作：</p>
+<ol>
+<li>读取套接字中的协议格式的命令请求，并将其保存到客户端状态的输入缓冲区里面。</li>
+<li>对输入缓冲区中的命令请求进行分析，提取出命令请求中的包含的命令参数，以及命令的个数，然后分别将参数和参数个数保存到客户端状态的argv属性和argc属性里面。</li>
+<li>调用命令执行器，执行客户端指定的命令。</li>
+</ol>
+<h3 id="命令执行器（1）：查找命令实现"><a href="#命令执行器（1）：查找命令实现" class="headerlink" title="命令执行器（1）：查找命令实现"></a>命令执行器（1）：查找命令实现</h3><p>命令查找器要做的第一件事就是根据客户端状态的argv[0]参数，在命令表中查找参数所指定的命令，并将找到的命令保存到客户端状态的cmd属性里面。</p>
+<p>命令表是一个字典，键是命令名字，比如set、get等等；值则是一个个redisCommand结构，每个redisCommand结构记录了一个Redis命令的实现信息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisCommand</span> &#123;</span></span><br><span class="line">    <span class="comment">// 命令名字</span></span><br><span class="line">    <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="comment">// 实现函数</span></span><br><span class="line">    redisCommandProc *proc;</span><br><span class="line">    <span class="comment">// 参数个数</span></span><br><span class="line">    <span class="keyword">int</span> arity;</span><br><span class="line">    <span class="comment">// 字符串表示的 FLAG，这个值记录了命令的属性，比如是写还是读</span></span><br><span class="line">    <span class="keyword">char</span> *sflags; </span><br><span class="line">    <span class="comment">// 实际 FLAG，对sflags标识进行分析得出的二进制标识，由程序自动生成</span></span><br><span class="line">    <span class="keyword">int</span> flags;    </span><br><span class="line">    <span class="comment">// 从命令中判断命令的键参数。在 Redis 集群转向时使用。</span></span><br><span class="line">    redisGetKeysProc *getkeys_proc;</span><br><span class="line">    <span class="comment">/* What keys should be loaded in background when calling this command? */</span></span><br><span class="line">    <span class="comment">// 指定哪些参数是 key</span></span><br><span class="line">    <span class="keyword">int</span> firstkey; <span class="comment">/* The first argument that&#x27;s a key (0 = no keys) */</span></span><br><span class="line">    <span class="keyword">int</span> lastkey;  <span class="comment">/* The last argument that&#x27;s a key */</span></span><br><span class="line">    <span class="keyword">int</span> keystep;  <span class="comment">/* The step between first and last key */</span></span><br><span class="line">    <span class="comment">// 统计信息</span></span><br><span class="line">    <span class="comment">// microseconds 记录了命令执行耗费的总毫微秒数</span></span><br><span class="line">    <span class="comment">// calls 是命令被执行的总次数</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> microseconds, calls;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="命令执行器（2）：执行预备操作"><a href="#命令执行器（2）：执行预备操作" class="headerlink" title="命令执行器（2）：执行预备操作"></a>命令执行器（2）：执行预备操作</h3><p>在真正执行命令之前，程序还需要进行一些预备操作，从而确保命令可以正确执行：</p>
+<ul>
+<li>检查客户端状态的cmd指针是否指向NULL；</li>
+<li>根据客户端cmd属性指向的redisCommand的arity属性，检查命令请求所给定的参数个数是否正确，当参数个数不正确时，不再执行后续步骤，直接向客户端返回一个错误；</li>
+<li>检查客户端是否通过了身份验证；</li>
+<li>如果服务器打开了maxmemory功能，那么在执行命令之前，先检查服务器的内存占用情况，并在有需要时进行内存回收，从而使得接下来的命令可以顺利执行。</li>
+</ul>
+<p>还有很多预备操作，这里不一一列举。</p>
+<h3 id="命令执行器（3）调用命令的实现函数"><a href="#命令执行器（3）调用命令的实现函数" class="headerlink" title="命令执行器（3）调用命令的实现函数"></a>命令执行器（3）调用命令的实现函数</h3><p>当服务器决定要执行命令的时候，它只需要执行以下语句就可以了：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client-&gt;cmd-&gt;proc(client)</span><br></pre></td></tr></table></figure>
+<p>被调用的命令实现函数会执行指定的操作，并产生相应的命令恢复，这些回复会被保存在客户端状态的输出缓冲区里面，之后实现函数还会为客户端的套接字关联命令回复处理器，这个处理器负责将回复返回给客户端。</p>
+<h3 id="命令执行器（4）：执行后续操作"><a href="#命令执行器（4）：执行后续操作" class="headerlink" title="命令执行器（4）：执行后续操作"></a>命令执行器（4）：执行后续操作</h3><p>在执行晚实现函数之后，服务器还会做一些后续操作：</p>
+<ul>
+<li>如果服务器开启了慢查询日志功能，那么慢查询日志模块，会检查是否需要为刚刚执行完的命令请求添加一条新的慢查询日志。</li>
+<li>根据刚刚执行命令所耗费的时长，更新被执行命令的redisComand结构的milliseconds属性，并将命令的redisCommand结构的calls计数器的值增一。</li>
+<li>根据是否开启了AOF持久化，将命令请求写入AOF缓冲区（也可能还包括重写缓冲区）。</li>
+<li>如果有其他从服务器正在复制当前这个服务器，那么服务器会将刚刚执行的命令传播给所有从服务器。</li>
+</ul>
+<h3 id="将命令回复发送给客户端"><a href="#将命令回复发送给客户端" class="headerlink" title="将命令回复发送给客户端"></a>将命令回复发送给客户端</h3><p>当客户端套接字编程可写状态时，服务器会执行命令回复处理器，将输出缓冲区中的命令回复发送给客户端。</p>
+<h3 id="客户端接收并打印命令回复"><a href="#客户端接收并打印命令回复" class="headerlink" title="客户端接收并打印命令回复"></a>客户端接收并打印命令回复</h3><p>当客户端收到协议格式的命令回复之后，它会将这些回复转换成人类可读的格式，并将打印给用户观看。</p>
+<h2 id="serverCron函数"><a href="#serverCron函数" class="headerlink" title="serverCron函数"></a>serverCron函数</h2><p>Redis服务器中的serverCron函数默认每隔100毫秒执行一次，这个函数负责管理服务器的资源，并保持服务器自身的良好运转。</p>
+<h3 id="更新服务器时间缓存"><a href="#更新服务器时间缓存" class="headerlink" title="更新服务器时间缓存"></a>更新服务器时间缓存</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span>&#123;</span></span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">	<span class="comment">// 保存了秒级精度的系统当前UNIX时间戳</span></span><br><span class="line">	<span class="keyword">time_t</span> unixtime</span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span> mstime;</span><br><span class="line">	<span class="comment">// 保存了毫秒精度的系统当前时间UNIX时间戳</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为serverCron函数默认会以100毫秒一次的频率更新unixtime属性和mstime属性，所以这两个属性记录的时间的精确度并不高：</p>
+<ul>
+<li>服务器只会在打印日志、更新服务器的LRU时钟、决定是否执行持久化任务、计算服务器上线时间这类对精确度要求不高的功能上使用unixtime和mstime属性。</li>
+<li>对于键设置过期时间、添加慢查询日志这种需要高精度的时间功能来说，服务器还是会再次执行系统调用，从而获得最准确的系统当前时间。</li>
+</ul>
+<h3 id="更新LRU时钟"><a href="#更新LRU时钟" class="headerlink" title="更新LRU时钟"></a>更新LRU时钟</h3><p>当服务器要计算一个数据库键的空转时间，程序会用服务器的lrulock（服务器时间缓存的一种）属性记录的时间减去对象的lru属性记录的时间，得出的计算结果就是这个对象的空转时间。</p>
+<p>serverCron函数默认以10秒一次的频率更新lrulock属性的值。</p>
+<h3 id="更新服务器每秒执行命令次数"><a href="#更新服务器每秒执行命令次数" class="headerlink" title="更新服务器每秒执行命令次数"></a>更新服务器每秒执行命令次数</h3><p>serverCron函数中的trackOperationsPerSecond函数会以每100毫秒一次的频率执行，这个函数的功能是以抽样计算的方式，估算并将记录服务器在最近一次秒钟处理的命令请求数量，这个值可以通过INFO status命令的instantaneous_ops_per_sec域查看。</p>
+<h3 id="更新服务器内存峰值记录"><a href="#更新服务器内存峰值记录" class="headerlink" title="更新服务器内存峰值记录"></a>更新服务器内存峰值记录</h3><p>服务器状态中的stat_peak_memory属性记录了服务器内存的峰值大小：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span>&#123;</span></span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">	<span class="comment">// 已使用内存峰值</span></span><br><span class="line">	<span class="keyword">size_t</span> stat_peak_memory;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>serverCron函数每次执行，都会查看服务器当前使用的内存数量，并更新stat_peak_memory。</p>
+<h3 id="处理SIGTERM信号"><a href="#处理SIGTERM信号" class="headerlink" title="处理SIGTERM信号"></a>处理SIGTERM信号</h3><p>在启动服务器时，Redis会为服务器进程的SIGTERM信号关联处理器sigtermHandler函数，这个信号处理器负责在服务器接到SIGTERM信号时，打开服务器状态的shutdown_asap标识。</p>
+<p>每次serverCron函数运行时，都会对服务器状态的shutdown_asap属性进行检查，并根据属性的值决定是否关闭服务器。</p>
+<h3 id="管理客户端资源"><a href="#管理客户端资源" class="headerlink" title="管理客户端资源"></a>管理客户端资源</h3><p>serverCron函数每次执行都会调用clientCron函数、clientCron函数会对一定数量的客户端进行以下两个检查：</p>
+<ul>
+<li>如果客户端与服务器之间的连接已经超时，那么程序释放这个客户端。</li>
+<li>如果客户端在上一次执行命令请求之后，输入缓冲区的大小超过了一定的长度，那么程序会释放客户端当前的输入缓冲区，并重新创建一个默认大小的输入缓冲区，从而防止客户端的输入缓冲区耗费了过多的内存。</li>
+</ul>
+<h3 id="管理数据库资源"><a href="#管理数据库资源" class="headerlink" title="管理数据库资源"></a>管理数据库资源</h3><p>serverCron函数每次执行都会调用databaseCron函数，这个函数会对服务器中的一部分数据库进行检查，删除其中的过期键，并且有需要时，对字典进行收缩操作。</p>
+<h3 id="执行被延迟的BGREWRITEAOF"><a href="#执行被延迟的BGREWRITEAOF" class="headerlink" title="执行被延迟的BGREWRITEAOF"></a>执行被延迟的BGREWRITEAOF</h3><p>在服务器执行BGSAVE命令的期间，如果客户端向服务器发来的BGREWIRTEAOF命令，那么服务器会将BGREWIRTAOF命令的执行时间延迟到BGSAVE命令执行完毕之后。</p>
+<h3 id="检查持久化操作的运行状态"><a href="#检查持久化操作的运行状态" class="headerlink" title="检查持久化操作的运行状态"></a>检查持久化操作的运行状态</h3><p>服务器状态持久化使用rdb_child_pid属性和aof_child_pid属性记录执行BGSAVE命令和BGREWRITEAOF命令的子进程的ID，这两个属性也可以用于检查BGSAVE命令或者BGREWRITEAOF命令是否正在执行。</p>
+<h2 id="初始化服务器"><a href="#初始化服务器" class="headerlink" title="初始化服务器"></a>初始化服务器</h2><h3 id="初始化服务器状态结构"><a href="#初始化服务器状态结构" class="headerlink" title="初始化服务器状态结构"></a>初始化服务器状态结构</h3><p>初始化服务器的第一步是创建一个redisServer类型的实例变量，server作为服务器的状态，并为结构中的各个属性设置默认值。</p>
+<p>初始化server变量的工作由initServerConfig函数完成。主要工作包括：</p>
+<ul>
+<li>设置服务器的运行ID。</li>
+<li>设置服务器的默认允许频率。</li>
+<li>设置服务器的默认配置文件路径。</li>
+<li>设置服务器的允许架构。</li>
+<li>设置服务器的默认端口号。</li>
+<li>设置服务器的默认RDB持久化条件和AOF持久化条件。</li>
+<li>初始化服务器的LRU时钟。</li>
+<li>创建文件表。</li>
+</ul>
+<h3 id="载入配置选项"><a href="#载入配置选项" class="headerlink" title="载入配置选项"></a>载入配置选项</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> redis-server --port 10086</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> redis-server redis.conf</span></span><br></pre></td></tr></table></figure>
+<p>我们可以通过指定配置文件的方式修改了服务器的数据库数量，以及RDB持久化模块的压缩功能。</p>
+<h3 id="初始化服务器的数据结构"><a href="#初始化服务器的数据结构" class="headerlink" title="初始化服务器的数据结构"></a>初始化服务器的数据结构</h3><p>在之前执行initServerConfig函数初始化server状态时，程序只创建了命令表一个数据结构，不过除了命令表之外，服务器状态还包含了其他数据结构，比如：</p>
+<ul>
+<li>server.clients链表；</li>
+<li>server.db数据；</li>
+<li>用于保存订阅信息的server.pubsub_channels字典；</li>
+</ul>
+<p>当初初始服务器进行到这一步，服务器将调用initServer函数，为以上的数据结构分配内存，并且这个函数还负责设置信号处理器、创建共享对象等重要工作。</p>
+<h3 id="还原数据库状态"><a href="#还原数据库状态" class="headerlink" title="还原数据库状态"></a>还原数据库状态</h3><p>如果服务器启用了AOF持久化功能，服务器需要载入RDB文件或者AOF文件，并根据文件记录的内容来还原服务器的数据库状态。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/30/%E4%BA%8B%E5%8A%A1/" rel="prev" title="事务">
+      <i class="fa fa-chevron-left"></i> 事务
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/01/%E5%AE%A2%E6%88%B7%E7%AB%AF/" rel="next" title="客户端">
+      客户端 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E7%9A%84%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">命令的请求过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%AF%B7%E6%B1%82%E5%8F%91%E9%80%81"><span class="nav-number">2.0.1.</span> <span class="nav-text">命令请求发送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%AF%B7%E6%B1%82"><span class="nav-number">2.0.2.</span> <span class="nav-text">读取命令请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%99%A8%EF%BC%881%EF%BC%89%EF%BC%9A%E6%9F%A5%E6%89%BE%E5%91%BD%E4%BB%A4%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.0.3.</span> <span class="nav-text">命令执行器（1）：查找命令实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%99%A8%EF%BC%882%EF%BC%89%EF%BC%9A%E6%89%A7%E8%A1%8C%E9%A2%84%E5%A4%87%E6%93%8D%E4%BD%9C"><span class="nav-number">2.0.4.</span> <span class="nav-text">命令执行器（2）：执行预备操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%99%A8%EF%BC%883%EF%BC%89%E8%B0%83%E7%94%A8%E5%91%BD%E4%BB%A4%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%87%BD%E6%95%B0"><span class="nav-number">2.0.5.</span> <span class="nav-text">命令执行器（3）调用命令的实现函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%99%A8%EF%BC%884%EF%BC%89%EF%BC%9A%E6%89%A7%E8%A1%8C%E5%90%8E%E7%BB%AD%E6%93%8D%E4%BD%9C"><span class="nav-number">2.0.6.</span> <span class="nav-text">命令执行器（4）：执行后续操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E5%91%BD%E4%BB%A4%E5%9B%9E%E5%A4%8D%E5%8F%91%E9%80%81%E7%BB%99%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">2.0.7.</span> <span class="nav-text">将命令回复发送给客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8E%A5%E6%94%B6%E5%B9%B6%E6%89%93%E5%8D%B0%E5%91%BD%E4%BB%A4%E5%9B%9E%E5%A4%8D"><span class="nav-number">2.0.8.</span> <span class="nav-text">客户端接收并打印命令回复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#serverCron%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">serverCron函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%97%B6%E9%97%B4%E7%BC%93%E5%AD%98"><span class="nav-number">2.1.1.</span> <span class="nav-text">更新服务器时间缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0LRU%E6%97%B6%E9%92%9F"><span class="nav-number">2.1.2.</span> <span class="nav-text">更新LRU时钟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%AF%8F%E7%A7%92%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E6%AC%A1%E6%95%B0"><span class="nav-number">2.1.3.</span> <span class="nav-text">更新服务器每秒执行命令次数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E5%AD%98%E5%B3%B0%E5%80%BC%E8%AE%B0%E5%BD%95"><span class="nav-number">2.1.4.</span> <span class="nav-text">更新服务器内存峰值记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86SIGTERM%E4%BF%A1%E5%8F%B7"><span class="nav-number">2.1.5.</span> <span class="nav-text">处理SIGTERM信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B5%84%E6%BA%90"><span class="nav-number">2.1.6.</span> <span class="nav-text">管理客户端资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B5%84%E6%BA%90"><span class="nav-number">2.1.7.</span> <span class="nav-text">管理数据库资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E8%A2%AB%E5%BB%B6%E8%BF%9F%E7%9A%84BGREWRITEAOF"><span class="nav-number">2.1.8.</span> <span class="nav-text">执行被延迟的BGREWRITEAOF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E6%8C%81%E4%B9%85%E5%8C%96%E6%93%8D%E4%BD%9C%E7%9A%84%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81"><span class="nav-number">2.1.9.</span> <span class="nav-text">检查持久化操作的运行状态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text">初始化服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8A%B6%E6%80%81%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.1.</span> <span class="nav-text">初始化服务器状态结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%BD%E5%85%A5%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9"><span class="nav-number">2.2.2.</span> <span class="nav-text">载入配置选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.3.</span> <span class="nav-text">初始化服务器的数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%98%E5%8E%9F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%8A%B6%E6%80%81"><span class="nav-number">2.2.4.</span> <span class="nav-text">还原数据库状态</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乡村程序员"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wujiah251" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wujiah251" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/wujiahao.mail@gmail.com" title="E-Mail → wujiahao.mail@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='45,45,200' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

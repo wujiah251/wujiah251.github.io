@@ -191,6 +191,186 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/05/ET-LT%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/05/ET-LT%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">I/O多路复用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-05 21:13:50" itemprop="dateCreated datePublished" datetime="2021-02-05T21:13:50+08:00">2021-02-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>I/O多路复用是一种机制：一个进程监听多个描述符，一旦一个某个描述符就绪（读就绪或者写就绪），通知进程进行相应的读写操作。<br>这个机制在Linux中有3个常见实现（select、poll、epoll），但是他们本质都是同步I/O，因为他们都需要在读写事件就绪后自己负责读写。而异步I/O不需要负责读写，异步I/O的实现会负责将数据从内核空间拷贝到内核空间。  </p>
+<h2 id="Select机制"><a href="#Select机制" class="headerlink" title="Select机制"></a>Select机制</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span> <span class="params">(<span class="keyword">int</span> n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *fdset)</span></span>;	<span class="comment">//清空一个fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;	<span class="comment">//添加一个fd进入fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_CTR</span><span class="params">(<span class="keyword">int</span> fd,fd_set *fdset)</span></span>;	<span class="comment">//从fdset删除一个fd</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;	<span class="comment">//判断fdset里面是否有某个fd</span></span><br></pre></td></tr></table></figure>
+<p>select函数监听的文件描述符分3类，分别是writefds、readfds和exceptfds。调用后select函数会阻塞，知道有描述符就绪，或者超时，函数返回。当select函数返回后，可以通过遍历fdset来找到就绪的描述符。<br>select目前在几乎所有平台上支持，其良好的跨平台支持也是它的一个优点。缺点就是单个进程能够监听的描述符的数量存在最大限制，在Linux上一般为1024，可以通过修改宏定义来提升这一限制，但是会降低效率。</p>
+<h2 id="Poll机制"><a href="#Poll机制" class="headerlink" title="Poll机制"></a>Poll机制</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span> <span class="params">(struct pollfd *fds, <span class="keyword">unsigned</span> <span class="keyword">int</span> nfds, <span class="keyword">int</span> timeout)</span></span>; </span><br></pre></td></tr></table></figure>
+<p>不同于select使用3个位图来表示3个fdset的方式，poll使用一个pollfd的指针实现。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> fd;</span><br><span class="line">	<span class="keyword">short</span> events;</span><br><span class="line">   <span class="keyword">short</span> revents;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>pollfd结构包含了要监视的event和发生的event，不再使用select“参数-值”传递方式。同时，pollfd并没有最大数量限制（但是数量大了性能变差）。和select一样，poll返回后需要轮询pollfd来获取就绪的描述符。</p>
+<p>从上面的例子看，select和poll都需要在返回后同遍历文件描述符来获取已经就绪的socket。事实上，同时连接的大量客户端在一时刻可能只有很少的处于就绪状态，因此随着监听的描述符数量增长，其效率线性下降。</p>
+<h2 id="Epoll"><a href="#Epoll" class="headerlink" title="Epoll"></a>Epoll</h2><p>epoll是select和poll的增强版本。epoll更加灵活，没有数量限制。epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放在内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。  </p>
+<h3 id="Epoll具体使用"><a href="#Epoll具体使用" class="headerlink" title="Epoll具体使用"></a>Epoll具体使用</h3><p>epoll操作过程需要3个接口，分别如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_ctl</span><span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, struct epoll_event *event)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span><span class="params">(<span class="keyword">int</span> epfd, struct epoll_event * events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li><code>epoll_create()</code>创建一个epoll句柄，size用来告诉内核这个监听的数目一共多大，这个参数无法限制epoll监听的最大数目，而是给出一个建议。 epoll句柄会占用一个fd值。 </li>
+<li><code>epoll_ctl()</code>对指定的描述符fd执行op操作，可以添加（EPOLL_CTL_ADD）/删除（EPOLL_CTL_DEL）/修改（EPOLL_CTL_MOD）对fd的监听事件。event是告诉我们内核需要监听数目事件。<code>struct epoll_event</code>结构如下所示：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span>&#123;</span></span><br><span class="line">	<span class="keyword">_uint32_t</span> events;	<span class="comment">/* Epoll events */</span></span><br><span class="line">   <span class="keyword">epoll_data_t</span> data;  <span class="comment">/* User data variable */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//events可以表示为以下几个宏的集合</span></span><br><span class="line">EPOLLIN ：表示对应的文件描述符可以读（包括对端SOCKET正常关闭）；</span><br><span class="line">EPOLLOUT：表示对应的文件描述符可以写；</span><br><span class="line">EPOLLPRI：表示对应的文件描述符有紧急的数据可读（这里应该表示有带外数据到来）；</span><br><span class="line">EPOLLERR：表示对应的文件描述符发生错误；</span><br><span class="line">EPOLLHUP：表示对应的文件描述符被挂断；</span><br><span class="line">EPOLLET： 将EPOLL设为边缘触发(Edge Triggered)模式，这是相对于水平触发(Level Triggered)来说的。</span><br><span class="line">EPOLLONESHOT：只监听一次事件，当监听完这次事件之后，如果还需要继续监听这个socket的话，需要再次把这个socket加入到EPOLL队列里 </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>epoll_wait()</code>等待epfd上的I/O事件，最多返回maxevents个事件。参数events用来从内核得到事件的集合，maxevents告知内核这个events有多大。</li>
+</ul>
+<h3 id="Epoll底层机制"><a href="#Epoll底层机制" class="headerlink" title="Epoll底层机制"></a>Epoll底层机制</h3><p>Epoll在内核维护了两个数据结构，一个红黑树用来存储监听IO事件的fd，另一个用来存储IO事件的双链表。红黑树能够提供高效的fd查找、修改、删除操作（<code>epoll_ctl()</code>）。一旦某个fd发生了IO事件，就会触发fd的回调函数，将事件添加到双链表中。而<code>epoll_wait()</code>只需要检查链表是否为空即可，不为空等待返回，否则等待IO事件发生触发回调函数。  </p>
+<h2 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h2><p>epoll对文件描述符有两种工作模式：<strong>LT（level trigger，水平触发）和ET（edge trigger，边沿触发）</strong>：LT模式是默认模式，LT模式与ET模式区别如下所示：<br><strong>LT</strong>：当epoll检测到描述符事件发生并将此事件通知主程序，应用程序可以不立即处理该事件。下次调用epoll_wait时，会再次响应应用程序并通知此事件。<br><strong>ET模式</strong>：当epoll_wait()检测到描述符事件发生并将此事件通知注应用程序，应用程序必须立即处理该事件。如果不处理，下次调用epoll_wait()时，不会再次响应应用程序并通知此事件。  </p>
+<h3 id="LT模式"><a href="#LT模式" class="headerlink" title="LT模式"></a>LT模式</h3><p>LT是epoll默认的工作方式，支持阻塞和非阻塞两种机制。LT模式下内核会持续通知你文件描述符就绪了，然后你可以对这个就绪的fd进行I/O操作。如果不做任何操作，内核还是会继续通知你的。  </p>
+<h3 id="ET模式"><a href="#ET模式" class="headerlink" title="ET模式"></a>ET模式</h3><p>ET模式相对LT模式更加高效，只支持非阻塞模式。在这个模式下，当描述符从未就绪变为就绪时，内核通过epoll告诉你。然后它会假设你知道文件描述符已经就绪，并且不再为那个文件描述符发生更多的就绪通知。直到你做了某些操作导致那个文件描述符不再为就绪状态了。<br>ET模式在很大程度上减少了epoll事件被重复触发的次数，因此效率要比LT模式高。epoll工作在ET模式时，必须使用非阻塞套接口，以避免一个文件句柄的阻塞导致把其他文件描述符饿死。  </p>
+<h2 id="Epoll总结"><a href="#Epoll总结" class="headerlink" title="Epoll总结"></a>Epoll总结</h2><p>在select/poll中，进程只有在调用一定的方法后才对所有监视的文件描述符进行扫描，而epoll事先通过epoll_ctl()注册一个文件描述符，一旦某个文件描述符就绪时，内核会采取回调机制，迅速激活这个文件描述符，当进程调用epoll_wait()时便得到通知。  </p>
+<p>epoll的优点主要是以下几个方面：  </p>
+<ol>
+<li>监听的文件描述符不受限制，它所支持的fd上限是最大可打开文件数目；  </li>
+<li>I/O效率不会随着监听的文件描述符规模增大而下降。不同于select/poll轮询的方式，epoll通过每个fd定义的回调函数来实现。只有就绪的fd才会执行回调函数。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/04/IO%E5%A4%8D%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/04/IO%E5%A4%8D%E7%94%A8/" class="post-title-link" itemprop="url">I/O复用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-04 22:08:00" itemprop="dateCreated datePublished" datetime="2021-02-04T22:08:00+08:00">2021-02-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="I-O模型介绍"><a href="#I-O模型介绍" class="headerlink" title="I/O模型介绍"></a>I/O模型介绍</h1><p>同步和异步、阻塞和非阻塞在I/O操作中总是容易分不清楚。<br>I/O操作可以分为：发起I/O请求，执行I/O操作，得到I/O操作结果，返回结果。  </p>
+<h2 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h2><p>同步和异步实际上是一种通信机制，涉及调用方和被调用方。<br><strong>同步</strong>：调用方等待被调用方完成操作然后返回结果；<br><strong>异步</strong>：调用方不需要等待调用方操作，而是被调用方自己操作完成后通知调用方。<br>同步和异步适合用于描述I/O操作的执行部分。</p>
+<h2 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h2><p>阻塞和非阻塞其实是一种调用机制，只涉及调用方，关注的是I/O操作的执行状态，不同点在于请求I/O操作后，针对I/O操作，被调用方的行为。<br>如果调用方等待IO操作完成后返回，则是阻塞的；如果调用方不需要等待I/O操作完成就立即返回，则是非阻塞的，非阻塞的情况下，常常需要多次调用去检查，才能获得I/O操作的结果。</p>
+<h2 id="I-O模型总结"><a href="#I-O模型总结" class="headerlink" title="I/O模型总结"></a>I/O模型总结</h2><ol>
+<li>阻塞I/O<br>当发生系统调用时候，比如recv，用户进程要一直等待到数据拷贝到用户空间，这段时间内进程始终阻塞。它是同步I/O。  </li>
+<li>非阻塞I/O<br>还是以recv为例子，不管有没有数据都返回，如果没有数据，过一会再调用recv看看，如此循环。但是如果有数据，它要等待数据拷贝到用户空间，因此还是同步I/O。（相当于没有数据读的时候阻塞，读的时候还是非阻塞）  </li>
+<li>I/O复用<br>同时监听多个文件描述符，当有可读/可写/异常事件发生的时候，通知进程，进行读写或者处理异常。当没有事件发生时候，正常运行。就当前例子来看还是同步I/O，因为依旧要等待数据读完或者写完才能继续运行。I/O复用可用于同步I/O也可用于异步I/O。</li>
+<li>信号驱动的I/O模型<br>通过调用sigaction注册信号函数，等内核数据准备好的时候，系统中断当前程序，执行信号函数（在这里调用recv）。这还是同步I/O。</li>
+<li>异步I/O模型<br>调用aio_read，让内核等数据准本好，并且复制到用户进程空间后执行实现指定好的函数。这样子省去了进程等待读数据的事件。这是真正的异步I/O。</li>
+<li>I/O的两个阶段<br>内核数据的准备阶段和内核数据复制到用户缓冲区阶段。只有进程不用等待这两个阶段，才是真正的异步I/O。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/04/%E6%AD%BB%E9%94%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1124,194 +1304,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E5%88%9B%E5%BB%BA%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/28/%E5%88%9B%E5%BB%BA%E8%A1%A8/" class="post-title-link" itemprop="url">创建表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-28 11:14:44" itemprop="dateCreated datePublished" datetime="2021-01-28T11:14:44+08:00">2021-01-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h1><h2 id="创建表基础"><a href="#创建表基础" class="headerlink" title="创建表基础"></a>创建表基础</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table customers(</span><br><span class="line">   -&gt; cust_id		int			NOT NULL AUTO_INCREMENT,</span><br><span class="line">   -&gt; cust_name		char(50)	NOT NULL ,</span><br><span class="line">   -&gt; cust_address	char(50)	NULL,</span><br><span class="line">   -&gt; cust_city		char(50)	NULL,</span><br><span class="line">   -&gt; cust_state	char(5)		NULL,</span><br><span class="line">   -&gt; cust_zip		char(10)	NULL,</span><br><span class="line">   -&gt; cust_country	char(50)	NULL,</span><br><span class="line">   -&gt; cust_contact	char(50)	NULL,</span><br><span class="line">   -&gt; cust_email	char(255)	NULL,</span><br><span class="line">   -&gt; PRIMARY KEY (cust_id)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用NULL值"><a href="#使用NULL值" class="headerlink" title="使用NULL值"></a>使用NULL值</h2><p>NULL值就是没有值或缺值，运行NULL值得列也允许在插入行时，不给出该列得值。</p>
-<h2 id="主键介绍"><a href="#主键介绍" class="headerlink" title="主键介绍"></a>主键介绍</h2><p>表中每个行都必须具有唯一的主键值。主键用下列语句定义：<br><code>PRIMARY KEY (vend_id)</code><br>当然也可以用多个作为主键，举例：  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table orderitems(</span><br><span class="line">   -&gt; order_num		int		   NOT NULL ,</span><br><span class="line">   -&gt; order_item	   int		   NOT NULL ,</span><br><span class="line">   -&gt; prod_id		  char(10)      NOT NULL ,</span><br><span class="line">   -&gt; quantity		 int		   NOT NULL ,</span><br><span class="line">   -&gt; item_price	   decimal(8,2)  NOT NULL ,</span><br><span class="line">   -&gt; PRIMARY KEY (order_num, order_item)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用AUTO-INCREMENT"><a href="#使用AUTO-INCREMENT" class="headerlink" title="使用AUTO_INCREMENT"></a>使用AUTO_INCREMENT</h2><p><code>AUTO_INCREMENT</code>告诉MySQL，本列每当增加一行时自动增量。每次执行一个INSERT操作时，MySQL自动对该列增量。</p>
-<h2 id="指定默认值"><a href="#指定默认值" class="headerlink" title="指定默认值"></a>指定默认值</h2><p>如果在插入行时没有给出值，MySQL允许使用默认值，默认值用CREATE TABLE语句得列定义中的DEFAULT关键字指定。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table orderitems(</span><br><span class="line">   -&gt; order_num		int		   NOT NULL ,</span><br><span class="line">   -&gt; order_item	   int		   NOT NULL ,</span><br><span class="line">   -&gt; prod_id		  char(10)      NOT NULL ,</span><br><span class="line">   -&gt; quantity		 int		   NOT NULL DEFAULT 1,</span><br><span class="line">   -&gt; item_price	   decimal(8,2)  NOT NULL ,</span><br><span class="line">   -&gt; PRIMARY KEY (order_num, order_item)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
-
-<h2 id="引擎类型"><a href="#引擎类型" class="headerlink" title="引擎类型"></a>引擎类型</h2><p>MySQL（其他DBMS也一样）有一个具体管理和处理数据的内部引擎。在你使用<code>create table</code>语句时，该引擎具体创建表，而在你使用select或进行其他数据库处理时，该引擎在内部处理你的请求。以下几个是需要知道的引擎：  </p>
-<ul>
-<li>InnoDB是一个可靠的事务处理引擎，它不支持全文本搜索。  </li>
-<li>MEMORY在功能商等同于MyISAM，但由于数据存储在内存中，速度很快。  </li>
-<li>MyISAM是一个性能极高的引擎，它支持全文本搜索，但不支持事务处理。  </li>
-</ul>
-<h1 id="更新表"><a href="#更新表" class="headerlink" title="更新表"></a>更新表</h1><p>为更新表定义，可使用ALTER TABLE语句（理想情况下表一旦被创建就不应该被更新）。  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER TABLE vendors</span><br><span class="line">    -&gt; ADD vend_phone CHAR(20);</span><br></pre></td></tr></table></figure>
-
-<p>如果想删除刚刚添加的列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER TABLE vendors </span><br><span class="line">    -&gt; DROP column vend_phone;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>ALTER TABLE的一种常见用途是定义外键。具体细节不做展开。</p>
-<h1 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h1><p>非常简单：<br><code>DROP TABLE customers2;</code></p>
-<h1 id="重命名表"><a href="#重命名表" class="headerlink" title="重命名表"></a>重命名表</h1><p>使用<code>RENAME TABLE</code>语句可以重新命名一张表：<br><code>RENAME TABLE customers2 TO customers;</code></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">更新和删除数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 23:56:26" itemprop="dateCreated datePublished" datetime="2021-01-27T23:56:26+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="更新数据"><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h1><p>为了更行（修改）表中的数据可以使用<code>UPDATE</code>语句。举例：  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update customers</span><br><span class="line">    -&gt; set cust_email &#x3D; &#39;elmer@fudd.com&#39;</span><br><span class="line">    -&gt; where cust_id &#x3D; 10005;</span><br></pre></td></tr></table></figure>
-<p>基本的update语句由3部分组成：  </p>
-<ul>
-<li>要更新的表  </li>
-<li>列名和它们的新值  </li>
-<li>确定要更新行的过滤条件  </li>
-</ul>
-<p>更新多个列的话：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update customers</span><br><span class="line">    -&gt; set cust_email &#x3D; &#39;elmer@fudd.com&#39;,cust_name &#x3D; &#39;the Fudds&#39;</span><br><span class="line">    -&gt; where cust_id &#x3D; 10005;</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h1><p>为了从表中删除数据，使用<code>DELETE</code>语句：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delete from customers</span><br><span class="line">    -&gt; where cust_id &#x3D; 10006;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1379,7 +1375,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">122</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

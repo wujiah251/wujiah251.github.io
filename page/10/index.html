@@ -191,6 +191,168 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">使用数据处理函数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 14:56:30" itemprop="dateCreated datePublished" datetime="2021-01-27T14:56:30+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用数据处理函数"><a href="#使用数据处理函数" class="headerlink" title="使用数据处理函数"></a>使用数据处理函数</h1><h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p>大多数SQL实现支持以下类型的函数。</p>
+<ul>
+<li>用于处理文本串  </li>
+<li>用于在数值数据上进行算术操作  </li>
+<li>用于处理日期和时间并从这些值中提取特定成分的日期和时间函数  </li>
+<li>返回DBMS正在使用的特殊信息的系统函数</li>
+</ul>
+<h3 id="文本处理函数"><a href="#文本处理函数" class="headerlink" title="文本处理函数"></a>文本处理函数</h3><p>使用Upper()将文本转换为大写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_name, upper(vend_name) as vend_name_upcase</span><br><span class="line">    -&gt; from vendors order by vend_name;</span><br><span class="line">+----------------+------------------+</span><br><span class="line">| vend_name      | vend_name_upcase |</span><br><span class="line">+----------------+------------------+</span><br><span class="line">| ACME           | ACME             |</span><br><span class="line">| Anvils R Us    | ANVILS R US      |</span><br><span class="line">| Furball Inc.   | FURBALL INC.     |</span><br><span class="line">| Jet Set        | JET SET          |</span><br><span class="line">| Jouets Et Ours | JOUETS ET OURS   |</span><br><span class="line">| LT Supplies    | LT SUPPLIES      |</span><br><span class="line">+----------------+------------------+</span><br></pre></td></tr></table></figure>
+<p>常用的文本处理函数有<code>Left()</code>、<code>Length()</code>等等，具体使用查阅相关资料。</p>
+<h3 id="日期和时间处理函数"><a href="#日期和时间处理函数" class="headerlink" title="日期和时间处理函数"></a>日期和时间处理函数</h3><p>函数较多，具体查阅相关资料。</p>
+<h3 id="数值处理函数"><a href="#数值处理函数" class="headerlink" title="数值处理函数"></a>数值处理函数</h3><p>有<code>Abs()</code>、<code>Cos()</code>、<code>Exp()</code>等许多数值处理函数。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%88%9B%E5%BB%BA%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E5%88%9B%E5%BB%BA%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5/" class="post-title-link" itemprop="url">创建计算字段</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 14:44:16" itemprop="dateCreated datePublished" datetime="2021-01-27T14:44:16+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="创建计算字段"><a href="#创建计算字段" class="headerlink" title="创建计算字段"></a>创建计算字段</h1><h2 id="拼接字段"><a href="#拼接字段" class="headerlink" title="拼接字段"></a>拼接字段</h2><p><strong>拼接(concatenate)</strong> 将值联结到一起构成单个值。解决办法就是把两个列拼接起来，在MySQL的SELECT语句中，可使用<code>Concat()</code>函数来拼接两个列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select Concat(vend_name,&#39; (&#39;,vend_country, &#39;)&#39;) </span><br><span class="line">    -&gt; from vendors order by vend_name;</span><br><span class="line">+------------------------------------------+</span><br><span class="line">| Concat(vend_name,&#39; (&#39;,vend_country, &#39;)&#39;) |</span><br><span class="line">+------------------------------------------+</span><br><span class="line">| ACME (USA)                               |</span><br><span class="line">| Anvils R Us (USA)                        |</span><br><span class="line">| Furball Inc. (USA)                       |</span><br><span class="line">| Jet Set (England)                        |</span><br><span class="line">| Jouets Et Ours (France)                  |</span><br><span class="line">| LT Supplies (USA)                        |</span><br><span class="line">+------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>还可以通过删除数据右侧多余的空格来整理数据，比如<code>RTrim()</code>，<code>LTrim()</code>可以删除左边多余的空格。</p>
+<h2 id="执行算术计算"><a href="#执行算术计算" class="headerlink" title="执行算术计算"></a>执行算术计算</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id,</span><br><span class="line">    -&gt; quantity,</span><br><span class="line">    -&gt; item_price,</span><br><span class="line">    -&gt; quantity*item_price as expanded_price</span><br><span class="line">    -&gt; from orderitems</span><br><span class="line">    -&gt; where order_num &#x3D; 20005;</span><br><span class="line">+---------+----------+------------+----------------+</span><br><span class="line">| prod_id | quantity | item_price | expanded_price |</span><br><span class="line">+---------+----------+------------+----------------+</span><br><span class="line">| ANV01   |       10 |       5.99 |          59.90 |</span><br><span class="line">| ANV02   |        3 |       9.99 |          29.97 |</span><br><span class="line">| TNT2    |        5 |      10.00 |          50.00 |</span><br><span class="line">| FB      |        1 |      10.00 |          10.00 |</span><br><span class="line">+---------+----------+------------+----------------+</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%90%9C%E7%B4%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -901,173 +1063,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/22/MySQL-API/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/22/MySQL-API/" class="post-title-link" itemprop="url">MySQL API</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-22 23:14:00" itemprop="dateCreated datePublished" datetime="2021-01-22T23:14:00+08:00">2021-01-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>常见的MySQL API函数如下所示：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">MYSQL *<span class="title">mysql_real_connect</span> <span class="params">(MYSQL *mysql,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *host,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *user, </span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *passwd, </span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *db, </span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">unsigned</span> <span class="keyword">int</span> port,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *unix_socket,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">unsigned</span> <span class="keyword">long</span> client_flag)</span></span>;</span><br><span class="line"><span class="comment">// 返回一个MYSQL指针，host未null或者localhost时链接本地的计算机</span></span><br><span class="line"><span class="comment">// user和passwd是账号和密码</span></span><br><span class="line"><span class="comment">// db是数据库名称，port是端口，MySQL服务器默认端口号是3306</span></span><br><span class="line"><span class="comment">// unix_socket为null标识不适用socket或管道机制，最后一个参数经常设置为0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mysql_select_db</span><span class="params">(MYSQL *mysql,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *db)</span></span>;</span><br><span class="line"><span class="comment">// 选择一个数据库，db是数据库名，类似 USE</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mysql_query</span><span class="params">(MYSQL *mysql, <span class="keyword">const</span> <span class="keyword">char</span> *q)</span></span>;</span><br><span class="line"><span class="comment">// 建立一个查询，q是查询语句，C风格字符串，内容语法和MySQL一致</span></span><br><span class="line"></span><br><span class="line"><span class="function">MYSQL_RES *<span class="title">mysql_store_result</span><span class="params">(MYSQL *mysql)</span></span>;</span><br><span class="line"><span class="comment">// 将全部数据保存在本机</span></span><br><span class="line"><span class="comment">// 返回一个结果指针</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">mysql_num_fields</span><span class="params">(MYSQL_RES *res)</span></span>;</span><br><span class="line"><span class="comment">// 返回结果集的行数</span></span><br><span class="line"></span><br><span class="line"><span class="function">MYSQL_FIELD *<span class="title">mysql_fetch_fields</span><span class="params">(MYSQL_RES *res)</span></span>;</span><br><span class="line"><span class="comment">// 对于结果集，返回所有MYSQL_FIELD结构的数组。每个结构提供了结果集中1列的字段定义。</span></span><br><span class="line"></span><br><span class="line"><span class="function">MYSQL_ROW <span class="title">mysql_fetch_row</span><span class="params">(MYSQL_RES *result)</span></span>;</span><br><span class="line"><span class="comment">// 检索结果集的下一行。在mysql_store_result()之后使用时，如果没有要检索的行，mysql_fetch_row()返回NULL。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mysql_close</span><span class="params">(MYSQL *sock)</span></span>;</span><br><span class="line"><span class="comment">// 关闭一个数据库连接</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/19/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/19/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" class="post-title-link" itemprop="url">最小生成树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-19 17:54:18" itemprop="dateCreated datePublished" datetime="2021-01-19T17:54:18+08:00">2021-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Prim算法"><a href="#Prim算法" class="headerlink" title="Prim算法"></a>Prim算法</h1><p>本算法性质是集合A中的边总是构成一棵树。<br>算法原理：<br>这棵树从任意的根结点r开始，一直长大到覆盖V中的所有结点时为止。算法每一步在连接集合A和A之外的结点的所有边中，选择一条权重最低的结边加入到A中。  </p>
-<p>为了有效的实现Prim算法，需要一种快速的方法来选择一条新的边，以便加入到由集合A中所有边所构成的树里。在下面的伪代码中，连通图G和最小生成树的根结点r将作为算法的输入。在算法的执行过程中，所有不在树A中的结点都存放在一个基于key属性的最小优先队列Q中。对每个结点v，v.key保存的是连接v和树中结点的所有边中的最小边的权重。<br>伪代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">MST-PRIM(G,w,r)</span><br><span class="line">for each u in G.V</span><br><span class="line">	u:key &#x3D; inf</span><br><span class="line">	u:p &#x3D; none</span><br><span class="line">r:key&#x3D;0</span><br><span class="line">Q&#x3D;G.V</span><br><span class="line">while Q!&#x3D;空集</span><br><span class="line">	u&#x3D;extract-min(Q)</span><br><span class="line">	for each v in G.adj[u]</span><br><span class="line">	if v in Q and w(u,v)&lt;v.key</span><br><span class="line">		v.p&#x3D;u</span><br><span class="line">		v.key&#x3D;w(u,v)</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="Kruskal算法"><a href="#Kruskal算法" class="headerlink" title="Kruskal算法"></a>Kruskal算法</h1><p>在所连接森林中两棵不同树的边里面，找到权重最小的边(u,v)。设C1和C2为边(u,v)所连接的两棵树。由于边(u,v)一定是连接C1和其他某棵树的一条轻量级边，边(u,v)是C1的一条安全边。很显然，Kruskal算法属于贪心算法，因为它每次都选择一条权重最小的边加入到森林。<br>我们使用一个不相交集合数据结构来维护几个互不相交的元素集合。每个集合代表当前森林中的一棵树。操作FIND-SET(v)用来返回包含元素u的集合的代表元素。我们可以通过测试FIND-SET(u)是否等于FIND-SET(v)来判断结点u和结点v是否属于同一棵树。Kruskal算法使用UNION过程来对两棵树合并。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">MST-KRUSKAL(G,w)</span><br><span class="line">A&#x3D;空集</span><br><span class="line">for each vertex v in G.V</span><br><span class="line">	MAKE-SET(v)</span><br><span class="line">sort the edge of G.E into nondecreasing order by weight w</span><br><span class="line">for each edge(u,v) in G.E,taken in nondecreasing order by weight</span><br><span class="line">	if FIND-SET(v)!&#x3D;FIND-SET(v)</span><br><span class="line">		A&#x3D;A 并 &#123;(u,v)&#125;</span><br><span class="line">		UNION(u,v)</span><br><span class="line">return A</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/min-cost-to-connect-all-points/">链接</a></p>
-<h2 id="Prim算法-1"><a href="#Prim算法-1" class="headerlink" title="Prim算法"></a>Prim算法</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">distance</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; a,vector&lt;<span class="keyword">int</span>&gt;&amp; b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">abs</span>(a[<span class="number">0</span>]-b[<span class="number">0</span>])+<span class="built_in">abs</span>(a[<span class="number">1</span>]-b[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCostConnectPoints</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; points)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n=points.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(n&lt;=<span class="number">1</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">matrix</span>(n,vector&lt;<span class="keyword">int</span>&gt;(n,<span class="number">0</span>));</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;n;j++)</span><br><span class="line">                matrix[j][i]=matrix[i][j]=<span class="built_in">distance</span>(points[i],points[j]);</span><br><span class="line">        <span class="comment">// 从点0开始生成最小生成树</span></span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">bool</span>&gt; <span class="title">visited</span><span class="params">(n,<span class="literal">false</span>)</span></span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">cost</span><span class="params">(n,INT_MAX)</span></span>;</span><br><span class="line">        visited[<span class="number">0</span>]=<span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</span><br><span class="line">            cost[i]=matrix[i][<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> min_index,min_cost=INT_MAX;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(visited[j])<span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">if</span>(cost[j]&lt;min_cost)&#123;</span><br><span class="line">                    min_cost=cost[j];</span><br><span class="line">                    min_index=j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            res+=min_cost;</span><br><span class="line">            visited[min_index]=<span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(visited[j])<span class="keyword">continue</span>;</span><br><span class="line">                cost[j]=<span class="built_in">min</span>(cost[j],matrix[min_index][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>堆实现版本：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">prim</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt; &gt;&amp; points, <span class="keyword">int</span> start)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = points.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将points转化成邻接矩阵</span></span><br><span class="line">        vector&lt;vector&lt;<span class="keyword">int</span>&gt; &gt; <span class="built_in">g</span>(n, vector&lt;<span class="keyword">int</span>&gt;(n));</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">                <span class="keyword">int</span> dist = <span class="built_in">abs</span>(points[i][<span class="number">0</span>] - points[j][<span class="number">0</span>]) + <span class="built_in">abs</span>(points[i][<span class="number">1</span>] - points[j][<span class="number">1</span>]);</span><br><span class="line">                g[i][j] = dist;</span><br><span class="line">                g[j][i] = dist;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 记录V[i]到Vnew的最近距离</span></span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">lowcost</span><span class="params">(n, INT_MAX)</span></span>;</span><br><span class="line">        <span class="comment">// 记录V[i]是否加入到了Vnew</span></span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">v</span><span class="params">(n, <span class="number">-1</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 格式：&lt;距离, 下标&gt;</span></span><br><span class="line">        priority_queue&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;, vector&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; &gt;, greater&lt;&gt; &gt; pq;</span><br><span class="line">        pq.<span class="built_in">push</span>(<span class="built_in">make_pair</span>(<span class="number">0</span>, start));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (!pq.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> [dist, i] = pq.<span class="built_in">top</span>();</span><br><span class="line">            pq.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="keyword">if</span> (v[i] == <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">            v[i] = <span class="number">0</span>;</span><br><span class="line">            res += dist;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">                <span class="keyword">int</span> w = g[i][j];</span><br><span class="line">                <span class="keyword">if</span> (v[j] == <span class="number">-1</span> &amp;&amp; lowcost[j] &gt; w) &#123;</span><br><span class="line">                    lowcost[j] = w;</span><br><span class="line">                    pq.<span class="built_in">push</span>(<span class="built_in">make_pair</span>(w, j));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCostConnectPoints</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; points)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">prim</span>(points, <span class="number">0</span>);  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>作者：yexiso<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/min-cost-to-connect-all-points/solution/prim-and-kruskal-by-yexiso-c500/">链接</a></p>
-<h2 id="Kruskal算法-1"><a href="#Kruskal算法-1" class="headerlink" title="Kruskal算法"></a>Kruskal算法</h2><p>代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Djset</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; parent; <span class="comment">// 记录节点的根</span></span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; rank;   <span class="comment">// 记录根节点的深度（用于优化）</span></span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; size;   <span class="comment">// 记录每个连通分量的节点个数</span></span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; len;    <span class="comment">// 记录每个连通分量里的所有边长度</span></span><br><span class="line">    <span class="keyword">int</span> num;            <span class="comment">// 记录节点个数</span></span><br><span class="line">    <span class="built_in">Djset</span>(<span class="keyword">int</span> n): <span class="built_in">parent</span>(n), <span class="built_in">rank</span>(n), <span class="built_in">len</span>(n, <span class="number">0</span>), <span class="built_in">size</span>(n, <span class="number">1</span>), <span class="built_in">num</span>(n) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            parent[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 压缩方式：直接指向根节点</span></span><br><span class="line">        <span class="keyword">if</span> (x != parent[x]) &#123;</span><br><span class="line">            parent[x] = <span class="built_in">find</span>(parent[x]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> parent[x];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootx = <span class="built_in">find</span>(x);</span><br><span class="line">        <span class="keyword">int</span> rooty = <span class="built_in">find</span>(y);</span><br><span class="line">        <span class="keyword">if</span> (rootx != rooty) &#123;</span><br><span class="line">            <span class="keyword">if</span> (rank[rootx] &lt; rank[rooty]) &#123;</span><br><span class="line">                <span class="built_in">swap</span>(rootx, rooty);</span><br><span class="line">            &#125;</span><br><span class="line">            parent[rooty] = rootx;</span><br><span class="line">            <span class="keyword">if</span> (rank[rootx] == rank[rooty]) rank[rootx] += <span class="number">1</span>;</span><br><span class="line">            <span class="comment">// rooty的父节点设置为rootx,同时将rooty的节点数和边长度累加到rootx,</span></span><br><span class="line">            size[rootx] += size[rooty];</span><br><span class="line">            len[rootx] += len[rooty] + length;</span><br><span class="line">            <span class="comment">// 如果某个连通分量的节点数 包含了所有节点，直接返回边长度</span></span><br><span class="line">            <span class="keyword">if</span> (size[rootx] == num) <span class="keyword">return</span> len[rootx];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Edge</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> start; <span class="comment">// 顶点1</span></span><br><span class="line">    <span class="keyword">int</span> end;   <span class="comment">// 顶点2</span></span><br><span class="line">    <span class="keyword">int</span> len;   <span class="comment">// 长度</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCostConnectPoints</span><span class="params">(vector&lt;vector&lt;<span class="keyword">int</span>&gt;&gt;&amp; points)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> n = points.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">Djset <span class="title">ds</span><span class="params">(n)</span></span>;</span><br><span class="line">        vector&lt;Edge&gt; edges;</span><br><span class="line">        <span class="comment">// 建立点-边式数据结构</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">                Edge edge = &#123;i, j, <span class="built_in">abs</span>(points[i][<span class="number">0</span>] - points[j][<span class="number">0</span>]) + <span class="built_in">abs</span>(points[i][<span class="number">1</span>] - points[j][<span class="number">1</span>])&#125;;</span><br><span class="line">                edges.<span class="built_in">emplace_back</span>(edge);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 按边长度排序</span></span><br><span class="line">        <span class="built_in">sort</span>(edges.<span class="built_in">begin</span>(), edges.<span class="built_in">end</span>(), [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; a, <span class="keyword">const</span> <span class="keyword">auto</span>&amp; b) &#123;</span><br><span class="line">            <span class="keyword">return</span> a.len &lt; b.len;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 连通分量合并</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; e : edges) &#123;</span><br><span class="line">           res = ds.<span class="built_in">merge</span>(e.start, e.end, e.len);</span><br><span class="line">           <span class="keyword">if</span> (res != <span class="number">-1</span>) <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1135,7 +1134,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">122</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1244,61 +1243,6 @@
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-          load: ['[tex]/mhchem'],
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-          packages: {'[+]': ['mhchem']},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 
