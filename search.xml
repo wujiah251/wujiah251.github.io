@@ -4,6 +4,150 @@
   
     
     <entry>
+      <title>慢查询日志</title>
+      <link href="2021/05/03/%E6%85%A2%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97/"/>
+      <url>2021/05/03/%E6%85%A2%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>二进制位数组</title>
+      <link href="2021/05/03/%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D%E6%95%B0%E7%BB%84/"/>
+      <url>2021/05/03/%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BD%8D%E6%95%B0%E7%BB%84/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>排序</title>
+      <link href="2021/05/03/%E6%8E%92%E5%BA%8F/"/>
+      <url>2021/05/03/%E6%8E%92%E5%BA%8F/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Lua脚本</title>
+      <link href="2021/05/03/Lua%E8%84%9A%E6%9C%AC/"/>
+      <url>2021/05/03/Lua%E8%84%9A%E6%9C%AC/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Lua脚本"><a href="#Lua脚本" class="headerlink" title="Lua脚本"></a>Lua脚本</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> Redis </category>
+          
+          <category> 独立功能的实现 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>发布和订阅</title>
+      <link href="2021/05/03/%E5%8F%91%E5%B8%83%E5%92%8C%E8%AE%A2%E9%98%85/"/>
+      <url>2021/05/03/%E5%8F%91%E5%B8%83%E5%92%8C%E8%AE%A2%E9%98%85/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Redis </category>
+          
+          <category> 独立功能的实现 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>集群</title>
+      <link href="2021/05/02/%E9%9B%86%E7%BE%A4/"/>
+      <url>2021/05/02/%E9%9B%86%E7%BE%A4/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Redis </category>
+          
+          <category> 集群 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Sentinel</title>
+      <link href="2021/05/02/Sentinel/"/>
+      <url>2021/05/02/Sentinel/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Redis </category>
+          
+          <category> 多机数据库的实现 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>复制</title>
+      <link href="2021/05/02/%E5%A4%8D%E5%88%B6/"/>
+      <url>2021/05/02/%E5%A4%8D%E5%88%B6/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Redis </category>
+          
+          <category> 多机数据库的实现 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>客户端</title>
       <link href="2021/05/01/%E5%AE%A2%E6%88%B7%E7%AB%AF/"/>
       <url>2021/05/01/%E5%AE%A2%E6%88%B7%E7%AB%AF/</url>
@@ -14,6 +158,8 @@
       <categories>
           
           <category> Redis </category>
+          
+          <category> 单机数据库的实现 </category>
           
       </categories>
       
@@ -27,12 +173,14 @@
       <link href="2021/05/01/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
       <url>2021/05/01/%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
       
-        <content type="html"><![CDATA[<p>本文是《Redis设计与实现》中关于服务器的内容的笔记。<br> <span id="more"></span></p><h1 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h1><h1 id="命令的请求过程"><a href="#命令的请求过程" class="headerlink" title="命令的请求过程"></a>命令的请求过程</h1><h3 id="命令请求发送"><a href="#命令请求发送" class="headerlink" title="命令请求发送"></a>命令请求发送</h3><p><img src="../images/%E6%9C%8D%E5%8A%A1%E5%99%A8/image-20210501211513103.png" alt="image-20210501211513103"></p><h3 id="读取命令请求"><a href="#读取命令请求" class="headerlink" title="读取命令请求"></a>读取命令请求</h3><p>客户端和服务器之间的连接套接字变成可读的时候，服务器调用命令请求处理器来执行以下操作：</p><ol><li>读取套接字中的协议格式的命令请求，并将其保存到客户端状态的输入缓冲区里面。</li><li>对输入缓冲区中的命令请求进行分析，提取出命令请求中的包含的命令参数，以及命令的个数，然后分别将参数和参数个数保存到客户端状态的argv属性和argc属性里面。</li><li>调用命令执行器，执行客户端指定的命令。</li></ol><h3 id="命令执行器（1）：查找命令实现"><a href="#命令执行器（1）：查找命令实现" class="headerlink" title="命令执行器（1）：查找命令实现"></a>命令执行器（1）：查找命令实现</h3><p>命令查找器要做的第一件事就是根据客户端状态的argv[0]参数，在命令表中查找参数所指定的命令，并将找到的命令保存到客户端状态的cmd属性里面。</p><p>命令表是一个字典，键是命令名字，比如set、get等等；值则是一个个redisCommand结构，每个redisCommand结构记录了一个Redis命令的实现信息。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisCommand</span> &#123;</span></span><br><span class="line">    <span class="comment">// 命令名字</span></span><br><span class="line">    <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="comment">// 实现函数</span></span><br><span class="line">    redisCommandProc *proc;</span><br><span class="line">    <span class="comment">// 参数个数</span></span><br><span class="line">    <span class="keyword">int</span> arity;</span><br><span class="line">    <span class="comment">// 字符串表示的 FLAG，这个值记录了命令的属性，比如是写还是读</span></span><br><span class="line">    <span class="keyword">char</span> *sflags; </span><br><span class="line">    <span class="comment">// 实际 FLAG，对sflags标识进行分析得出的二进制标识，由程序自动生成</span></span><br><span class="line">    <span class="keyword">int</span> flags;    </span><br><span class="line">    <span class="comment">// 从命令中判断命令的键参数。在 Redis 集群转向时使用。</span></span><br><span class="line">    redisGetKeysProc *getkeys_proc;</span><br><span class="line">    <span class="comment">/* What keys should be loaded in background when calling this command? */</span></span><br><span class="line">    <span class="comment">// 指定哪些参数是 key</span></span><br><span class="line">    <span class="keyword">int</span> firstkey; <span class="comment">/* The first argument that&#x27;s a key (0 = no keys) */</span></span><br><span class="line">    <span class="keyword">int</span> lastkey;  <span class="comment">/* The last argument that&#x27;s a key */</span></span><br><span class="line">    <span class="keyword">int</span> keystep;  <span class="comment">/* The step between first and last key */</span></span><br><span class="line">    <span class="comment">// 统计信息</span></span><br><span class="line">    <span class="comment">// microseconds 记录了命令执行耗费的总毫微秒数</span></span><br><span class="line">    <span class="comment">// calls 是命令被执行的总次数</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> microseconds, calls;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><h3 id="命令执行器（2）：执行预备操作"><a href="#命令执行器（2）：执行预备操作" class="headerlink" title="命令执行器（2）：执行预备操作"></a>命令执行器（2）：执行预备操作</h3><p>在真正执行命令之前，程序还需要进行一些预备操作，从而确保命令可以正确执行：</p><ul><li>检查客户端状态的cmd指针是否指向NULL；</li><li>根据客户端cmd属性指向的redisCommand的arity属性，检查命令请求所给定的参数个数是否正确，当参数个数不正确时，不再执行后续步骤，直接向客户端返回一个错误；</li><li>检查客户端是否通过了身份验证；</li><li>如果服务器打开了maxmemory功能，那么在执行命令之前，先检查服务器的内存占用情况，并在有需要时进行内存回收，从而使得接下来的命令可以顺利执行。</li></ul><p>还有很多预备操作，这里不一一列举。</p><h3 id="命令执行器（3）调用命令的实现函数"><a href="#命令执行器（3）调用命令的实现函数" class="headerlink" title="命令执行器（3）调用命令的实现函数"></a>命令执行器（3）调用命令的实现函数</h3><p>当服务器决定要执行命令的时候，它只需要执行以下语句就可以了：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client-&gt;cmd-&gt;proc(client)</span><br></pre></td></tr></table></figure><p>被调用的命令实现函数会执行指定的操作，并产生相应的命令恢复，这些回复会被保存在客户端状态的输出缓冲区里面，之后实现函数还会为客户端的套接字关联命令回复处理器，这个处理器负责将回复返回给客户端。</p><h3 id="命令执行器（4）：执行后续操作"><a href="#命令执行器（4）：执行后续操作" class="headerlink" title="命令执行器（4）：执行后续操作"></a>命令执行器（4）：执行后续操作</h3><p>在执行晚实现函数之后，服务器还会做一些后续操作：</p><ul><li>如果服务器开启了慢查询日志功能，那么慢查询日志模块，会检查是否需要为刚刚执行完的命令请求添加一条新的慢查询日志。</li><li>根据刚刚执行命令所耗费的时长，更新被执行命令的redisComand结构的milliseconds属性，并将命令的redisCommand结构的calls计数器的值增一。</li><li>根据是否开启了AOF持久化，将命令请求写入AOF缓冲区（也可能还包括重写缓冲区）。</li><li>如果有其他从服务器正在复制当前这个服务器，那么服务器会将刚刚执行的命令传播给所有从服务器。</li></ul><h3 id="将命令回复发送给客户端"><a href="#将命令回复发送给客户端" class="headerlink" title="将命令回复发送给客户端"></a>将命令回复发送给客户端</h3><p>当客户端套接字编程可写状态时，服务器会执行命令回复处理器，将输出缓冲区中的命令回复发送给客户端。</p><h3 id="客户端接收并打印命令回复"><a href="#客户端接收并打印命令回复" class="headerlink" title="客户端接收并打印命令回复"></a>客户端接收并打印命令回复</h3><p>当客户端收到协议格式的命令回复之后，它会将这些回复转换成人类可读的格式，并将打印给用户观看。</p><h2 id="serverCron函数"><a href="#serverCron函数" class="headerlink" title="serverCron函数"></a>serverCron函数</h2><p>Redis服务器中的serverCron函数默认每隔100毫秒执行一次，这个函数负责管理服务器的资源，并保持服务器自身的良好运转。</p><h3 id="更新服务器时间缓存"><a href="#更新服务器时间缓存" class="headerlink" title="更新服务器时间缓存"></a>更新服务器时间缓存</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span>&#123;</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 保存了秒级精度的系统当前UNIX时间戳</span></span><br><span class="line"><span class="keyword">time_t</span> unixtime</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> mstime;</span><br><span class="line"><span class="comment">// 保存了毫秒精度的系统当前时间UNIX时间戳</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>因为serverCron函数默认会以100毫秒一次的频率更新unixtime属性和mstime属性，所以这两个属性记录的时间的精确度并不高：</p><ul><li>服务器只会在打印日志、更新服务器的LRU时钟、决定是否执行持久化任务、计算服务器上线时间这类对精确度要求不高的功能上使用unixtime和mstime属性。</li><li>对于键设置过期时间、添加慢查询日志这种需要高精度的时间功能来说，服务器还是会再次执行系统调用，从而获得最准确的系统当前时间。</li></ul><h3 id="更新LRU时钟"><a href="#更新LRU时钟" class="headerlink" title="更新LRU时钟"></a>更新LRU时钟</h3><p>当服务器要计算一个数据库键的空转时间，程序会用服务器的lrulock（服务器时间缓存的一种）属性记录的时间减去对象的lru属性记录的时间，得出的计算结果就是这个对象的空转时间。</p><p>serverCron函数默认以10秒一次的频率更新lrulock属性的值。</p><h3 id="更新服务器每秒执行命令次数"><a href="#更新服务器每秒执行命令次数" class="headerlink" title="更新服务器每秒执行命令次数"></a>更新服务器每秒执行命令次数</h3><p>serverCron函数中的trackOperationsPerSecond函数会以每100毫秒一次的频率执行，这个函数的功能是以抽样计算的方式，估算并将记录服务器在最近一次秒钟处理的命令请求数量，这个值可以通过INFO status命令的instantaneous_ops_per_sec域查看。</p><h3 id="更新服务器内存峰值记录"><a href="#更新服务器内存峰值记录" class="headerlink" title="更新服务器内存峰值记录"></a>更新服务器内存峰值记录</h3><p>服务器状态中的stat_peak_memory属性记录了服务器内存的峰值大小：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span>&#123;</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 已使用内存峰值</span></span><br><span class="line"><span class="keyword">size_t</span> stat_peak_memory;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>serverCron函数每次执行，都会查看服务器当前使用的内存数量，并更新stat_peak_memory。</p><h3 id="处理SIGTERM信号"><a href="#处理SIGTERM信号" class="headerlink" title="处理SIGTERM信号"></a>处理SIGTERM信号</h3><p>在启动服务器时，Redis会为服务器进程的SIGTERM信号关联处理器sigtermHandler函数，这个信号处理器负责在服务器接到SIGTERM信号时，打开服务器状态的shutdown_asap标识。</p><p>每次serverCron函数运行时，都会对服务器状态的shutdown_asap属性进行检查，并根据属性的值决定是否关闭服务器。</p><h3 id="管理客户端资源"><a href="#管理客户端资源" class="headerlink" title="管理客户端资源"></a>管理客户端资源</h3><p>serverCron函数每次执行都会调用clientCron函数、clientCron函数会对一定数量的客户端进行以下两个检查：</p><ul><li>如果客户端与服务器之间的连接已经超时，那么程序释放这个客户端。</li><li>如果客户端在上一次执行命令请求之后，输入缓冲区的大小超过了一定的长度，那么程序会释放客户端当前的输入缓冲区，并重新创建一个默认大小的输入缓冲区，从而防止客户端的输入缓冲区耗费了过多的内存。</li></ul><h3 id="管理数据库资源"><a href="#管理数据库资源" class="headerlink" title="管理数据库资源"></a>管理数据库资源</h3><p>serverCron函数每次执行都会调用databaseCron函数，这个函数会对服务器中的一部分数据库进行检查，删除其中的过期键，并且有需要时，对字典进行收缩操作。</p><h3 id="执行被延迟的BGREWRITEAOF"><a href="#执行被延迟的BGREWRITEAOF" class="headerlink" title="执行被延迟的BGREWRITEAOF"></a>执行被延迟的BGREWRITEAOF</h3><p>在服务器执行BGSAVE命令的期间，如果客户端向服务器发来的BGREWIRTEAOF命令，那么服务器会将BGREWIRTAOF命令的执行时间延迟到BGSAVE命令执行完毕之后。</p><h3 id="检查持久化操作的运行状态"><a href="#检查持久化操作的运行状态" class="headerlink" title="检查持久化操作的运行状态"></a>检查持久化操作的运行状态</h3><p>服务器状态持久化使用rdb_child_pid属性和aof_child_pid属性记录执行BGSAVE命令和BGREWRITEAOF命令的子进程的ID，这两个属性也可以用于检查BGSAVE命令或者BGREWRITEAOF命令是否正在执行。</p><h2 id="初始化服务器"><a href="#初始化服务器" class="headerlink" title="初始化服务器"></a>初始化服务器</h2><h3 id="初始化服务器状态结构"><a href="#初始化服务器状态结构" class="headerlink" title="初始化服务器状态结构"></a>初始化服务器状态结构</h3><p>初始化服务器的第一步是创建一个redisServer类型的实例变量，server作为服务器的状态，并为结构中的各个属性设置默认值。</p><p>初始化server变量的工作由initServerConfig函数完成。主要工作包括：</p><ul><li>设置服务器的运行ID。</li><li>设置服务器的默认允许频率。</li><li>设置服务器的默认配置文件路径。</li><li>设置服务器的允许架构。</li><li>设置服务器的默认端口号。</li><li>设置服务器的默认RDB持久化条件和AOF持久化条件。</li><li>初始化服务器的LRU时钟。</li><li>创建文件表。</li></ul><h3 id="载入配置选项"><a href="#载入配置选项" class="headerlink" title="载入配置选项"></a>载入配置选项</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> redis-server --port 10086</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> redis-server redis.conf</span></span><br></pre></td></tr></table></figure><p>我们可以通过指定配置文件的方式修改了服务器的数据库数量，以及RDB持久化模块的压缩功能。</p><h3 id="初始化服务器的数据结构"><a href="#初始化服务器的数据结构" class="headerlink" title="初始化服务器的数据结构"></a>初始化服务器的数据结构</h3><p>在之前执行initServerConfig函数初始化server状态时，程序只创建了命令表一个数据结构，不过除了命令表之外，服务器状态还包含了其他数据结构，比如：</p><ul><li>server.clients链表；</li><li>server.db数据；</li><li>用于保存订阅信息的server.pubsub_channels字典；</li></ul><p>当初初始服务器进行到这一步，服务器将调用initServer函数，为以上的数据结构分配内存，并且这个函数还负责设置信号处理器、创建共享对象等重要工作。</p><h3 id="还原数据库状态"><a href="#还原数据库状态" class="headerlink" title="还原数据库状态"></a>还原数据库状态</h3><p>如果服务器启用了AOF持久化功能，服务器需要载入RDB文件或者AOF文件，并根据文件记录的内容来还原服务器的数据库状态。</p>]]></content>
+        <content type="html"><![CDATA[<p>本文是《Redis设计与实现》中关于服务器的内容的笔记。<br> <span id="more"></span></p><h1 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h1><h1 id="命令的请求过程"><a href="#命令的请求过程" class="headerlink" title="命令的请求过程"></a>命令的请求过程</h1><h3 id="命令请求发送"><a href="#命令请求发送" class="headerlink" title="命令请求发送"></a>命令请求发送</h3><h3 id="读取命令请求"><a href="#读取命令请求" class="headerlink" title="读取命令请求"></a>读取命令请求</h3><p>客户端和服务器之间的连接套接字变成可读的时候，服务器调用命令请求处理器来执行以下操作：</p><ol><li>读取套接字中的协议格式的命令请求，并将其保存到客户端状态的输入缓冲区里面。</li><li>对输入缓冲区中的命令请求进行分析，提取出命令请求中的包含的命令参数，以及命令的个数，然后分别将参数和参数个数保存到客户端状态的argv属性和argc属性里面。</li><li>调用命令执行器，执行客户端指定的命令。</li></ol><h3 id="命令执行器（1）：查找命令实现"><a href="#命令执行器（1）：查找命令实现" class="headerlink" title="命令执行器（1）：查找命令实现"></a>命令执行器（1）：查找命令实现</h3><p>命令查找器要做的第一件事就是根据客户端状态的argv[0]参数，在命令表中查找参数所指定的命令，并将找到的命令保存到客户端状态的cmd属性里面。</p><p>命令表是一个字典，键是命令名字，比如set、get等等；值则是一个个redisCommand结构，每个redisCommand结构记录了一个Redis命令的实现信息。</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisCommand</span> &#123;</span></span><br><span class="line">    <span class="comment">// 命令名字</span></span><br><span class="line">    <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="comment">// 实现函数</span></span><br><span class="line">    redisCommandProc *proc;</span><br><span class="line">    <span class="comment">// 参数个数</span></span><br><span class="line">    <span class="keyword">int</span> arity;</span><br><span class="line">    <span class="comment">// 字符串表示的 FLAG，这个值记录了命令的属性，比如是写还是读</span></span><br><span class="line">    <span class="keyword">char</span> *sflags; </span><br><span class="line">    <span class="comment">// 实际 FLAG，对sflags标识进行分析得出的二进制标识，由程序自动生成</span></span><br><span class="line">    <span class="keyword">int</span> flags;    </span><br><span class="line">    <span class="comment">// 从命令中判断命令的键参数。在 Redis 集群转向时使用。</span></span><br><span class="line">    redisGetKeysProc *getkeys_proc;</span><br><span class="line">    <span class="comment">/* What keys should be loaded in background when calling this command? */</span></span><br><span class="line">    <span class="comment">// 指定哪些参数是 key</span></span><br><span class="line">    <span class="keyword">int</span> firstkey; <span class="comment">/* The first argument that&#x27;s a key (0 = no keys) */</span></span><br><span class="line">    <span class="keyword">int</span> lastkey;  <span class="comment">/* The last argument that&#x27;s a key */</span></span><br><span class="line">    <span class="keyword">int</span> keystep;  <span class="comment">/* The step between first and last key */</span></span><br><span class="line">    <span class="comment">// 统计信息</span></span><br><span class="line">    <span class="comment">// microseconds 记录了命令执行耗费的总毫微秒数</span></span><br><span class="line">    <span class="comment">// calls 是命令被执行的总次数</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> microseconds, calls;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><h3 id="命令执行器（2）：执行预备操作"><a href="#命令执行器（2）：执行预备操作" class="headerlink" title="命令执行器（2）：执行预备操作"></a>命令执行器（2）：执行预备操作</h3><p>在真正执行命令之前，程序还需要进行一些预备操作，从而确保命令可以正确执行：</p><ul><li>检查客户端状态的cmd指针是否指向NULL；</li><li>根据客户端cmd属性指向的redisCommand的arity属性，检查命令请求所给定的参数个数是否正确，当参数个数不正确时，不再执行后续步骤，直接向客户端返回一个错误；</li><li>检查客户端是否通过了身份验证；</li><li>如果服务器打开了maxmemory功能，那么在执行命令之前，先检查服务器的内存占用情况，并在有需要时进行内存回收，从而使得接下来的命令可以顺利执行。</li></ul><p>还有很多预备操作，这里不一一列举。</p><h3 id="命令执行器（3）调用命令的实现函数"><a href="#命令执行器（3）调用命令的实现函数" class="headerlink" title="命令执行器（3）调用命令的实现函数"></a>命令执行器（3）调用命令的实现函数</h3><p>当服务器决定要执行命令的时候，它只需要执行以下语句就可以了：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client-&gt;cmd-&gt;proc(client)</span><br></pre></td></tr></table></figure><p>被调用的命令实现函数会执行指定的操作，并产生相应的命令恢复，这些回复会被保存在客户端状态的输出缓冲区里面，之后实现函数还会为客户端的套接字关联命令回复处理器，这个处理器负责将回复返回给客户端。</p><h3 id="命令执行器（4）：执行后续操作"><a href="#命令执行器（4）：执行后续操作" class="headerlink" title="命令执行器（4）：执行后续操作"></a>命令执行器（4）：执行后续操作</h3><p>在执行晚实现函数之后，服务器还会做一些后续操作：</p><ul><li>如果服务器开启了慢查询日志功能，那么慢查询日志模块，会检查是否需要为刚刚执行完的命令请求添加一条新的慢查询日志。</li><li>根据刚刚执行命令所耗费的时长，更新被执行命令的redisComand结构的milliseconds属性，并将命令的redisCommand结构的calls计数器的值增一。</li><li>根据是否开启了AOF持久化，将命令请求写入AOF缓冲区（也可能还包括重写缓冲区）。</li><li>如果有其他从服务器正在复制当前这个服务器，那么服务器会将刚刚执行的命令传播给所有从服务器。</li></ul><h3 id="将命令回复发送给客户端"><a href="#将命令回复发送给客户端" class="headerlink" title="将命令回复发送给客户端"></a>将命令回复发送给客户端</h3><p>当客户端套接字编程可写状态时，服务器会执行命令回复处理器，将输出缓冲区中的命令回复发送给客户端。</p><h3 id="客户端接收并打印命令回复"><a href="#客户端接收并打印命令回复" class="headerlink" title="客户端接收并打印命令回复"></a>客户端接收并打印命令回复</h3><p>当客户端收到协议格式的命令回复之后，它会将这些回复转换成人类可读的格式，并将打印给用户观看。</p><h2 id="serverCron函数"><a href="#serverCron函数" class="headerlink" title="serverCron函数"></a>serverCron函数</h2><p>Redis服务器中的serverCron函数默认每隔100毫秒执行一次，这个函数负责管理服务器的资源，并保持服务器自身的良好运转。</p><h3 id="更新服务器时间缓存"><a href="#更新服务器时间缓存" class="headerlink" title="更新服务器时间缓存"></a>更新服务器时间缓存</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span>&#123;</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 保存了秒级精度的系统当前UNIX时间戳</span></span><br><span class="line"><span class="keyword">time_t</span> unixtime</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> mstime;</span><br><span class="line"><span class="comment">// 保存了毫秒精度的系统当前时间UNIX时间戳</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>因为serverCron函数默认会以100毫秒一次的频率更新unixtime属性和mstime属性，所以这两个属性记录的时间的精确度并不高：</p><ul><li>服务器只会在打印日志、更新服务器的LRU时钟、决定是否执行持久化任务、计算服务器上线时间这类对精确度要求不高的功能上使用unixtime和mstime属性。</li><li>对于键设置过期时间、添加慢查询日志这种需要高精度的时间功能来说，服务器还是会再次执行系统调用，从而获得最准确的系统当前时间。</li></ul><h3 id="更新LRU时钟"><a href="#更新LRU时钟" class="headerlink" title="更新LRU时钟"></a>更新LRU时钟</h3><p>当服务器要计算一个数据库键的空转时间，程序会用服务器的lrulock（服务器时间缓存的一种）属性记录的时间减去对象的lru属性记录的时间，得出的计算结果就是这个对象的空转时间。</p><p>serverCron函数默认以10秒一次的频率更新lrulock属性的值。</p><h3 id="更新服务器每秒执行命令次数"><a href="#更新服务器每秒执行命令次数" class="headerlink" title="更新服务器每秒执行命令次数"></a>更新服务器每秒执行命令次数</h3><p>serverCron函数中的trackOperationsPerSecond函数会以每100毫秒一次的频率执行，这个函数的功能是以抽样计算的方式，估算并将记录服务器在最近一次秒钟处理的命令请求数量，这个值可以通过INFO status命令的instantaneous_ops_per_sec域查看。</p><h3 id="更新服务器内存峰值记录"><a href="#更新服务器内存峰值记录" class="headerlink" title="更新服务器内存峰值记录"></a>更新服务器内存峰值记录</h3><p>服务器状态中的stat_peak_memory属性记录了服务器内存的峰值大小：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span>&#123;</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 已使用内存峰值</span></span><br><span class="line"><span class="keyword">size_t</span> stat_peak_memory;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>serverCron函数每次执行，都会查看服务器当前使用的内存数量，并更新stat_peak_memory。</p><h3 id="处理SIGTERM信号"><a href="#处理SIGTERM信号" class="headerlink" title="处理SIGTERM信号"></a>处理SIGTERM信号</h3><p>在启动服务器时，Redis会为服务器进程的SIGTERM信号关联处理器sigtermHandler函数，这个信号处理器负责在服务器接到SIGTERM信号时，打开服务器状态的shutdown_asap标识。</p><p>每次serverCron函数运行时，都会对服务器状态的shutdown_asap属性进行检查，并根据属性的值决定是否关闭服务器。</p><h3 id="管理客户端资源"><a href="#管理客户端资源" class="headerlink" title="管理客户端资源"></a>管理客户端资源</h3><p>serverCron函数每次执行都会调用clientCron函数、clientCron函数会对一定数量的客户端进行以下两个检查：</p><ul><li>如果客户端与服务器之间的连接已经超时，那么程序释放这个客户端。</li><li>如果客户端在上一次执行命令请求之后，输入缓冲区的大小超过了一定的长度，那么程序会释放客户端当前的输入缓冲区，并重新创建一个默认大小的输入缓冲区，从而防止客户端的输入缓冲区耗费了过多的内存。</li></ul><h3 id="管理数据库资源"><a href="#管理数据库资源" class="headerlink" title="管理数据库资源"></a>管理数据库资源</h3><p>serverCron函数每次执行都会调用databaseCron函数，这个函数会对服务器中的一部分数据库进行检查，删除其中的过期键，并且有需要时，对字典进行收缩操作。</p><h3 id="执行被延迟的BGREWRITEAOF"><a href="#执行被延迟的BGREWRITEAOF" class="headerlink" title="执行被延迟的BGREWRITEAOF"></a>执行被延迟的BGREWRITEAOF</h3><p>在服务器执行BGSAVE命令的期间，如果客户端向服务器发来的BGREWIRTEAOF命令，那么服务器会将BGREWIRTAOF命令的执行时间延迟到BGSAVE命令执行完毕之后。</p><h3 id="检查持久化操作的运行状态"><a href="#检查持久化操作的运行状态" class="headerlink" title="检查持久化操作的运行状态"></a>检查持久化操作的运行状态</h3><p>服务器状态持久化使用rdb_child_pid属性和aof_child_pid属性记录执行BGSAVE命令和BGREWRITEAOF命令的子进程的ID，这两个属性也可以用于检查BGSAVE命令或者BGREWRITEAOF命令是否正在执行。</p><h2 id="初始化服务器"><a href="#初始化服务器" class="headerlink" title="初始化服务器"></a>初始化服务器</h2><h3 id="初始化服务器状态结构"><a href="#初始化服务器状态结构" class="headerlink" title="初始化服务器状态结构"></a>初始化服务器状态结构</h3><p>初始化服务器的第一步是创建一个redisServer类型的实例变量，server作为服务器的状态，并为结构中的各个属性设置默认值。</p><p>初始化server变量的工作由initServerConfig函数完成。主要工作包括：</p><ul><li>设置服务器的运行ID。</li><li>设置服务器的默认允许频率。</li><li>设置服务器的默认配置文件路径。</li><li>设置服务器的允许架构。</li><li>设置服务器的默认端口号。</li><li>设置服务器的默认RDB持久化条件和AOF持久化条件。</li><li>初始化服务器的LRU时钟。</li><li>创建文件表。</li></ul><h3 id="载入配置选项"><a href="#载入配置选项" class="headerlink" title="载入配置选项"></a>载入配置选项</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> redis-server --port 10086</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> redis-server redis.conf</span></span><br></pre></td></tr></table></figure><p>我们可以通过指定配置文件的方式修改了服务器的数据库数量，以及RDB持久化模块的压缩功能。</p><h3 id="初始化服务器的数据结构"><a href="#初始化服务器的数据结构" class="headerlink" title="初始化服务器的数据结构"></a>初始化服务器的数据结构</h3><p>在之前执行initServerConfig函数初始化server状态时，程序只创建了命令表一个数据结构，不过除了命令表之外，服务器状态还包含了其他数据结构，比如：</p><ul><li>server.clients链表；</li><li>server.db数据；</li><li>用于保存订阅信息的server.pubsub_channels字典；</li></ul><p>当初初始服务器进行到这一步，服务器将调用initServer函数，为以上的数据结构分配内存，并且这个函数还负责设置信号处理器、创建共享对象等重要工作。</p><h3 id="还原数据库状态"><a href="#还原数据库状态" class="headerlink" title="还原数据库状态"></a>还原数据库状态</h3><p>如果服务器启用了AOF持久化功能，服务器需要载入RDB文件或者AOF文件，并根据文件记录的内容来还原服务器的数据库状态。</p>]]></content>
       
       
       <categories>
           
           <category> Redis </category>
+          
+          <category> 单机数据库的实现 </category>
           
       </categories>
       
@@ -53,6 +201,8 @@
           
           <category> Redis </category>
           
+          <category> 单机数据库的实现 </category>
+          
       </categories>
       
       
@@ -71,6 +221,8 @@
       <categories>
           
           <category> Redis </category>
+          
+          <category> 单机数据库的实现 </category>
           
       </categories>
       
@@ -91,6 +243,8 @@
           
           <category> Redis </category>
           
+          <category> 单机数据库的实现 </category>
+          
       </categories>
       
       
@@ -109,6 +263,8 @@
       <categories>
           
           <category> Redis </category>
+          
+          <category> 单机数据库的实现 </category>
           
       </categories>
       
@@ -129,6 +285,8 @@
           
           <category> Redis </category>
           
+          <category> 数据结构与对象 </category>
+          
       </categories>
       
       
@@ -143,6 +301,14 @@
       
         <content type="html"><![CDATA[<h1 id="压缩列表"><a href="#压缩列表" class="headerlink" title="压缩列表"></a>压缩列表</h1><h2 id="压缩列表的构成"><a href="#压缩列表的构成" class="headerlink" title="压缩列表的构成"></a>压缩列表的构成</h2><p><img src="../images/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/压缩列表的各个组成部分.png" alt="压缩列表的各个组成部分"></p><div class="table-container"><table><thead><tr><th style="text-align:left">属性</th><th>类型</th><th>长度</th><th>用途</th></tr></thead><tbody><tr><td style="text-align:left">zlbytes</td><td>uint32_t</td><td>4字节</td><td>记录整个压缩列表占用的内存字节数：在对压缩列表进行内存重分配，或者计算zlend的位置时使用</td></tr><tr><td style="text-align:left">zltail</td><td>uint32_t</td><td>4字节</td><td>记录压缩列表距离列表尾节点的起始地址有多少字节</td></tr><tr><td style="text-align:left">zllen</td><td>uint32_t</td><td>2字节</td><td>记录压缩列表包含的节点数量，当这个属性的值下于UINT16_MAX（65535）时，则个值才是正确的，超过时候需要遍历整个列表才能计算得出</td></tr><tr><td style="text-align:left">entryX</td><td>列表节点</td><td>不定</td><td>压缩列表包含的各个节点长度并不一定相同，长度由节点保存的内容决定</td></tr><tr><td style="text-align:left">zlend</td><td>uint8_t</td><td>1字节</td><td>特殊值0xFF，用于标记压缩列表的末端</td></tr></tbody></table></div><h2 id="压缩列表的节点构成"><a href="#压缩列表的节点构成" class="headerlink" title="压缩列表的节点构成"></a>压缩列表的节点构成</h2><p>每个压缩列表节点都可以保存一个字节数组或者一个整数值，其中字节数组可以是以下三种长度之一：</p><ul><li>长度小于等于63（$2^6-1$）字节的字节数组；  </li><li>长度小于等于16383（$2^{14}-1$）字节的字节数组；  </li><li>长度小于等于4294967295（$2^{32}-1$）字节的字节数组；  </li></ul><p>而整数可以是4位、1字节、3字节、int16_t、int32_t、int64_t。</p><p>每个压缩列表节点都有previous_entry_length、encoding、content三个部分组成。如图所示：</p><p><img src="../images/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/image-20210424000604329.png" alt="压缩列表节点的各个组成部分"></p><h3 id="previous-entry-length"><a href="#previous-entry-length" class="headerlink" title="previous_entry_length"></a>previous_entry_length</h3><p>节点的previous_entry_length属性以字节为单位，记录了压缩列表中前一个节点的长度。该属性可以说1字节或者5字节，如果前一个结点长度小于254，则用一个字节；如果大于等于254字节，则用5个字节，并且第一个字节置为0xFE（十进制的254）。后面四个字节用于保存长度信息。  </p><h3 id="encoding"><a href="#encoding" class="headerlink" title="encoding"></a>encoding</h3><p>节点的encoding属性记录了节点的content属性所保存的数据的类型以及长度：  </p><p>一字节、两字节或者五字节长，值得最高位为00、01或者10是字节数组编码：这种编码表示节点得content属性保存着字节数组，数组的长度由编码除去最高两位之后的其他位记录；  </p><p><img src="../images/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/image-20210424002245234.png" alt="字节数组编码"></p><p>一字节长，值的最高位以11开头的是整数编码：这种编码表示节点的content属性保存着整数值，整数值的类型和长度由编码出去最高两位之后的其他位记录；  </p><p><img src="../images/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/image-20210424002304775.png" alt="整数编码"></p><h3 id="content"><a href="#content" class="headerlink" title="content"></a>content</h3><p>节点的content属性负责保存节点的值，节点值可以是一个字节数组或者整数，值得类型和长度由节点得encoding属性决定。</p><h2 id="连锁更新"><a href="#连锁更新" class="headerlink" title="连锁更新"></a>连锁更新</h2><p>连锁更新是指多个连续节点的长度是250-253，而在它们的前面插入了一个大于等于254字节节点，导致后面的节点需要将previous_entry_length从原来的1字节长扩展为5字节长，然后产生连锁反应，后续的节点都需要重新进行空间分配，这种特殊情况称为连锁更新，但是由于这种情况较少出现，我们可以方向地使用压缩列表，ziplistPush等命令的平均复杂度仅为O(N)。</p><h2 id="重点回顾"><a href="#重点回顾" class="headerlink" title="重点回顾"></a>重点回顾</h2><ol><li>压缩列表是一种为节约内存而开发的顺序型数据结构。  </li><li>压缩列表被用作列表键和哈希键的底层实现之一。</li><li>压缩列表可以包含多个节点，每个节点可以保存一个字节数组或者整数值。  </li><li>添加新节点到压缩列表，或者从压缩列表中删除节点，可能会引起连锁更新操作，但这种操作出现的机率并不高。</li></ol>]]></content>
       
+      
+      <categories>
+          
+          <category> Redis </category>
+          
+          <category> 数据结构与对象 </category>
+          
+      </categories>
       
       
     </entry>
@@ -180,6 +346,8 @@
           
           <category> Redis </category>
           
+          <category> 数据结构与对象 </category>
+          
       </categories>
       
       
@@ -199,6 +367,8 @@
           
           <category> Redis </category>
           
+          <category> 数据结构与对象 </category>
+          
       </categories>
       
       
@@ -217,6 +387,8 @@
       <categories>
           
           <category> Redis </category>
+          
+          <category> 数据结构与对象 </category>
           
       </categories>
       

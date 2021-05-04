@@ -191,6 +191,1113 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH12%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH12%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">CH12并发编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:39:36" itemprop="dateCreated datePublished" datetime="2021-01-14T15:39:36+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h1><p>现代操作系统提供三种基本的构造并发程序的方法：</p>
+<ul>
+<li>进程</li>
+<li>I/O多路复用</li>
+<li>线程</li>
+</ul>
+<h2 id="基于进程的并发编程"><a href="#基于进程的并发编程" class="headerlink" title="基于进程的并发编程"></a>基于进程的并发编程</h2><p>构造并发进程最简单的方法就是用进程。<br>服务器接受连接请求-&gt;返回一个已连接描述符（假设为4）-&gt;服务器派生一个子进程-&gt;关闭原服务器的已连接描述符4的副本（避免内存崩溃）。</p>
+<h3 id="基于进程的并发服务器"><a href="#基于进程的并发服务器" class="headerlink" title="基于进程的并发服务器"></a>基于进程的并发服务器</h3><ul>
+<li>首先，通常服务器会允许很长时间，所以我们必须要包括一个SIGCHLD处理程序来回收僵死子进程的资源。因为当SIGCHLD处理程序执行时，SIGCHLD信号是阻塞的，而Linux信号是不排队的，所以SIGCHLD处理程序必须准备好回收多个僵尸子进程的资源。</li>
+<li>其次父子进程必须关闭它们各自的connfd副本。就像我们已经提到过的，这对父进程而言尤为重要，它必须关闭它的已连接描述符，以避免内存泄露。</li>
+<li>最后，因为套接字的文件表表项中的引用计数，直到父子进程的connfd都关闭了，到客户端的连接才会终止。</li>
+</ul>
+<h3 id="进程的优劣"><a href="#进程的优劣" class="headerlink" title="进程的优劣"></a>进程的优劣</h3><p>对于在父、子进程间共享状态信息，进程有一个非常清晰的模型：共享文件表，但是不共享用户地址空间。进程有独立的地址空间一方面避免了进程不小心覆盖另一个进程的虚拟内存，另一方面使得进程共享状态信息更加困难。为了共享信息，它们必须使用显式的IPC（进程间通信）机制。</p>
+<h2 id="基于I-O多路复用的并发编程"><a href="#基于I-O多路复用的并发编程" class="headerlink" title="基于I/O多路复用的并发编程"></a>基于I/O多路复用的并发编程</h2><p>假设要求你编写一个echo服务器，它也能对用户从标准输入键入的交互 命令做出响应。在这个情况下服务器必须响应两个互相独立的I/O事件（连接请求何用户在键盘键入命令行），我们先等待哪个事件呢？针对这种问题的一个解决办法是I/O多路复用计数，基本思路就是使用select函数，要求内核挂起进程，只有在一个或多个I/O事件发生后，才将控制返回给相应的应用程序。<br>（<strong>跳过</strong>）</p>
+<h2 id="基于线程的并发编程"><a href="#基于线程的并发编程" class="headerlink" title="基于线程的并发编程"></a>基于线程的并发编程</h2><p>线程（Thread）就是运行在进程上下文中的逻辑流。线程由内核自动调度，每个线程都有它自己的线程上下文，包括一个唯一的整数线程ID（Thread ID，TID）、栈、栈指针、程序计数器、通用目的寄存器何条件码。所有的运行在一个进程里的线程共享该进程的整个虚拟地址空间。</p>
+<h3 id="线程执行模型"><a href="#线程执行模型" class="headerlink" title="线程执行模型"></a>线程执行模型</h3><p>每个进程开始生命周期时都是单一线程，这个线程称为主线程（math thread），在某一时刻主线程创建一个对等线程，从这个时间点开始，两个线程就并发地运行了。最后，因为主线程执行一个慢速系统调用，例如read或者sleep，或者因为被系统的间隔计时器中断，控制就会通过上下文切换传递到对等线程。对等线程会执行一段时间；然后控制传回主线程，依次类推。  </p>
+<h3 id="Posix线程"><a href="#Posix线程" class="headerlink" title="Posix线程"></a>Posix线程</h3><p>Posix线程是在C程序中处理线程的一个标准接口。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*调用命令：gcc main.c -o main -pthread*/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">thread</span><span class="params">(<span class="keyword">void</span> *vargp)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">pthread_t</span> tid;</span><br><span class="line">    <span class="keyword">int</span> a=<span class="number">2</span>;</span><br><span class="line">    <span class="built_in">pthread_create</span>(&amp;tid,<span class="literal">NULL</span>,thread,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,a);</span><br><span class="line">    <span class="built_in">pthread_join</span>(tid,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">thread</span><span class="params">(<span class="keyword">void</span> *vargp)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello, world!\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> *(func)(<span class="keyword">void</span> *);</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_create</span><span class="params">(<span class="keyword">pthread_t</span> *tid,<span class="keyword">pthread_attr_t</span> *attr,func *f,<span class="keyword">void</span> *arg)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>pthread_create</code>函数创建一个新的进程，并带着一个输入变量arg，在新进程的上下文运行线程例程f。能用attr参数来改变新创建线程的默认属性（已超出范围，在示例中总是用一个为NULL的attr参数来调用pthread_create函数）。<br>当<code>pthread_create</code>函数返回时，参数tid包含新创建线程的ID。新线程可以通过调用<code>pthread_self</code>函数来获得它自己的线程ID。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">pthread_t</span> <span class="title">pthread_self</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="终止线程"><a href="#终止线程" class="headerlink" title="终止线程"></a>终止线程</h3><p>一个线程以下列方式之一来终止的：</p>
+<ul>
+<li>当顶层的线程例程返回时，线程会隐式地终止。</li>
+<li>通过调用<code>pthread_exit</code>函数，线程会显式地终止。如果主线程调用<code>pthread_exit</code>，它会等待所有其他对等线程终止，然后再终止主线程和整个进程，返回值为<code>thread_return</code>。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *thread_return)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>某个对等线程调用Linux的<code>exit()</code>函数，该函数终止进程以及所有与该进程相关的线程。</li>
+<li>另一个对等线程通过以当前线程ID为参数调用<code>pthread_cancel</code>函数来终止当前进程。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cancel</span><span class="params">(<span class="keyword">pthread_t</span> tid)</span></span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="回收已终止线程的资源"><a href="#回收已终止线程的资源" class="headerlink" title="回收已终止线程的资源"></a>回收已终止线程的资源</h3><p>线程通过调用<code>pthread_join</code>函数等待其他线程终止。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> tid,<span class="keyword">void</span> **thread_return)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>pthread_join</code>函数会阻塞，直到tid线程终止，然后将线程例程返回的通用<code>(void *)</code>指针赋值为<code>thread_return</code>指向的位置，然后回收已终止线程占用的所有内存资源。</p>
+<h3 id="分离线程"><a href="#分离线程" class="headerlink" title="分离线程"></a>分离线程</h3><p>在任何一个时间点上，线程是<strong>可结合的</strong>或者是<strong>分离的</strong>。一个可结合的线程是能够被其他线程收回和杀死。在被其他线程回收之前，它的内存资源是不释放的。相反，一个分离的线程是不能被其他线程回收或杀死的。它的内存资源在它终止时由系统自动释放。<br>默认情况下，线程被创建为可结合的，为了避免内存泄露，每个可结合线程都应该要么被其他线程显式地收回，要么通过调用<code>pthread_detach</code>函数被分离。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_detach</span><span class="params">(<span class="keyword">pthread_t</span> tid)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化线程"><a href="#初始化线程" class="headerlink" title="初始化线程"></a>初始化线程</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">pthread_once_t</span> once_control = PTHREAD_ONCE_INIT;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_once</span><span class="params">(<span class="keyword">pthread_once_t</span> *once_control,<span class="keyword">void</span> (*init_routine)(<span class="keyword">void</span>))</span></span>;</span><br></pre></td></tr></table></figure>
+<p>once_control 变量是一个全局或者静态变量，总是被初始化为PTHREAD_ONCE_INIT。当你第一次用参数once_control调用pthread_once时，它调用init_routine，这是一个没有输入参数、声明也不返回的函数。</p>
+<h3 id="基于线程并发服务器"><a href="#基于线程并发服务器" class="headerlink" title="基于线程并发服务器"></a>基于线程并发服务器</h3><h2 id="基于线程程序中的共享变量"><a href="#基于线程程序中的共享变量" class="headerlink" title="基于线程程序中的共享变量"></a>基于线程程序中的共享变量</h2><h3 id="线程内存模型"><a href="#线程内存模型" class="headerlink" title="线程内存模型"></a>线程内存模型</h3><p>每个线程和其他线程一起共享进程上下文的剩余部分。这包括整个用户虚拟地址空间，它是由只读<br>文本、读/写数据、堆以及所有的共享库代码和数据区域组成的。线程也共享相同的打开文件集合。</p>
+<h3 id="将变量映射到内存"><a href="#将变量映射到内存" class="headerlink" title="将变量映射到内存"></a>将变量映射到内存</h3><ul>
+<li><strong>全局变量</strong><br>定义在函数之外的变量，在运行时，虚拟内存的读/写区域只包含每个全局变量的一个实例，任何线程都可以引用。</li>
+<li><strong>本地自动变量</strong><br>定义在函数内部但是没有static属性的变量。</li>
+<li><strong>本地静态变量</strong><br>定义在函数内部并有static属性的变量。</li>
+</ul>
+<h3 id="共享变量"><a href="#共享变量" class="headerlink" title="共享变量"></a>共享变量</h3><p>我们说一个变量$v$是共享的，当且仅当它的一个实例被一个以上的线程引用。</p>
+<h2 id="用信号量同步线程"><a href="#用信号量同步线程" class="headerlink" title="用信号量同步线程"></a>用信号量同步线程</h2><p>共享变量十分方便，但是它们也引入了同步错误的可能性。</p>
+<h3 id="进度图"><a href="#进度图" class="headerlink" title="进度图"></a>进度图</h3><p><strong>临界区</strong>（在线程中操作共享变量的指令），这个临界区不应该和其他进程的临界区交替执行。我们想要确保每个线程在执行它的临界区中的指令时，拥有对共享变量的互斥的访问，通常这种现象称为<strong>互斥</strong>。<br>在进度图中，两个临界区的交集形成的状态空间称为<strong>不安全区</strong>。  </p>
+<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><p>信号量s是具有非负整数值的全局变量，只能由两种特殊的操作来处理，这两种操作称为P和V：</p>
+<ul>
+<li>P(s)：如果s是非零的，那么P将s减1，并且立即返回。如果S为零，那么就挂起这个线程，直到s变为非零，而一个V操作会重启这个线程。在重启之后，P操作将s减1，并将控制权返回给调用者。</li>
+<li>V(s)：V操作将s加1，如果有任何线程阻塞在P操作等待s变为非零，那么V操作将会重启这些线程中的一个，然后该线程将s减1，完成它的P操作。<br>P中测试和减1操作是不可分割的，也就是说，一旦预测信号量变为非零，那么V操作会重启这些线程中的一个，然后该线程将s减1，完成它的P操作。<br>P中的测试和减1操作是不可分割的。V中的加1操作是不可分割的（也就是加载、加1和存储信号是V必须只能重启一个正在等待的线程）。<br>P和V的定义保证了一个正在运行的程序不可能进入到一种信号量为负值的状态，为控制并发程序的轨迹线提供了强有力的工具。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_init</span><span class="params">(<span class="keyword">sem_t</span> *sem,<span class="number">0</span>,<span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_wait</span><span class="params">(<span class="keyword">sem_t</span> *s)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_post</span><span class="params">(<span class="keyword">sem_t</span> *s)</span></span>;</span><br></pre></td></tr></table></figure>
+sem_init函数将信号量sem初始化为value。每个信号量在使用前必须初始化。针对我们的目的，中间的参数总是为0.程序通过调用sem_wait和sem_post函数来执行P和V操作。</li>
+</ul>
+<h3 id="使用信号量来实现互斥"><a href="#使用信号量来实现互斥" class="headerlink" title="使用信号量来实现互斥"></a>使用信号量来实现互斥</h3><p>基本思想是将每个共享比那辆与一个信号量s联系起来，然后用P(s)和V(s)操作将相应的临界区包围起来。以这种方式保护起来共享变量的信号量叫做二元信号量（因为总是为0/1）。以提供互斥为目的的二元信号量常常也称为互斥锁。在一个互斥锁上执行P操作称为对互斥锁加锁，执行V操作称为对互斥锁解锁。</p>
+<h3 id="利用信号量来调度共享资源"><a href="#利用信号量来调度共享资源" class="headerlink" title="利用信号量来调度共享资源"></a>利用信号量来调度共享资源</h3><ol>
+<li>生产者-消费者问题<br>生产者和消费者进程共享有n个槽的有限缓冲区。生产者线程反复地生成新的项目，并把它们插入到缓冲区中。消费者线程不断地从缓冲区中取出这些项目，然后消费（使用）它们。<br>因为插入和取出都涉及更新共享变量，所以我们必须保证缓冲区的访问时互斥的，但仅仅互斥是不够的，我们还需要调度对缓冲区的访问。如果缓冲区时满的，那么生产者必须等待直到有槽位变为可用。与之相似的，如果缓冲区时空的，消费者必须等待直到有一个项目变为可用。</li>
+</ol>
+<p><strong>例子</strong>：在一个多媒体系统中生产者编码视频帧，而消费者解码并在屏幕中呈现出来，缓冲区的目的时为了减少视频流的抖动。<br>下面是一个简单的用来构造生产者-消费者程序的包:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> *buf;          <span class="comment">/* Buffer array */</span>         </span><br><span class="line">    <span class="keyword">int</span> n;             <span class="comment">/* 规模 */</span></span><br><span class="line">    <span class="keyword">int</span> front;         <span class="comment">/* 记录该数组的第一项，buf[(front+1)%n] is first item */</span></span><br><span class="line">    <span class="keyword">int</span> rear;          <span class="comment">/* 记录该数组的最后一项，buf[rear%n] is last item */</span></span><br><span class="line">    <span class="keyword">sem_t</span> mutex;       <span class="comment">/* 提供互斥的缓冲区访问 */</span></span><br><span class="line">    <span class="keyword">sem_t</span> slots;       <span class="comment">/* 记录空槽位 */</span></span><br><span class="line">    <span class="keyword">sem_t</span> items;       <span class="comment">/* 记录可用项目的数量 */</span></span><br><span class="line">&#125; <span class="keyword">sbuf_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_init</span><span class="params">(<span class="keyword">sbuf_t</span> *sp, <span class="keyword">int</span> n)</span></span>;</span><br><span class="line"><span class="comment">/*为缓冲区分配堆内存，并为三个信号量设置初值*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_deinit</span><span class="params">(<span class="keyword">sbuf_t</span> *sp)</span></span>;</span><br><span class="line"><span class="comment">/*sbuf_deinit函数是当应用程序使用万缓冲区时，释放缓冲区存储的*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_insert</span><span class="params">(<span class="keyword">sbuf_t</span> *sp, <span class="keyword">int</span> item)</span></span>;</span><br><span class="line"><span class="comment">/*sbuf_insert函数等待一个可用的槽位，对互斥锁加锁，添加项目，对互斥锁解锁*/</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sbuf_remove</span><span class="params">(<span class="keyword">sbuf_t</span> *sp)</span></span>;</span><br><span class="line"><span class="comment">/*sbuf_remove函数和sbuf_insert函数是对称的在等待一个可用的缓冲区项目后，</span></span><br><span class="line"><span class="comment">对互斥锁加锁，从缓冲区的前面取出该项目，对互斥锁解锁*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_init</span><span class="params">(<span class="keyword">sbuf_t</span> *sp, <span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sp-&gt;buf = <span class="built_in">calloc</span>(n, <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">int</span>)); </span><br><span class="line">    sp-&gt;n = n;                       <span class="comment">/* Buffer holds max of n items */</span></span><br><span class="line">    sp-&gt;front = sp-&gt;rear = <span class="number">0</span>;        <span class="comment">/* Empty buffer iff front == rear */</span></span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;sp-&gt;mutex, <span class="number">0</span>, <span class="number">1</span>);      <span class="comment">/* Binary semaphore for locking */</span></span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;sp-&gt;slots, <span class="number">0</span>, n);      <span class="comment">/* Initially, buf has n empty slots */</span></span><br><span class="line">    <span class="built_in">sem_init</span>(&amp;sp-&gt;items, <span class="number">0</span>, <span class="number">0</span>);      <span class="comment">/* Initially, buf has zero data items */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_deinit</span><span class="params">(<span class="keyword">sbuf_t</span> *sp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">free</span>(sp-&gt;buf);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sbuf_insert</span><span class="params">(<span class="keyword">sbuf_t</span> *sp, <span class="keyword">int</span> item)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">sem_wait</span>(&amp;sp-&gt;slots);                          <span class="comment">/* Wait for available slot */</span></span><br><span class="line">    <span class="built_in">sem_wait</span>(&amp;sp-&gt;mutex);                          <span class="comment">/* Lock the buffer */</span></span><br><span class="line">    sp-&gt;buf[(++sp-&gt;rear)%(sp-&gt;n)] = item;   <span class="comment">/* Insert the item */</span></span><br><span class="line">    <span class="built_in">sem_post</span>(&amp;sp-&gt;mutex);                          <span class="comment">/* Unlock the buffer */</span></span><br><span class="line">    <span class="built_in">sem_post</span>(&amp;sp-&gt;items);                          <span class="comment">/* Announce available item */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sbuf_remove</span><span class="params">(<span class="keyword">sbuf_t</span> *sp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> item;</span><br><span class="line">    <span class="built_in">sem_wait</span>(&amp;sp-&gt;items);                          <span class="comment">/* Wait for available item */</span></span><br><span class="line">    <span class="built_in">sem_wait</span>(&amp;sp-&gt;mutex);                          <span class="comment">/* Lock the buffer */</span></span><br><span class="line">    item = sp-&gt;buf[(++sp-&gt;front)%(sp-&gt;n)];  <span class="comment">/* Remove the item */</span></span><br><span class="line">    <span class="built_in">sem_post</span>(&amp;sp-&gt;mutex);                          <span class="comment">/* Unlock the buffer */</span></span><br><span class="line">    <span class="built_in">sem_post</span>(&amp;sp-&gt;slots);                          <span class="comment">/* Announce available slot */</span></span><br><span class="line">    <span class="keyword">return</span> item;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>读者-写者问题<br>这是一个互斥问题的概括，一组并发的程序要访问一个共享对象，例如一个主存中的数据结构，或者一个磁盘上的数据库。有些线程只读对象（读者），而其他线程只修改对象（写者）。<br>读者-写者问题的几个变种：  </li>
+</ol>
+<ul>
+<li>读者优先，要求不让读者等待。</li>
+<li>写者优先，要求一旦一个写者准备好可以写，它就会尽可能快地完成它的写操作。 </li>
+</ul>
+<h3 id="综合：基于预线程化的并发服务器"><a href="#综合：基于预线程化的并发服务器" class="headerlink" title="综合：基于预线程化的并发服务器"></a>综合：基于预线程化的并发服务器</h3><p>（跳过）</p>
+<h2 id="使用线程提高并行性"><a href="#使用线程提高并行性" class="headerlink" title="使用线程提高并行性"></a>使用线程提高并行性</h2><h2 id="其他并发问题"><a href="#其他并发问题" class="headerlink" title="其他并发问题"></a>其他并发问题</h2><h3 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h3><p>四个线程不安全函数类：</p>
+<ol>
+<li>不保护共享变量的函数</li>
+<li>保持跨越多个调用的状态的函数</li>
+<li>返回指向静态变量的指针的函数</li>
+<li>调用线程不安全的函数</li>
+</ol>
+<h3 id="可重入性"><a href="#可重入性" class="headerlink" title="可重入性"></a>可重入性</h3><h3 id="竞争"><a href="#竞争" class="headerlink" title="竞争"></a>竞争</h3><h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>互斥锁加锁顺序规则：给定所有互斥锁操作的一个全序，如果每个线程都是以一种顺序获得互斥锁并以相反的顺序释放，那么这个程序就是无死锁的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH11%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH11%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">CH11网络编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:39:18" itemprop="dateCreated datePublished" datetime="2021-01-14T15:39:18+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="网络编程"><a href="#网络编程" class="headerlink" title="网络编程"></a><strong>网络编程</strong></h1><h2 id="客户端-服务器编程模型"><a href="#客户端-服务器编程模型" class="headerlink" title="客户端-服务器编程模型"></a>客户端-服务器编程模型</h2><p>流程：  </p>
+<ol>
+<li>客户端发送请求  </li>
+<li>服务器处理请求  </li>
+<li>服务器发送响应  </li>
+<li>客户端处理相应   </li>
+</ol>
+<p>值得注意的是：客户端和服务器都是指进程而非主机，一个主机上可以允许多个客户端进程、服务器进程。</p>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p>网络-&gt;网络适配器（网卡）-&gt;I/O和内存总线-&gt;内存。<br>网络是一个按照地理位置远近组成的层次结构，最底层是LAN（Local Area Network，局域网）。最流行的局域网技术是以太网（一个以太网段包含一个些电缆和一个集线器）。使用一个些电缆和叫做网桥（bridge）的小盒子，多个以太网段可以连接成较大的局域网，称为桥连接以太网。<br>在层次的更高级别中，多个不兼容的局域网可以由一个叫做路由器的特殊计算机连接起来，组成一个互联网络（internet）。<br>一般来说，路由器可以用来由各种局域网和广域网（WAN）构建互联网络。<br>互联网至关重要的特性就是它能由采用完全不同和不兼容的计数的各种局域网和广域网组成。但是如何能够让某台源主机跨越所有这些不兼容的网络发送数据位到另一台目的主机呢？解决办法就是一层允许在每台主机和路由器上的协议软件。这种协议必须提供两种基本能力：  </p>
+<ol>
+<li>命名机制：每台主机至少被分配一个这种互联网络地址，这个地址唯一地标识了这台主机。  </li>
+<li>传送机制：互联网络协议通过定义一种把数据捆扎成不连续的片（称为<strong>包</strong>）的统一方式来消除差异。包包括包头和有效载荷，包头包括包的大小以及源主机和目的主机的地址，有效载荷包括从源主机发出的数据位。  </li>
+</ol>
+<h2 id="全球IP因特网"><a href="#全球IP因特网" class="headerlink" title="全球IP因特网"></a>全球IP因特网</h2><p>每台因特网主机都运行实现TCP/IP协议。<br>TCP/IP实际上是一个协议族，其中每个提供不同的功能。例如，IP协议提供基本的命名方法和递送机制（不可靠，如果数据报在网络中丢失并不会试图恢复）。UDP稍微扩展了IP协议，这样一来包可以在进程间而不是主机间传送。TCP是一个建立在IP之上的复杂协议，提供了进程间可靠的全双工（双向）连接。<br>从程序员的角度，我们可以把因特网看做一个世界范围的主机集合，满足一下特性：  </p>
+<ul>
+<li>主机集合被映射为一组32位的IP地址  </li>
+<li>这组IP地址被映射为一组因特网域名的标识符  </li>
+<li>因特网主机上的进程能够通过连接和任何其他因特网主机上的进程通信。    </li>
+</ul>
+<h3 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h3><p>IP地址是大端法存储。<br>IP地址通常使用点分十进制表示法来表示。例如：128.2.194.242就是地址0x8002c2f2的点分十进制表示。</p>
+<h3 id="因特网域名"><a href="#因特网域名" class="headerlink" title="因特网域名"></a>因特网域名</h3><p>域名是一串用句点分隔的单词（字母、数字、和破折号），例如 whaleshark.ics.cs.cmu.edu。<br>域名集合形成了一个层次结构，每个域名编码了它在这个层次中的位置。<br>常见的第一层域名有com、edu、gov、org、net，下一层是二级域名，例如cmu.edu。<br>因特网定义了域名集合和IP集合之间的映射，通过分布在世界范围内的数据库来维护。<br>每台因特网主机都有本地定义的域名，这个域名总是映射为回送地址127.0.0.1，localhost名字为引用运行在同一台机器上的客户端和服务器提供了一种便利的可移植的方式，这对调试相当有用。</p>
+<h3 id="因特网连接"><a href="#因特网连接" class="headerlink" title="因特网连接"></a>因特网连接</h3><p>一个套接字是连接的一个端点，每个套接字都有相应的套接字地址，是有一个因特网地址和一个16位的整数端口组成的，用“地址：端口”来表示。<br>客户端发起连接请求（客户端套接字地址中的端口由内核自动分配，称为临时端口），然而服务端套接字地址的端口通常是某个知名端口，与提供的服务相对应，例如Web服务器通常使用端口80，而电子邮件服务器使用端口25。<br>每个具有知名端口的服务都有一个对应的知名的服务名，例如Web服务的名字为http，email的知名名字为smtp。<br>一个连接是由它两端的套接字地址唯一确定的。这对套接字地址叫做套接字对。</p>
+<h2 id="套接字接口"><a href="#套接字接口" class="headerlink" title="套接字接口"></a>套接字接口</h2><p>套接字接口（socket interface）是一组函数，它们和Unix I/O函数结合起来，用以创建网络应<br>用。大多数现代系统上都实现套接字接口，包括所有Unix变种。</p>
+<h3 id="套接字地址结构"><a href="#套接字地址结构" class="headerlink" title="套接字地址结构"></a>套接字地址结构</h3><p>因特网的套接字地址存放在类型为sockaddr_in的16字结构中。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span>&#123;</span></span><br><span class="line">    uint_16     sin_family; <span class="comment">//通常设为AF_INET，代表是同Internet（TCP/IP）地址族。</span></span><br><span class="line">    uint_16     sin_port;   <span class="comment">//保存端口号</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span>  <span class="title">sin_addr</span>;</span>   <span class="comment">//IP地址</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> sin_zero[<span class="number">8</span>];  <span class="comment">//没有特殊含义，是为了让sockaddr与sockaddr_in两个数据结构保持大小相同而保留的空字节</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr</span>&#123;</span></span><br><span class="line">    uint_16 sa_family;</span><br><span class="line">    <span class="keyword">char</span>    sa_data[<span class="number">14</span>];    <span class="comment">// Address data</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>注：_in后缀是互联网（Internet）的缩写。<br>connect、bind和accept函数要求一个指向与协议相关的套接字地址结构的指针。解决办法是定义套接字函数要求一个指向通用sockaddr结构的指针，然后要求应用程序将与协议特定的结构的指针强制转换成这个通用结构。</p>
+<h3 id="socket函数"><a href="#socket函数" class="headerlink" title="socket函数"></a>socket函数</h3><p>客户端和服务器使用socket函数来创建一个套接字描述符。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> domain,<span class="keyword">int</span> type,<span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="connect函数"><a href="#connect函数" class="headerlink" title="connect函数"></a>connect函数</h3><p>客户端通过调用connect函数来建立和服务器的连接。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> clientfd,<span class="keyword">const</span> struct sockaddr *addr,<span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功则返回0，否则返回-1</span></span><br></pre></td></tr></table></figure>
+<p>connect函数试图与套接字地址为addr的服务器建立一个因特网连接，其中addrlen是sizeof(sockaddr_in)。connect函数会阻塞，一直到连接成功建立或是发生错误。如果成功，clientfd描述符现在就准备好可以读写了，表示连接的套接字对如下：<br>(客户端IP:临时端口,addr.sin_addr:addr.sin_port)<br>临时端口唯一确定了客户端主机上的客户端进程。<br>对于socket，最好的方法是用getaddrinfo来为connect提供参数。</p>
+<h3 id="bind、listen、accept函数"><a href="#bind、listen、accept函数" class="headerlink" title="bind、listen、accept函数"></a>bind、listen、accept函数</h3><p>这些函数被服务器用来和客户端建立连接。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> sockfd,<span class="keyword">const</span> struct sockaddr *addr,<span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> sockfd,<span class="keyword">int</span> backlog)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> listenfd,struct sockaddr *addr,<span class="keyword">int</span> *addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>bind函数告诉内核将addr中的服务器套接字地址和套接字描述符sockfd联系起来。参数addrlen就是sizeof(sockaddr_in)。对于socket和connect，最好的方法是用getaddrinfo来为bind提供参数。（注：绑定的是服务器进程自己的套接字地址、IP地址）<br>客户端时发起请求连接的主动实体，服务器时等待来自客户端的请求连接的被动实体。默认情况下，内核会认为socket函数创建的描述符对应于主动套接字（active socket），它默认存在于一个连接的客户端。服务器调用listen函数告诉内核描述符是被用于服务器而不是客户端使用。<br>服务器调用accept函数来等待来自客户端的连接请求。accept函数等待来自客户端的连接请求到达侦听描述符listenfd，然后在addr中填写客户端的套接字地址，并返回一个已连接描述符，这个描述符可被用来利用UnixI/O函数与客户端通信。  </p>
+<h3 id="主机和服务的转换"><a href="#主机和服务的转换" class="headerlink" title="主机和服务的转换"></a>主机和服务的转换</h3><ol>
+<li>getaddrinfo函数  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys.socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;netdb.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getaddrinfo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* host,<span class="keyword">const</span> <span class="keyword">char</span> *service,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">const</span> struct addrinfo *hints,</span></span></span><br><span class="line"><span class="function"><span class="params">                struct addrinfo **result)</span></span>;</span><br><span class="line">                <span class="comment">//成功则返回 0</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">freeaddrinfo</span><span class="params">(struct addrinfo *result)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> *<span class="title">gai_streroor</span><span class="params">(<span class="keyword">int</span> errcode)</span></span>;</span><br></pre></td></tr></table></figure>
+给定host和service（套接字地址的两个组成部分），getaddrinfo返回result，result一个指向addrinfo结构的链表，其中每个结构指向一个对应于host和service的套接字地址结构。<br>客户端调用getaddrinfo-&gt;遍历列表-&gt;尝试每个套接字地址-&gt;直到调用socket和connect成功，建立起连接。<br>可选参数hints是一个addrinfo结构，它提供对getaddrinfo返回的套接字地址列表的更好的控制。如果要传递hints参数，只能设置下列字段：ai_family、ai_socktype、ai_protocol和ai_flags字段。其他字段必须设置为0。实际中，我们可以用memset将整个结构清零，然后有选择地设置一些字段。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">addrinfo</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span>     ai_flags;</span><br><span class="line">    <span class="keyword">int</span>     ai_family;</span><br><span class="line">    <span class="keyword">int</span>     ai_socktype;</span><br><span class="line">    <span class="keyword">int</span>     ai_protocol;</span><br><span class="line">    <span class="keyword">char</span>    *ai_canonname;</span><br><span class="line">    <span class="keyword">size_t</span>  ai_addrlen;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span>  <span class="title">sockaddr</span> *<span class="title">ai_addr</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span>  <span class="title">addrinfo</span> *<span class="title">ai_next</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>getnameinfo函数<br>getnameinfo函数和getaddrinfo是相反的，将一个套接字地址结构转换成相应的主机和服务名字符串。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/socket.j&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;netdb.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getnameinfo</span><span class="params">(<span class="keyword">const</span> struct sockaddr *sa,<span class="keyword">socklen_t</span> salen,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">char</span> *host,<span class="keyword">size_t</span> hostlen,</span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">char</span> *service,<span class="keyword">size_t</span> servlen,<span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+参数sa指向大小为salen字节的套接字地址结构，host指向大小为hostlen字节的缓冲区，service指向大小为servlen字节的缓冲区。getnameinfo函数将套接字地址结构sa转换成对应的主机和服务名字字符串，并将它们复制到host和service缓冲区。</li>
+</ol>
+<h2 id="Web服务器"><a href="#Web服务器" class="headerlink" title="Web服务器"></a>Web服务器</h2><h3 id="Web基础"><a href="#Web基础" class="headerlink" title="Web基础"></a>Web基础</h3><p>Web客户端和服务器之间的交互用的是一个基于文本的应用级协议，叫做HTTP。Web服务和常规的文件检索服务（例如FTP）有什么区别呢？主要的区别是Web内容可以用一种叫做HTML的语言来编写。</p>
+<h3 id="Web内容"><a href="#Web内容" class="headerlink" title="Web内容"></a>Web内容</h3><p>对于Web客户端和服务器而言，内容是一个MIME（Multipurpose Internet Mail Extensions，多用途的国际邮件扩充协议）类型相关的字节序列。常用的MIME类型如下：<br>text/html：HTML页面<br>text/plain：无格式文本<br>application/postscript：Postscript文档<br>image/gif：GIF格式编码的二进制图像<br>image/png：PNG格式编码的二进制图像<br>image/jpeg：JPEG格式编码的二进制图像<br>Web服务器以两种方式向客户端提供内容：  </p>
+<ul>
+<li>静态内容：取一个磁盘文件返回给客户端  </li>
+<li>动态内容：运行一个可执行文件并将输出返回给客户端。  </li>
+</ul>
+<p>每条由Web服务器返回的内容都是和它管理的某个文件相关联的。这些文件中的每一个都有唯一的名字，叫做URL（通用资源定位符），例如：<br><a target="_blank" rel="noopener" href="http://www.google.com/index.html">http://www.google.com:80/index.html</a><br>表示因特网主机<a target="_blank" rel="noopener" href="http://www.google.com上一个称为/index.html%E7%9A%84HTML%E6%96%87%E4%BB%B6%EF%BC%8C%E5%AE%83%E6%98%AF%E7%94%B1%E4%B8%80%E4%B8%AA%E7%9B%91%E5%90%AC%E7%AB%AF%E5%8F%A380%E7%9A%84Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E7%9A%84%E3%80%82">www.google.com上一个称为/index.html的HTML文件，它是由一个监听端口80的Web服务器管理的。</a></p>
+<h3 id="HTTP事务"><a href="#HTTP事务" class="headerlink" title="HTTP事务"></a>HTTP事务</h3>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH10%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH10%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/" class="post-title-link" itemprop="url">CH10系统级IO</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:39:00" itemprop="dateCreated datePublished" datetime="2021-01-14T15:39:00+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="系统级I-O"><a href="#系统级I-O" class="headerlink" title="系统级I/O"></a>系统级I/O</h1><h2 id="Unix-I-O"><a href="#Unix-I-O" class="headerlink" title="Unix I/O"></a>Unix I/O</h2><p>所有的Linux文件就是一个m字节的序列，所有的I/O设备（例如网络、磁盘、和终端）都被模型化为文件，而所有的输入输出都被当作相应文件的读和写来执行。这种设备优雅地映射为文件的方式，允许Linux内核引出一个简单、低级的应用接口，称为Unix I/O，这使得所有的输入和输出都能以统一且一致的方式执行。  </p>
+<ul>
+<li>打开文件（内核会返回一个非负整数，叫做描述符，内核记录有关这个打开文件的所有信息，应用程序只需要记住这个描述符）  </li>
+<li>Linux shell创建的每个进程开始时都有三个打开的文件：标准输入（描述符为0）、标准输出（描述符为1）和标准错误（描述符为2）。头文件<code>&lt;stdlib.h&gt;</code>定义了常量STDIN_FILENO、STDOUT_FILENO和STDERR_FILENO，它们可以来代替显式的描述符值。  </li>
+<li>改变当前的文件位置：对于每个打开的文件，内核保持着一个文件位置k，这是从问及那开头其实的字节偏移量。  </li>
+<li>读写文件；读n个字节：k增加到k+n，给定一个大小为m字节的文件，当k&gt;=m时执行读操作会触发一个称为end-of-file（EOF）的条件。  </li>
+<li>关闭文件</li>
+</ul>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><ul>
+<li>普通文件：包含任意数据。应用程序通常要区分文本文件（text file）和二进制文件（binary file），文本文件时只含有ASCII或Unicode字符的普通文件。二进制文件是所有其他文件。对内核而言，都一样。  </li>
+<li>目录：包含一组连接（link）的文件，其中每个链接都将一个文件名映射到一个文件，这个文件可能时另一个目录。每个目录至少包含两个条目：“.”时到该目录自身的条目，以及“..”时到目录层次结构中父目录的链接。可以用mkdir创建一个目录，用ls查看其内容，用rmdir删除该目录。  </li>
+<li>套接字（socket）是用来与另一个进程进行跨网络通信的文件。<br>其他文件类型包含命名通道、符号链接，以及字符和块设备，这些不在本书讨论范围内。<br>Linux将所有文件组织成一个目录层次结构，有名为“/”的根目录确定。<br>作为其上下文的一部分，每个进程都有一个当前工作目录来确定其在目录层次结构中的当前位置。你可以用cd来修改shell中的当前工作目录。</li>
+</ul>
+<h2 id="打开和关闭文件"><a href="#打开和关闭文件" class="headerlink" title="打开和关闭文件"></a>打开和关闭文件</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;fcnt1.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">char</span> *filename,<span class="keyword">int</span> flags,<span class="keyword">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>open函数将filename转换成一个文件描述符，并返回描述符数字。flags指明了进程打算如何访问这个文件：  </p>
+<ul>
+<li>O_RDONLY：只读  </li>
+<li>O_WRONLY：只写  </li>
+<li>O_RDWR：可读可写<br>mode参数指定了新文件的访问权限位。<br>最后，进程通过调用close函数关闭一个打开的文件。</li>
+</ul>
+<h2 id="读和写文件"><a href="#读和写文件" class="headerlink" title="读和写文件"></a>读和写文件</h2><p>应用程序分别调用read和write函数来执行输入和输出的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">read</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">void</span> *buf,<span class="keyword">size_t</span> n)</span></span>;</span><br><span class="line"><span class="comment">// 返回：若成功则为读的字节数，若EOF则为0，若出错为-1</span></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">write</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">const</span> <span class="keyword">void</span> *buf,<span class="keyword">size_t</span>, n)</span></span></span><br><span class="line"><span class="function"><span class="comment">// 返回：若成成功则为写的字节数，若出错则为-1</span></span></span><br><span class="line"><span class="function"><span class="comment">// ssize_t-long，size_t-unsigned long</span></span></span><br></pre></td></tr></table></figure>
+<p>在某些情况下，read和write传送的字节比应用程序要求的要少。这些不足值不表示有错误。出现这样情况的原因有：  </p>
+<ul>
+<li>读时遇到EOF。  </li>
+<li>从终端读文本行。如果打开文件是与终端相关联的（如键盘和显示器），那么每个read函数将一次传送一个文本行，返回的不足值等于文本行的大小。  </li>
+<li>读和写网络套接词（socket）。如果打开文件对应于网络套接字，那么内部缓冲约束和较长的网络延迟会引起read和write返回不足值。<br>实际上，除了EOF，在读磁盘文件时不会遇到不足值，而在写磁盘文件时也不会遇到不足值。然而如果想创建健壮的（可靠的）诸如Web服务器这样的网络应用，就必须通过反复调用read和write处理不足值，直到所有需要的字节都传送完毕。</li>
+</ul>
+<h2 id="用RIO（Robust-I-O）包健壮地读写"><a href="#用RIO（Robust-I-O）包健壮地读写" class="headerlink" title="用RIO（Robust I/O）包健壮地读写"></a>用RIO（Robust I/O）包健壮地读写</h2><ul>
+<li>无缓冲的输入输出函数。这些函数直接在内存和文件之间传送数据，没有应用级缓冲。它们对将二进制数据读写到网络和从网路读写二进制数据尤其有用。  </li>
+<li>带缓冲的输入函数。这些函数允许高效地从文本读取文本行和二进制数据，这些文件的内容缓存在应用级缓冲区内，类似像printf这样标准I/O函数提供的缓冲区。  </li>
+</ul>
+<h3 id="RIO的无缓冲的输入输出函数"><a href="#RIO的无缓冲的输入输出函数" class="headerlink" title="RIO的无缓冲的输入输出函数"></a>RIO的无缓冲的输入输出函数</h3><p>通过调用rio_readn和rio_writen函数，应用程序可以在内存和文件之间直接传送数据。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;csapp.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">rio_readn</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">void</span> *usrbuf,<span class="keyword">size_t</span> n)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">rio_writen</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">void</span> *usrbuf,<span class="keyword">size_t</span> n)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">rio_readn</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">void</span> *usrbuf,<span class="keyword">size_t</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">size_t</span> nleft=n;</span><br><span class="line">    <span class="keyword">ssize_t</span> nread;</span><br><span class="line">    <span class="keyword">char</span> *bufp=usrbuf;</span><br><span class="line">    <span class="keyword">while</span>(nleft&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>((nread=<span class="built_in">read</span>(fd,bufp,nleft))&lt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(errno==EINTR)<span class="comment">//遇到中断</span></span><br><span class="line">                nread=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(nread==<span class="number">0</span>)<span class="keyword">break</span>;</span><br><span class="line">        nleft-=nread;</span><br><span class="line">        bufp+=nread;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (n-nleft);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于同一个文件描述符可以任意交错地调用rio_readn和rio_writen。</p>
+<h3 id="RIO的带缓冲输入函数"><a href="#RIO的带缓冲输入函数" class="headerlink" title="RIO的带缓冲输入函数"></a>RIO的带缓冲输入函数</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;csapp.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rio_readinitb</span><span class="params">(<span class="keyword">rio_t</span> *rp,<span class="keyword">int</span> fd)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">rio_readlineb</span><span class="params">(<span class="keyword">rio_t</span> *rp,<span class="keyword">void</span> *usrbuf,<span class="keyword">size_t</span> maxlen)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">rio_readnb</span><span class="params">(<span class="keyword">rio_t</span> *,<span class="keyword">void</span> *usrbuf,<span class="keyword">size_t</span> n)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>每打开一个描述符，都会调用一次rio_readinitb函数。它将描述符fd和地址rp处在一个类型为rio_t的读缓冲区联系起来。<br>对于同一描述符，rio_readlineb和rio_readnb的调用可以交叉进行。</p>
+<h2 id="读取文件元数据"><a href="#读取文件元数据" class="headerlink" title="读取文件元数据"></a>读取文件元数据</h2><p>应用程序能够调用stat和fstat函数，检索到关于文件的信息（有时也称为文件的元数据）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename,struct stat *buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fstat</span><span class="params">(<span class="keyword">int</span> fd,struct stat *buf)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>stat函数以一个文件名作为输入，并填写如下所示的一个stat数据结构中的各个成员。fstat函数是相似的，只不过是以文件描述符而不是文件名作为输入。当我们在11.5节讨论Web服务器时，会需要stat数据结构中的st_mode和st_size成员。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stat</span>&#123;</span></span><br><span class="line">    <span class="keyword">dev_t</span>   st_dev;</span><br><span class="line">    <span class="keyword">ino_t</span>   st_ino;</span><br><span class="line">    <span class="keyword">mode_t</span>  st_mode;</span><br><span class="line">    <span class="keyword">nlink_t</span> st_nlink;</span><br><span class="line">    <span class="keyword">uid_t</span>   st_uid;</span><br><span class="line">    <span class="keyword">gid_t</span>   st_gid;</span><br><span class="line">    <span class="keyword">dev_t</span>   st_rdev;</span><br><span class="line">    <span class="keyword">off_t</span>   st_size;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> st_blksize;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> st_blocks;</span><br><span class="line">    <span class="keyword">time_t</span>  st_atime;</span><br><span class="line">    <span class="keyword">time_t</span>  st_mtime;</span><br><span class="line">    <span class="keyword">time_t</span>  st_ctime;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="读取目录内容"><a href="#读取目录内容" class="headerlink" title="读取目录内容"></a>读取目录内容</h2><p>函数opendir和readdir，closedir用来关闭流并释放其所有资源。</p>
+<h2 id="共享"><a href="#共享" class="headerlink" title="共享"></a>共享</h2><p>内核用三个相关的数据结构来表示打开的文件：</p>
+<ul>
+<li>描述符表（每个进程都有独立的描述符表，每个描述符表项指向文件表中的一个表项）</li>
+<li>文件表（打开文件的集合是由一张文件表来表示，所有进程共享这张表。每个文件表的表项组成包括当前的文件位置、引用计数，以及一个指向v-node表中对应表项的指针。关闭一个描述符会减少相应的文件表表项中的引用计数。内核不会删除这个文件表表项，直到它的引用次数为0。）</li>
+<li>v-node表。所有进程共享，每个表项包含stat结构中的大多数信息，包括st_mode和st_size成员。<br>多个描述符也可以通过不同的文件表表项来引用同一个文件。例如，如果以同一个filename调用open函数两次，就会发生这种情况。</li>
+</ul>
+<h2 id="I-O重定向"><a href="#I-O重定向" class="headerlink" title="I/O重定向"></a>I/O重定向</h2><p>Linux shell提供了I/O重定向操作符，允许用户将磁盘文件和标准输入输出联系起来。例如，键入<br><code>linux&gt; ls &gt; foo.txt</code><br>使得shell加载和执行ls程序，将标准输出重定向到磁盘文件foo.txt。就如我们将在11.5节中看到的那样，当一个Web服务器代表客户端允许CGI程序时，它就执行一种类似类型的重定向。<br>一种重定位方式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> oldfd,<span class="keyword">int</span> newfd)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>dup2函数复制描述符表项oldfd到描述符表项newfd，覆盖描述符表项newfd以前的内容。</p>
+<h2 id="标准I-O"><a href="#标准I-O" class="headerlink" title="标准I/O"></a>标准I/O</h2><p>标准I/O库将一个打开的文件模型化为一个流。对于程序员而言，一个流就是一个指向FILE类型的结构的指针。每个ANSI C程序开始时都有3个打开的流stdin、stdout和stderr，分别对应于标准输入、标准输出和标准错误。<br>类型为FILE的流是对文件描述符和缓冲流的抽想。流缓冲区的目的和RIO读缓冲区一样：就是使开销较高的Linux I/O系统调用的数量尽可能得小。</p>
+<h2 id="综合：我们该使用哪些I-O函数"><a href="#综合：我们该使用哪些I-O函数" class="headerlink" title="综合：我们该使用哪些I/O函数"></a>综合：我们该使用哪些I/O函数</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH9%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH9%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" class="post-title-link" itemprop="url">CH9虚拟内存</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:38:41" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:41+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="虚拟内存（Virtual-Memory）"><a href="#虚拟内存（Virtual-Memory）" class="headerlink" title="虚拟内存（Virtual Memory）"></a>虚拟内存（Virtual Memory）</h1><p>虚拟内存是硬件异常、硬件地址翻译、主存、磁盘文件和内核软件的完美交互，它为每个进程提供了一个大的、一致的和私有的地址空间。它有三个重要的能力：  </p>
+<ol>
+<li>它将主存看成是一个存储在磁盘上的地址空间的高速缓存，在主存中只保存活动区域，并根据需要在主存和磁盘之间来回传送数据，通过这种方式，它高效地使用了主存。  </li>
+<li>他为每个进程提供了一致的地址空间，它高效地使用了主存。  </li>
+<li>它保护了每个进程的地址空间不被其他进程破坏。  </li>
+</ol>
+<h2 id="物理和虚拟寻址"><a href="#物理和虚拟寻址" class="headerlink" title="物理和虚拟寻址"></a>物理和虚拟寻址</h2><p>使用虚拟寻址，CPU通过生成一个虚拟地址来访问主存（被组织成一个由M个连续字节大小的单元组成的数组，每个字节都有唯一的物理地址），这个虚拟地址在被送到内存之前，先转换成适当的物理地址。地址翻译需要CPU硬件和操作系统之间的紧密合作。CPU芯片上叫做内存管理单元（Memory Management Unit，MMU）的专用硬件，利用存放在主存中的查询表来动态翻译。</p>
+<h2 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h2><p>虚拟地址空间：${0,1,2,…,N-1}$，$N=2^n$。<br>物理地址空间：${0,1,2,…,M-1}$，M不一定要素2的幂。</p>
+<h2 id="虚拟内存作为缓存的工具"><a href="#虚拟内存作为缓存的工具" class="headerlink" title="虚拟内存作为缓存的工具"></a>虚拟内存作为缓存的工具</h2><p>磁盘上的数据被分割为块，作为主存和磁盘之间的传输单元。VM系统通过将虚拟内存分割为称为虚拟页的大小固定的块来处理这个问题，每个虚拟页大小为$P=2^p$字节。类似地，物理内存被分割为物理页，大小也为P字节（物理页被称为页帧）。<br>在任何时刻，虚拟页吗被分为三个不相交的子集：  </p>
+<ul>
+<li>为分配的：还未分配（或者创建）的页。  </li>
+<li>缓存的：已缓存在物理内存中的已分配页。  </li>
+<li>未缓存的：未缓存在物理内存中的已分配页。  </li>
+</ul>
+<h3 id="DRAM缓存的组织结构"><a href="#DRAM缓存的组织结构" class="headerlink" title="DRAM缓存的组织结构"></a>DRAM缓存的组织结构</h3><p>由于磁盘访问要比DRAM慢太多，所以DRAM缓存不命中比起SRAM缓存（L1、L2、L3）要昂贵得多。</p>
+<h3 id="页表"><a href="#页表" class="headerlink" title="页表"></a>页表</h3><p>不命中-&gt;系统判定这个虚拟页在磁盘哪个位置，并将虚拟页复制到DRAM中，替换牺牲页。<br>页表：虚拟页-&gt;物理页。<br>页表实际上是页表条目（Page Table Entry，PTE）的数组，虚拟地址空间中的每个页在页表中一个固定偏移量处都有一个PTE，每个PTE都由一个有效位和一个n位地址字段组成。有效位表明该虚拟页是否被缓存在DRAM中。如果有效，地址字段是指向该虚拟页在DRAM中相应的物理页的起始位置；如果无效，那么一个空地址表明这个虚拟页还未分配，如果地址非空就是已分配但未被保存，地址指向虚拟页在磁盘上的起始位置。  </p>
+<h3 id="页命中"><a href="#页命中" class="headerlink" title="页命中"></a>页命中</h3><p>地址翻译硬件将虚拟地址作为一个索引来定位PTE-&gt;如果设置了有效位，则利用PTE中的物理内存地址构造出这个字的物理地址。</p>
+<h3 id="缺页"><a href="#缺页" class="headerlink" title="缺页"></a>缺页</h3><p>DRAM缓存不命中称为缺页（page fault）。<br>未命中则从磁盘复制到内存中的牺牲页中（牺牲页如果修改过则写回磁盘）。<br>在磁盘和内存之间传送页的活动叫做交换（swapping）或者页面调度（paging）。页从磁盘换入DRAM和从DRAM换出磁盘。</p>
+<h3 id="分配页面"><a href="#分配页面" class="headerlink" title="分配页面"></a>分配页面</h3><p>例如，调用malloc，在磁盘上创建空间并且更新页表上该条目的（能够分配页面必然有剩余虚拟内存可分配）地址。</p>
+<h3 id="又是局部性救了我们"><a href="#又是局部性救了我们" class="headerlink" title="又是局部性救了我们"></a>又是局部性救了我们</h3><p>如果工作集的大小超出了物理内存的大小，那么程序将处于一种不信的状态，叫做抖动（thrashing），这时页面将不断地换进换出。</p>
+<h2 id="虚拟内存作为内存管理工具"><a href="#虚拟内存作为内存管理工具" class="headerlink" title="虚拟内存作为内存管理工具"></a>虚拟内存作为内存管理工具</h2><ul>
+<li>简化链接：没搞太懂  </li>
+<li>简化加载：没搞太懂  </li>
+<li>简化共享：不同虚拟页映射到同一物理页来实现共享。  </li>
+<li>简化内存分配  </li>
+</ul>
+<h2 id="虚拟内存作为内存保护的工具"><a href="#虚拟内存作为内存保护的工具" class="headerlink" title="虚拟内存作为内存保护的工具"></a>虚拟内存作为内存保护的工具</h2><p>通过在PTE上添加一些额外的许可位来控制对一个虚拟页面内容的访问十分简单。比如：</p>
+<ul>
+<li>SUP：是否进程必须运行在内核模式才能访问该页。  </li>
+<li>READ：控制读访问  </li>
+<li>WRITE：控制写访问  </li>
+</ul>
+<h2 id="地址翻译"><a href="#地址翻译" class="headerlink" title="地址翻译"></a>地址翻译</h2><p>如果违反了这些许可条件，那么CPU就会触发一般保护故障，将控制传递给内核中的异常处理程序。Linux shell一般将这种异常报告为“段错误（segmental fault）”。</p>
+<h2 id="地址翻译-1"><a href="#地址翻译-1" class="headerlink" title="地址翻译"></a>地址翻译</h2><p>$N=2^n$：虚拟地址空间中的地址数量<br>$M=2^m$：物理地址空间中的地址数量<br>$P=2^p$：页的大小<br>页表基址寄存器（Page Table Register，PTBR）指向当前页表。n位的虚拟地址包含两部分：一个p位的虚拟页面偏移（Virtual Page Offset，VPO）和一个（n-p）位的虚拟页号（VirtualPage Number，VPN）。MMU利用页表基址寄存器和VPN找到对应的PTE，然后将页表条目中的物理页号（PPN，m-p位）和虚拟地址中的虚拟页面偏移串联期来就得到相应的物理地址。注：物理页面和虚拟页面的页面偏移是一样的。</p>
+<h3 id="结合高速换粗和虚拟内存"><a href="#结合高速换粗和虚拟内存" class="headerlink" title="结合高速换粗和虚拟内存"></a>结合高速换粗和虚拟内存</h3><h3 id="利用TLB加速地址翻译"><a href="#利用TLB加速地址翻译" class="headerlink" title="利用TLB加速地址翻译"></a>利用TLB加速地址翻译</h3><p>每次产生一个虚拟地址，MMU就必须查阅一个PTE（代价很大），以便将虚拟地址翻译为物理地址。如果PTE碰巧在L1中，那么开销就下降很多。然而，许多系统都试图消除即使是这样的开销，它们在MMU中包括了一个关于PTE的小的缓存，称为翻译后备缓冲器（TranslationLookaside Buffer，TLB）。<br>TLB（TLB索引+TLB标记+PTE）是一个小的、虚拟寻址的缓存，其每一行都保存者一个由单个PTE组成的块，如果保存$T=2^t$个组，那么TLB索引由虚拟页号的t个最低位组成的，而TLB标记由VPN中剩余的位组成。TLB通常有高度的相联度。TLB命中的步骤：</p>
+<ol>
+<li>CPU产生一个虚拟地址。  </li>
+<li>MMU从TLB中取出相应的PTE。  </li>
+<li>MMU将这个虚拟地址翻译成一个物理地址，并且将它发送到高速缓存/主存。  </li>
+<li>高速缓存/主存将所请求的数据字返回给CPU。  </li>
+</ol>
+<p>当TLB不命中时，MMU必须从L1缓存中取出相应的PTE，新取出的PTE存放在TLB中，可能会覆盖一个已经存在的条目。  </p>
+<h3 id="多级页表"><a href="#多级页表" class="headerlink" title="多级页表"></a>多级页表</h3><p>如果一级页表的一个PTE是空的，那么相应的二级页表就根本不会存在。这代表一种巨大的节约。<br>对于k级别页表层次结构的地址翻译：<br>虚拟地址：$VPN_1|VPN_2|…|VPN_k|VPO$<br>一级页表,$VPN_1$-&gt;二级页表,$VPN_2$-&gt;…-&gt;k级页表$VPN_k$-&gt;$PPN$,$PPO$，$PPO==VPO$，物理页面偏移量==虚拟页面偏移量。  </p>
+<h3 id="综合：端到端的地址翻译"><a href="#综合：端到端的地址翻译" class="headerlink" title="综合：端到端的地址翻译"></a>综合：端到端的地址翻译</h3><p>虚拟地址：VPN（虚拟页码）+VPO（虚拟页偏移）<br>VPN：TLBT（TLB标记）+TLBI（TLB索引）<br>MMU从虚拟地址中抽取VPN，并检查TLB，看它是否因为前面某个内存引用缓存了VPN的条目的一个副本。TLB从VPN中抽取TLB索引，和TLB标记，检查TLBI组中是否有匹配，若存在匹配项，则命中，然后将缓存的PPN返回给MMU。<br>如果TLB不命中，那么MMU就需要从主存中取出相应的PTE（页表条目，存放在物理内存中）。将PTE中的PPN和来自虚拟地址的VPO连接起来，这就形成了物理地址。</p>
+<h2 id="案例研究：Intel-Core-i7-Linux内存系统"><a href="#案例研究：Intel-Core-i7-Linux内存系统" class="headerlink" title="案例研究：Intel Core i7/Linux内存系统"></a>案例研究：Intel Core i7/Linux内存系统</h2><p>处理器：四个核、一个大的所有核共享的L3高速缓存，以及一个DRR3内存控制器。每个核包含一个层次结构的TLB、一个层次结构的数据和指令高速缓存，以及一组快速到店链路，这种链路基于QuickPath技术，是为了让一个核与其他核核外部I/O桥直接通信。TLB是虚拟寻址的，是四路组相联的。L1、L2、L3高速缓存是物理寻址的，块大小为64字节。L1和L2是8路相联的，而L3是16路相联的。</p>
+<h3 id="Core-i7-地址翻译"><a href="#Core-i7-地址翻译" class="headerlink" title="Core i7 地址翻译"></a>Core i7 地址翻译</h3><p>Core i7使用四级页表翻译。<br>物理页表要求4KB对齐。<br>页表条目PTE：<br>位  </p>
+<ul>
+<li>0：P（子页表是否在内存中存在）  </li>
+<li>1：R/W（对于所有可访问页，只读或者读写访问权限）  </li>
+<li>2：U/S（对于所有可访问页，用户或者超级用户（内核）模式访问权限）  </li>
+<li>3：WT（子页表直写或者写回缓存策略）  </li>
+<li>4：CD（能/不能缓存子页表）  </li>
+<li>5：A（引用位，由MMU在读和写时设置，由软件清除）  </li>
+<li>7：PS（页大小为4KB或4MB（只对第一层PTE定义））  </li>
+<li>12-51：Base addr（子页表的物理基地址的最高40位）  </li>
+<li>63：XD（能/不能从这个PTE可访问的所有页中取指令）<br>注：还有第四级页表条目格式：  </li>
+<li>0：P（子页表是否在内存中存在，如果P为0，则剩余63位操作系统可用）  </li>
+<li>1：R/W（对于所有可访问页，只读或者读写访问权限）  </li>
+<li>2：U/S（对于所有可访问页，用户或者超级用户（内核）模式访问权限）  </li>
+<li>3：WT（子页表直写或者写回缓存策略）  </li>
+<li>4：CD（能/不能缓存子页表）  </li>
+<li>5：A（引用位，由MMU在读和写时设置，由软件清除）  </li>
+<li>6：D（修改位，由MMU在读和写时设置，由软件清除）  </li>
+<li>7：0  </li>
+<li>8：G（全局页，在任务切换时，不从TLB驱逐出去）  </li>
+<li>12-51：Base addr（子页表的物理基地址的最高40位）  </li>
+<li>63：XD（能/不能从这个子页中取指令）<br>引用位：每次访问，MMU都会设置A位，称为引用位，内核可以利用引用位来设计页替换算法。<br>修改位：告诉内核替换页之前是否必须写回牺牲页。  </li>
+</ul>
+<h3 id="9-7-2-Linux虚拟内存系统"><a href="#9-7-2-Linux虚拟内存系统" class="headerlink" title="9.7.2 Linux虚拟内存系统"></a>9.7.2 Linux虚拟内存系统</h3><ol>
+<li>Linux虚拟内存区域<br>区域的概念；每个存在的虚拟页面都必然属于某个区域；这允许虚拟地址空间有间隙。<br>内核为系统进程维护一个单独的任务结构，这中的元素包含或者指向内核运行该进程所需要的所有信息（例如PID、指向用户栈的指针，可执行目标文件的名字，以及程序计数器）。  </li>
+<li>Linux缺页异常处理<br>MMU视图翻译A时触发一个缺页，这个异常导致控制转移到内核的缺页处理程序，随后执行如下步骤：<br>1）虚拟地址A时合法的吗？（即A是否在某个区域结构定义的区域内）<br>2）试图进行内存访问是否合法？进程是否有读、写或者执行这个区域内页面的权限。<br>3）内核知道这个缺页是由于对合法的虚拟地址进行合法的操作造成的。然后，选择一个牺牲页面（如果修改过，写回），换入新的页面并更新页表，当缺页处理程序返回时，CPU重新启动引起缺页的指令。  </li>
+</ol>
+<h2 id="内存映射"><a href="#内存映射" class="headerlink" title="内存映射"></a>内存映射</h2><p>Linux将一个虚拟内存区域与一个磁盘上的对象关联起来，以初始化这个虚拟内存的内容，这个过程称为内存映射。<br>1）Linux文件系统中的普通文件<br>2）匿名文件<br>3）交换文件  </p>
+<h3 id="再看共享对象"><a href="#再看共享对象" class="headerlink" title="再看共享对象"></a>再看共享对象</h3><p>一个映射到共享对象的虚拟内存区域叫做共享区域，类似地，也有私有区域。<br>私有对象使用一种叫做写时复制的巧妙技术被映射到虚拟内存中。举例：两个进程共享了一个对象同一个物理副本。对于每个映射私有对象的进程，相应的页表条目标记为只读，并在区域结构被标记为私有写时复制。只要没有进程试图写它自己的私有区域，它们就可以继续共享物理内存中对象的一个单独副本，然而只要有一个进程试图写私有区域内的某个页面，那么这个写操作会触发一个保护故障。当故障处理程序注意到保护异常是由于进程试图写私有的写时复制区域中的一个页面而引起的，它就会在物理内存中创建这个页面的一个新副本，更新页表条目指向这个新的副本，然后恢复这个页面的写权限。</p>
+<h3 id="再看fork函数"><a href="#再看fork函数" class="headerlink" title="再看fork函数"></a>再看fork函数</h3><h3 id="再看execve函数"><a href="#再看execve函数" class="headerlink" title="再看execve函数"></a>再看execve函数</h3><p>一个execve调用：<br><code>execve(&quot;a.out&quot;,NULL,NULL)</code><br>该函数加载并允许可执行目标程序a.out中的程序，用a.out程序有效替代了当前的程序。加载并允许a.out需要一下几个步骤：  </p>
+<ul>
+<li><p>删除已存在的用户区域</p>
+</li>
+<li><p>映射私有区域</p>
+</li>
+<li><p>映射共享区域</p>
+</li>
+<li><p>设置程序计数器（PC）</p>
+</li>
+</ul>
+<h3 id="使用mmap函数的用户级内存映射"><a href="#使用mmap函数的用户级内存映射" class="headerlink" title="使用mmap函数的用户级内存映射"></a>使用mmap函数的用户级内存映射</h3><p>mmap函数要求内核创建一个新的虚拟内存区域，并将指定的一各连续的片（chunk）映射到这个新的<br>区域。</p>
+<h2 id="动态内存分配"><a href="#动态内存分配" class="headerlink" title="动态内存分配"></a>动态内存分配</h2><p>虽然可以使用低级的mmap和munmap函数来创建和删除虚拟内存区域，但是C程序员还会觉得当运行时需要额外的虚拟内存时，用动态内存分配器（dynamic memory allocator）更方便，也有更好的可以移植性。<br>动态内存分配器维护者一个进程的虚拟内存区域，称为堆（heap）。<br>分配器将堆视为一组不同大小的块的集合来维护。每个块就是一个连续的虚拟内存片，要么是已分配的，要么是空闲的。  </p>
+<ol>
+<li>显示分配器（例如C语言的malloc函数）  </li>
+<li>隐式分配器（也叫做垃圾收集器，要求分配器检测一个已分配块何时不再被程序所使用）  </li>
+</ol>
+<h3 id="malloc和free函数"><a href="#malloc和free函数" class="headerlink" title="malloc和free函数"></a>malloc和free函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">malloc</span><span class="params">(<span class="keyword">size_t</span> size)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>malloc函数返回一个指针，指向为至少size字节的内存块，这个块会为可能包含在这个块内的任何数据对象型做对齐。在32位模式中，地址总是8的倍数，在64位模式中地址总是16的倍数。<br>如果malloc遇到问题（例如要求的内存块比可用的虚拟内存还大），就返回NULL，并设置errno。如果想要改变一个已分配块的大小，可以使用realloc函数。</p>
+<h3 id="分配器的要求和目标"><a href="#分配器的要求和目标" class="headerlink" title="分配器的要求和目标"></a>分配器的要求和目标</h3><ol>
+<li>处理任意请求序列。一个应用可以有任意的分配请求序列何释放请求序列  </li>
+<li>立即响应请求  </li>
+<li>只使用堆  </li>
+<li>对齐块（对齐要求）<br>一个分配请求的最糟糕运行时间与空闲块的数量成线性关系，而一个释放请求的运行时间是一个常数。<br>一个系统中被所有进程分配的虚拟内存的全部数量是受磁盘上交换空间的数量限制的。</li>
+</ol>
+<h3 id="碎片"><a href="#碎片" class="headerlink" title="碎片"></a>碎片</h3><p>内部碎片何外部碎片。  </p>
+<ol>
+<li>内部碎片<br>实际中为了满足对齐条件，分配器可能增加块的大小。  </li>
+<li>外部碎片<br>当空闲内存合起来满足一个分配请求，但是没有一个单独的空闲块足够来满足这个请求，那么如果不向内核请求额外的虚拟内存就无法满足这个请求。<br>分配器通常采用启发式策略来试图维持少量的大空闲块。  </li>
+</ol>
+<h3 id="实现问题"><a href="#实现问题" class="headerlink" title="实现问题"></a>实现问题</h3><h3 id="隐式空闲链表"><a href="#隐式空闲链表" class="headerlink" title="隐式空闲链表"></a>隐式空闲链表</h3><p>优点是简单，缺点是任何操作的开销都要对空闲链表进行搜索。</p>
+<h3 id="放置已分配的块"><a href="#放置已分配的块" class="headerlink" title="放置已分配的块"></a>放置已分配的块</h3><p>三种放置策略：首次适配、下一次适配、最佳适配</p>
+<h3 id="分割空闲块"><a href="#分割空闲块" class="headerlink" title="分割空闲块"></a>分割空闲块</h3><p>如果放置策略趋向于产生好的匹配，那么额外的内部碎片也是可以接受的。<br>如果匹配不太好，那么分配器通常会把这个空闲块分割为两部分。第一部分变成分配块，而剩下的变成一个新的空闲块。  </p>
+<h3 id="获取额外的内存"><a href="#获取额外的内存" class="headerlink" title="获取额外的内存"></a>获取额外的内存</h3><h3 id="合并内存块"><a href="#合并内存块" class="headerlink" title="合并内存块"></a>合并内存块</h3><p>假设一个对4字（16字节）有效载荷的请求，但是只有两个相邻的有效载荷为3字的空闲块，这种现象叫做假碎片。为了解决假碎片问题，任何实际的分配器都必须合并相邻的空闲块，这个过程称为合并。这就出现了一个重要的策略决定，那就是何视执行合并。分配器可以选择立即合并（也就是在每次一个块被释放时，就合并所有相邻的块），或者它也可以选择推迟合并（也就是等到某个稍晚的时候再合并空闲块，例如可以等到某个分配请求失败，再扫描整个堆，合并所有空闲块）。立即合并简单明了，但会产生某种形式的抖动（频繁的合并和分割），快速分配器通常会选择某种形式的推迟合并。</p>
+<h3 id="带边界标记的合并"><a href="#带边界标记的合并" class="headerlink" title="带边界标记的合并"></a>带边界标记的合并</h3><p>头部、脚部，两者一样，各占一字。<br>头部可以让前面的块确定后继块的范围，脚部可以让后面的块确定前面块的范围。为了节省空间，已分配块没有脚部。</p>
+<h3 id="综合：实现一个简单的分配器"><a href="#综合：实现一个简单的分配器" class="headerlink" title="综合：实现一个简单的分配器"></a>综合：实现一个简单的分配器</h3><p>跳过，之后再看。</p>
+<h3 id="显示空闲链表"><a href="#显示空闲链表" class="headerlink" title="显示空闲链表"></a>显示空闲链表</h3><p>可以将堆组织成一个双向空闲链表，每个空闲块中，都包含一个pred（前驱）、succ（后继）指针。<br>使用双向链表而不是隐式空闲链表，使首次适配的分配时间从块数量的线性时间降低到空闲块数量的线性时间。不过释放一个块的时间可以是线性的也可以是常数，这取决于我们所选择的空闲链表中块的排序策略。<br>一种方法是：LIFO（先进后出，将新释放的块放置在链表的开始处，这样子释放将是常数时间，如果使用了边界标记，合并也是常数时间）<br>另一种方法是按地址顺序维护链表，其中链表中每个块的地址都小于它的后继的地址。在这种情况下，释放一个块需要线性时间的搜索来定位合适的前驱。但是这相对于LIFO排序有更高的内存利用率，接近最佳适配的利用率。</p>
+<h3 id="分离的空闲链表"><a href="#分离的空闲链表" class="headerlink" title="分离的空闲链表"></a>分离的空闲链表</h3><p>一种流行的减少分配时间的方法是分离存储，维护多个空闲链表，其中每个链表中的块有大致相等的大小。一般的思路是将所有可能的块大小分成一些等价类，也叫做大小类。有很多种方式来定义大小类。例如根据2的幂：<br>{1},{2},{3，4},{5<del>8},…,{1025</del>2048},{2049<del>4096},{4097</del>$\infin$}  </p>
+<ol>
+<li>简单分离存储<br>使用简单分离存储，每个大小类的空闲链表包含大小相等的块，每个块的大小就算这个大小类中的最大元素的大小。<br>优点：释放和分配块，都是常数时间操作。而且每个片中都是大小相等的块，不分割，不合并。显著的缺点是：很容易造成内部碎片和外部碎片。  </li>
+<li>分离适配<br>C标准库中的malloc包就是采用这种方法。这种方法既快速，对内存的使用也很有效率。搜索时间减少了，因为搜索被限制在堆的某个部分，而不是整个堆。<br>为了分配一个块，先确定请求的大小类，并且对适当的空闲链表做首次适配，查找一个合适的块，如果找到一个，那么就分割它，并将剩余的部分插入到适当的空闲链表中，如果找不到合适的块，那么就搜索下一个更大的大小类的空闲链表。如此重复知道找到一个合适的块。如果空闲链表中没有合适的块，那么就像操作系统请求额外堆内存，从这个新的堆内存中分配出一个块，将剩余部分放置在适当的大小类中。要释放一个块，我们执行合并，并将结果放置在相应的空闲链表中。  </li>
+<li>伙伴系统<br>一种特殊的分离适配，为每个块大小$2^k$维护一个分离空闲链表。请求块大小，向上舍入到最近的2的幂，找到一可用的块大小为$2^j$，然后递归地分割这个块，直到j=k。当分割时每个剩下的半块被放置在相应的空闲链表中。<br>优点：快速搜索和合并，可能导致显著的内部碎片。不过如果，块大小预知时2的幂，伙伴系统分配器就很有吸引力了。  </li>
+</ol>
+<h2 id="垃圾收集"><a href="#垃圾收集" class="headerlink" title="垃圾收集"></a>垃圾收集</h2><p>垃圾收集器（garbage collector）是一种动态内存分配器，它自动释放程序不再需要的已分配块。这些块被称为垃圾。</p>
+<h3 id="垃圾收集器的基本知识"><a href="#垃圾收集器的基本知识" class="headerlink" title="垃圾收集器的基本知识"></a>垃圾收集器的基本知识</h3><p>垃圾收集器将内存视为一张有向可达图，包含根节点（包含指向堆中的指针）和堆节点（对应于一个堆中的已分配块）。当存在一条从任意根结点出发并达到p的有向路径时，我们说p节点时可达的。不可达节点对应于垃圾。<br>向ML和Java这样的语言能够维护可达图的一种精确表示，也因此能够回收所有垃圾。例如C/C++这样的语言通常不能维持可达图的精确表示，这样的收集器也叫做保守的垃圾收集器，每个可达块都被正确标记为可达了，但是某些不可达节点可能被错误标记为可达了。<br>需要堆空间时：应用通常会调用malloc，如果malloc找不到一个合适的空闲块，那么它就调用垃圾收集器，希望能够回收一些垃圾到空闲链表。</p>
+<h3 id="Mark-amp-Sweep垃圾收集器"><a href="#Mark-amp-Sweep垃圾收集器" class="headerlink" title="Mark&amp;Sweep垃圾收集器"></a>Mark&amp;Sweep垃圾收集器</h3><p>Mark&amp;Sweep垃圾收集器通常由标记（Mark）和清除（sweep）阶段组成。  标记：标记出根节点的所有可达和已分配的后继。<br>清除：释放每个未标记的已分配块。<br>块头部中空闲的低位中的一位通常用来表示这个快是否被标记了。</p>
+<h3 id="C程序的保守Mark-amp-Sweep"><a href="#C程序的保守Mark-amp-Sweep" class="headerlink" title="C程序的保守Mark&amp;Sweep"></a>C程序的保守Mark&amp;Sweep</h3><p>C语言的Mark&amp;Sweep收集器必须是保守的，其根本原因是C语言不会用类型信息来标记内存位置。因此像int或者float这样的标量可以伪装成指针。</p>
+<h2 id="C程序中的常见的与内存相关的错误"><a href="#C程序中的常见的与内存相关的错误" class="headerlink" title="C程序中的常见的与内存相关的错误"></a>C程序中的常见的与内存相关的错误</h2><h3 id="间接引用坏指针"><a href="#间接引用坏指针" class="headerlink" title="间接引用坏指针"></a>间接引用坏指针</h3><h3 id="读未初始化的内存"><a href="#读未初始化的内存" class="headerlink" title="读未初始化的内存"></a>读未初始化的内存</h3><h3 id="允许栈缓冲区溢出"><a href="#允许栈缓冲区溢出" class="headerlink" title="允许栈缓冲区溢出"></a>允许栈缓冲区溢出</h3><h3 id="假设指针和它们指向的对象是相同大小的"><a href="#假设指针和它们指向的对象是相同大小的" class="headerlink" title="假设指针和它们指向的对象是相同大小的"></a>假设指针和它们指向的对象是相同大小的</h3><h3 id="造成错位错误"><a href="#造成错位错误" class="headerlink" title="造成错位错误"></a>造成错位错误</h3><h3 id="引用指针而不是它所指向的对象"><a href="#引用指针而不是它所指向的对象" class="headerlink" title="引用指针而不是它所指向的对象"></a>引用指针而不是它所指向的对象</h3><h3 id="误解指针运算"><a href="#误解指针运算" class="headerlink" title="误解指针运算"></a>误解指针运算</h3><h3 id="引用不存在的变量"><a href="#引用不存在的变量" class="headerlink" title="引用不存在的变量"></a>引用不存在的变量</h3><h3 id="引用空闲堆块中的数据"><a href="#引用空闲堆块中的数据" class="headerlink" title="引用空闲堆块中的数据"></a>引用空闲堆块中的数据</h3><h3 id="引起内存泄漏"><a href="#引起内存泄漏" class="headerlink" title="引起内存泄漏"></a>引起内存泄漏</h3>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH8%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH8%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" class="post-title-link" itemprop="url">CH8异常控制流</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:38:24" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:24+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="异常控制流"><a href="#异常控制流" class="headerlink" title="异常控制流"></a>异常控制流</h1><p>现代系统通过使控制流发生突变来应对这些情况（如程序向磁盘请求数据、子进程终止同制父进程等），一般而言我们把这些突变称为异常控制流（Exceptional Control Folw，ECF）。</p>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p>异常（Exception）就是控制流中的突变。<br>处理器检测到事件发生时，它会通过一张叫做异常表（exception table）<br>的跳转表，进行一个间接过程调用（异常），到一个专门设计用来处理这类事件得操作系统子程序（异常处理程序，exception handler）。当异常处理程序完成处理后，根据引起异常得事件类型，会发生以下3种情况中得一种：  </p>
+<ol>
+<li>处理程序将控制返回给当前指令$I_{curr}$，即当事件发生时正在执行得指令。  </li>
+<li>处理程序将控制返回给$I_{next}$，如果没有发生异常将会执行下一条指令。  </li>
+<li>处理程序终止被终端的程序。  </li>
+</ol>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p>系统中每种可能得异常都分配了唯一的非负整数的异常号（exception number）。其中一些号码是由处理器（CPU）的设计者分配的，其他号码是由操作系统内核的设计者分配的。前者的示例包括零除、缺页、内存访问为例、断点以及算术运算溢出。后者示例包括系统调用和来自外部I/O设备的信号。<br>异常-&gt;异常表基地址寄存器-&gt;异常表-&gt;相应的处理程序。</p>
+<h3 id="异常的类别"><a href="#异常的类别" class="headerlink" title="异常的类别"></a>异常的类别</h3><p>分为四类：中断（interrupt）、陷阱（trap）、故障（fault）和终止（abort）。</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th align="center">原因</th>
+<th>异步/同步</th>
+<th align="right">返回行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>中断</td>
+<td align="center">来自I/O设备的信号</td>
+<td>异步</td>
+<td align="right">总是返回到下一条指令</td>
+</tr>
+<tr>
+<td>陷阱</td>
+<td align="center">有意的异常</td>
+<td>同步</td>
+<td align="right">总是返回到下一条指令</td>
+</tr>
+<tr>
+<td>故障</td>
+<td align="center">潜在可恢复的错误</td>
+<td>同步</td>
+<td align="right">可能返回到当前指令</td>
+</tr>
+<tr>
+<td>终止</td>
+<td align="center">不可恢复的错误</td>
+<td>同步</td>
+<td align="right">不会返回</td>
+</tr>
+</tbody></table>
+<ol>
+<li>中断<br>中断是异步发生的，来自处理器外部的I/O设备信号的结果。硬件中断不是由任何一条专门的指令造成的，从这个意义上说它是异步的。  </li>
+<li>陷阱和系统调用<br>陷阱是有意的异常，陷阱最重要的用途是在用户程序和内核之间提供一个像过程一样的接口，叫做系统调用。为了允许用户程序对内核服务受控的访问，处理器提供了一条特殊的“syscall n”指令，当用户程序想要请求服务n时，可以执行这条指令，执行syscall指令会导致一个到异常处理程序的陷阱，这个处理程序解析参数，并调用适当的内核程序。  </li>
+<li>故障<br>故障时由错误情况引起的，它可能够被故障处理程序修正。当故障发生时，处理器将控制转移给故障处理程序。如果处理程序能够修正这个错误情况，它就将控制返回到引起故障的指令，从而重新执行它。<br>一个经典故障时缺页异常，当指令引用一个虚拟地址，而与地址相对应的物理页面不在内存中，因此必须从磁盘中取出来。  </li>
+<li>终止<br>终止是不可恢复的致命错误造成的结果，通常是一些硬件错误，比如DRAM或者SRAM位被损坏时发生了奇偶错误。终止处理程序从不将控制返回给应用程序。</li>
+</ol>
+<h3 id="Linux-x86-64系统中的异常"><a href="#Linux-x86-64系统中的异常" class="headerlink" title="Linux/x86-64系统中的异常"></a>Linux/x86-64系统中的异常</h3><p>在X86-64系统中，系统调用是通过一条称为syscall的陷阱指令来提供的。C程序用syscall函数可以直接调用任何系统调用，标准C库提供了一组方便的包装函数。这些包装函数将参数打包到一起，以适当的系统调用指令陷入内核，然后将系统调用的返回状态传递回调用程序。系统调用和它们相关的包装函数都成为系统级函数。</p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>经典定义：一个执行中程序的实例。系统中每个进程都运行在某个进程的上下文（context）中。上下文是由程序正确运行所需的状态组成的。这个状态包括存放在内存中的程序的代码和数据，它的栈、通用目的寄存器的内容、程序计数器、环境变量以及打开文件描述符的集合。</p>
+<h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>程序在执行过程中的一系列的程序计数器（PC）的值。</p>
+<h3 id="并发流"><a href="#并发流" class="headerlink" title="并发流"></a>并发流</h3><p>一个逻辑流在执行的时间上和另一个流重叠，称为并发流，这两个流称为并发地运行。<br>多任务：一个进程和其他进程轮流运行的概念称为多任务。<br>两个流并发地运行在不同处理器核或者计算机上，那么我们称它们为并行流，它们并行地运行并且并行地执行。</p>
+<h3 id="私有地址空间"><a href="#私有地址空间" class="headerlink" title="私有地址空间"></a>私有地址空间</h3><p>进程为每个程序提供它自己的私有地址空间，一般来说是不能被其他进程读或写的。</p>
+<h3 id="用户模式核内核模式"><a href="#用户模式核内核模式" class="headerlink" title="用户模式核内核模式"></a>用户模式核内核模式</h3><p>处理器通常是用某个控制寄存器中的一个模式位（mode bit）来限制应用可以执行的指令以及它可以访问的地址空间范围。<br>没有设置模式位时，进程就允许用户模式。<br>进程进入内核模式的唯一方法就算通过中断、故障或者陷入系统调用这样的异常。</p>
+<h3 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h3><p>内核使用一种称为上下文切换的较高层次的异常控制流来实现多任务。<br>内核为每个进程维持一个上下文，这就是内核重新启动一个被抢占的进程所需的状态。它由一些对象的值组成，这些对象包括通用目的寄存器、浮点寄存器、程序计数器、用户栈、状态寄存器、内核栈核各种内核数据结构。</p>
+<h2 id="系统调用错误处理"><a href="#系统调用错误处理" class="headerlink" title="系统调用错误处理"></a>系统调用错误处理</h2><p>当Unix系统级函数遇到错误时，它们通常回返回-1，并设置全局整数变量errno来表示什么出错了。程序员应该总是检查错误，但不信的时，许多人都忽略了错误检查，因为它时代码变得臃肿，而且难以读懂。</p>
+<h2 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h2><p>Unix提供了大量从C程序中操作进程的系统调用。</p>
+<h3 id="获取进程ID"><a href="#获取进程ID" class="headerlink" title="获取进程ID"></a>获取进程ID</h3><p>每个进程都有一个唯一正数进程ID（PID）。<code>getpid</code>函数返回调用进程的PID。<code>getppid</code>返回它的父进程的PID（创建调用进程的进程）。<br>返回类型为pid_t，在Linux系统上它在type.h里被定义为int。</p>
+<h3 id="创建和终止进程"><a href="#创建和终止进程" class="headerlink" title="创建和终止进程"></a>创建和终止进程</h3><p>进程总是处于下面三种状态之一：</p>
+<ul>
+<li>运行：进程要么在CPU上执行，要么在等待被执行且最终会被内核调度。</li>
+<li>停止：进程的执行被挂起（suspended），且不会被调度。</li>
+<li>终止：进程永远的停止了。三个原因：收到一个信号，该信号的默认行为是终止进程；从主程序返回，调用exit函数。<br>父进程通过<code>fork</code>函数创建新的子进程。<br>父进程和子进程有相同但是独立的地址空间，它们共享文件。</li>
+</ul>
+<h3 id="回收子进程"><a href="#回收子进程" class="headerlink" title="回收子进程"></a>回收子进程</h3><p>当一个子进程由于某种原因终止时，内核不是立即把它从系统中清除。相反，进程被保持在一种已终止的状态中，直到被它的父进程回收。当父进程回收已终止的子进程时，内核将子进程的退出状态传递给父进程，然后抛弃已终止的进程，从此时开始，该进程就不存在了。一个终止了但还未被回收的进程称为僵尸进程。如固父进程终止了，内核会安排init进程成为它的孤儿进程的养父。</p>
+<h3 id="让进程休眠"><a href="#让进程休眠" class="headerlink" title="让进程休眠"></a>让进程休眠</h3><p>sleep函数将一个进程挂起一段指定的时间。如固请求的时间量已经达到了，sleep返回0，否则返回还剩下的要休眠的秒数。</p>
+<h3 id="加载并运行程序"><a href="#加载并运行程序" class="headerlink" title="加载并运行程序"></a>加载并运行程序</h3><p>execve函数加载并运行可执行目标文件filename，只要但出现错误，如找不到filename，execve才会返回到调用程序。execve调用一次并从不返回。<br>在execve加载了filename之后，它调用启动代码，启动代码设置栈，并将控制传递给新程序的主函数，该主函数有如下形式的原型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv,<span class="keyword">char</span> **envp)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>或等价的</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[],<span class="keyword">char</span> *envp[])</span></span>;</span><br></pre></td></tr></table></figure>
+<p>argc是命令参数的个数，argv是命令参数数组，<code>argv[0]-&gt;argv[argc-1]</code>，<code>argv[argc]=NULL</code>，envp变量指向一个以null结尾的指针数组，其中每个指针指向一个环境变量字符串，每个串都是形如<code>name=value</code>的名字-值对。<br>Linux提供了几个函数来操作环境数组：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>getenv函数在环境数组中搜索字符串<code>&quot;name=value&quot;</code>。如果找到了就返回一个指向value的指针，否则就返回<code>NULL</code>。<br>还有：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">setenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name,<span class="keyword">const</span> <span class="keyword">char</span> *newvalue,<span class="keyword">int</span> overwrite)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unsetenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果环境数组中包含一个形如<code>&quot;name=oldvalue&quot;</code>的字符串，那么unsetenv就会删除它，而setenv就会用newvalue代替oldvalue，但是只有在overwrite非零时才会这样。如果name不存在，那么setenv就把<code>&quot;name=newvalue&quot;</code>添加到数组中。</p>
+<ul>
+<li>程序和进程<br>fork函数在新的子进程中运行相同的程序，而execve函数在当前进程的上下文加载并运行一个新的程序。它会覆盖当前进程的地址空间，但并没有创建一个新进程，新的程序仍然具有相同的PID，并且继承了execve函数时已打开的所有文件描述符。</li>
+</ul>
+<h3 id="利用fork和execve运行程序"><a href="#利用fork和execve运行程序" class="headerlink" title="利用fork和execve运行程序"></a>利用fork和execve运行程序</h3><p>跳过</p>
+<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><p>Linux信号：一种更高层的软件形式的异常，它允许进程和内核中断其他进程。<br>低层的硬件异常是由内核处理程序处理的，正常情况这些对用户程序来说都是不可见的。信号提供了一种机制，通知用户进程发生了这些异常。</p>
+<h2 id="信号术语"><a href="#信号术语" class="headerlink" title="信号术语"></a>信号术语</h2><p>传送一个目的信号到进程由两个不同步骤组成：  </p>
+<ul>
+<li>发送信号：内核通过更新目的进程的上下文中的某个状态，发送（递送）一个信号给目的进程。发生信号可能有两个原因：内核检测到一个系统事件；一个进程调用了kill函数，显示地要求内核发送信号给目的进程。  </li>
+<li>接收信号：目的进程被内核强迫以某种方式对信号的发送做出反应时，它就接收到了信号。进程可以忽略这个信号，终止或通过执行一个称为信号处理程序的应用层函数来捕获这个信号。<br>一个发错而没有被接收的信号叫做待处理信号，在任何时刻，一种类型至多只有一个待处理信号（如果有一个该类信号，其他会被丢弃）。</li>
+</ul>
+<h3 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h3><ol>
+<li>进程组<br>每个进程都只属于一个进程组，由正整数进程组ID来唯一标识。<code>pid_t getpgrp(void)</code>返回当前进程的进程组ID。<br>子进程和父进程默认情况下属于同一个进程组，一个进程可以通过使用<code>setpgid</code>函数来改变自己或者其他进程的进程组：  </li>
+<li>用/bin/kill程序发送信号    </li>
+<li>从键盘发送信号<br>Unix shell使用作业（job）这个抽象概念来表示对一条命令行求值而创建的进程。在任何时刻至多只有一个前台作业和0个或多个后台作业。在键盘上输入Ctrl+C会导致内核发送一个SIGINT信号到前台进程组中的每一个进程。<br>默认情况下是终止前台作业；Ctrl+Z默认情况下挂起前台作业。  </li>
+<li>用kill函数发送信号<br>进程调用kill函数发送信号给其他进程（包括它们自己）。  </li>
+<li>用alarm函数发送信号<br>进程调用alarm函数发送SIGALRM信号给它自己。  </li>
+</ol>
+<h3 id="接收信号"><a href="#接收信号" class="headerlink" title="接收信号"></a>接收信号</h3><h3 id="阻塞和解除阻塞信号"><a href="#阻塞和解除阻塞信号" class="headerlink" title="阻塞和解除阻塞信号"></a>阻塞和解除阻塞信号</h3><p>隐式阻塞机制（内核默认阻塞任何当前处理程序正在处理信号类型的待处理的信号）、显式阻塞机制</p>
+<h3 id="编写信号处理程序"><a href="#编写信号处理程序" class="headerlink" title="编写信号处理程序"></a>编写信号处理程序</h3><p>跳过</p>
+<h3 id="同步流以避免讨厌的并发错误"><a href="#同步流以避免讨厌的并发错误" class="headerlink" title="同步流以避免讨厌的并发错误"></a>同步流以避免讨厌的并发错误</h3><h3 id="显式等待信号"><a href="#显式等待信号" class="headerlink" title="显式等待信号"></a>显式等待信号</h3><p>有时候主程序必须要显示地等待某个信号处理程序运行。</p>
+<h2 id="非本地跳转"><a href="#非本地跳转" class="headerlink" title="非本地跳转"></a>非本地跳转</h2><p>非本地跳转（nonlocal jump），一种C语言提供的用户及异常控制流形式。它将控制直接由一个函数转移到另一个当前正在执行的函数，而不需要经过正常的调用-返回序列。nonlocal jump通过<code>setjump</code>和<code>longjump</code>来提供。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH7%E9%93%BE%E6%8E%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH7%E9%93%BE%E6%8E%A5/" class="post-title-link" itemprop="url">CH7链接</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:38:00" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:00+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a><strong>链接</strong></h1><p>链接（linking）是将各种代码和数据片段收集并组合成一个单一文件的过程，这个文件可被加载（复制）到内存并执行。链接可以执行于编译时（compile time），也就是在源代码被翻译成机器代码时；也可以执行于加载时（load time），也就是在程序被加载器（loader）加载到内存系统执行时；甚至执行于运行时（run time），也就是在程序被加载器（loader）加载到内存并执行时；甚至于运行时，也就是由应用程序来执行。在早期的计算机系统中，链接是手动执行的。在现代系统中，链接时由叫做连接器（linker）程序自动执行的。  </p>
+<h2 id="编译器驱动程序"><a href="#编译器驱动程序" class="headerlink" title="编译器驱动程序"></a><strong>编译器驱动程序</strong></h2><p>sum.c、main.c<br>预处理器将main.c翻译成一个ASCII码的中间文件main.i，然后编译器将main.i翻译成ASCII汇编语言文件main.s，然后驱动程序运行汇编器，将main.s翻译成一个可重定位目标文件main.o。<br>sum.c-&gt;sum.i-&gt;sum.s-&gt;sum.o<br>运行链接器程序ld将main.o、sum.o以及一些必要的系统目标文件组合起来，创建一个可执行目标文件prog。</p>
+<h2 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a><strong>静态链接</strong></h2><p>为了构造可执行文件，链接器必须完成两个主要任务：符号解析、重定位。  </p>
+<h2 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a><strong>目标文件</strong></h2><p>三种形式：可重定位目标文件（包含二进制代码和数据，其形式可以在编译时与其他可重定位目标文件合并起来，生成一个可执行目标文件）、可执行目标文件（包含二进制代码和数据，可以直接被复制到内存并执行）、共享目标文件（一种特殊类型的可重定位目标文件，可以在加载或者运行时加载进内存并链接）。</p>
+<h2 id="可重定位目标文件"><a href="#可重定位目标文件" class="headerlink" title="可重定位目标文件"></a><strong>可重定位目标文件</strong></h2><h2 id="符号和符号表"><a href="#符号和符号表" class="headerlink" title="符号和符号表"></a><strong>符号和符号表</strong></h2><p>每个可重定位目标模块m有一个符号表，包含：  </p>
+<ul>
+<li>由m模块定义并能被其他模块引用的全局符号。  </li>
+<li>由其他模块定义并能被模块m引用的全局符号。  </li>
+<li>只被模块m定义和引用的局部符号。  </li>
+</ul>
+<h2 id="符号解析"><a href="#符号解析" class="headerlink" title="符号解析"></a><strong>符号解析</strong></h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">CH6存储器层次结构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:37:41" itemprop="dateCreated datePublished" datetime="2021-01-14T15:37:41+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="存储器层次结构"><a href="#存储器层次结构" class="headerlink" title="存储器层次结构"></a><strong>存储器层次结构</strong></h1><h2 id="存储技术"><a href="#存储技术" class="headerlink" title="存储技术"></a><strong>存储技术</strong></h2><h3 id="随机访问存储器（Random-Access-Memory-RAM）"><a href="#随机访问存储器（Random-Access-Memory-RAM）" class="headerlink" title="随机访问存储器（Random-Access Memory,RAM）"></a><strong>随机访问存储器（Random-Access Memory,RAM）</strong></h3><p>分为静态和动态两类（SRAM、DRAM）。SRAM比DRAM更快但更贵。  </p>
+<ol>
+<li>SRAM：用作高速缓存存储器  </li>
+<li>DRAM：用于主存及图形系统的帧缓存区<br>内存系统必须周期性地通过读出，然后重写来刷新内存的每一位。有些系统会使用纠错码。  </li>
+<li>传统的DRAM<br>每个DRAM芯片被连接到某个称为内存控制器的电路，这个电路用来传送$\omega$位到每个DRAM芯片或者一次从每个DRAM芯片传出$\omega$位。  </li>
+<li>内存模块<br>DRAM芯片封装在内存模块中，可以多个DRAM芯片同时读取和写入一个字节（举例8个DRAM芯片），合并后即为一个64位字，然后返回给内存控制器。  </li>
+<li>增强的DRAM  </li>
+</ol>
+<ul>
+<li>快页模式DRAM（Fast Page Model DRAM,FPM DRAM）</li>
+<li>扩展数据输出DRAM（Extended Data Out DRAM，EDO DRAM）</li>
+<li>同步DRAM（Synchronous DRAM，SDRAM）</li>
+<li>双倍数据速率同步DRAM（Double Data-Rate Synchronous）</li>
+<li>视频RAM（Video RAM，VRAM）</li>
+</ul>
+<ol start="6">
+<li>非易失性存储器（nonvolatile memory）<br>DRAM和SRAM在断电的情况都会丧失它们的信息。只读存储器（read-only Memory）中有的类型可以读也可以写，但整齐称为ROM。<br>PROM(Programmable ROM，可编程ROM)只能被编程一次，还有很多。。。<br>还有可擦写可编程ROM(Erasable Programmable ROM，EPROM)、闪存(flash memory)。存储在ROM设备中的程序通常被称为固件（firmware）。</li>
+<li>访问主存<br>总线(bus)，数据流通过总线在处理器和DRAM主存之间来来回回。</li>
+</ol>
+<h3 id="磁盘存储"><a href="#磁盘存储" class="headerlink" title="磁盘存储"></a><strong>磁盘存储</strong></h3><ol>
+<li>磁盘构造<br>主轴、盘片、磁道、扇区、柱面等概念。</li>
+<li>磁盘容量</li>
+<li>磁盘操作  </li>
+</ol>
+<ul>
+<li>寻道时间</li>
+<li>旋转时间</li>
+<li>传送时间</li>
+</ul>
+<ol start="4">
+<li>逻辑磁盘块<br>为了对操作系统隐藏磁盘的复杂性，现代磁盘将为它们的构造呈现一个简单的视图，一个B个扇区大小的逻辑块的序列。磁盘块封装中有一个效得硬件/固件设备，称为磁盘控制器，维护着逻辑块号和实际（物理）磁盘山去之间的映射关系。</li>
+<li>连接I/O设备<br>慢于系统总线和内存总线。</li>
+<li>访问磁盘<br>I/O端口、直接内存访问（Direct Memory Access，DMA）、DMA传送（DMA transfer）</li>
+</ol>
+<h3 id="固态硬盘（Solid-State-Disk，SSD）"><a href="#固态硬盘（Solid-State-Disk，SSD）" class="headerlink" title="固态硬盘（Solid State Disk，SSD）"></a><strong>固态硬盘（Solid State Disk，SSD）</strong></h3><p>这是一种基于闪存的存储技术。</p>
+<h2 id="局部性"><a href="#局部性" class="headerlink" title="局部性"></a><strong>局部性</strong></h2><p>通常表现为时间局部性（在一个具有良好的时间局部性程序中，被引用过一次的内存位置很可能在不远的将来再被多次引用）和空间局部性（在一个具有良好空间局部性的程序中，如果一个内存位置被引用了一次，那么程序很可能在不远的将来引用附件的一个内存位置）。</p>
+<h2 id="存储器层次结构（memery-hierarchy）"><a href="#存储器层次结构（memery-hierarchy）" class="headerlink" title="存储器层次结构（memery hierarchy）"></a><strong>存储器层次结构（memery hierarchy）</strong></h2><ol start="0">
+<li>寄存器（CPU寄存器保存着从高速缓存存储器去除的字）  </li>
+<li>L1高速缓存（SRAM）（L1&lt;-L2，保存取出的缓存行）  </li>
+<li>L2高速缓存（SRAM）（L2&lt;-L3，保存取出的缓存行）  </li>
+<li>L3高速缓存（SRAM）（L3&lt;-主存，保存取出的缓存行）  </li>
+<li>主存（DRAM）（主存&lt;-本地磁盘，保存着取出的磁盘块）  </li>
+<li>本地二级存储（本地磁盘）（保存从远程网络服务器取出的文件）  </li>
+<li>远程二级存储（分布式文件系统、Web服务器）  </li>
+</ol>
+<h3 id="存储器层次结构中的缓存"><a href="#存储器层次结构中的缓存" class="headerlink" title="存储器层次结构中的缓存"></a><strong>存储器层次结构中的缓存</strong></h3><p>高速缓存（cache）是一个小而快的存储设备，它作为存储在更大、也更慢的设备中的数据对象的缓冲区域。使用高速缓存的过程称为<strong>缓存（caching）</strong>。  </p>
+<ol>
+<li>缓存命中：当程序需要第$k+1$层的一个数据对象d时，优先在第$k$层查找d，如果d刚好存储在第$k$层，那么直接读取，这就是我们说的缓存命中。  </li>
+<li>缓存不命中：如果第$k$层没有缓存数据对象d，那么就是我们说的缓存不命中。当发生缓存不命中时，第$k$层的缓存从第k+1层缓存取出包含d的那个块，如果第k层缓存已经满了，可能就会覆盖现存的一个块（牺牲块）。  </li>
+<li>缓存不命中的种类：强制性不命中、冲突不命中、容量不命中。  </li>
+<li>缓存管理：编译器管理寄存器文件；L1、L2和L3层的缓存完全有内置在缓存中的硬件逻辑来管理；在一个有虚拟内存的系统中，DRAM主存作为存储在磁盘上的数据块的缓存，是由操作系统软件和CPU上的地址翻译硬件共同管理的。  </li>
+</ol>
+<h3 id="存储器层次结构概念小结"><a href="#存储器层次结构概念小结" class="headerlink" title="存储器层次结构概念小结"></a><strong>存储器层次结构概念小结</strong></h3><p>概括来说，基于缓存的存储器层次结构行之有效，是因为较慢的存储设备比较快的存储设备更便宜，还因为程序倾向于展示局部性（可以补偿不命中的代价）</p>
+<h2 id="高速缓存存储器"><a href="#高速缓存存储器" class="headerlink" title="高速缓存存储器"></a><strong>高速缓存存储器</strong></h2><p>原来存储器层次结构只有三层：寄存器、主存、磁盘；随着CPU和主存之间逐渐增大的差距，系统设<br>计者被迫在CPU寄存器文件和主存之间插入了一个小的SRAM高速缓存存储器，称为L1高速缓存，后来又插入了L2、L3。</p>
+<h3 id="通用的高速缓存存储器组织结构"><a href="#通用的高速缓存存储器组织结构" class="headerlink" title="通用的高速缓存存储器组织结构"></a><strong>通用的高速缓存存储器组织结构</strong></h3><p>高速缓存的结构可以用元组（S，E，B，m）来描述。S：$S=2^s$个高速缓存组；E：每个组包含E个高速缓存行；B：每个行由$B=2^b$字节的数据块组成的，一个有效位指明这个行是否包含有意义的信息，还有t个标记位来唯一的标识这个块。$t+s+b=m$，t位标记块，s位组索引，b位时块偏移。容量$C=S\times E\times B$。</p>
+<h3 id="直接映射高速缓存"><a href="#直接映射高速缓存" class="headerlink" title="直接映射高速缓存"></a><strong>直接映射高速缓存</strong></h3><p>每个组只有一行  </p>
+<ol>
+<li>直接映射高速缓存中的组选择  </li>
+<li>直接映射高速缓存中的行匹配  </li>
+<li>直接映射高速缓存中的字选择  </li>
+<li>直接映射高速缓存不命中时的行替换  </li>
+<li>综合：运行中的直接映射高速缓存  </li>
+</ol>
+<h3 id="组相联高速缓存"><a href="#组相联高速缓存" class="headerlink" title="组相联高速缓存"></a><strong>组相联高速缓存</strong></h3><ol>
+<li>组相联高速缓存中的组选择  </li>
+<li>组相联高速缓存中的行匹配和字选择：搜索组中的每一行来匹配标记，命中后块偏移从这个块中选择字  </li>
+<li>组相联高速缓存中的不命中的行替换：若无空行，则采用替换策略，有LFU（Least-Frequently-Used，最不常使用）、LRU（Least-Recently-USed，最近最少使用）等。  </li>
+</ol>
+<h3 id="全相联高速缓存"><a href="#全相联高速缓存" class="headerlink" title="全相联高速缓存"></a><strong>全相联高速缓存</strong></h3><p>$E=C/B$，S=1，仅有一个组。</p>
+<ol>
+<li>组选择  </li>
+<li>行匹配和字选择<br>因为高速缓存电路必须并行地搜索许多相匹配的标记，构造一个又大又快的相联高速缓存很困难，而且昂贵。因此全相联高速缓存只适合做小的高速缓存，例如虚拟内存系统中翻译备用缓冲器（TLB），它缓存页表项。</li>
+</ol>
+<h3 id="有关写的问题"><a href="#有关写的问题" class="headerlink" title="有关写的问题"></a><strong>有关写的问题</strong></h3><p>如果命中，更新了副本之后，如何更新在低一层中的副本。  </p>
+<ul>
+<li>直写：最简单的方法，立即写回到下一级。  </li>
+<li>写回：等待替换算法要驱逐这个更新过的块的时候，才把它紧接着写到低一层（需要在每个高速缓存行中额外保留一个修改位来标识该行是否被修改过）。<br>如果不命中：  </li>
+<li>写分配：加载相应的低一层中的块到高速缓存行中，然后更新这个高速缓存块  </li>
+<li>非写分配：避开高速缓存，直接写到低一层</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">网络编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 22:29:00" itemprop="dateCreated datePublished" datetime="2021-01-13T22:29:00+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文主要总结C++网络编程中关于套接字编程的相关函数。  </p>
+<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="创建一个套接字：socket"><a href="#创建一个套接字：socket" class="headerlink" title="创建一个套接字：socket()"></a>创建一个套接字：<code>socket()</code></h2><p><code>int socket(int family, int type, int protocol);</code><br>其中family指明协议族，IPV4是<code>AF_INET</code>，IPv6<code>AF_INET6</code>；type指明套接字类型，TCP为<code>SOCK_STREAM</code>，UDP是<code>SOCK_DGRAM</code>。protocol参数设为某个协议的类型常值，或者设为0。</p>
+<h2 id="建立连接：connect"><a href="#建立连接：connect" class="headerlink" title="建立连接：connect()"></a>建立连接：<code>connect()</code></h2><p><code>int connect(int sockfd, const struct sockaddr *serveraddr, socklen_t addrlen);</code><br>sockfd是socket函数返回的套接字描述符，第二个参数是指向一个套接字地址的指针和该结构大小。连接成功返回0，否则-1。</p>
+<p>实际使用中，我们一般传入sockaddr_in指针，进行类型转换为sockaddr，sockaddr_in结构如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span>&#123;</span></span><br><span class="line">	<span class="keyword">short</span> <span class="keyword">int</span> sin_family;	<span class="comment">//协议族</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> <span class="keyword">int</span> sin_port;	<span class="comment">//存储端口号，只能用网络字顺序</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> <span class="title">sin_addr</span>;</span>	<span class="comment">//存储IP地址</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="绑定端口：bind"><a href="#绑定端口：bind" class="headerlink" title="绑定端口：bind()"></a>绑定端口：<code>bind()</code></h2><p><code>int bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen);</code><br>将一个本地协议地址和套接字描述符绑定起来。  </p>
+<p>一般来说，端口我们可以自己指定或者使用0让内核自己选择一个临时端口；IP地址可以选择统配地址让内核等套接字已连接再选择一个本地地址。  </p>
+<h2 id="监听：listen"><a href="#监听：listen" class="headerlink" title="监听：listen()"></a>监听：<code>listen()</code></h2><p>一般来说，服务器会打开一个监听套接字，用来等待来自client的连接请求：<br><code>int listen(int sockfd,int backlog);</code><br>sockfd是socket函数创建的套接字，然后backlog是为这个监听套接字维护的队列长度，队列包括已连接队列（established状态）和未连接队列（syn_recv状态）。  </p>
+<h2 id="生成已连接套接字：accept"><a href="#生成已连接套接字：accept" class="headerlink" title="生成已连接套接字：accept()"></a>生成已连接套接字：<code>accept()</code></h2><p><code>int accept(int sockfd, struct sockaddr *cliaddr, socklen_t * addrlen);</code><br>该函数会从监听套接字sockfd的已连接队列中取出一个连接，返回一个已连接套接字描述符，并且返回另一方套接字地址和地址结字节数。  </p>
+<h2 id="关闭套接字：close"><a href="#关闭套接字：close" class="headerlink" title="关闭套接字：close()"></a>关闭套接字：<code>close()</code></h2><p><code>int close(int sockfd);</code><br>该函数可以关闭一个套接字描述符，不过如果该套接字使用引用计数，如果被多个进程拥有，则只会计数-1，当计数为0时候才会真正的关闭。  </p>
+<h2 id="设置套接字参数：getsockopt-和setsockopt"><a href="#设置套接字参数：getsockopt-和setsockopt" class="headerlink" title="设置套接字参数：getsockopt()和setsockopt()"></a>设置套接字参数：<code>getsockopt()</code>和<code>setsockopt()</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen);</span><br><span class="line">int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);</span><br></pre></td></tr></table></figure>
+<p>上述两个函数分别用来获得套接字的参数和设置参数，一般情况下先获得已有参数，然后将想要加入的参数和以后参数做或运算，然后再设置参数即可。函数的各个参数具体使用建议参考《UNIX网络编程 卷1：套接字联网API》。  </p>
+<h1 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h1><h2 id="创建套接字：socket"><a href="#创建套接字：socket" class="headerlink" title="创建套接字：socket()"></a>创建套接字：<code>socket()</code></h2><p>创建套接字的方法上一章已经说过了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> family, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>不加赘述了。  </p>
+<h2 id="接收数据：recvfrom"><a href="#接收数据：recvfrom" class="headerlink" title="接收数据：recvfrom()"></a>接收数据：<code>recvfrom()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recvfrom</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *from, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
+<p>参数sockfd是套接字描述符，buff是指向读缓冲区的指针，btybes是最大读入的字节数（避免缓冲区溢出）。 最后两个参数数数据发送方的套接字地址和结构字节数。  </p>
+<h2 id="发送数据：sendto"><a href="#发送数据：sendto" class="headerlink" title="发送数据：sendto()"></a>发送数据：<code>sendto()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">sendto</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *to, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
+<p>发送数据，buff为写缓冲区，btybe是待写入的字节数，后面是发送的目的地套接字地址和地址结构的字节数。</p>
+<h1 id="读写函数"><a href="#读写函数" class="headerlink" title="读写函数"></a>读写函数</h1><h2 id="recv-和send"><a href="#recv-和send" class="headerlink" title="recv()和send()"></a><code>recv()</code>和<code>send()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recv</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">send</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>前面3参数很好理解，flags是一个额外的参数，具体可看《UNIX网络编程 卷一：套接字联网API》。  </p>
+<h2 id="readv-和writev"><a href="#readv-和writev" class="headerlink" title="readv()和writev()"></a><code>readv()</code>和<code>writev()</code></h2><p>readv和writev允许单个系统调用读入到或写出自一个或多个缓冲区。这些操作被称为分散度和集中写。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readv</span><span class="params">(<span class="keyword">int</span> sockfd, cosnt struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">writev</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这两个函数的第2个参数都是指向某个iovec结构数组的一个指针，其中iovec结构再头文件&lt;sys/uio.h&gt;中定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iovec</span>&#123;</span></span><br><span class="line">	<span class="keyword">void</span> *iov_base;	<span class="comment">//内存起始地址</span></span><br><span class="line">   <span class="keyword">size_t</span> iov_len;	<span class="comment">//内存大小</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个函数可以用于任何描述符，而不仅仅限于套接字。另外writev是一个原子操作，意味着对于一个基于记录的协议而言，一次writev调用只产生单个UDP数据报。</p>
+<h1 id="获取地址"><a href="#获取地址" class="headerlink" title="获取地址"></a>获取地址</h1><h2 id="gethostbyname"><a href="#gethostbyname" class="headerlink" title="gethostbyname()"></a><code>gethostbyname()</code></h2><p>gethostbyname()函数主要作用：用域名或者主机名获取地址，操作系统提供的库函数。以下的讨论基于linux环境。<br>域名系统（Domain Name System, DNS）主要用于主机名字与IP地址之间的映射。每个组织机构往往运行一个或多个名字服务器（name server），我们编写的客户端和服务器等应用程序通过调用解析器（resolver）的函数库中的函数接触DNS服务器。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyname</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果成功则返回一个hostent指针，否则返回NULL。当发生错误时，它不设置errno变量，设置全局整数变量h_errno。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> &#123;</span></span><br><span class="line">	<span class="keyword">char</span>  *h_name;            <span class="comment">/*主机规范名*/</span></span><br><span class="line">	<span class="keyword">char</span> **h_aliases;         <span class="comment">/*主机别名列表*/</span></span><br><span class="line">   <span class="keyword">int</span>	h_addrtype;        <span class="comment">/*地址类型，只能是IPv4，本函数无法解决IPv6*/</span></span><br><span class="line">   <span class="keyword">int</span> 	h_length;          <span class="comment">/*IP地址字节数*/</span></span><br><span class="line">   <span class="keyword">char</span> **h_addr_list;</span><br><span class="line">   <span class="comment">/*主机的IP地址，是网络字节序，需要通过inet_ntop函数转换*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="gethostbyaddr"><a href="#gethostbyaddr" class="headerlink" title="gethostbyaddr()"></a><code>gethostbyaddr()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyaddr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *addr, <span class="keyword">socklen_t</span> len, <span class="keyword">int</span> type)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>根据地址和地址类型来获得主机名。返回类型和gethostbyname一样。注意addr是网络字节序。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -376,669 +1483,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%95%B0%E7%BB%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">数组</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:25:36" itemprop="dateCreated datePublished" datetime="2021-01-13T20:25:36+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a><strong>数组</strong></h1><h2 id="题目1051-高度检查器"><a href="#题目1051-高度检查器" class="headerlink" title="题目1051 高度检查器"></a><strong>题目1051 高度检查器</strong></h2><p><a href="">链接</a></p>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a><strong>题目描述</strong></h3><p>学校在拍年度纪念照时，一般要求学生按照<strong>非递减</strong>的高度顺序排列。<br>请你返回能让所有学生以<strong>非递减</strong>高度排列的最小必要移动人数。<br>注意，当一组学生被选中时，他们之间可以以任何可能的方式重新排序，而未被选中的学生应该保持不动。</p>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a><strong>示例</strong></h3><ul>
-<li>输入：<code>height=[1,1,4,2,1,3]</code></li>
-<li>输出：<code>3</code></li>
-</ul>
-<h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a><strong>提示</strong></h3><ol>
-<li>$1\leqslant height.length \leqslant 100$</li>
-<li>$1\leqslant height[i] \leqslant 100$</li>
-</ol>
-<h3 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a><strong>方法1</strong></h3><p>将数组非降序排序，然后比较排序前后数值不同的位置个数即可。<br>时间复杂度：O(nlogn)<br>空间复杂度：O(n)</p>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a><strong>代码</strong></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">heightChecker</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; heights)</span></span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; temp=heights;</span><br><span class="line">        <span class="built_in">sort</span>(temp.<span class="built_in">begin</span>(),temp.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">int</span> res=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;temp.<span class="built_in">size</span>();i++)</span><br><span class="line">            <span class="keyword">if</span>(temp[i]!=heights[i])res++;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a><strong>方法2</strong></h3><p>考虑到$1\leqslant height[i]\leqslant 100$，使用计数排序效率更高。<br>创建一个规模为101的数组<code>count</code>，<code>count[i](1&lt;=i&lt;=100)</code>表示高度<code>i</code>出现次数。遍历数组<code>height</code>然后获得<code>count</code>，然后利用双指针来计算不同的个数。<br>时间复杂度：O(n+100)<br>空间复杂度：O(100)</p>
-<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a><strong>代码</strong></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">heightChecker</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; heights)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> count[<span class="number">101</span>]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> h:heights)count[h]++;</span><br><span class="line">        <span class="keyword">int</span> p1=<span class="number">1</span>,p2=<span class="number">0</span>,res=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(p1&lt;=<span class="number">100</span>&amp;&amp;p2&lt;heights.<span class="built_in">size</span>())&#123;</span><br><span class="line">            <span class="keyword">while</span>(!count[p1])p1++;</span><br><span class="line">            <span class="keyword">if</span>(p1&gt;<span class="number">100</span>)<span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">if</span>(p1!=heights[p2])res++;</span><br><span class="line">            count[p1]--;</span><br><span class="line">            p2++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="题目08-03-魔术索引"><a href="#题目08-03-魔术索引" class="headerlink" title="题目08.03.魔术索引"></a><strong>题目08.03.魔术索引</strong></h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">数和相加</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:25:17" itemprop="dateCreated datePublished" datetime="2021-01-13T20:25:17+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数组值相加问题"><a href="#数组值相加问题" class="headerlink" title="数组值相加问题"></a>数组值相加问题</h1><p>遇到形如$num_1[i]+num_2[j]+…+num_n[l]$=某个目标值target的问题，都考虑对数组进行一个划分：$num_1,num_2,…,num_t$和$num_{t+1}…num_{n}$的形式，把前者的一个哈希表中，然后对后者遍历求和得到sum，然后在哈希表中搜索target-sum就可以降低复杂度了。</p>
-<h2 id="四数相加"><a href="#四数相加" class="headerlink" title="四数相加||"></a>四数相加||</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/4sum-ii/">链接</a></p>
-<h3 id="题目表述"><a href="#题目表述" class="headerlink" title="题目表述"></a>题目表述</h3><p>给定四个包含整数的数组列表 A , B , C , D ,计算有多少个元组 (i, j, k, l) ，使得 A[i] + B[j] + C[k] + D[l] = 0。<br>为了使问题简单化，所有的 A, B, C, D 具有相同的长度 N，且 0 ≤ N ≤ 500 。所有整数的范围在 -228 到 228 - 1 之间，最终结果不会超过 231 - 1 。</p>
-<h3 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h3><p>分成A、B和C、D，时间复杂度由$O(n^4)$降低为$O(n^2)$。<br>code：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">fourSumCount</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; A, vector&lt;<span class="keyword">int</span>&gt;&amp; B, vector&lt;<span class="keyword">int</span>&gt;&amp; C, vector&lt;<span class="keyword">int</span>&gt;&amp; D)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> N=A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> res=<span class="number">0</span>;</span><br><span class="line">        unordered_map&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; map;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a:A)<span class="keyword">for</span>(<span class="keyword">int</span> b:B)map[a+b]++;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> c:C)<span class="keyword">for</span>(<span class="keyword">int</span> d:D)res+=map[-c-d];</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" class="post-title-link" itemprop="url">排列组合</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:24:41" itemprop="dateCreated datePublished" datetime="2021-01-13T20:24:41+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="排列组合"><a href="#排列组合" class="headerlink" title="排列组合"></a>排列组合</h1><h2 id="nextpermutation和prev-permutation"><a href="#nextpermutation和prev-permutation" class="headerlink" title="nextpermutation和prev_permutation"></a>nextpermutation和prev_permutation</h2><p>STL提供了两个用来计算排列组合关系的算法，分别是next_permutation和prev_permutation。首先我们必须了解什么是“下一个”排列组合，什么是“前一个”排列组合。考虑三个字符组成的序列{a,b,c}。<br>这个序列有6个可能的组合：abc、acb、bac、bca、cab、cba。这些排列组合根据less-than操作符做字典顺序的排序。<br>next_permuation会取得[first,last)所示之序列的下一个排列组合，如果没有下一个排列组合，便返回false，否则返回true。  </p>
-<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>这样想，加如要寻找下一个排列，则这两个排列一定有尽可能长的前缀相同，所以我们可以从后往前看这个序列，如果后面的若干个数字有下一个排列，则问题得到了解决。<br>什么情况有下一个排列？非降序！比方说124653，3、53、653都不存在下一个排列，因为是降序的，而4653是存在下一个排列的，那么我们只需要返回”12”+next(“4653”)即可，一直4653的第一个元素以后都是降序的，我们只需要从后往前找到第一个大于首元素的即可（一定存在，因为第二个必然比第一个大），此例子中为5，那么下一个排列开头变为了5，然后只要找到643的最小排列，考虑到把4放入原来5的位置并不改变降序性质，故其实只需要逆置后面即可。<br>算法逻辑：从后往前搜索找到第一组arr[i-1] &lt; arr[i]，然后从后往前搜索找到arr[j] &gt; a[i-1]，然后替换arr[i-1]和arr[j],然后对a[i]-&gt;a[end]逆置。本例结果为125346。<br>找上一个排列的算法流程基本相同，并且本算法可用于有重复元素的序列。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">next_permutation</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> item=nums.<span class="built_in">end</span>();</span><br><span class="line">    item--;</span><br><span class="line">    <span class="keyword">for</span>(;item!=nums.<span class="built_in">begin</span>();item--)&#123;</span><br><span class="line">        <span class="keyword">if</span>(*item&gt;*(item<span class="number">-1</span>))<span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(item==nums.<span class="built_in">begin</span>())<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    item--;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> j=nums.<span class="built_in">end</span>()<span class="number">-1</span>;j!=item;j--)&#123;</span><br><span class="line">        <span class="keyword">if</span>(*item&lt;*j)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp=*j;</span><br><span class="line">            *j=*item;</span><br><span class="line">            *item=temp;</span><br><span class="line">            <span class="built_in">reverse</span>(item+<span class="number">1</span>,nums.<span class="built_in">end</span>());</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E8%84%91%E7%AD%8B%E6%80%A5%E8%BD%AC%E5%BC%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E8%84%91%E7%AD%8B%E6%80%A5%E8%BD%AC%E5%BC%AF/" class="post-title-link" itemprop="url">脑筋急转弯</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:24:25" itemprop="dateCreated datePublished" datetime="2021-01-13T20:24:25+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="脑筋急转弯"><a href="#脑筋急转弯" class="headerlink" title="脑筋急转弯"></a>脑筋急转弯</h1><h2 id="题目777-在LR字符串中交换相邻字符"><a href="#题目777-在LR字符串中交换相邻字符" class="headerlink" title="题目777 在LR字符串中交换相邻字符"></a>题目777 在LR字符串中交换相邻字符</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/swap-adjacent-in-lr-string/">链接</a></p>
-<h2 id="题目1227-飞机座位分配概率"><a href="#题目1227-飞机座位分配概率" class="headerlink" title="题目1227 飞机座位分配概率"></a>题目1227 飞机座位分配概率</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/airplane-seat-assignment-probability/">链接</a></p>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>按次序上飞机的乘客编号分别为1-n。</p>
-<ul>
-<li>情况1<br>乘客1选中了自己的位置（概率为1/n），那么后面每个人都可以坐上自己的位置，n号坐在自己位置的概率为1/n  </li>
-<li>情况2<br>乘客1选中了n号位置（概率为1/n），那么n号将无法坐在自己的座位上。  </li>
-<li>情况3<br>乘客1选中了i（0 &lt; i &lt; n）号位置（概率为1/n），那么从2到i-1号都能坐上自己的位置，i号将随机选择一个位置坐下，<br>那么关于n坐在自己的位置上的概率问题规模缩减到了（n-i+1）,最终概率为1/n*P(n-i+1)  </li>
-</ul>
-<p>综上所述<br>概率P(n)=1/n+1/n*(P(n-2+1)+P(n-3+1)+…+P(2))  n&gt;3<br>考虑到P(1)=1，<br>所以P(n)=1/n*(P(n-1)+P(n-2)+…+P(1))，<br>而P(1)=1，故P(2)=1/2*(P(1))=1/2，P(3)=1/3*(P(1)+P(2))=1/2，<br>数学归纳法证明P(n)=1/2 when n&gt;=2：  </p>
-<ul>
-<li>1<br>P(2)=1/2已知</li>
-<li>2<br>假设P(i)=1/2，任取2&lt;=i&lt;=k, k&gt;=2</li>
-<li>3<br>那么P(k+1)=(P(1)+…+P(k))/(k+1)=(1+1/2+…+1/2)/(k+1)=(1+(k+1)/2)/(k+1)=1/2  </li>
-</ul>
-<p>故最终结果为P(n)=(n==1)? 1:1/2</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E5%BF%AB%E9%80%9F%E5%B9%82/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E5%BF%AB%E9%80%9F%E5%B9%82/" class="post-title-link" itemprop="url">快速幂</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:24:11" itemprop="dateCreated datePublished" datetime="2021-01-13T20:24:11+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="快速幂"><a href="#快速幂" class="headerlink" title="快速幂"></a><strong>快速幂</strong></h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a><strong>描述</strong></h2><p>假设我们要设计一个函数<code>pow(double a,int n)</code>计算a^n。  </p>
-<h2 id="暴力算法"><a href="#暴力算法" class="headerlink" title="暴力算法"></a><strong>暴力算法</strong></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>&gt;)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">double</span> res=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n--)res*=a;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很明显，时间复杂度为O(n)。</p>
-<h2 id="快速幂算法"><a href="#快速幂算法" class="headerlink" title="快速幂算法"></a><strong>快速幂算法</strong></h2><p>我们考虑如下情况，计算3^5，之前的暴力算法需要计算五次，那么我们这样计算：$3^5=3^{2\times2+}={3^2}^2\times3$，我们可以发现只需要计算3次，<br>更加通用的表示如下 $a^n=(a^2)^{\lfloor n/2\rfloor}\times 2(n-\lfloor n/2\rfloor)\times a$<br>那么我们可以递归地设计函数如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> n%<span class="number">2</span>==<span class="number">0</span>? <span class="built_in">pow</span>(a*a,n/<span class="number">2</span>):<span class="built_in">pow</span>(a*a,n/<span class="number">2</span>)*a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们可以啊发现时间复杂度降低为O(logn)。</p>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a><strong>优化</strong></h3><p>可以非递归实现</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">double</span> res=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n)&#123;</span><br><span class="line">        <span class="keyword">if</span>(n%<span class="number">2</span>==<span class="number">0</span>)&#123;</span><br><span class="line">            a=a*a;</span><br><span class="line">            n/=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            res*=a;</span><br><span class="line">            a=a*a;</span><br><span class="line">            n/=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们还可以进一步优化</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">double</span> res=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n)&#123;</span><br><span class="line">        <span class="keyword">if</span>(n%<span class="number">2</span>==<span class="number">0</span>)res*=a;</span><br><span class="line">        a=a*a;</span><br><span class="line">        n/=<span class="number">2</span>; <span class="comment">// or n=n&gt;&gt;2;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E9%80%92%E5%BD%92/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E9%80%92%E5%BD%92/" class="post-title-link" itemprop="url">递归</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:23:51" itemprop="dateCreated datePublished" datetime="2021-01-13T20:23:51+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h1><h2 id="题目687"><a href="#题目687" class="headerlink" title="题目687"></a>题目687</h2><p>将二叉搜索树变平衡<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-univalue-path/">https://leetcode-cn.com/problems/longest-univalue-path/</a><br>###<br>一条路径中间为包含一个根结点，路径长其实就是该结点左右子树中同元素向下路径的结点数之和<br>设计一个函数dfs(root)，返回root-&gt;val的最长向下路径结点数<br>返回左子树最长路径结点数l<br>返回右子树最长路径结点数r<br>通过判断左右结点是否和root-&gt;val相等计算以root为根结点的最长路径，并更新结果(用类成员保存)<br>计算以root为起点的最长向下路径结点数  </p>
-<h2 id="题目794"><a href="#题目794" class="headerlink" title="题目794"></a>题目794</h2><p>有效的井字游戏<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-tic-tac-toe-state/">https://leetcode-cn.com/problems/valid-tic-tac-toe-state/</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">打乱数组</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:23:29" itemprop="dateCreated datePublished" datetime="2021-01-13T20:23:29+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="打乱数组"><a href="#打乱数组" class="headerlink" title="打乱数组"></a><strong>打乱数组</strong></h1><h2 id="题目384打乱数组"><a href="#题目384打乱数组" class="headerlink" title="题目384打乱数组"></a><strong>题目384打乱数组</strong></h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/shuffle-an-array/">题目链接</a></p>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a><em><strong>题目描述</strong></em></h3><p>给你一个整数数组 nums ，设计算法来打乱一个没有重复元素的数组。<br>实现 Solution class: </p>
-<ul>
-<li><code>Solution(int[] nums)</code> 使用整数数组 nums 初始化对象</li>
-<li><code>int[] reset()</code> 重设数组到它的初始状态并返回</li>
-<li><code>int[] shuffle()</code> 返回数组随机打乱后的结果</li>
-</ul>
-<h3 id="代码模板"><a href="#代码模板" class="headerlink" title="代码模板"></a><strong>代码模板</strong></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Solution</span>(vector&lt;<span class="keyword">int</span>&gt;&amp; nums) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">shuffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a><strong>分析</strong></h3><ul>
-<li>设$P_{i,k}$表示第i个数被分到第k个位置的概率，其中$1&lt;=i,k&lt;=n$，$n$为数组规模</li>
-<li>假设前面n个数已经按要求排列好了，即$P_{i,k}=\frac{1}{n}$，那么对于第{n+1}个数应该有$P_{n+1,k}=\frac{1}{n+1}$，并且此次迭代将使得前面n个数有$P_{i,k}=\frac{1}{n}$更新为$P_{i,k}=\frac{1}{n+1}$。</li>
-<li>考虑这样操作：<br>以$\frac{1}{n+1}$的概率和$1-n+1$这$n+1$个数交换（可以和自己交换），那么第$n+1$个数满足条件，而对于前n个数中任意一个数$j$，它被交换到$n+1$位置的概率为$\frac{1}{n+1}$，它在前$n$个位置中第$k$个位置的概率$P_{i,k}^{new}=P(第i个数在n+1个数排列之前被放置在k位置)\times P(第i个数未与第n+1个数交换)=P_{i,k}^{old}\times\frac{n}{n+1}=\frac{1}{n}\times\frac{n}{n+1}=\frac{1}{n+1}$，所以上述操作满足条件。</li>
-</ul>
-<h4 id="代码如下"><a href="#代码如下" class="headerlink" title="代码如下"></a><strong>代码如下</strong></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; nums;</span><br><span class="line">    <span class="built_in">Solution</span>(vector&lt;<span class="keyword">int</span>&gt;&amp; nums):<span class="built_in">nums</span>(nums)&#123;</span><br><span class="line">        <span class="built_in">srand</span>(<span class="built_in">time</span>(<span class="literal">NULL</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nums;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">shuffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; res=nums;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;res.<span class="built_in">size</span>();i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> index=<span class="built_in">rand</span>()%(i+<span class="number">1</span>);</span><br><span class="line">            <span class="built_in">swap</span>(res[index],res[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>&amp; a,<span class="keyword">int</span>&amp; b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp=a;</span><br><span class="line">        a=b;</span><br><span class="line">        b=temp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a><strong>复杂度分析</strong></h3><ul>
-<li>时间复杂度O(n)，需要遍历一遍数组。</li>
-<li>空间复杂度O(n)，需要开一个新数组。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">差分数组</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 20:22:49" itemprop="dateCreated datePublished" datetime="2021-01-13T20:22:49+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="题目1674使数组互补的最少操作次数"><a href="#题目1674使数组互补的最少操作次数" class="headerlink" title="题目1674使数组互补的最少操作次数"></a>题目1674使数组互补的最少操作次数</h1><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-moves-to-make-array-complementary/">链接</a></p>
-<h2 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h2><p>保存一个数组记录目标值为$2-&gt;2limit$的总操作数，然后遍历找到最小值。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minMoves</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp;&amp; nums, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">sum</span><span class="params">(<span class="number">2</span>*limit+<span class="number">1</span>,<span class="number">0</span>)</span></span>;<span class="comment">//0-limit*2</span></span><br><span class="line">        <span class="keyword">int</span> n=nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> Max,Min;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>,j;i&lt;n/<span class="number">2</span>;i++)&#123;</span><br><span class="line">            j=n-i<span class="number">-1</span>;</span><br><span class="line">            cout &lt;&lt; nums[i] &lt;&lt; nums[j] &lt;&lt; limit &lt;&lt; endl;</span><br><span class="line">            Max=<span class="built_in">max</span>(nums[i]+limit,limit+nums[j]);</span><br><span class="line">            Min=<span class="built_in">min</span>(nums[i]+<span class="number">1</span>,<span class="number">1</span>+nums[j]);</span><br><span class="line">            <span class="comment">// [Min,Max]这个范围是可以只操作一次达到得</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">2</span>;k&lt;=limit*<span class="number">2</span>;k++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(k==nums[i]+nums[j])<span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(k&lt;=Max&amp;&amp;k&gt;=Min)sum[k]++;</span><br><span class="line">                <span class="keyword">else</span> sum[k]+=<span class="number">2</span>;</span><br><span class="line">            </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res=INT_MAX;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">2</span>;k&lt;=limit*<span class="number">2</span>;k++)&#123;</span><br><span class="line">            res=<span class="built_in">min</span>(sum[k],res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>时间复杂度：$O(n*limit)$</p>
-<h2 id="差分数组的利用"><a href="#差分数组的利用" class="headerlink" title="差分数组的利用"></a>差分数组的利用</h2><p>在暴力破解中，针对每组数，我们需要修改整个记录数组sum，修改形式其实是对五个连续区间$[2,Min-1],[Min,Sum-1],[Sum],[Sum+1,Max],[Max+1,2*limit]$进行一些修改，我们发现这些其实是对连续区间进行统一的修改，这是我们可以考虑使用差分数组diff，diff[i]维护sum[i]-sum[i-1]的信息，那么当我们需要对区间$[i,j]$整体加上一个k时，只需要</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">diff[i]+=k;</span><br><span class="line">diff[j+<span class="number">1</span>]=k;</span><br></pre></td></tr></table></figure>
-<p>整个复杂度降低到了一个常数级别。<br>代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minMoves</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp;&amp; nums, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">diff</span><span class="params">(<span class="number">2</span>*limit+<span class="number">2</span>,<span class="number">0</span>)</span></span>;<span class="comment">//0-limit*2+1</span></span><br><span class="line">        <span class="keyword">int</span> n=nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> Max,Min,Sum;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>,j;i&lt;n/<span class="number">2</span>;i++)&#123;</span><br><span class="line">            j=n-i<span class="number">-1</span>;</span><br><span class="line">            Max=<span class="built_in">max</span>(nums[i]+limit,limit+nums[j]);</span><br><span class="line">            Min=<span class="built_in">min</span>(nums[i]+<span class="number">1</span>,<span class="number">1</span>+nums[j]);</span><br><span class="line">            <span class="comment">// [Min,Max]这个范围是可以只操作一次达到得</span></span><br><span class="line">            diff[<span class="number">2</span>]+=<span class="number">2</span>;</span><br><span class="line">            diff[Min]-=<span class="number">2</span>;</span><br><span class="line">            diff[Min]+=<span class="number">1</span>;</span><br><span class="line">            diff[Sum]-=<span class="number">1</span>;</span><br><span class="line">            diff[Sum+<span class="number">1</span>]+=<span class="number">1</span>;</span><br><span class="line">            diff[Max+<span class="number">1</span>]-=<span class="number">1</span>;</span><br><span class="line">            diff[Max+<span class="number">1</span>]+=<span class="number">2</span>;</span><br><span class="line">            diff[<span class="number">2</span>*limit+<span class="number">1</span>]+=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res=INT_MAX,temp=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">2</span>;k&lt;=limit*<span class="number">2</span>;k++)&#123;</span><br><span class="line">            temp+=diff[k];</span><br><span class="line">            res=<span class="built_in">min</span>(temp,res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>时间复杂度为$O(max(limit,n))$。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1110,14 +1554,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-count">130</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

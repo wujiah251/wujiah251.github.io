@@ -191,6 +191,669 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%95%B0%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">数组</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:25:36" itemprop="dateCreated datePublished" datetime="2021-01-13T20:25:36+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a><strong>数组</strong></h1><h2 id="题目1051-高度检查器"><a href="#题目1051-高度检查器" class="headerlink" title="题目1051 高度检查器"></a><strong>题目1051 高度检查器</strong></h2><p><a href="">链接</a></p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a><strong>题目描述</strong></h3><p>学校在拍年度纪念照时，一般要求学生按照<strong>非递减</strong>的高度顺序排列。<br>请你返回能让所有学生以<strong>非递减</strong>高度排列的最小必要移动人数。<br>注意，当一组学生被选中时，他们之间可以以任何可能的方式重新排序，而未被选中的学生应该保持不动。</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a><strong>示例</strong></h3><ul>
+<li>输入：<code>height=[1,1,4,2,1,3]</code></li>
+<li>输出：<code>3</code></li>
+</ul>
+<h3 id="提示"><a href="#提示" class="headerlink" title="提示"></a><strong>提示</strong></h3><ol>
+<li>$1\leqslant height.length \leqslant 100$</li>
+<li>$1\leqslant height[i] \leqslant 100$</li>
+</ol>
+<h3 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a><strong>方法1</strong></h3><p>将数组非降序排序，然后比较排序前后数值不同的位置个数即可。<br>时间复杂度：O(nlogn)<br>空间复杂度：O(n)</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a><strong>代码</strong></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">heightChecker</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; heights)</span></span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; temp=heights;</span><br><span class="line">        <span class="built_in">sort</span>(temp.<span class="built_in">begin</span>(),temp.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">int</span> res=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;temp.<span class="built_in">size</span>();i++)</span><br><span class="line">            <span class="keyword">if</span>(temp[i]!=heights[i])res++;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a><strong>方法2</strong></h3><p>考虑到$1\leqslant height[i]\leqslant 100$，使用计数排序效率更高。<br>创建一个规模为101的数组<code>count</code>，<code>count[i](1&lt;=i&lt;=100)</code>表示高度<code>i</code>出现次数。遍历数组<code>height</code>然后获得<code>count</code>，然后利用双指针来计算不同的个数。<br>时间复杂度：O(n+100)<br>空间复杂度：O(100)</p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a><strong>代码</strong></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">heightChecker</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; heights)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> count[<span class="number">101</span>]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> h:heights)count[h]++;</span><br><span class="line">        <span class="keyword">int</span> p1=<span class="number">1</span>,p2=<span class="number">0</span>,res=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(p1&lt;=<span class="number">100</span>&amp;&amp;p2&lt;heights.<span class="built_in">size</span>())&#123;</span><br><span class="line">            <span class="keyword">while</span>(!count[p1])p1++;</span><br><span class="line">            <span class="keyword">if</span>(p1&gt;<span class="number">100</span>)<span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">if</span>(p1!=heights[p2])res++;</span><br><span class="line">            count[p1]--;</span><br><span class="line">            p2++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="题目08-03-魔术索引"><a href="#题目08-03-魔术索引" class="headerlink" title="题目08.03.魔术索引"></a><strong>题目08.03.魔术索引</strong></h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">数和相加</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:25:17" itemprop="dateCreated datePublished" datetime="2021-01-13T20:25:17+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数组值相加问题"><a href="#数组值相加问题" class="headerlink" title="数组值相加问题"></a>数组值相加问题</h1><p>遇到形如$num_1[i]+num_2[j]+…+num_n[l]$=某个目标值target的问题，都考虑对数组进行一个划分：$num_1,num_2,…,num_t$和$num_{t+1}…num_{n}$的形式，把前者的一个哈希表中，然后对后者遍历求和得到sum，然后在哈希表中搜索target-sum就可以降低复杂度了。</p>
+<h2 id="四数相加"><a href="#四数相加" class="headerlink" title="四数相加||"></a>四数相加||</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/4sum-ii/">链接</a></p>
+<h3 id="题目表述"><a href="#题目表述" class="headerlink" title="题目表述"></a>题目表述</h3><p>给定四个包含整数的数组列表 A , B , C , D ,计算有多少个元组 (i, j, k, l) ，使得 A[i] + B[j] + C[k] + D[l] = 0。<br>为了使问题简单化，所有的 A, B, C, D 具有相同的长度 N，且 0 ≤ N ≤ 500 。所有整数的范围在 -228 到 228 - 1 之间，最终结果不会超过 231 - 1 。</p>
+<h3 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h3><p>分成A、B和C、D，时间复杂度由$O(n^4)$降低为$O(n^2)$。<br>code：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">fourSumCount</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; A, vector&lt;<span class="keyword">int</span>&gt;&amp; B, vector&lt;<span class="keyword">int</span>&gt;&amp; C, vector&lt;<span class="keyword">int</span>&gt;&amp; D)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> N=A.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> res=<span class="number">0</span>;</span><br><span class="line">        unordered_map&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; map;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a:A)<span class="keyword">for</span>(<span class="keyword">int</span> b:B)map[a+b]++;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> c:C)<span class="keyword">for</span>(<span class="keyword">int</span> d:D)res+=map[-c-d];</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/" class="post-title-link" itemprop="url">排列组合</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:24:41" itemprop="dateCreated datePublished" datetime="2021-01-13T20:24:41+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="排列组合"><a href="#排列组合" class="headerlink" title="排列组合"></a>排列组合</h1><h2 id="nextpermutation和prev-permutation"><a href="#nextpermutation和prev-permutation" class="headerlink" title="nextpermutation和prev_permutation"></a>nextpermutation和prev_permutation</h2><p>STL提供了两个用来计算排列组合关系的算法，分别是next_permutation和prev_permutation。首先我们必须了解什么是“下一个”排列组合，什么是“前一个”排列组合。考虑三个字符组成的序列{a,b,c}。<br>这个序列有6个可能的组合：abc、acb、bac、bca、cab、cba。这些排列组合根据less-than操作符做字典顺序的排序。<br>next_permuation会取得[first,last)所示之序列的下一个排列组合，如果没有下一个排列组合，便返回false，否则返回true。  </p>
+<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>这样想，加如要寻找下一个排列，则这两个排列一定有尽可能长的前缀相同，所以我们可以从后往前看这个序列，如果后面的若干个数字有下一个排列，则问题得到了解决。<br>什么情况有下一个排列？非降序！比方说124653，3、53、653都不存在下一个排列，因为是降序的，而4653是存在下一个排列的，那么我们只需要返回”12”+next(“4653”)即可，一直4653的第一个元素以后都是降序的，我们只需要从后往前找到第一个大于首元素的即可（一定存在，因为第二个必然比第一个大），此例子中为5，那么下一个排列开头变为了5，然后只要找到643的最小排列，考虑到把4放入原来5的位置并不改变降序性质，故其实只需要逆置后面即可。<br>算法逻辑：从后往前搜索找到第一组arr[i-1] &lt; arr[i]，然后从后往前搜索找到arr[j] &gt; a[i-1]，然后替换arr[i-1]和arr[j],然后对a[i]-&gt;a[end]逆置。本例结果为125346。<br>找上一个排列的算法流程基本相同，并且本算法可用于有重复元素的序列。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">next_permutation</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> item=nums.<span class="built_in">end</span>();</span><br><span class="line">    item--;</span><br><span class="line">    <span class="keyword">for</span>(;item!=nums.<span class="built_in">begin</span>();item--)&#123;</span><br><span class="line">        <span class="keyword">if</span>(*item&gt;*(item<span class="number">-1</span>))<span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(item==nums.<span class="built_in">begin</span>())<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    item--;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> j=nums.<span class="built_in">end</span>()<span class="number">-1</span>;j!=item;j--)&#123;</span><br><span class="line">        <span class="keyword">if</span>(*item&lt;*j)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp=*j;</span><br><span class="line">            *j=*item;</span><br><span class="line">            *item=temp;</span><br><span class="line">            <span class="built_in">reverse</span>(item+<span class="number">1</span>,nums.<span class="built_in">end</span>());</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E8%84%91%E7%AD%8B%E6%80%A5%E8%BD%AC%E5%BC%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E8%84%91%E7%AD%8B%E6%80%A5%E8%BD%AC%E5%BC%AF/" class="post-title-link" itemprop="url">脑筋急转弯</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:24:25" itemprop="dateCreated datePublished" datetime="2021-01-13T20:24:25+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="脑筋急转弯"><a href="#脑筋急转弯" class="headerlink" title="脑筋急转弯"></a>脑筋急转弯</h1><h2 id="题目777-在LR字符串中交换相邻字符"><a href="#题目777-在LR字符串中交换相邻字符" class="headerlink" title="题目777 在LR字符串中交换相邻字符"></a>题目777 在LR字符串中交换相邻字符</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/swap-adjacent-in-lr-string/">链接</a></p>
+<h2 id="题目1227-飞机座位分配概率"><a href="#题目1227-飞机座位分配概率" class="headerlink" title="题目1227 飞机座位分配概率"></a>题目1227 飞机座位分配概率</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/airplane-seat-assignment-probability/">链接</a></p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>按次序上飞机的乘客编号分别为1-n。</p>
+<ul>
+<li>情况1<br>乘客1选中了自己的位置（概率为1/n），那么后面每个人都可以坐上自己的位置，n号坐在自己位置的概率为1/n  </li>
+<li>情况2<br>乘客1选中了n号位置（概率为1/n），那么n号将无法坐在自己的座位上。  </li>
+<li>情况3<br>乘客1选中了i（0 &lt; i &lt; n）号位置（概率为1/n），那么从2到i-1号都能坐上自己的位置，i号将随机选择一个位置坐下，<br>那么关于n坐在自己的位置上的概率问题规模缩减到了（n-i+1）,最终概率为1/n*P(n-i+1)  </li>
+</ul>
+<p>综上所述<br>概率P(n)=1/n+1/n*(P(n-2+1)+P(n-3+1)+…+P(2))  n&gt;3<br>考虑到P(1)=1，<br>所以P(n)=1/n*(P(n-1)+P(n-2)+…+P(1))，<br>而P(1)=1，故P(2)=1/2*(P(1))=1/2，P(3)=1/3*(P(1)+P(2))=1/2，<br>数学归纳法证明P(n)=1/2 when n&gt;=2：  </p>
+<ul>
+<li>1<br>P(2)=1/2已知</li>
+<li>2<br>假设P(i)=1/2，任取2&lt;=i&lt;=k, k&gt;=2</li>
+<li>3<br>那么P(k+1)=(P(1)+…+P(k))/(k+1)=(1+1/2+…+1/2)/(k+1)=(1+(k+1)/2)/(k+1)=1/2  </li>
+</ul>
+<p>故最终结果为P(n)=(n==1)? 1:1/2</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E5%BF%AB%E9%80%9F%E5%B9%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E5%BF%AB%E9%80%9F%E5%B9%82/" class="post-title-link" itemprop="url">快速幂</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:24:11" itemprop="dateCreated datePublished" datetime="2021-01-13T20:24:11+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="快速幂"><a href="#快速幂" class="headerlink" title="快速幂"></a><strong>快速幂</strong></h1><h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a><strong>描述</strong></h2><p>假设我们要设计一个函数<code>pow(double a,int n)</code>计算a^n。  </p>
+<h2 id="暴力算法"><a href="#暴力算法" class="headerlink" title="暴力算法"></a><strong>暴力算法</strong></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>&gt;)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">double</span> res=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n--)res*=a;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很明显，时间复杂度为O(n)。</p>
+<h2 id="快速幂算法"><a href="#快速幂算法" class="headerlink" title="快速幂算法"></a><strong>快速幂算法</strong></h2><p>我们考虑如下情况，计算3^5，之前的暴力算法需要计算五次，那么我们这样计算：$3^5=3^{2\times2+}={3^2}^2\times3$，我们可以发现只需要计算3次，<br>更加通用的表示如下 $a^n=(a^2)^{\lfloor n/2\rfloor}\times 2(n-\lfloor n/2\rfloor)\times a$<br>那么我们可以递归地设计函数如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> n%<span class="number">2</span>==<span class="number">0</span>? <span class="built_in">pow</span>(a*a,n/<span class="number">2</span>):<span class="built_in">pow</span>(a*a,n/<span class="number">2</span>)*a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以啊发现时间复杂度降低为O(logn)。</p>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a><strong>优化</strong></h3><p>可以非递归实现</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">double</span> res=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n)&#123;</span><br><span class="line">        <span class="keyword">if</span>(n%<span class="number">2</span>==<span class="number">0</span>)&#123;</span><br><span class="line">            a=a*a;</span><br><span class="line">            n/=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            res*=a;</span><br><span class="line">            a=a*a;</span><br><span class="line">            n/=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们还可以进一步优化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">pow</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&lt;<span class="number">0</span>)<span class="keyword">return</span> <span class="number">1.0</span>/<span class="built_in">pow</span>(a,-n);</span><br><span class="line">    <span class="keyword">double</span> res=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n)&#123;</span><br><span class="line">        <span class="keyword">if</span>(n%<span class="number">2</span>==<span class="number">0</span>)res*=a;</span><br><span class="line">        a=a*a;</span><br><span class="line">        n/=<span class="number">2</span>; <span class="comment">// or n=n&gt;&gt;2;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E9%80%92%E5%BD%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E9%80%92%E5%BD%92/" class="post-title-link" itemprop="url">递归</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:23:51" itemprop="dateCreated datePublished" datetime="2021-01-13T20:23:51+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h1><h2 id="题目687"><a href="#题目687" class="headerlink" title="题目687"></a>题目687</h2><p>将二叉搜索树变平衡<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-univalue-path/">https://leetcode-cn.com/problems/longest-univalue-path/</a><br>###<br>一条路径中间为包含一个根结点，路径长其实就是该结点左右子树中同元素向下路径的结点数之和<br>设计一个函数dfs(root)，返回root-&gt;val的最长向下路径结点数<br>返回左子树最长路径结点数l<br>返回右子树最长路径结点数r<br>通过判断左右结点是否和root-&gt;val相等计算以root为根结点的最长路径，并更新结果(用类成员保存)<br>计算以root为起点的最长向下路径结点数  </p>
+<h2 id="题目794"><a href="#题目794" class="headerlink" title="题目794"></a>题目794</h2><p>有效的井字游戏<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-tic-tac-toe-state/">https://leetcode-cn.com/problems/valid-tic-tac-toe-state/</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">打乱数组</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:23:29" itemprop="dateCreated datePublished" datetime="2021-01-13T20:23:29+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="打乱数组"><a href="#打乱数组" class="headerlink" title="打乱数组"></a><strong>打乱数组</strong></h1><h2 id="题目384打乱数组"><a href="#题目384打乱数组" class="headerlink" title="题目384打乱数组"></a><strong>题目384打乱数组</strong></h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/shuffle-an-array/">题目链接</a></p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a><em><strong>题目描述</strong></em></h3><p>给你一个整数数组 nums ，设计算法来打乱一个没有重复元素的数组。<br>实现 Solution class: </p>
+<ul>
+<li><code>Solution(int[] nums)</code> 使用整数数组 nums 初始化对象</li>
+<li><code>int[] reset()</code> 重设数组到它的初始状态并返回</li>
+<li><code>int[] shuffle()</code> 返回数组随机打乱后的结果</li>
+</ul>
+<h3 id="代码模板"><a href="#代码模板" class="headerlink" title="代码模板"></a><strong>代码模板</strong></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Solution</span>(vector&lt;<span class="keyword">int</span>&gt;&amp; nums) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">shuffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a><strong>分析</strong></h3><ul>
+<li>设$P_{i,k}$表示第i个数被分到第k个位置的概率，其中$1&lt;=i,k&lt;=n$，$n$为数组规模</li>
+<li>假设前面n个数已经按要求排列好了，即$P_{i,k}=\frac{1}{n}$，那么对于第{n+1}个数应该有$P_{n+1,k}=\frac{1}{n+1}$，并且此次迭代将使得前面n个数有$P_{i,k}=\frac{1}{n}$更新为$P_{i,k}=\frac{1}{n+1}$。</li>
+<li>考虑这样操作：<br>以$\frac{1}{n+1}$的概率和$1-n+1$这$n+1$个数交换（可以和自己交换），那么第$n+1$个数满足条件，而对于前n个数中任意一个数$j$，它被交换到$n+1$位置的概率为$\frac{1}{n+1}$，它在前$n$个位置中第$k$个位置的概率$P_{i,k}^{new}=P(第i个数在n+1个数排列之前被放置在k位置)\times P(第i个数未与第n+1个数交换)=P_{i,k}^{old}\times\frac{n}{n+1}=\frac{1}{n}\times\frac{n}{n+1}=\frac{1}{n+1}$，所以上述操作满足条件。</li>
+</ul>
+<h4 id="代码如下"><a href="#代码如下" class="headerlink" title="代码如下"></a><strong>代码如下</strong></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; nums;</span><br><span class="line">    <span class="built_in">Solution</span>(vector&lt;<span class="keyword">int</span>&gt;&amp; nums):<span class="built_in">nums</span>(nums)&#123;</span><br><span class="line">        <span class="built_in">srand</span>(<span class="built_in">time</span>(<span class="literal">NULL</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nums;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">shuffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; res=nums;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;res.<span class="built_in">size</span>();i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> index=<span class="built_in">rand</span>()%(i+<span class="number">1</span>);</span><br><span class="line">            <span class="built_in">swap</span>(res[index],res[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>&amp; a,<span class="keyword">int</span>&amp; b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp=a;</span><br><span class="line">        a=b;</span><br><span class="line">        b=temp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a><strong>复杂度分析</strong></h3><ul>
+<li>时间复杂度O(n)，需要遍历一遍数组。</li>
+<li>空间复杂度O(n)，需要开一个新数组。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E5%B7%AE%E5%88%86%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">差分数组</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:22:49" itemprop="dateCreated datePublished" datetime="2021-01-13T20:22:49+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="题目1674使数组互补的最少操作次数"><a href="#题目1674使数组互补的最少操作次数" class="headerlink" title="题目1674使数组互补的最少操作次数"></a>题目1674使数组互补的最少操作次数</h1><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-moves-to-make-array-complementary/">链接</a></p>
+<h2 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h2><p>保存一个数组记录目标值为$2-&gt;2limit$的总操作数，然后遍历找到最小值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minMoves</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp;&amp; nums, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">sum</span><span class="params">(<span class="number">2</span>*limit+<span class="number">1</span>,<span class="number">0</span>)</span></span>;<span class="comment">//0-limit*2</span></span><br><span class="line">        <span class="keyword">int</span> n=nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> Max,Min;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>,j;i&lt;n/<span class="number">2</span>;i++)&#123;</span><br><span class="line">            j=n-i<span class="number">-1</span>;</span><br><span class="line">            cout &lt;&lt; nums[i] &lt;&lt; nums[j] &lt;&lt; limit &lt;&lt; endl;</span><br><span class="line">            Max=<span class="built_in">max</span>(nums[i]+limit,limit+nums[j]);</span><br><span class="line">            Min=<span class="built_in">min</span>(nums[i]+<span class="number">1</span>,<span class="number">1</span>+nums[j]);</span><br><span class="line">            <span class="comment">// [Min,Max]这个范围是可以只操作一次达到得</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">2</span>;k&lt;=limit*<span class="number">2</span>;k++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(k==nums[i]+nums[j])<span class="keyword">continue</span>;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(k&lt;=Max&amp;&amp;k&gt;=Min)sum[k]++;</span><br><span class="line">                <span class="keyword">else</span> sum[k]+=<span class="number">2</span>;</span><br><span class="line">            </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res=INT_MAX;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">2</span>;k&lt;=limit*<span class="number">2</span>;k++)&#123;</span><br><span class="line">            res=<span class="built_in">min</span>(sum[k],res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：$O(n*limit)$</p>
+<h2 id="差分数组的利用"><a href="#差分数组的利用" class="headerlink" title="差分数组的利用"></a>差分数组的利用</h2><p>在暴力破解中，针对每组数，我们需要修改整个记录数组sum，修改形式其实是对五个连续区间$[2,Min-1],[Min,Sum-1],[Sum],[Sum+1,Max],[Max+1,2*limit]$进行一些修改，我们发现这些其实是对连续区间进行统一的修改，这是我们可以考虑使用差分数组diff，diff[i]维护sum[i]-sum[i-1]的信息，那么当我们需要对区间$[i,j]$整体加上一个k时，只需要</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">diff[i]+=k;</span><br><span class="line">diff[j+<span class="number">1</span>]=k;</span><br></pre></td></tr></table></figure>
+<p>整个复杂度降低到了一个常数级别。<br>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minMoves</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp;&amp; nums, <span class="keyword">int</span> limit)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">diff</span><span class="params">(<span class="number">2</span>*limit+<span class="number">2</span>,<span class="number">0</span>)</span></span>;<span class="comment">//0-limit*2+1</span></span><br><span class="line">        <span class="keyword">int</span> n=nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> Max,Min,Sum;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>,j;i&lt;n/<span class="number">2</span>;i++)&#123;</span><br><span class="line">            j=n-i<span class="number">-1</span>;</span><br><span class="line">            Max=<span class="built_in">max</span>(nums[i]+limit,limit+nums[j]);</span><br><span class="line">            Min=<span class="built_in">min</span>(nums[i]+<span class="number">1</span>,<span class="number">1</span>+nums[j]);</span><br><span class="line">            <span class="comment">// [Min,Max]这个范围是可以只操作一次达到得</span></span><br><span class="line">            diff[<span class="number">2</span>]+=<span class="number">2</span>;</span><br><span class="line">            diff[Min]-=<span class="number">2</span>;</span><br><span class="line">            diff[Min]+=<span class="number">1</span>;</span><br><span class="line">            diff[Sum]-=<span class="number">1</span>;</span><br><span class="line">            diff[Sum+<span class="number">1</span>]+=<span class="number">1</span>;</span><br><span class="line">            diff[Max+<span class="number">1</span>]-=<span class="number">1</span>;</span><br><span class="line">            diff[Max+<span class="number">1</span>]+=<span class="number">2</span>;</span><br><span class="line">            diff[<span class="number">2</span>*limit+<span class="number">1</span>]+=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res=INT_MAX,temp=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">2</span>;k&lt;=limit*<span class="number">2</span>;k++)&#123;</span><br><span class="line">            temp+=diff[k];</span><br><span class="line">            res=<span class="built_in">min</span>(temp,res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度为$O(max(limit,n))$。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%9C%80%E5%B0%8F%E4%B8%8D%E5%85%BC%E5%AE%B9%E6%80%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -449,14 +1112,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-count">130</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>

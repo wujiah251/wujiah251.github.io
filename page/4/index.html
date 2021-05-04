@@ -191,6 +191,789 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/15/lab2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/15/lab2/" class="post-title-link" itemprop="url">lab2</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-15 09:43:00" itemprop="dateCreated datePublished" datetime="2021-03-15T09:43:00+08:00">2021-03-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%BE%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">操作系统课程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="lab2"><a href="#lab2" class="headerlink" title="lab2"></a>lab2</h1><h2 id="makefile"><a href="#makefile" class="headerlink" title="makefile"></a>makefile</h2><ol>
+<li>本程序的编译使用哪个编译器？<br>本程序使用的编译器是<code>gcc</code>。  </li>
+<li>采用哪个命令，可以将所有程序全部编译？<br>使用<code>make</code>或<code>make all</code>命令可以全部编译。  </li>
+<li>采用哪个命令，可以将所有上次编译的结果全部删除？<br>使用<code>make clean</code>可以讲编译结果全部删除。  </li>
+<li>文件中第几行生成 btest 的目标文件？<br>在文件的地10-11行：  <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">btest: btest.c bits.c decl.c tests.c btest.h bits.h</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> <span class="variable">$(LIBS)</span> -o btest bits.c btest.c decl.c tests.c</span><br></pre></td></tr></table></figure></li>
+<li>文件中第几行生成 fshow 的目标文件？<br>在文件的第13-14行：  <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">fshow: fshow.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -o fshow fshow.c</span><br></pre></td></tr></table></figure></li>
+<li>如果在 Makefile 文件中用要引用变量“FOO“， 怎么表示？<br>只需要<code>$(FOO)</code>即可。  </li>
+</ol>
+<h2 id="位级运算、数的编码"><a href="#位级运算、数的编码" class="headerlink" title="位级运算、数的编码"></a>位级运算、数的编码</h2><h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab2&#x2F;datalab$ .&#x2F;btest</span><br><span class="line">Score	Rating	Errors	Function</span><br><span class="line"> 2	2	0	allOddBits</span><br><span class="line"> 4	4	0	isLessOrEqual</span><br><span class="line"> 4	4	0	logicalNeg</span><br><span class="line"> 5	5	0	floatScale2</span><br><span class="line"> 5	5	0	floatFloat2Int</span><br><span class="line">Total points: 20&#x2F;20</span><br></pre></td></tr></table></figure>
+<p>5个函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">allOddBits</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">int</span> num = <span class="number">0xAAAAAAAA</span>;</span><br><span class="line">   <span class="keyword">return</span> !((num &amp; x) ^ num);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">isLessOrEqual</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">int</span> a = x &gt;&gt; <span class="number">31</span>;</span><br><span class="line">   <span class="keyword">int</span> b = y &gt;&gt; <span class="number">31</span>;</span><br><span class="line">   <span class="keyword">return</span> (!((!a) &amp; b)) &amp; ((a &amp; !b) | !((y + (~x + <span class="number">1</span>)) &amp; (<span class="number">1</span> &lt;&lt; <span class="number">31</span>)));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">logicalNeg</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">return</span> ((~(~x + <span class="number">1</span>) &amp; ~x) &gt;&gt; <span class="number">31</span>) &amp; <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="title">floatScale2</span><span class="params">(<span class="keyword">unsigned</span> uf)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">unsigned</span> frac = uf &amp; <span class="number">0x007fffff</span>;</span><br><span class="line">   <span class="keyword">unsigned</span> exp = (uf &gt;&gt; <span class="number">23</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line">   <span class="keyword">unsigned</span> s = uf &gt;&gt; <span class="number">31</span>;</span><br><span class="line">   <span class="keyword">if</span> (!exp)</span><br><span class="line">   &#123;</span><br><span class="line">      frac &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">      <span class="keyword">if</span> (frac &gt;&gt; <span class="number">23</span>)</span><br><span class="line">      &#123;</span><br><span class="line">         frac = frac &amp; <span class="number">0x007fffff</span>;</span><br><span class="line">         exp++;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span> <span class="keyword">if</span> (exp != <span class="number">0xff</span>)</span><br><span class="line">   &#123;</span><br><span class="line">      exp++;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> (s &lt;&lt; <span class="number">31</span>) | (exp &lt;&lt; <span class="number">23</span>) | frac;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">floatFloat2Int</span><span class="params">(<span class="keyword">unsigned</span> uf)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="comment">//unsigned frac = uf &amp; 0x007fffff;</span></span><br><span class="line">   <span class="keyword">int</span> frac = (uf &amp; <span class="number">0x007fffff</span>) | <span class="number">0x00800000</span>;</span><br><span class="line">   <span class="keyword">int</span> exp = ((uf &gt;&gt; <span class="number">23</span>) &amp; <span class="number">0xff</span>) - <span class="number">127</span>;</span><br><span class="line">   <span class="keyword">int</span> s = uf &gt;&gt; <span class="number">31</span>;</span><br><span class="line">   <span class="keyword">int</span> tar = <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">if</span> (s)</span><br><span class="line">      s = <span class="number">-1</span>;</span><br><span class="line">   <span class="keyword">else</span></span><br><span class="line">      s = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (exp &gt; <span class="number">31</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0x80000000</span>;</span><br><span class="line">   <span class="keyword">if</span> (exp &lt; <span class="number">0</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">if</span> (exp &gt; <span class="number">23</span>)</span><br><span class="line">      tar = s * (frac &lt;&lt; (exp - <span class="number">23</span>));</span><br><span class="line">   <span class="keyword">else</span> <span class="keyword">if</span> (exp &lt; <span class="number">23</span>)</span><br><span class="line">      tar = s * (frac &gt;&gt; (<span class="number">23</span> - exp));</span><br><span class="line">   <span class="keyword">return</span> tar;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/14/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/14/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/" class="post-title-link" itemprop="url">关系型数据库设计</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-14 12:14:00" itemprop="dateCreated datePublished" datetime="2021-03-14T12:14:00+08:00">2021-03-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/" itemprop="url" rel="index"><span itemprop="name">数据库系统概念</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="范式"><a href="#范式" class="headerlink" title="范式"></a>范式</h1><h2 id="第一范式"><a href="#第一范式" class="headerlink" title="第一范式"></a>第一范式</h2><p>1NF的定义为：符合1NF的关系中的每个属性都不可再分。表1所示的情况，就不符合1NF的要求。<br>1NF是所有关系型数据库的最基本要求，你在关系型数据库管理系统（RDBMS），例如SQL Server，Oracle，MySQL中创建数据表的时候，如果数据表的设计不符合这个最基本的要求，那么操作一定是不能成功的。也就是说，只要在RDBMS中已经存在的数据表，一定是符合1NF的。  </p>
+<h2 id="第二范式"><a href="#第二范式" class="headerlink" title="第二范式"></a>第二范式</h2><p>第二范式（2NF）在1NF的基础之上，消除了非主属性对于码的部分函数依赖。其定义是不存在非主属性对码存在部分函数依赖关系。  </p>
+<h2 id="第三范式"><a href="#第三范式" class="headerlink" title="第三范式"></a>第三范式</h2><p>第三范式（3NF）在3NF的基础上，消除了非主属性对码的传递函数依赖。其定义是不存在非主属性对码存在传递函数依赖关系。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/13/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E5%92%8CE-R%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/13/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E5%92%8CE-R%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">数据库设计和E-R模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-13 20:17:00" itemprop="dateCreated datePublished" datetime="2021-03-13T20:17:00+08:00">2021-03-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/" itemprop="url" rel="index"><span itemprop="name">数据库系统概念</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h1><h2 id="映射基数"><a href="#映射基数" class="headerlink" title="映射基数"></a>映射基数</h2><p>对于实体集A和B之间的二元关系集R来说，映射基数必然是以下情况之一：  </p>
+<ol>
+<li>一对一（one-to-one）。A中的一个实体至多与B中的一个实体相关联，并且B中的一个实体也至多与A中的一个实体相关联。  </li>
+<li>一对多（one-to-many）。A中的一个实体可以与B中的任意数目实体相关联，而B中的一个实体至多与A中的一个实体相关联。  </li>
+<li>多对一（many-to-one）。A中的一个实体至多与B中的一个实体相关联，而B中的一个实体可以与A中任意数目实体相关联。  </li>
+<li>多对多（many-to-many）。A中的一个实体可以与B中的任意数目实体相关联，而且B中的一个实体也可以与A中的任意数目实体相关联。  </li>
+</ol>
+<h2 id="参与约束"><a href="#参与约束" class="headerlink" title="参与约束"></a>参与约束</h2><p>如果实体集E中的每个实体都参与到联系集R中的至少一个联系中，实体集在联系集R中的参与称为全部（total）的。如果E中只有部分实体参与到R的联系中，实体集到联系集R的参与称为部分的。  </p>
+<h2 id="码"><a href="#码" class="headerlink" title="码"></a>码</h2><p>实体的码是一个足以区分每个实体的属性集合。  </p>
+<p><strong>超码</strong>：一个或多个属性的集合，这些属性的组合可以使我们在一个关系中唯一地标识一个元组。<br><strong>候选码</strong>：超码可能会有冗余属性，我们称满足任意任意真子集不能称为超码的超码为候选码。  </p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/13/MOD%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/13/MOD%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="post-title-link" itemprop="url">POD数据类型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-13 19:45:00" itemprop="dateCreated datePublished" datetime="2021-03-13T19:45:00+08:00">2021-03-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">STL标准库与泛型编程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="POS数据类型"><a href="#POS数据类型" class="headerlink" title="POS数据类型"></a>POS数据类型</h1><p>阅读《STL源码剖析》的时候出现了POD数据类型一词，看到的时候非常迷惑，查询了不少资料后大致理解了，这里总结一下。  </p>
+<p>POD全称Plain Old Data。字面意思，普通的，旧的数据类型。通俗的讲，一个类或结构体通过二进制拷贝后还能保持其数据不变，那么它就是一个POD类型。</p>
+<h2 id="trival（平凡的）"><a href="#trival（平凡的）" class="headerlink" title="trival（平凡的）"></a>trival（平凡的）</h2><p>trivial类型支持静态初始化。如果一个类型是拷贝不变的（trivially copyable），使用memcpy这种方式把它的数据从一个地方拷贝出来会得到相同的结果。<br>C++标准把trivial（平凡的）类型定义如下：  </p>
+<ol>
+<li>平凡的复制构造函数  </li>
+<li>平凡的转移构造函数  </li>
+<li>平凡的赋值操作符  </li>
+<li>平凡的转移赋值操作符  </li>
+<li>平凡的析构函数  </li>
+<li>没有虚函数和虚基类。  </li>
+</ol>
+<p>如何判断一个类是不是trival的呢？</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::is_trivial&lt;T&gt;::value</span><br><span class="line"><span class="comment">// 上述值为true则表示类型T是trival的</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="standard-layout-标准布局"><a href="#standard-layout-标准布局" class="headerlink" title="standard-layout(标准布局)"></a>standard-layout(标准布局)</h2><p>C++标准中的是这样定义的：</p>
+<ol>
+<li>所有的非静态数据成员都符合标准布局或是引用的  </li>
+<li>没有虚函数和虚基类  </li>
+<li>非静态数据成员的访问控制必须是相同的  </li>
+<li>基类都符合标准布局  </li>
+<li>在派生类中没有非静态数据成员，且在基类中最多有一个基类拥有非静态数据成员，也就是说在整个的继承关系中，最多有1个基类有非静态数据成员（含0个）并且子类不能有非静态数据成员  </li>
+<li>相同基类类型的非静态数据成员不能作为第一个成员，也就是说在子类中的第一个非静态数据成员不能是父类。  </li>
+</ol>
+<p>判断方式如下：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::is_standard_layout&lt;B_1&gt;::value</span><br><span class="line"><span class="comment">// 类似</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="POD"><a href="#POD" class="headerlink" title="POD"></a>POD</h2><p>当一个数据类型满足了trival(平凡)和 standard_layout(标准布局)，我们则认为它是一个POD数据。可以通过std::is_pod来判断一个类型是否为POD类型：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::is_pod&lt;T&gt;:value</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/12/%E7%A9%BA%E9%97%B4%E9%85%8D%E7%BD%AE%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/12/%E7%A9%BA%E9%97%B4%E9%85%8D%E7%BD%AE%E5%99%A8/" class="post-title-link" itemprop="url">空间配置器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-12 19:32:00" itemprop="dateCreated datePublished" datetime="2021-03-12T19:32:00+08:00">2021-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">STL标准库与泛型编程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="空间配置器"><a href="#空间配置器" class="headerlink" title="空间配置器"></a>空间配置器</h1><h2 id="设计一个简单的空间配置器"><a href="#设计一个简单的空间配置器" class="headerlink" title="设计一个简单的空间配置器"></a>设计一个简单的空间配置器</h2><p>函数<code>set_new_handler()</code>可以设置内存分配失败的回调函数，方式如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// new_handler example</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span>     <span class="comment">// std::cout</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdlib&gt;</span>      <span class="comment">// std::exit</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;new&gt;</span>          <span class="comment">// std::set_new_handler</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">no_memory</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;Failed to allocate memory!\n&quot;</span>;</span><br><span class="line">  std::<span class="built_in">exit</span> (<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">  std::<span class="built_in">set_new_handler</span>(no_memory);</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;Attempting to allocate 1 GiB...&quot;</span>;</span><br><span class="line">  <span class="keyword">char</span>* p = <span class="keyword">new</span> <span class="keyword">char</span> [<span class="number">1024</span>*<span class="number">1024</span>*<span class="number">1024</span>];</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;Ok\n&quot;</span>;</span><br><span class="line">  <span class="keyword">delete</span>[] p;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意如果不设置或者这样<code>set_new_handler(0)</code>则将调用默认的处理函数，该函数在内存分配失败时抛出bad_alloc异常。  </p>
+<h2 id="new"><a href="#new" class="headerlink" title="new"></a>new</h2><p>C++中new操作符通常完成两个工作，分配内存及其调用相应的构造函数初始化，那么如何让new操作符不分配内存，只调用构造函数呢？<br>可以如下使用：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;new&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">some_type</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="comment">//......</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> memory[<span class="built_in"><span class="keyword">sizeof</span></span>(some_type)];</span><br><span class="line">   <span class="keyword">void</span>* place = memory;</span><br><span class="line">   some_type* place = memory;</span><br><span class="line">   some_type *ptr = <span class="built_in"><span class="keyword">new</span></span>(place) <span class="built_in">some_type</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个称为<code>placement new</code>，作用就是创建对象但是不分配内存，而是在以有的内存块上面创建对象。</p>
+<h2 id="一级配置器和二级配置器"><a href="#一级配置器和二级配置器" class="headerlink" title="一级配置器和二级配置器"></a>一级配置器和二级配置器</h2><h2 id="一级配置器"><a href="#一级配置器" class="headerlink" title="一级配置器"></a>一级配置器</h2><h2 id="二级配置器"><a href="#二级配置器" class="headerlink" title="二级配置器"></a>二级配置器</h2><p>二级配置器多了一些机制来避免太多小额区块造成的内存碎片。小额区块带来的其实不仅仅是内存碎片，配置时的额外负担也是一个大问题。额外的复旦永远无法避免，毕竟系统要靠这多出来的空间来管理内存。<br>SGI第二级配置器的做法是，如果区块够大，超过128bytes时，就移交第一级配置器处理。当区块小于128bytes时，则以内存池管理，此法又称为次层配置：每次配置一大块内存，并维护对应的自由链表（free-list）。下次若再有相同大小的内存需求，直接从free-list中拔出。如果客端释还小额区块，就由配置器回收到free-list中。为了方便管理，SGI会主动将内存需求量上调至8的倍数，大小分别为8，16，24，32，40，48，56，64，72，80，88，96，104，112，120，128bytes。<br><strong>free-list</strong>的结点结构如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">obj</span>&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">union</span> <span class="title">obj</span> * <span class="title">free_list_link</span>;</span></span><br><span class="line">	<span class="keyword">char</span> client_data[<span class="number">1</span>];	 </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上述写法主要是为了节省空间，由于union之故，从第一字段观之，obj可被视为一个指针，指向相同形式的另一个obj，第二个字段obj可被视为一个指针，指向实际区块。<br>有几个关键函数要注意：  </p>
+<ol>
+<li><code>allocate()</code>：用于从free-list中取走区块；  </li>
+<li><code>deallocate()</code>：释放区块回到free-list；  </li>
+<li><code>refill()</code>：重新填充区块，前面的allocate()如果没有可用区块时会调用此函数，从内存池中获取内存，不但返回区块而且分配区块给free-list；  </li>
+<li><code>chunk_alloc</code>：从内存池中获取内存。  </li>
+</ol>
+<h2 id="内存基本处理工具"><a href="#内存基本处理工具" class="headerlink" title="内存基本处理工具"></a>内存基本处理工具</h2><p>uninita<br>除了用于构造的<code>construct()</code>和用于析构的<code>destroy()</code>外，还有<code>uninitialized_copy</code>、<code>uninitialized_fill()</code>、<code>uninitialized_fill_n()</code>。<br>主要功能是序列化配置已经分配但是尚未初始化的内存。</p>
+<h3 id="uninitialized-copy"><a href="#uninitialized-copy" class="headerlink" title="uninitialized_copy"></a>uninitialized_copy</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>, <span class="keyword">class</span> <span class="title">ForwardIterator</span>&gt;</span></span><br><span class="line">ForwardIterator</span><br><span class="line"><span class="built_in">uninitialized_copy</span>(InputIterator first, InputIterator last, ForwardIterator result);</span><br></pre></td></tr></table></figure>
+
+<p>该函数用于使我们能够将内存的配置与对象的构造行为分离开来。如果作为输出目的地的[result,result+(last-first))范围内的每一个迭代器都指向未初始化区域，则uninitialized_copy()会使用copy constructor，给身为输入来源之[first,last)范围内的每一个对象产生一个迭代器i，该函数会调用construct(&amp;*(result+(i-first)),*i)，产生*i的复制品，放置于输出范围的相对位置上。  </p>
+<h3 id="uninitialized-fill"><a href="#uninitialized-fill" class="headerlink" title="uninitialized_fill"></a>uninitialized_fill</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">ForwardIterator</span>, <span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">uninitialized_fill</span><span class="params">(ForwardIterator first, ForwardIterator last, <span class="keyword">const</span> T&amp; x)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>该函数能够使我们将内存配置与对象的构造行为分离开来。如果[first, last)范围内的每个迭代器都指向未初始化的内存，那么<code>uninitialized_fill()</code>会在该范围内产生x的复制品。  </p>
+<h3 id="uninitialized-fill-n"><a href="#uninitialized-fill-n" class="headerlink" title="uninitialized_fill_n"></a>uninitialized_fill_n</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">ForwardIterator</span>, <span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line">ForwardIterator</span><br><span class="line"><span class="built_in">uninitialized_fill_n</span>(ForwardIterator first, Size n, <span class="keyword">const</span> T&amp; x);</span><br></pre></td></tr></table></figure>
+<p>如果[first,first+n)范围内的每一个迭代器都指向未初始化的内存，那么uninitialized_fill_n()会调用copy constructor，在该范围内产生x（上式第三参数）的复制品。  </p>
+<h3 id="“commit-or-rollback”"><a href="#“commit-or-rollback”" class="headerlink" title="“commit or rollback”"></a>“commit or rollback”</h3><p>上述三个函数都具有“commit or rollback”的语义。要么产生所有必要的元素，要么不产生任何元素。如果任何一个copy construct丢出异常，必须析构已经产生的所有元素。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/12/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A6%82%E5%BF%B5%E4%B8%8Etraits%E7%BC%96%E7%A8%8B%E6%8A%80%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/12/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A6%82%E5%BF%B5%E4%B8%8Etraits%E7%BC%96%E7%A8%8B%E6%8A%80%E6%B3%95/" class="post-title-link" itemprop="url">迭代器概念与traits编程技法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-12 10:20:00" itemprop="dateCreated datePublished" datetime="2021-03-12T10:20:00+08:00">2021-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">STL标准库与泛型编程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="迭代器（iterators）概念与traits编程技法"><a href="#迭代器（iterators）概念与traits编程技法" class="headerlink" title="迭代器（iterators）概念与traits编程技法"></a>迭代器（iterators）概念与traits编程技法</h1><h2 id="迭代器设计思维-STL关键所在"><a href="#迭代器设计思维-STL关键所在" class="headerlink" title="迭代器设计思维-STL关键所在"></a>迭代器设计思维-STL关键所在</h2><p>STL的中心思想是讲数据容器（containers）和算法（algorithms）分开，最后再以一贴胶着剂将它们撮合在一起。前两者可以通过C++的class templates和function templates来实现，后者如何实现呢。</p>
+<h2 id="迭代器（iterators）是一种smart-pointer"><a href="#迭代器（iterators）是一种smart-pointer" class="headerlink" title="迭代器（iterators）是一种smart pointer"></a>迭代器（iterators）是一种smart pointer</h2><h2 id="迭代器相应型别"><a href="#迭代器相应型别" class="headerlink" title="迭代器相应型别"></a>迭代器相应型别</h2><p>可以利用function template来做类型推导：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func_impl</span><span class="params">(I iter, T t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	T tmp;</span><br><span class="line">   <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="keyword">inline</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(I iter)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">func_impl</span>(iter, *iter);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="built_in">func</span>(&amp;i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Traits编程技法-STL源码门钥"><a href="#Traits编程技法-STL源码门钥" class="headerlink" title="Traits编程技法-STL源码门钥"></a>Traits编程技法-STL源码门钥</h2><p>返回值类型如何推导呢？可以使用内嵌类型：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MyIter</span>&#123;</span></span><br><span class="line">	<span class="keyword">typedef</span> T value_type;</span><br><span class="line">   T* ptr;</span><br><span class="line">   <span class="built_in">MyIter</span>(T* p=<span class="number">0</span>):<span class="built_in">ptr</span>(p)&#123;&#125;</span><br><span class="line">   T&amp; <span class="keyword">operator</span>*()<span class="keyword">const</span>&#123;<span class="keyword">return</span> *ptr;&#125;</span><br><span class="line">   <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="keyword">typename</span> I::value_type</span><br><span class="line"><span class="built_in">func</span>(I ite)</span><br><span class="line">&#123;<span class="keyword">return</span> *ite;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="function">MyIter&lt;<span class="keyword">int</span>&gt; <span class="title">ite</span><span class="params">(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">8</span>))</span></span>;</span><br><span class="line">cout &lt;&lt; <span class="built_in">func</span>(ite);	<span class="comment">//输出：8</span></span><br></pre></td></tr></table></figure>
+
+<p><code>typename</code>可以告诉编译器返回值是一个类型。但是这里有个问题，并不是所有的迭代器都是class type，原生指针就不是。  </p>
+<p>下面这个<code>class template</code>专门用于“萃取”迭代器的特性，而value_type正是迭代器的特性之一：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">I</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iterator_traits</span>&#123;</span></span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> I::value_type value_type;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>我们就可以通过如下方式萃取出I中的value_type了:  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">I</span>&gt;</span></span><br><span class="line"><span class="keyword">typename</span> iterator_traits&lt;I&gt;::value</span><br><span class="line"><span class="built_in">func</span>(I ite)</span><br><span class="line">&#123;<span class="keyword">return</span> *ite;;&#125;</span><br></pre></td></tr></table></figure>
+<p>还可以萃取原生指针中的value_type：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iterator_traits</span>&lt;</span>T*&gt;&#123;</span><br><span class="line">	<span class="keyword">typedef</span> T value_type;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据经验，最常用到的迭代器相应类型有五种：<code>value type</code>,<code>difference type</code>,<code>pointer</code>,<code>reference</code>,<code>iterator catagoly</code>。  为了与STL能够水乳交融，一定要定义如下萃取机：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tempalte&lt;<span class="class"><span class="keyword">class</span> <span class="title">I</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iterator_traits</span>&#123;</span></span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> I::iterator_category    iterator_category;</span><br><span class="line">   <span class="keyword">typedef</span> <span class="keyword">typename</span> I::value_type 		   value_type;</span><br><span class="line">   <span class="keyword">typedef</span> <span class="keyword">typename</span> I::difference_type 	  difference_type;</span><br><span class="line">   <span class="keyword">typedef</span> <span class="keyword">typename</span> I::pointer 			  pointer;</span><br><span class="line">   <span class="keyword">typedef</span> <span class="keyword">typename</span> I::reference		     reference</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/11/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/11/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">多进程和多线程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-11 08:46:00" itemprop="dateCreated datePublished" datetime="2021-03-11T08:46:00+08:00">2021-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="多进程和多线程分析"><a href="#多进程和多线程分析" class="headerlink" title="多进程和多线程分析"></a>多进程和多线程分析</h1><p>最近面试的时候常常被问一个问题，多进程好还是多线程好？具体的使用场景是什么？笔者在这方面的知识储备不多也不够系统，所以在这里总结一下：  </p>
+<h2 id="多进程和多线程特性"><a href="#多进程和多线程特性" class="headerlink" title="多进程和多线程特性"></a>多进程和多线程特性</h2><table>
+  <tr>
+  <th>属性</th>
+  <th>多进程</th>
+  <th>多线程</th>
+  <th>总结</th>
+  <tr>
+  <td>数据同步</td>
+  <td>数据共享复杂，需要使用IPC；数据是分开的，同步简单</td>
+  <td>因为共享进程的内存，数据共享简单，但是同步复杂</td>
+  <td>各有优势</td>
+  <tr>
+  <td>内存、CPU</td>
+  <td>占用内存多，切换复杂，CPU利用率低</td>
+  <td>占用内存少，切换简单，CPU利用率高</td>
+  <td>线程占优</td>
+  <tr>
+  <td>创建销毁、切换</td>
+  <td>创建、销毁、切换复杂，速度慢</td>
+  <td>创建销毁、切换简单，速度很快</td>
+  <td>线程占优</td>
+  <tr>
+  <td>编程、调试</td>
+  <td>编程简单、调试简单</td>
+  <td>编程复杂、调试复杂</td>
+  <td>进程占优</td>
+  <tr>
+  <td>可靠性</td>
+  <td>进程之间不会相互影响</td>
+  <td>一个线程挂掉将导致整个进程挂掉</td>
+  <td>进程占优</td>
+  <tr>
+  <td>分布式</td>
+  <td>适应于多核、多机分布式系统，扩展机器比较简单</td>
+  <td>适应于多核分布式</td>
+  <td>进程占优</td>
+</table>
+
+<h2 id="不同场景下的选择"><a href="#不同场景下的选择" class="headerlink" title="不同场景下的选择"></a>不同场景下的选择</h2><ol>
+<li>需要频繁创建销毁的优先用线程：<br>这种情况最常见的就是Web服务器了，来了一个连接建立一个线程，断了就销毁线程，要是用进程，创建和销毁的代价是很难承受的。  </li>
+<li>需要进行大量计算的优先使用线程：<br>大量计算即CPU开销比较大，切换频繁了，这种情况下线程最合适。  </li>
+<li>强相关的处理用线程，弱相关的处理用进程：<br>首先什么叫强相关，什么叫弱相关？举个例子，一般的server需要完成如下任务：消息收发、消息处理。这就叫弱相关的任务。而“消息处理”里面可能又分为“消息解码”、“业务处理”，这两个任务相对来说相关性就要强多了。因此“消息收发”和“消息处理”可以分进程设计，“消息解码”、“业务处理”可以分线程设计。  </li>
+<li>可能要扩展到多机分布的用进程，多核分布的用线程  </li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/07/InnoDB%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/07/InnoDB%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">InnoDB体系结构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-07 20:15:00" itemprop="dateCreated datePublished" datetime="2021-03-07T20:15:00+08:00">2021-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="InnoDB体系结构"><a href="#InnoDB体系结构" class="headerlink" title="InnoDB体系结构"></a>InnoDB体系结构</h1><ol>
+<li>后台线程；  </li>
+<li>InnoDB存储引擎内存池（所有进程、线程需要访问的多个内部数据结构；缓存磁盘上的数据，方便快速读取；重做日志缓冲）。  </li>
+</ol>
+<p>后台线程的主要作用是刷新内存池种的数据，保证缓存池中的内存缓存的时最近的数据。此外将已修复的数据文件刷新到磁盘文件，同时保证在数据库发生异常的情况下InnoDB能恢复到正常运行状态。  </p>
+<h2 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h2><ol>
+<li>Master Thread<br>这是一个非常核心的后台线程，主要负责将缓冲池中的数据异步刷新到磁盘，保证数据的一致性，包括脏页的刷新，合并插入缓冲等。  </li>
+<li>IO Thread<br>在InnoDB存储引擎中大量使用了AIO（Async IO）来处理写IO请求，这样可以极大提高数据库性能。而IO Thread的工作主要是负责这些IO请求的回调处理。  </li>
+<li>Purge Thread<br>事务被提交后，其所使用的undolog可能不再需要，因此需要PurgeThread来回收已经使用并分配的undo页。  </li>
+<li>Page Cleaner Thread<br>将之前版本中脏页的刷新操作都放入到单独的线程中来完成。  </li>
+</ol>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ol>
+<li>缓冲池<br>缓冲池使用来减少磁盘IO的消耗而存在的，对于数据库中的页的修改操作，则首先修改在缓冲池中页，然后再以一定的频率刷新到磁盘。<br>具体来看缓存池中缓存了数据页、索引页、插入缓存、undo页、自适应哈希索引、InnoDB存储的锁消息、数据字典信息等。  </li>
+<li>LRU List、Free List和Flush List<br>缓存池是通过LRU算法管理的。LRU列表中的页被修改后，称该页为脏页（dirty page）。而Flush列表中的页即为脏页列表。  </li>
+<li>重做日志缓冲<br>InnoDB存储引擎首先将重做日志信息放入到这个混缓冲区，然后按一定频率将其刷新到重做日志文件。重做日志缓冲一般不需要设置得很大，因为一般情况下每一秒会将重做日志缓冲刷新到日志文件，因此用户只要保证每秒产生得事务量在这个缓冲大小之内即可。  </li>
+<li>额外的内存池  </li>
+</ol>
+<h1 id="Master-Thread工作方式"><a href="#Master-Thread工作方式" class="headerlink" title="Master Thread工作方式"></a>Master Thread工作方式</h1><p>Master Thread具有最高界别的线程优先级。其内部由多个循环组成：主循环（loop）、后台循环（background loop）、刷新循环（flush loop）、暂停循环。Master Thread会根据数据库运行状态在多个循环中切换。  </p>
+<h1 id="InnoDB关键特性"><a href="#InnoDB关键特性" class="headerlink" title="InnoDB关键特性"></a>InnoDB关键特性</h1><p>InnoDB存储引擎的关键特性包括：  </p>
+<ol>
+<li>插入缓存；  </li>
+<li>两次写；  </li>
+<li>自适应哈希索引；  </li>
+<li>异步IO；  </li>
+<li>刷新邻接页。  </li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/07/MySQL%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -390,687 +1173,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8/" class="post-title-link" itemprop="url">计算机网络中的安全</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-03-03 09:29:00" itemprop="dateCreated datePublished" datetime="2021-03-03T09:29:00+08:00">2021-03-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="什么是网络安全"><a href="#什么是网络安全" class="headerlink" title="什么是网络安全"></a>什么是网络安全</h1><p>安全通信的特性：  </p>
-<ol>
-<li>机密性；  </li>
-<li>报文完整性；  </li>
-<li>端点鉴别；  </li>
-<li>运行安全性。  </li>
-</ol>
-<h1 id="密码学的原则"><a href="#密码学的原则" class="headerlink" title="密码学的原则"></a>密码学的原则</h1><h2 id="凯撒密码"><a href="#凯撒密码" class="headerlink" title="凯撒密码"></a>凯撒密码</h2><p>用字母表后的第k个字母替代当前字母。但是如果知道是凯撒密码之后，很容易破解，因为可能性只有25种。另一种方法是单码代替密码，用字母表中的一个字母题代另一个，保证一一对应，这有26!种可能。但是这些方法都可以通过统计词频来判断。  </p>
-<h2 id="多玛代替密码"><a href="#多玛代替密码" class="headerlink" title="多玛代替密码"></a>多玛代替密码</h2><p>可以用多玛代替密码的方式来解决上述问题，即每个字母对应关系都是k偏移的，但是我们使用多个不同的k值进些加密，比如C1代表k=3，C2代表k=5，用这两种方法加密，然后以C1、C2的某种排列对每个字母加密，然后只要保留这个排列即可知道加密、解密方式。  </p>
-<h2 id="块密码"><a href="#块密码" class="headerlink" title="块密码"></a>块密码</h2><p>上述都是古代的加密方式，我们回到现代社会，考察对称加密技术有两种宽泛的类型，流密码和块密码。块密码用在多种因特网协议的加密种，包括PCG（用于安全电子邮件）、SSL（用于使TCP连接更安全）、IPsec（用于使网络层传输更安全）。<br>在块密码中，要加密的的报文被处理为k比特的块，每个块采取一一映射，将k比特的明文映射为k比特的密文。但是如果这个k比较小，则能够蛮力破解所有可能。但是如果k比较大，需要维护的这张密码表非非常庞大。<br>取而代之的是，块密码通常使用函数模拟随机排列表。</p>
-<h2 id="密码块链接"><a href="#密码块链接" class="headerlink" title="密码块链接"></a>密码块链接</h2><p>由于同样的明文必然对应的相同的密文，而有些内容是重复出现的，比如”HTTP/1.1”这些，攻击者看到重复的密码块，参考报文的结构，它可能猜出其明文。所以我们需要在其中添加某些随机性。我们将具有密钥S的块密码加密算法称为KS。我们每次为第i个明文块Mi随机生成一个r(i)，并且计算第i个密码块Ci=KS(Mi^r(i))。这样子接收方可以先通过密钥还原出随机化后的明文块和随机数，然后再利用随机块还原明文。  </p>
-<h2 id="公开密钥加密"><a href="#公开密钥加密" class="headerlink" title="公开密钥加密"></a>公开密钥加密</h2><p>加密通信需要通信双方共享一个秘密。</p>
-<h2 id="RSA"><a href="#RSA" class="headerlink" title="RSA"></a>RSA</h2><p>RSA加密过程：  </p>
-<ol>
-<li>找到两个大素数p和q；  </li>
-<li>计算n=pq，z=(p-1)(q-1)；  </li>
-<li>选择小于n的一个数e使得e、z互素；  </li>
-<li>求一个数d，使得ed-1可以被z整除。  </li>
-<li>Bob使外界可用的公钥KB+是一对数（n,e），其私钥KB-是一对数（n,d）。</li>
-<li>对一个由整数m表示的比特组合（待加密字符串），且满足m&lt;n，计算加密值c=(m^e)%n；  </li>
-<li>收到对应密文报文c解密，m=(c^d)%n。</li>
-</ol>
-<h2 id="会话密钥"><a href="#会话密钥" class="headerlink" title="会话密钥"></a>会话密钥</h2><p>由于RSA中的指数运算相当耗时，所以实际应用中，我们常常会把RSA和对称密钥结合起来使用。首先选择一方选择一个会话密钥，然后使用对方的RSA公钥要加密该会话密钥，然后将会话密钥的密文发送过去，对方接收到以后就能够使用会话密钥来通信了。</p>
-<h1 id="报文完整性和数字签名"><a href="#报文完整性和数字签名" class="headerlink" title="报文完整性和数字签名"></a>报文完整性和数字签名</h1><p>假定Bob接收到一个报文，并且他认为这个报文时由Alice发送的。为了鉴别这个报文，Bob需要证实：<br>1）该报文的确源自Alice。<br>2）该报文在到Bob的途中没有被篡改。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/01/C++%E4%B8%AD%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84char/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/01/C++%E4%B8%AD%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84char/" class="post-title-link" itemprop="url">C++中不同类型的char</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-03-01 13:03:00" itemprop="dateCreated datePublished" datetime="2021-03-01T13:03:00+08:00">2021-03-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>C++中提供了四种不同的char类型，分别是char、wchar_t、char16_t、char32_t。我们主要来看下他们的不同。</p>
-<h1 id="占用空间不同"><a href="#占用空间不同" class="headerlink" title="占用空间不同"></a>占用空间不同</h1><p>运行如下代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of char is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of wchar_t is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">wchar_t</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of char16_t is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char16_t</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of char32_t is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char32_t</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 结果如下：</span></span><br><span class="line">size of <span class="keyword">char</span> is <span class="number">1</span></span><br><span class="line">size of <span class="keyword">wchar_t</span> is <span class="number">2</span></span><br><span class="line">size of <span class="keyword">char16_t</span> is <span class="number">2</span></span><br><span class="line">size of <span class="keyword">char32_t</span> is <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<p>我们可以知道char、wchar_t、char16_t、char32_t分别是1、2、2、4个字节。  </p>
-<h1 id="char和wchar-t"><a href="#char和wchar-t" class="headerlink" title="char和wchar_t"></a>char和wchar_t</h1><p>char是C和C++中的原始字符类型。<br>wchar_t是定义和实现的宽字符类型。<br>Char16_t和char32_t类型分别表示16位和32位宽字符；</p>
-<p>char和wchar_t分别是ANSI和Unicode编码方式，即ANSI中的字符采用8bit，而UNICODE中的字符采用16bit。（对于字符来说ANSI以单字节存放英文字符，以双字节存放中文等字符,而Unicode下，英文和中文的字符都以双字节存放）Unicode码也是一种国际标准编码，采用二个字节编码，与ANSI码不兼容。目前，在网络、Windows系统和很多大型软件中得到应用。8bit的ANSI编码只能表示256种字符，表示26个英文字母是绰绰有余的，但是表示汉字，韩国语等有着成千上万个字符的非西方字符肯定就不够了，正是如此才引入了UNICODE标准。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/%E5%AE%B9%E5%99%A8%E4%B9%8B%E5%88%86%E7%B1%BB%E4%B8%8E%E5%90%84%E7%A7%8D%E6%B5%8B%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/28/%E5%AE%B9%E5%99%A8%E4%B9%8B%E5%88%86%E7%B1%BB%E4%B8%8E%E5%90%84%E7%A7%8D%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">容器之分类</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-28 18:33:00" itemprop="dateCreated datePublished" datetime="2021-02-28T18:33:00+08:00">2021-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">STL标准库与泛型编程</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>容器分类介绍：</p>
-<h1 id="序列式容器"><a href="#序列式容器" class="headerlink" title="序列式容器"></a>序列式容器</h1><h2 id="数组：array"><a href="#数组：array" class="headerlink" title="数组：array"></a>数组：<code>array</code></h2><h2 id="向量：vector"><a href="#向量：vector" class="headerlink" title="向量：vector"></a>向量：<code>vector</code></h2><h2 id="双向队列：Deque"><a href="#双向队列：Deque" class="headerlink" title="双向队列：Deque"></a>双向队列：<code>Deque</code></h2><h2 id="链表：list"><a href="#链表：list" class="headerlink" title="链表：list"></a>链表：<code>list</code></h2><p>双向环状链表。</p>
-<h2 id="Forward-List"><a href="#Forward-List" class="headerlink" title="Forward-List"></a>Forward-List</h2><p>这是C++11新增的，是单向链表。</p>
-<h1 id="关联式容器"><a href="#关联式容器" class="headerlink" title="关联式容器"></a>关联式容器</h1><h2 id="集合：set-multiset"><a href="#集合：set-multiset" class="headerlink" title="集合：set/multiset"></a>集合：<code>set/multiset</code></h2><p>红黑树实现。<code>set/multiset</code>只保存key。mutiset和set的区别就是前者可以重复，后者不能重复。  </p>
-<h2 id="查找表：map-multimap"><a href="#查找表：map-multimap" class="headerlink" title="查找表：map/multimap"></a>查找表：<code>map/multimap</code></h2><p>红黑树实现。<code>map/multimap</code>保存<code>&lt;key,value&gt;</code>，通过key进行检索，multiset和set的区别在于key是否可以重复。  </p>
-<h1 id="无序容器-Unordered-Containers"><a href="#无序容器-Unordered-Containers" class="headerlink" title="无序容器,Unordered Containers"></a>无序容器,Unordered Containers</h1><h2 id="哈希表：HashTable"><a href="#哈希表：HashTable" class="headerlink" title="哈希表：HashTable"></a>哈希表：HashTable</h2><p>哈希表就是通过hash函数来计算一个哈希值来确定数据放入的位置和查找的位置。理论上我们希望可以通过计算hash值直接找到每个元素的位置，但实际上会有hash冲突，即不同的key有相同的hash值，所以hash表的关键就是如何解决hash冲突，常见的方法有线性探测、二次探测、开链。一般用开链法。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/STL%E5%85%AD%E5%A4%A7%E9%83%A8%E4%BB%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/28/STL%E5%85%AD%E5%A4%A7%E9%83%A8%E4%BB%B6/" class="post-title-link" itemprop="url">STL六大部件</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-28 18:02:31" itemprop="dateCreated datePublished" datetime="2021-02-28T18:02:31+08:00">2021-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>STL有六大部件（Components）：  </p>
-<ul>
-<li>容器（Containers）  </li>
-<li>分配器（Allocators）  </li>
-<li>算法（Algorithms）  </li>
-<li>迭代器（Iterators）  </li>
-<li>适配器（Adapters）  </li>
-<li>仿函数（Functors）</li>
-</ul>
-<p><strong>前闭后开区间</strong>：<br>标准库规定所有容器都提供<code>begin()</code>、<code>end()</code>两个迭代器，前一个指向第一个元素，后一个指向最后一个元素的下一个位置。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/28/C++STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/28/C++STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">C++STL标准库与泛型编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-28 17:39:00" itemprop="dateCreated datePublished" datetime="2021-02-28T17:39:00+08:00">2021-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/STL%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">STL标准库与泛型编程</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>使用一个东西却不明白它的道理，不高明！<br>本章是学习侯捷《C++标准库与泛型编程》的第一课笔记。学习目标分为4各层次：  </p>
-<ul>
-<li>level 0：使用C++标准库  </li>
-<li>level 1：认识C++标准库（胸中自有丘壑）  </li>
-<li>level 2：<strong>良好</strong>使用C++标准库  </li>
-<li>level 3：扩充C++标准库  </li>
-</ul>
-<h1 id="标准库和标准模板库"><a href="#标准库和标准模板库" class="headerlink" title="标准库和标准模板库"></a>标准库和标准模板库</h1><p>C++标准库（C++ Standard Library）和标准模板库（Standard Template Library，STL）。<br>前者是后者的超集，STL占C++标准库80-90%的内容。  </p>
-<p>标准库以<strong>header files</strong>形式呈现：<br>C++标准库的header files不带副名称(.h)，例如<code>#include&lt;vector&gt;</code>。  </p>
-<h1 id="有用的网站和网站"><a href="#有用的网站和网站" class="headerlink" title="有用的网站和网站"></a>有用的网站和网站</h1><p><a href="cplusplus.com">cplusplus.com</a><br><a href="cppreference.com">cppreference.com</a><br><a href="gcc.gnu.org">gcc.gnu.org</a>  </p>
-<p>《THE C++ STANDARD LIBRARY》和《STL源码剖析》。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/26/MySQL%E5%BC%95%E6%93%8E/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/26/MySQL%E5%BC%95%E6%93%8E/" class="post-title-link" itemprop="url">MySQL引擎</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-26 17:35:00" itemprop="dateCreated datePublished" datetime="2021-02-26T17:35:00+08:00">2021-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>MySQL存储引擎有InnoDB、MyISAM、MEMORY。</p>
-<h1 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h1><p>InnoDB是事务型数据库的首选引擎，支持事务安全（ACID），支持行锁定和外键，InnoDB是MySQL默认的引擎。<br>主要特性：</p>
-<ol>
-<li>InnoDB提供了具有提交、回滚和崩溃恢复的事务安全存储引擎。  </li>
-<li>InnoDB存储引擎在主内存中缓存数据和索引而维持它的缓冲池。它表和索引放在一个逻辑表空间中，而MyISAM表中每个表被存放在分离的文件中。  </li>
-<li>InnoDB支持外键完整性约束。  </li>
-</ol>
-<h1 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h1><p>MyISAM基于ISAM，是在Web、数据仓储和其他应用环境下最常使用的存储引擎之一。MyISAM拥有较高的插入、查询，但不支持事务。<br>主要特性：  </p>
-<ol>
-<li>查询、插入效率高；  </li>
-<li>可以把数据文件和索引文件放在不同的目录中；  </li>
-<li>对事务的支持不好。  </li>
-</ol>
-<h1 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h1><p>MEMORY存储引擎将表中的数据存储到内存中，为查询和引用其他表数据提供快速访问。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/25/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" class="post-title-link" itemprop="url">右值引用和移动语义</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-25 20:44:00" itemprop="dateCreated datePublished" datetime="2021-02-25T20:44:00+08:00">2021-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="右值是啥"><a href="#右值是啥" class="headerlink" title="右值是啥"></a>右值是啥</h1><p>右值是区别与左值的存在，一般来说，表达式右边就是右值，左边就是左值，当然这是开玩笑的。最好的区分方式就是，左值可以取地址，而右值不可以。比方说：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x=<span class="number">1</span>;</span><br><span class="line"><span class="comment">// x是左值，1是右值</span></span><br><span class="line">y=x;</span><br><span class="line"><span class="comment">// y、x都是左值</span></span><br><span class="line">z=x+y;</span><br><span class="line"><span class="comment">// z是左值，x+y是右值</span></span><br></pre></td></tr></table></figure>
-
-
-<h2 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h2><p>原来C++有左值引用，如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iny y=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;x=y;</span><br></pre></td></tr></table></figure>
-<p>也就是说，引用只能引用左值，但是C++11提供了右值引用，使用&amp;&amp;来表示，右值引用可以关联到右值，但是不能对其应用地址运算符。右值包括字面常量，诸如x+y等表达式以及函数的返回值（前提是返回不能是引用）。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x=<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> y=<span class="number">20</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;&amp;z=x;	<span class="comment">//非法</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;&amp;z=x;	<span class="comment">//非法</span></span><br><span class="line"><span class="keyword">int</span> &amp;&amp;r1=<span class="number">13</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;&amp;r2=x+y;</span><br><span class="line"><span class="keyword">double</span> &amp;&amp;r3=std::<span class="built_in">sqrt</span>(<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;value:&quot;</span> &lt;&lt; r1 &lt;&lt; <span class="string">&quot; address:&quot;</span> &lt;&lt; &amp;r1 &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h1><p>在某些场景下，使用一个对象初始化另一个对象，可以通过复制构造函数进行深拷贝完成，但是有时候用于的旧对象不再使用，可以通过移动构造函数提高效率。移动构造函数只调整记录，是将所有权转移到新对象的过程，这个过程中可能修改其实参，这意味着右值引用参数不应是const。通俗的将就类似于在计算机中移动文件的情形：实际文件还留在原来的地方，而只是修改了记录，这就是移动语义。  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Useless</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> n;</span><br><span class="line">   <span class="keyword">char</span> *p;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">int</span> ct;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">showobject</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Useless</span>();</span><br><span class="line">   <span class="function"><span class="keyword">explicit</span> <span class="title">Useless</span><span class="params">(<span class="keyword">int</span> k)</span></span>;</span><br><span class="line">   <span class="built_in">Useless</span>(<span class="keyword">int</span> k,<span class="keyword">char</span> c);</span><br><span class="line">   <span class="built_in">Useless</span>(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   <span class="built_in">Useless</span>(Useless&amp;&amp;ul);</span><br><span class="line">   Useless&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   Useless&amp; <span class="keyword">operator</span>=(Useless&amp;&amp;nl);</span><br><span class="line">   Useless <span class="keyword">operator</span>+(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   ~Useless <span class="keyword">operator</span>+(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">ShowData</span><span class="params">()</span><span class="keyword">const</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 左值引用</span></span><br><span class="line">Useless::<span class="built_in">Useless</span>(<span class="keyword">const</span> Useless &amp; ul)</span><br><span class="line">&#123;</span><br><span class="line">	++ct;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;copy const called;numbers ofobject:&quot;</span> &lt;&lt; ct &lt;&lt; std::endl;</span><br><span class="line">	n = ul.n;</span><br><span class="line">	p = <span class="keyword">new</span> <span class="keyword">char</span>[n];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">		p[i] = ul.p[i];</span><br><span class="line">	<span class="built_in">showobject</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 右值引用</span></span><br><span class="line">Useless::<span class="built_in">Useless</span>(Useless &amp;&amp; ul)</span><br><span class="line">&#123;</span><br><span class="line">	++ct;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;move constructor called;numbers ofobject:&quot;</span> &lt;&lt; ct &lt;&lt; std::endl;</span><br><span class="line">	n = ul.n;</span><br><span class="line">	p = ul.p;</span><br><span class="line">	ul.n = <span class="number">0</span>;</span><br><span class="line">	ul.p = <span class="literal">nullptr</span>;</span><br><span class="line">	<span class="built_in">showobject</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95/" class="post-title-link" itemprop="url">数据库索引</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-25 17:37:00" itemprop="dateCreated datePublished" datetime="2021-02-25T17:37:00+08:00">2021-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="索引的优缺点"><a href="#索引的优缺点" class="headerlink" title="索引的优缺点"></a>索引的优缺点</h1><ol>
-<li>加速数据库的检索速度；  </li>
-<li>降低了插入、删除、修改等维护任务的速度；  </li>
-<li>唯一索引可以确保每一行数据的唯一性；  </li>
-<li>通过索引，可以在查询过程中优化隐藏器，提高系统性能；  </li>
-<li>索引要占据物理和数据空间。  </li>
-</ol>
-<h1 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h1><h2 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h2><p>表的数据要按照索引的顺序来存储。对于聚集索引，叶子结点即存储了真实的数据行，不再有另外的单独数据页。  </p>
-<h2 id="非聚集索引"><a href="#非聚集索引" class="headerlink" title="非聚集索引"></a>非聚集索引</h2><p>表数据存储顺序与索引顺序无关。对于非聚集索引，叶节点包含了索引字段值及指向数据页数据的行的逻辑指针，该层紧邻数据页，其行数量与数据表行数据量一致。  </p>
-<h1 id="建立索引要关注哪些因素"><a href="#建立索引要关注哪些因素" class="headerlink" title="建立索引要关注哪些因素"></a>建立索引要关注哪些因素</h1><ul>
-<li>访问类型；  </li>
-<li>访问时间；  </li>
-<li>插入时间；  </li>
-<li>删除时间；  </li>
-<li>空间开销。  </li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1142,14 +1244,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-count">130</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
