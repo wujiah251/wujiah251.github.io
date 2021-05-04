@@ -1,9 +1,10 @@
 title: RDB持久化
 author: 乡村程序员
 tags: []
-categories: Redis
+categories:
+  - Redis
+  - 单机数据库的实现
 date: 2021-04-27 22:24:00
-
 ---
 本文是《Redis设计与实现》中关于RDB持久化的内容的笔记。
  <!-- more -->
