@@ -191,6 +191,426 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/11/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/11/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">多进程和多线程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-11 08:46:00" itemprop="dateCreated datePublished" datetime="2021-03-11T08:46:00+08:00">2021-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="多进程和多线程分析"><a href="#多进程和多线程分析" class="headerlink" title="多进程和多线程分析"></a>多进程和多线程分析</h1><p>最近面试的时候常常被问一个问题，多进程好还是多线程好？具体的使用场景是什么？笔者在这方面的知识储备不多也不够系统，所以在这里总结一下：  </p>
+<h2 id="多进程和多线程特性"><a href="#多进程和多线程特性" class="headerlink" title="多进程和多线程特性"></a>多进程和多线程特性</h2><table>
+  <tr>
+  <th>属性</th>
+  <th>多进程</th>
+  <th>多线程</th>
+  <th>总结</th>
+  <tr>
+  <td>数据同步</td>
+  <td>数据共享复杂，需要使用IPC；数据是分开的，同步简单</td>
+  <td>因为共享进程的内存，数据共享简单，但是同步复杂</td>
+  <td>各有优势</td>
+  <tr>
+  <td>内存、CPU</td>
+  <td>占用内存多，切换复杂，CPU利用率低</td>
+  <td>占用内存少，切换简单，CPU利用率高</td>
+  <td>线程占优</td>
+  <tr>
+  <td>创建销毁、切换</td>
+  <td>创建、销毁、切换复杂，速度慢</td>
+  <td>创建销毁、切换简单，速度很快</td>
+  <td>线程占优</td>
+  <tr>
+  <td>编程、调试</td>
+  <td>编程简单、调试简单</td>
+  <td>编程复杂、调试复杂</td>
+  <td>进程占优</td>
+  <tr>
+  <td>可靠性</td>
+  <td>进程之间不会相互影响</td>
+  <td>一个线程挂掉将导致整个进程挂掉</td>
+  <td>进程占优</td>
+  <tr>
+  <td>分布式</td>
+  <td>适应于多核、多机分布式系统，扩展机器比较简单</td>
+  <td>适应于多核分布式</td>
+  <td>进程占优</td>
+</table>
+
+<h2 id="不同场景下的选择"><a href="#不同场景下的选择" class="headerlink" title="不同场景下的选择"></a>不同场景下的选择</h2><ol>
+<li>需要频繁创建销毁的优先用线程：<br>这种情况最常见的就是Web服务器了，来了一个连接建立一个线程，断了就销毁线程，要是用进程，创建和销毁的代价是很难承受的。  </li>
+<li>需要进行大量计算的优先使用线程：<br>大量计算即CPU开销比较大，切换频繁了，这种情况下线程最合适。  </li>
+<li>强相关的处理用线程，弱相关的处理用进程：<br>首先什么叫强相关，什么叫弱相关？举个例子，一般的server需要完成如下任务：消息收发、消息处理。这就叫弱相关的任务。而“消息处理”里面可能又分为“消息解码”、“业务处理”，这两个任务相对来说相关性就要强多了。因此“消息收发”和“消息处理”可以分进程设计，“消息解码”、“业务处理”可以分线程设计。  </li>
+<li>可能要扩展到多机分布的用进程，多核分布的用线程  </li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/07/InnoDB%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/07/InnoDB%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">InnoDB体系结构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-07 20:15:00" itemprop="dateCreated datePublished" datetime="2021-03-07T20:15:00+08:00">2021-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="InnoDB体系结构"><a href="#InnoDB体系结构" class="headerlink" title="InnoDB体系结构"></a>InnoDB体系结构</h1><ol>
+<li>后台线程；  </li>
+<li>InnoDB存储引擎内存池（所有进程、线程需要访问的多个内部数据结构；缓存磁盘上的数据，方便快速读取；重做日志缓冲）。  </li>
+</ol>
+<p>后台线程的主要作用是刷新内存池种的数据，保证缓存池中的内存缓存的时最近的数据。此外将已修复的数据文件刷新到磁盘文件，同时保证在数据库发生异常的情况下InnoDB能恢复到正常运行状态。  </p>
+<h2 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h2><ol>
+<li>Master Thread<br>这是一个非常核心的后台线程，主要负责将缓冲池中的数据异步刷新到磁盘，保证数据的一致性，包括脏页的刷新，合并插入缓冲等。  </li>
+<li>IO Thread<br>在InnoDB存储引擎中大量使用了AIO（Async IO）来处理写IO请求，这样可以极大提高数据库性能。而IO Thread的工作主要是负责这些IO请求的回调处理。  </li>
+<li>Purge Thread<br>事务被提交后，其所使用的undolog可能不再需要，因此需要PurgeThread来回收已经使用并分配的undo页。  </li>
+<li>Page Cleaner Thread<br>将之前版本中脏页的刷新操作都放入到单独的线程中来完成。  </li>
+</ol>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ol>
+<li>缓冲池<br>缓冲池使用来减少磁盘IO的消耗而存在的，对于数据库中的页的修改操作，则首先修改在缓冲池中页，然后再以一定的频率刷新到磁盘。<br>具体来看缓存池中缓存了数据页、索引页、插入缓存、undo页、自适应哈希索引、InnoDB存储的锁消息、数据字典信息等。  </li>
+<li>LRU List、Free List和Flush List<br>缓存池是通过LRU算法管理的。LRU列表中的页被修改后，称该页为脏页（dirty page）。而Flush列表中的页即为脏页列表。  </li>
+<li>重做日志缓冲<br>InnoDB存储引擎首先将重做日志信息放入到这个混缓冲区，然后按一定频率将其刷新到重做日志文件。重做日志缓冲一般不需要设置得很大，因为一般情况下每一秒会将重做日志缓冲刷新到日志文件，因此用户只要保证每秒产生得事务量在这个缓冲大小之内即可。  </li>
+<li>额外的内存池  </li>
+</ol>
+<h1 id="Master-Thread工作方式"><a href="#Master-Thread工作方式" class="headerlink" title="Master Thread工作方式"></a>Master Thread工作方式</h1><p>Master Thread具有最高界别的线程优先级。其内部由多个循环组成：主循环（loop）、后台循环（background loop）、刷新循环（flush loop）、暂停循环。Master Thread会根据数据库运行状态在多个循环中切换。  </p>
+<h1 id="InnoDB关键特性"><a href="#InnoDB关键特性" class="headerlink" title="InnoDB关键特性"></a>InnoDB关键特性</h1><p>InnoDB存储引擎的关键特性包括：  </p>
+<ol>
+<li>插入缓存；  </li>
+<li>两次写；  </li>
+<li>自适应哈希索引；  </li>
+<li>异步IO；  </li>
+<li>刷新邻接页。  </li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/07/MySQL%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/07/MySQL%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%92%8C%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" class="post-title-link" itemprop="url">MySQL体系结构和存储引擎</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-07 18:55:00" itemprop="dateCreated datePublished" datetime="2021-03-07T18:55:00+08:00">2021-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MySQL体系结构"><a href="#MySQL体系结构" class="headerlink" title="MySQL体系结构"></a>MySQL体系结构</h1><p>首先我们需要理解一点，MySQL既是数据库也是数据库实例，前者强调数据库是很多文件的集合，后者指的是一个程序，是位于用户和操作系统之间的一层数据库管理软件，用户对数据库的任何操作，包括数据库定义、数据查询、数据维护、数据库运行控制等都是在数据库实例下进行。  </p>
+<p>MySQL由以下部分组成：  </p>
+<ol>
+<li>连接池组件；  </li>
+<li>管理服务和工具组件；  </li>
+<li>SQL接口组件；  </li>
+<li>查询和分析器组件；  </li>
+<li>优化器组件；  </li>
+<li>缓冲（Cache）组件；  </li>
+<li>插件式存储引擎；  </li>
+<li>物理文件。  </li>
+</ol>
+<h1 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h1><h2 id="InnoDB存储引擎"><a href="#InnoDB存储引擎" class="headerlink" title="InnoDB存储引擎"></a>InnoDB存储引擎</h2><p>InnoDB存储引擎支持事务，其设计目标主要是面向在线事务处理的应用，其特点是行锁设计、支持外键。<br>InnoDB存储引擎讲数据放在一个逻辑的表空间种，这个表空间就像黑盒一样由InnoDB自身进行管理。<br>InnoDB通过使用MVCC（多版本并发控制）来获得高并发性。并实现了SQL标准的4种隔离级别，默认为可重复读（REPEATABLE）级别。<br>对于表中数据的存储，InnoDB采用了聚集（clustered）的方式，按照主键的顺序存放。</p>
+<h2 id="MyISAM存储引擎"><a href="#MyISAM存储引擎" class="headerlink" title="MyISAM存储引擎"></a>MyISAM存储引擎</h2><p>MyISAM存储引擎不支持事务、表锁设计，支持全文索引。MyISAM一个与众不同的地方是它的缓冲池只缓存（cache）索引文件，而不缓冲数据文件。<br>MyISAM存储引擎表由MYD和MYI组成，MYD用来存放数据文件，MYI用来存放索引文件。</p>
+<h2 id="Memory存储引擎"><a href="#Memory存储引擎" class="headerlink" title="Memory存储引擎"></a>Memory存储引擎</h2><p>Memory存储引擎将表中的数据存放在内存种，如果数据库重启或发生崩溃，表中的数据都将消失。它非常适合用于存储临时数据的临时表。Memory存储引擎默认使用哈希索引，而不是我们熟知的B+树。<br>由于数据全部存放在内存种，所以Memory速度非常快，但是在使用上还是有一定的限制。比如，只支持表锁，并发性能较差，并且不支持TEXT和BLOB列类型。最重要的是，存储变长字段（varchar）是按照定常字段的方式进行的，会浪费内存。<br>MySQL使用Memory存储引擎作为临时表存放查询的中间结果集。但是如果这个规模超过了Memory的最大容量，泽会把其转换为MyISAM存储引擎表而存放在磁盘中，这会损失查询性能。  </p>
+<h1 id="连接MySQL"><a href="#连接MySQL" class="headerlink" title="连接MySQL"></a>连接MySQL</h1><p>连接MySQL操作时一个连接进程和MySQL数据库实例进行通信。从程序设计的角度看，本质上时进程通信。所以通信方式也有TCP/IP、命名管道、共享内存、UNIX域套接字的办法。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/06/lab1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/06/lab1/" class="post-title-link" itemprop="url">lab1</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-06 00:13:00" itemprop="dateCreated datePublished" datetime="2021-03-06T00:13:00+08:00">2021-03-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%AF%BE%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">操作系统课程</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Lab1实验报告"><a href="#Lab1实验报告" class="headerlink" title="Lab1实验报告"></a>Lab1实验报告</h1><h2 id="练习1-gcc"><a href="#练习1-gcc" class="headerlink" title="练习1 gcc"></a>练习1 gcc</h2><ol>
+<li>编译<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -o glory glory.c</span><br><span class="line">&#x2F;&#x2F; gcc表示使用C编译器（c++是g++），-o参数表示生成可执行文件为glory，glory.c是原文件</span><br></pre></td></tr></table></figure></li>
+<li>运行<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ .&#x2F;glory</span><br><span class="line">&#x2F;&#x2F; 运行可执行文件file就是：.&#x2F;file</span><br></pre></td></tr></table></figure></li>
+<li>修改glory.c宏定义如下：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> V0 3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> V1 3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> V2 3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> V3 1</span></span><br></pre></td></tr></table></figure>
+重新编译并允许结果如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  SJTU labstarter:</span><br><span class="line">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">Happy Happy Happy </span><br><span class="line">FPX</span><br><span class="line"></span><br><span class="line">Guo Li!</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="练习2-GDB"><a href="#练习2-GDB" class="headerlink" title="练习2 GDB"></a>练习2 GDB</h2><ol>
+<li>How do you pass command line arguments to a program when using gdb?<br>修改hello.c的主函数如下：  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">        <span class="keyword">if</span>(argc&gt;<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,argv[<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">char</span> *str =<span class="string">&quot;hello, world!&quot;</span>, ch;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(str); i++)</span><br><span class="line">                ch = str[i];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,str);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+编译并调试如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -g -o hello hello.c</span><br><span class="line">$ gdb hello</span><br><span class="line">...</span><br><span class="line">(gdb) run</span><br><span class="line">Starting program: &#x2F;home&#x2F;wujiahao&#x2F;Desktop&#x2F;os&#x2F;lab1&#x2F;hello </span><br><span class="line">hello, world!</span><br><span class="line">[Inferior 1 (process 6122) exited normally]</span><br><span class="line">(gdb) run arg_test</span><br><span class="line">Starting program: &#x2F;home&#x2F;wujiahao&#x2F;Desktop&#x2F;os&#x2F;lab1&#x2F;hello arg_test</span><br><span class="line">arg_test</span><br><span class="line">hello, world!</span><br><span class="line">[Inferior 1 (process 6128) exited normally]</span><br></pre></td></tr></table></figure>
+<code>run</code>直接允许程序，由于没有命令行参数所以直接输出了<code>hello,wolrd!</code>。在run后面添加参数可以直接输出结果，比如<code>run arg_test</code>结果多输出了一行<code>arg_test</code>。  </li>
+<li>How do you set a breakpoint which only occurs when a set of conditions is true (e.g. when certain variables are a certain value)?<br>想设置一个条件断点，可以利用break if命令，如下所示：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) break line-or-function if expr</span><br></pre></td></tr></table></figure>
+例如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) break 46 if testsize&#x3D;&#x3D;100</span><br></pre></td></tr></table></figure>
+我面这样修改hello.c文件：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">        <span class="keyword">char</span> test_num=<span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">        <span class="keyword">if</span>(argc&gt;<span class="number">1</span>)&#123;</span><br><span class="line">            test_num=argv[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">char</span> *str =<span class="string">&quot;hello, world!&quot;</span>, ch;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="built_in">strlen</span>(str); i++)</span><br><span class="line">                ch = str[i];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>,str);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(gdb) break 18 if test_num!&#x3D;&#39;\0&#39;</span><br><span class="line">Breakpoint 1 at 0x4005cc: file hello.c, line 18.</span><br><span class="line">(gdb) run</span><br><span class="line">Starting program: &#x2F;home&#x2F;wujiahao&#x2F;Desktop&#x2F;os&#x2F;lab1&#x2F;hello </span><br><span class="line">hello, world!</span><br><span class="line">[Inferior 1 (process 6217) exited normally]</span><br><span class="line">(gdb) run 1</span><br><span class="line">Starting program: &#x2F;home&#x2F;wujiahao&#x2F;Desktop&#x2F;os&#x2F;lab1&#x2F;hello 1</span><br><span class="line">Breakpoint 1, main (argc&#x3D;2, argv&#x3D;0x7fffffffde08) at hello.c:18</span><br><span class="line">18		printf(&quot;%s\n&quot;,str);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>我们在18行设置一个条件断点，中断条件为字符变量test_num非’\0’空字符，我们可以通过命令行参数修改这个字符来触发中断。可以发现当时有命令行参数1的情况下，这个程序会中断在18行（就是<code>printf</code>这行），不会输出<code>hello,world!</code>。<br>3. How do you execute the next line of C code in the program after stopping at a breakpoint?<br>使用命令<code>continue</code>可以接着执行程序直到终止或者再次遇到断点，命令<code>step</code>可以运行下一行代码。<br>4. If the next line of code is a function call, you’ll execute the whole function call at once if you use your answer to #3. How do you tell GDB that you want to debug the code inside the function instead?<br><code>step</code>可以只执行下一行代码，不会调用整个函数，也可以通过<code>break [file:]function</code>在函数中设置断点。<br>5. How do you resume the program after stopping at a breakpoint?<br>运行<code>continue</code>即可恢复程序执行。<br>6. How can you see the value of a variable (or even an expression like 1+2) in gdb?<br><code>print</code>可以查看变量，比如对程序hello调用<code>print str</code>：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(gdb) break 18</span><br><span class="line">Breakpoint 1 at 0x4005cc: file hello.c, line 18.</span><br><span class="line">(gdb) run</span><br><span class="line">Starting program: &#x2F;home&#x2F;wujiahao&#x2F;Desktop&#x2F;os&#x2F;lab1&#x2F;hello </span><br><span class="line"></span><br><span class="line">Breakpoint 1, main (argc&#x3D;1, argv&#x3D;0x7fffffffde08) at hello.c:18</span><br><span class="line">18		printf(&quot;%s\n&quot;,str);</span><br><span class="line">(gdb) print str</span><br><span class="line">$1 &#x3D; 0x400674 &quot;hello, world!&quot;</span><br><span class="line">(gdb) print 1+2</span><br><span class="line">$2 &#x3D; 3</span><br></pre></td></tr></table></figure>
+
+<p>输出了字符指针str的值，以及指向字符串的值。<br>7. How do you configure gdb so it prints the value of a variable after every step?<br>通过<code>display</code>命令可以在程序中断时候自动显示变量的值，比如<code>display ch</code>可以自动显示字符变量ch的值。<br>8. How do you print a list of all variables and their values in the current function?<br><code>bt</code>可以显示程序堆栈信息，然后<code>bt full</code>可以查看当前函数的所有变量。<br>9.  How do you exit out of gdb?<br><code>quit</code>可以退出gdb调试。  </p>
+<h2 id="练习3-调试"><a href="#练习3-调试" class="headerlink" title="练习3 调试"></a>练习3 调试</h2><p>编译并执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -g -o ll_equal ll_equal.c</span><br><span class="line">$ .&#x2F;ll_equal</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">equal test 1 result &#x3D; 1</span><br><span class="line">Segmentation fault (core dumped)</span><br></pre></td></tr></table></figure>
+<p>然后我们开始调试</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(gdb) <span class="keyword">break</span> <span class="number">10</span></span><br><span class="line">Breakpoint <span class="number">2</span> at <span class="number">0x4005a2</span>: file ll_equal.c, line <span class="number">10.</span></span><br><span class="line">(gdb) <span class="keyword">continue</span></span><br><span class="line">Continuing.</span><br><span class="line"></span><br><span class="line">Breakpoint <span class="number">2</span>, <span class="built_in">ll_equal</span> (a=<span class="number">0x7fffffffdc70</span>, b=<span class="number">0x7fffffffdc70</span>) at ll_equal.c:<span class="number">10</span></span><br><span class="line"><span class="number">10</span>		<span class="keyword">while</span> (a != <span class="literal">NULL</span>) &#123;</span><br><span class="line">(gdb) <span class="keyword">continue</span></span><br><span class="line">Continuing.</span><br><span class="line">equal test <span class="number">1</span> result = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">Breakpoint <span class="number">2</span>, <span class="built_in">ll_equal</span> (a=<span class="number">0x7fffffffdc70</span>, b=<span class="number">0x7fffffffdc90</span>) at ll_equal.c:<span class="number">10</span></span><br><span class="line"><span class="number">10</span>		<span class="keyword">while</span> (a != <span class="literal">NULL</span>) &#123;</span><br><span class="line">(gdb) <span class="keyword">continue</span></span><br><span class="line">Continuing.</span><br><span class="line"></span><br><span class="line">Program received signal SIGSEGV, Segmentation fault.</span><br><span class="line"><span class="number">0x00000000004005ae</span> in <span class="built_in">ll_equal</span> (a=<span class="number">0x7fffffffdc90</span>, b=<span class="number">0x0</span>) at ll_equal.c:<span class="number">11</span></span><br><span class="line"><span class="number">11</span>			<span class="keyword">if</span> (a-&gt;val != b-&gt;val)</span><br></pre></td></tr></table></figure>
+<p>最后发现在11行出现错误，b的值为<code>0x0</code>，不能对空指针取调用<code>-&gt;</code>运算符。修改ll_equal.c如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">node</span> &#123;</span></span><br><span class="line">        <span class="keyword">int</span> val;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">node</span>* <span class="title">next</span>;</span></span><br><span class="line">&#125; node;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* <span class="doctag">FIXME:</span> this function is buggy. */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ll_equal</span><span class="params">(<span class="keyword">const</span> node* a, <span class="keyword">const</span> node* b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (a != <span class="literal">NULL</span>&amp;&amp;b != <span class="literal">NULL</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (a-&gt;val != b-&gt;val)</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                a = a-&gt;next;</span><br><span class="line">                b = b-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* lists are equal if a and b are both null */</span></span><br><span class="line">        <span class="keyword">return</span> a == b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">        node nodes[<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++) &#123;</span><br><span class="line">                nodes[i].val = <span class="number">0</span>;</span><br><span class="line">                nodes[i].next = <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        nodes[<span class="number">0</span>].next = &amp;nodes[<span class="number">1</span>];</span><br><span class="line">        nodes[<span class="number">1</span>].next = &amp;nodes[<span class="number">2</span>];</span><br><span class="line">        nodes[<span class="number">2</span>].next = &amp;nodes[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;equal test 1 result = %d\n&quot;</span>, <span class="built_in">ll_equal</span>(&amp;nodes[<span class="number">0</span>], &amp;nodes[<span class="number">0</span>]));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;equal test 2 result = %d\n&quot;</span>, <span class="built_in">ll_equal</span>(&amp;nodes[<span class="number">0</span>], &amp;nodes[<span class="number">2</span>]));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重新编译运行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">equal test 1 result &#x3D; 1</span><br><span class="line">equal test 2 result &#x3D; 0</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="练习4-Make初步"><a href="#练习4-Make初步" class="headerlink" title="练习4 Make初步"></a>练习4 Make初步</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ make wc</span><br><span class="line">cc     wc.c   -o wc</span><br><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ .&#x2F;wc wc.c</span><br><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ wc wc.c</span><br><span class="line">  9  23 145 wc.c</span><br><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ which wc</span><br><span class="line">&#x2F;usr&#x2F;bin&#x2F;wc</span><br></pre></td></tr></table></figure>
+<p>前一次是调用我们生成的可执行文件wc，源文件wc.c的文件名作为参数。后者是调用系统的命令wc，参数是wc.c，这个wc是系统自己的可执行文件，位于/usr/bin/wc。</p>
+<p>修改代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">wc</span><span class="params">(FILE *ofile, FILE *infile)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> ch, pre_ch=<span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    <span class="keyword">int</span> lines=<span class="number">0</span>,words=<span class="number">0</span>,chars=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>((ch=<span class="built_in">fgetc</span>(infile))!=EOF)&#123;</span><br><span class="line">        ++chars;</span><br><span class="line">        <span class="keyword">if</span>(ch!=<span class="string">&#x27; &#x27;</span>&amp;&amp;ch!=<span class="string">&#x27;\n&#x27;</span>&amp;&amp;ch!=<span class="string">&#x27;\t&#x27;</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(pre_ch==<span class="string">&#x27; &#x27;</span>||pre_ch==<span class="string">&#x27;\0&#x27;</span>||pre_ch==<span class="string">&#x27;\t&#x27;</span>||pre_ch==<span class="string">&#x27;\n&#x27;</span>)++words;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(ch==<span class="string">&#x27;\n&#x27;</span>)++lines;</span><br><span class="line">        pre_ch=ch;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">fprintf</span>(ofile,<span class="string">&quot;\t%d\t%d\t%d\n&quot;</span>,lines,words,chars);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span>* filename;</span><br><span class="line">    FILE *infile=stdin;</span><br><span class="line">    <span class="keyword">if</span>(argc&gt;<span class="number">1</span>)&#123;</span><br><span class="line">        filename=argv[<span class="number">1</span>];</span><br><span class="line">        infile=<span class="built_in">fopen</span>(filename,<span class="string">&quot;r&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">wc</span>(stdout,infile);</span><br><span class="line">    <span class="built_in">fclose</span>(infile);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ .&#x2F;wc wc.c</span><br><span class="line">	29	49	616</span><br><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ wc wc.c</span><br><span class="line"> 29  49 616 wc.c</span><br><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ wc</span><br><span class="line">123123 123123</span><br><span class="line">1231</span><br><span class="line">123</span><br><span class="line">123123 123123 123123</span><br><span class="line">123 1231 </span><br><span class="line">      5       9      53</span><br><span class="line">wujiahao@ubuntu:~&#x2F;Desktop&#x2F;os&#x2F;lab1$ .&#x2F;wc</span><br><span class="line">123123 123123</span><br><span class="line">1231</span><br><span class="line">123</span><br><span class="line">123123 123123 123123</span><br><span class="line">123 1231</span><br><span class="line">	5	9	53</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -695,397 +1115,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/25/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" class="post-title-link" itemprop="url">右值引用和移动语义</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-25 20:44:00" itemprop="dateCreated datePublished" datetime="2021-02-25T20:44:00+08:00">2021-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="右值是啥"><a href="#右值是啥" class="headerlink" title="右值是啥"></a>右值是啥</h1><p>右值是区别与左值的存在，一般来说，表达式右边就是右值，左边就是左值，当然这是开玩笑的。最好的区分方式就是，左值可以取地址，而右值不可以。比方说：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x=<span class="number">1</span>;</span><br><span class="line"><span class="comment">// x是左值，1是右值</span></span><br><span class="line">y=x;</span><br><span class="line"><span class="comment">// y、x都是左值</span></span><br><span class="line">z=x+y;</span><br><span class="line"><span class="comment">// z是左值，x+y是右值</span></span><br></pre></td></tr></table></figure>
-
-
-<h2 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h2><p>原来C++有左值引用，如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iny y=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;x=y;</span><br></pre></td></tr></table></figure>
-<p>也就是说，引用只能引用左值，但是C++11提供了右值引用，使用&amp;&amp;来表示，右值引用可以关联到右值，但是不能对其应用地址运算符。右值包括字面常量，诸如x+y等表达式以及函数的返回值（前提是返回不能是引用）。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x=<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> y=<span class="number">20</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;&amp;z=x;	<span class="comment">//非法</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;&amp;z=x;	<span class="comment">//非法</span></span><br><span class="line"><span class="keyword">int</span> &amp;&amp;r1=<span class="number">13</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;&amp;r2=x+y;</span><br><span class="line"><span class="keyword">double</span> &amp;&amp;r3=std::<span class="built_in">sqrt</span>(<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;value:&quot;</span> &lt;&lt; r1 &lt;&lt; <span class="string">&quot; address:&quot;</span> &lt;&lt; &amp;r1 &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h1><p>在某些场景下，使用一个对象初始化另一个对象，可以通过复制构造函数进行深拷贝完成，但是有时候用于的旧对象不再使用，可以通过移动构造函数提高效率。移动构造函数只调整记录，是将所有权转移到新对象的过程，这个过程中可能修改其实参，这意味着右值引用参数不应是const。通俗的将就类似于在计算机中移动文件的情形：实际文件还留在原来的地方，而只是修改了记录，这就是移动语义。  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Useless</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> n;</span><br><span class="line">   <span class="keyword">char</span> *p;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">int</span> ct;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">showobject</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Useless</span>();</span><br><span class="line">   <span class="function"><span class="keyword">explicit</span> <span class="title">Useless</span><span class="params">(<span class="keyword">int</span> k)</span></span>;</span><br><span class="line">   <span class="built_in">Useless</span>(<span class="keyword">int</span> k,<span class="keyword">char</span> c);</span><br><span class="line">   <span class="built_in">Useless</span>(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   <span class="built_in">Useless</span>(Useless&amp;&amp;ul);</span><br><span class="line">   Useless&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   Useless&amp; <span class="keyword">operator</span>=(Useless&amp;&amp;nl);</span><br><span class="line">   Useless <span class="keyword">operator</span>+(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   ~Useless <span class="keyword">operator</span>+(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">ShowData</span><span class="params">()</span><span class="keyword">const</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 左值引用</span></span><br><span class="line">Useless::<span class="built_in">Useless</span>(<span class="keyword">const</span> Useless &amp; ul)</span><br><span class="line">&#123;</span><br><span class="line">	++ct;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;copy const called;numbers ofobject:&quot;</span> &lt;&lt; ct &lt;&lt; std::endl;</span><br><span class="line">	n = ul.n;</span><br><span class="line">	p = <span class="keyword">new</span> <span class="keyword">char</span>[n];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">		p[i] = ul.p[i];</span><br><span class="line">	<span class="built_in">showobject</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 右值引用</span></span><br><span class="line">Useless::<span class="built_in">Useless</span>(Useless &amp;&amp; ul)</span><br><span class="line">&#123;</span><br><span class="line">	++ct;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;move constructor called;numbers ofobject:&quot;</span> &lt;&lt; ct &lt;&lt; std::endl;</span><br><span class="line">	n = ul.n;</span><br><span class="line">	p = ul.p;</span><br><span class="line">	ul.n = <span class="number">0</span>;</span><br><span class="line">	ul.p = <span class="literal">nullptr</span>;</span><br><span class="line">	<span class="built_in">showobject</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95/" class="post-title-link" itemprop="url">数据库索引</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-25 17:37:00" itemprop="dateCreated datePublished" datetime="2021-02-25T17:37:00+08:00">2021-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="索引的优缺点"><a href="#索引的优缺点" class="headerlink" title="索引的优缺点"></a>索引的优缺点</h1><ol>
-<li>加速数据库的检索速度；  </li>
-<li>降低了插入、删除、修改等维护任务的速度；  </li>
-<li>唯一索引可以确保每一行数据的唯一性；  </li>
-<li>通过索引，可以在查询过程中优化隐藏器，提高系统性能；  </li>
-<li>索引要占据物理和数据空间。  </li>
-</ol>
-<h1 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a>索引类型</h1><h2 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h2><p>表的数据要按照索引的顺序来存储。对于聚集索引，叶子结点即存储了真实的数据行，不再有另外的单独数据页。  </p>
-<h2 id="非聚集索引"><a href="#非聚集索引" class="headerlink" title="非聚集索引"></a>非聚集索引</h2><p>表数据存储顺序与索引顺序无关。对于非聚集索引，叶节点包含了索引字段值及指向数据页数据的行的逻辑指针，该层紧邻数据页，其行数量与数据表行数据量一致。  </p>
-<h1 id="建立索引要关注哪些因素"><a href="#建立索引要关注哪些因素" class="headerlink" title="建立索引要关注哪些因素"></a>建立索引要关注哪些因素</h1><ul>
-<li>访问类型；  </li>
-<li>访问时间；  </li>
-<li>插入时间；  </li>
-<li>删除时间；  </li>
-<li>空间开销。  </li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E9%94%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/25/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E9%94%81/" class="post-title-link" itemprop="url">MySQL事务隔离级别和锁</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-25 17:36:00" itemprop="dateCreated datePublished" datetime="2021-02-25T17:36:00+08:00">2021-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h1><ol>
-<li>可串行化；  </li>
-<li>可重复读，只允许读取已提交数据，而且在一个事务两次读取同一数据之间，其他事务不能更新该数据；    </li>
-<li>已提交读，只允许读取已经提交的数据；  </li>
-<li>未提交读，允许读取未提交的数据。  </li>
-</ol>
-<p>以上隔离性级别都不允许脏写，即如果一个数据项已经被另一个尚未提交或终止的事务写入，则不允许对该数据项执行写操作。  </p>
-<table>
-<tr>
-    <th>隔离级别</th>
-    <th>脏读</th>
-    <th>不可重复读</th>
-    <th>幻读</th>
-</tr>
-<tr>
-    <td>未提交读</td>
-    <td>可能</td>
-    <td>可能</td>
-    <td>可能</td>
-</tr>
-<tr>
-    <td>已提交读</td>
-    <td>不可能</td>
-    <td>可能</td>
-    <td>可能</td>
-</tr>
-<tr>
-    <td>可重复读</td>
-    <td>不可能</td>
-    <td>不可能</td>
-    <td>可能</td>
-</tr>
-<tr>
-    <td>可串行化</td>
-    <td>不可能</td>
-    <td>不可能</td>
-    <td>不可能</td>
-</tr>
-</table>
-
-
-<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><p>DBMS中的并发控制的任务是确保在多个事务同时存取数据库中统一数据时不破坏事务的隔离性和一致性。常见的控制手段是乐观并发控制（乐观锁）和悲观并发控制（悲观锁）。  </p>
-<h2 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h2><p>假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。<br>使用方法：  </p>
-<ol>
-<li>对任意数据进行修改时，先尝试为该记录加上排他锁。  </li>
-<li>如果加锁失败就说明该记录正在被修改，等待锁被释放。  </li>
-<li>成功加锁后就可以对记录做修改，事务完成后就会解锁。  </li>
-</ol>
-<p>悲观锁适用于数据竞争激烈的环境，以及发生并发冲突时使用锁保护数据的成本低于回滚事务的成本的环境中。</p>
-<h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>假定不会发生并发冲突，只在提交操作时检查是否违反了数据完整性。在提交数据更新之前，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据。如果其他事务有更新的话，正在提交的事务会进行回滚。<br>使用方法：  </p>
-<ol>
-<li>在对数据库进行处理的时候，乐观锁并不会使用数据库提供的锁机制。一般的实现乐观锁的方式就是记录数据版本。  </li>
-<li>数据版本,为数据增加的一个版本标识。当读取数据时，将版本标识的值一同读出，数据每更新一次，同时对版本标识进行更新。</li>
-<li>当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的版本标识进行比对，如果数据库表当前版本号与第一次取出来的版本标识值相等，则予以更新，否则认为是过期数据。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/24/C++%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/24/C++%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">C++构造函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-24 21:59:00" itemprop="dateCreated datePublished" datetime="2021-02-24T21:59:00+08:00">2021-02-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>C++的构造函数有四种，默认构造函数、参数构造函数、拷贝构造函数、转换构造函数</p>
-<h2 id="默认构造函数"><a href="#默认构造函数" class="headerlink" title="默认构造函数"></a>默认构造函数</h2><p>没有参数，如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">Student</span>()&#123;</span><br><span class="line">    num=<span class="number">100</span>;</span><br><span class="line">    age=<span class="number">18</span>;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="参数构造函数"><a href="#参数构造函数" class="headerlink" title="参数构造函数"></a>参数构造函数</h2><p>传入了一些参数，如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">Student</span>(<span class="keyword">int</span> Age,<span class="keyword">int</span> Num)&#123;</span><br><span class="line">   		num=Num;</span><br><span class="line">      age=Age;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2><p>形式参数是本类对象的引用：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">Student</span>(Student&amp; s)&#123;</span><br><span class="line">   		age=s.age;</span><br><span class="line">      num=s.num;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="转换构造函数"><a href="#转换构造函数" class="headerlink" title="转换构造函数"></a>转换构造函数</h2><p>转换构造函数能够将其他类型的变量转换为本类型，参数只有一个：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span>&#123;</span></span><br><span class="line">	<span class="built_in">Student</span>(<span class="keyword">int</span> r)&#123;</span><br><span class="line">   		num=r; </span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>如果Student类重载了+号，则下面的加法会调用student(18);</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Student <span class="title">s1</span><span class="params">(<span class="number">10</span>,<span class="number">10</span>)</span></span>;</span><br><span class="line"><span class="function">Student <span class="title">s2</span><span class="params">(s1+<span class="number">18</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1153,7 +1186,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">130</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
