@@ -191,6 +191,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/%E4%BD%BF%E7%94%A8MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/26/%E4%BD%BF%E7%94%A8MySQL/" class="post-title-link" itemprop="url">使用MySQL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-26 23:15:17" itemprop="dateCreated datePublished" datetime="2021-01-26T23:15:17+08:00">2021-01-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用MySQL"><a href="#使用MySQL" class="headerlink" title="使用MySQL"></a>使用MySQL</h1><h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; mysql -u xxx -p</span><br><span class="line">&#x2F;&#x2F;xxx是用户名</span><br></pre></td></tr></table></figure>
+<p>然后再输入密码，就可以连接上本地的MySQL服务器了。端口使用默认端口3306。  </p>
+<h2 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h2><p><strong>关键字（key word）</strong>作为MySQL语言组织的一个保留字。不要用关键字命名一个表或列。常见的关键字有<code>use</code>、<code>select</code>、<code>where</code>等等。<br>选择数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use crashcource;</span><br><span class="line">Database changed</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="了解数据库和表"><a href="#了解数据库和表" class="headerlink" title="了解数据库和表"></a>了解数据库和表</h2><p>以下命令可以用来展示当前MySQL服务器中有哪些数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mydb               |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| study              |</span><br><span class="line">| sys                |</span><br><span class="line">| webserver_database |</span><br><span class="line">+--------------------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>以下命令可以用来查询当前数据中有哪些表（前提是你已经连接上了数据库）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show tables;</span><br><span class="line">+-----------------+</span><br><span class="line">| Tables_in_study |</span><br><span class="line">+-----------------+</span><br><span class="line">| customers       |</span><br><span class="line">| orderitems      |</span><br><span class="line">| orders          |</span><br><span class="line">| productnotes    |</span><br><span class="line">| products        |</span><br><span class="line">| vendors         |</span><br><span class="line">+-----------------+</span><br></pre></td></tr></table></figure>
+<p>这个数据库内的表是用<a target="_blank" rel="noopener" href="https://forta.com/books/0672327120/">MySQL必知必会官方网站</a>上提供的sql脚本<code>create.sql</code>、<code>populate.sql</code>生成的。生成方式如下（你需要先将文件下载下来）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create database XXX;</span><br><span class="line">&#x2F;&#x2F; XXX是你创建的数据库，名字你可以任意定义</span><br><span class="line">mysql&gt; use XXX;</span><br><span class="line">mysql&gt; source create.sql;</span><br><span class="line">&#x2F;&#x2F; 此文件创建表</span><br><span class="line">mysql&gt; source populate.sql; </span><br><span class="line">&#x2F;&#x2F; 创建完成了</span><br></pre></td></tr></table></figure>
+<p>如下方法可以显示表中所有可用的列，以及相关参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show columns from customers;</span><br><span class="line">+--------------+-----------+------+-----+---------+----------------+</span><br><span class="line">| Field        | Type      | Null | Key | Default | Extra          |</span><br><span class="line">+--------------+-----------+------+-----+---------+----------------+</span><br><span class="line">| cust_id      | int(11)   | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| cust_name    | char(50)  | NO   |     | NULL    |                |</span><br><span class="line">| cust_address | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_city    | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_state   | char(5)   | YES  |     | NULL    |                |</span><br><span class="line">| cust_zip     | char(10)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_country | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_contact | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_email   | char(255) | YES  |     | NULL    |                |</span><br><span class="line">+--------------+-----------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/23/Makefile%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1283,159 +1369,6 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">CH6存储器层次结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-14 15:37:41" itemprop="dateCreated datePublished" datetime="2021-01-14T15:37:41+08:00">2021-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="存储器层次结构"><a href="#存储器层次结构" class="headerlink" title="存储器层次结构"></a><strong>存储器层次结构</strong></h1><h2 id="存储技术"><a href="#存储技术" class="headerlink" title="存储技术"></a><strong>存储技术</strong></h2><h3 id="随机访问存储器（Random-Access-Memory-RAM）"><a href="#随机访问存储器（Random-Access-Memory-RAM）" class="headerlink" title="随机访问存储器（Random-Access Memory,RAM）"></a><strong>随机访问存储器（Random-Access Memory,RAM）</strong></h3><p>分为静态和动态两类（SRAM、DRAM）。SRAM比DRAM更快但更贵。  </p>
-<ol>
-<li>SRAM：用作高速缓存存储器  </li>
-<li>DRAM：用于主存及图形系统的帧缓存区<br>内存系统必须周期性地通过读出，然后重写来刷新内存的每一位。有些系统会使用纠错码。  </li>
-<li>传统的DRAM<br>每个DRAM芯片被连接到某个称为内存控制器的电路，这个电路用来传送$\omega$位到每个DRAM芯片或者一次从每个DRAM芯片传出$\omega$位。  </li>
-<li>内存模块<br>DRAM芯片封装在内存模块中，可以多个DRAM芯片同时读取和写入一个字节（举例8个DRAM芯片），合并后即为一个64位字，然后返回给内存控制器。  </li>
-<li>增强的DRAM  </li>
-</ol>
-<ul>
-<li>快页模式DRAM（Fast Page Model DRAM,FPM DRAM）</li>
-<li>扩展数据输出DRAM（Extended Data Out DRAM，EDO DRAM）</li>
-<li>同步DRAM（Synchronous DRAM，SDRAM）</li>
-<li>双倍数据速率同步DRAM（Double Data-Rate Synchronous）</li>
-<li>视频RAM（Video RAM，VRAM）</li>
-</ul>
-<ol start="6">
-<li>非易失性存储器（nonvolatile memory）<br>DRAM和SRAM在断电的情况都会丧失它们的信息。只读存储器（read-only Memory）中有的类型可以读也可以写，但整齐称为ROM。<br>PROM(Programmable ROM，可编程ROM)只能被编程一次，还有很多。。。<br>还有可擦写可编程ROM(Erasable Programmable ROM，EPROM)、闪存(flash memory)。存储在ROM设备中的程序通常被称为固件（firmware）。</li>
-<li>访问主存<br>总线(bus)，数据流通过总线在处理器和DRAM主存之间来来回回。</li>
-</ol>
-<h3 id="磁盘存储"><a href="#磁盘存储" class="headerlink" title="磁盘存储"></a><strong>磁盘存储</strong></h3><ol>
-<li>磁盘构造<br>主轴、盘片、磁道、扇区、柱面等概念。</li>
-<li>磁盘容量</li>
-<li>磁盘操作  </li>
-</ol>
-<ul>
-<li>寻道时间</li>
-<li>旋转时间</li>
-<li>传送时间</li>
-</ul>
-<ol start="4">
-<li>逻辑磁盘块<br>为了对操作系统隐藏磁盘的复杂性，现代磁盘将为它们的构造呈现一个简单的视图，一个B个扇区大小的逻辑块的序列。磁盘块封装中有一个效得硬件/固件设备，称为磁盘控制器，维护着逻辑块号和实际（物理）磁盘山去之间的映射关系。</li>
-<li>连接I/O设备<br>慢于系统总线和内存总线。</li>
-<li>访问磁盘<br>I/O端口、直接内存访问（Direct Memory Access，DMA）、DMA传送（DMA transfer）</li>
-</ol>
-<h3 id="固态硬盘（Solid-State-Disk，SSD）"><a href="#固态硬盘（Solid-State-Disk，SSD）" class="headerlink" title="固态硬盘（Solid State Disk，SSD）"></a><strong>固态硬盘（Solid State Disk，SSD）</strong></h3><p>这是一种基于闪存的存储技术。</p>
-<h2 id="局部性"><a href="#局部性" class="headerlink" title="局部性"></a><strong>局部性</strong></h2><p>通常表现为时间局部性（在一个具有良好的时间局部性程序中，被引用过一次的内存位置很可能在不远的将来再被多次引用）和空间局部性（在一个具有良好空间局部性的程序中，如果一个内存位置被引用了一次，那么程序很可能在不远的将来引用附件的一个内存位置）。</p>
-<h2 id="存储器层次结构（memery-hierarchy）"><a href="#存储器层次结构（memery-hierarchy）" class="headerlink" title="存储器层次结构（memery hierarchy）"></a><strong>存储器层次结构（memery hierarchy）</strong></h2><ol start="0">
-<li>寄存器（CPU寄存器保存着从高速缓存存储器去除的字）  </li>
-<li>L1高速缓存（SRAM）（L1&lt;-L2，保存取出的缓存行）  </li>
-<li>L2高速缓存（SRAM）（L2&lt;-L3，保存取出的缓存行）  </li>
-<li>L3高速缓存（SRAM）（L3&lt;-主存，保存取出的缓存行）  </li>
-<li>主存（DRAM）（主存&lt;-本地磁盘，保存着取出的磁盘块）  </li>
-<li>本地二级存储（本地磁盘）（保存从远程网络服务器取出的文件）  </li>
-<li>远程二级存储（分布式文件系统、Web服务器）  </li>
-</ol>
-<h3 id="存储器层次结构中的缓存"><a href="#存储器层次结构中的缓存" class="headerlink" title="存储器层次结构中的缓存"></a><strong>存储器层次结构中的缓存</strong></h3><p>高速缓存（cache）是一个小而快的存储设备，它作为存储在更大、也更慢的设备中的数据对象的缓冲区域。使用高速缓存的过程称为<strong>缓存（caching）</strong>。  </p>
-<ol>
-<li>缓存命中：当程序需要第$k+1$层的一个数据对象d时，优先在第$k$层查找d，如果d刚好存储在第$k$层，那么直接读取，这就是我们说的缓存命中。  </li>
-<li>缓存不命中：如果第$k$层没有缓存数据对象d，那么就是我们说的缓存不命中。当发生缓存不命中时，第$k$层的缓存从第k+1层缓存取出包含d的那个块，如果第k层缓存已经满了，可能就会覆盖现存的一个块（牺牲块）。  </li>
-<li>缓存不命中的种类：强制性不命中、冲突不命中、容量不命中。  </li>
-<li>缓存管理：编译器管理寄存器文件；L1、L2和L3层的缓存完全有内置在缓存中的硬件逻辑来管理；在一个有虚拟内存的系统中，DRAM主存作为存储在磁盘上的数据块的缓存，是由操作系统软件和CPU上的地址翻译硬件共同管理的。  </li>
-</ol>
-<h3 id="存储器层次结构概念小结"><a href="#存储器层次结构概念小结" class="headerlink" title="存储器层次结构概念小结"></a><strong>存储器层次结构概念小结</strong></h3><p>概括来说，基于缓存的存储器层次结构行之有效，是因为较慢的存储设备比较快的存储设备更便宜，还因为程序倾向于展示局部性（可以补偿不命中的代价）</p>
-<h2 id="高速缓存存储器"><a href="#高速缓存存储器" class="headerlink" title="高速缓存存储器"></a><strong>高速缓存存储器</strong></h2><p>原来存储器层次结构只有三层：寄存器、主存、磁盘；随着CPU和主存之间逐渐增大的差距，系统设<br>计者被迫在CPU寄存器文件和主存之间插入了一个小的SRAM高速缓存存储器，称为L1高速缓存，后来又插入了L2、L3。</p>
-<h3 id="通用的高速缓存存储器组织结构"><a href="#通用的高速缓存存储器组织结构" class="headerlink" title="通用的高速缓存存储器组织结构"></a><strong>通用的高速缓存存储器组织结构</strong></h3><p>高速缓存的结构可以用元组（S，E，B，m）来描述。S：$S=2^s$个高速缓存组；E：每个组包含E个高速缓存行；B：每个行由$B=2^b$字节的数据块组成的，一个有效位指明这个行是否包含有意义的信息，还有t个标记位来唯一的标识这个块。$t+s+b=m$，t位标记块，s位组索引，b位时块偏移。容量$C=S\times E\times B$。</p>
-<h3 id="直接映射高速缓存"><a href="#直接映射高速缓存" class="headerlink" title="直接映射高速缓存"></a><strong>直接映射高速缓存</strong></h3><p>每个组只有一行  </p>
-<ol>
-<li>直接映射高速缓存中的组选择  </li>
-<li>直接映射高速缓存中的行匹配  </li>
-<li>直接映射高速缓存中的字选择  </li>
-<li>直接映射高速缓存不命中时的行替换  </li>
-<li>综合：运行中的直接映射高速缓存  </li>
-</ol>
-<h3 id="组相联高速缓存"><a href="#组相联高速缓存" class="headerlink" title="组相联高速缓存"></a><strong>组相联高速缓存</strong></h3><ol>
-<li>组相联高速缓存中的组选择  </li>
-<li>组相联高速缓存中的行匹配和字选择：搜索组中的每一行来匹配标记，命中后块偏移从这个块中选择字  </li>
-<li>组相联高速缓存中的不命中的行替换：若无空行，则采用替换策略，有LFU（Least-Frequently-Used，最不常使用）、LRU（Least-Recently-USed，最近最少使用）等。  </li>
-</ol>
-<h3 id="全相联高速缓存"><a href="#全相联高速缓存" class="headerlink" title="全相联高速缓存"></a><strong>全相联高速缓存</strong></h3><p>$E=C/B$，S=1，仅有一个组。</p>
-<ol>
-<li>组选择  </li>
-<li>行匹配和字选择<br>因为高速缓存电路必须并行地搜索许多相匹配的标记，构造一个又大又快的相联高速缓存很困难，而且昂贵。因此全相联高速缓存只适合做小的高速缓存，例如虚拟内存系统中翻译备用缓冲器（TLB），它缓存页表项。</li>
-</ol>
-<h3 id="有关写的问题"><a href="#有关写的问题" class="headerlink" title="有关写的问题"></a><strong>有关写的问题</strong></h3><p>如果命中，更新了副本之后，如何更新在低一层中的副本。  </p>
-<ul>
-<li>直写：最简单的方法，立即写回到下一级。  </li>
-<li>写回：等待替换算法要驱逐这个更新过的块的时候，才把它紧接着写到低一层（需要在每个高速缓存行中额外保留一个修改位来标识该行是否被修改过）。<br>如果不命中：  </li>
-<li>写分配：加载相应的低一层中的块到高速缓存行中，然后更新这个高速缓存块  </li>
-<li>非写分配：避开高速缓存，直接写到低一层</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1507,7 +1440,7 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -191,6 +191,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/25/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" class="post-title-link" itemprop="url">右值引用和移动语义</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-25 20:44:00" itemprop="dateCreated datePublished" datetime="2021-02-25T20:44:00+08:00">2021-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="右值是啥"><a href="#右值是啥" class="headerlink" title="右值是啥"></a>右值是啥</h1><p>右值是区别与左值的存在，一般来说，表达式右边就是右值，左边就是左值，当然这是开玩笑的。最好的区分方式就是，左值可以取地址，而右值不可以。比方说：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x=<span class="number">1</span>;</span><br><span class="line"><span class="comment">// x是左值，1是右值</span></span><br><span class="line">y=x;</span><br><span class="line"><span class="comment">// y、x都是左值</span></span><br><span class="line">z=x+y;</span><br><span class="line"><span class="comment">// z是左值，x+y是右值</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h2><p>原来C++有左值引用，如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iny y=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;x=y;</span><br></pre></td></tr></table></figure>
+<p>也就是说，引用只能引用左值，但是C++11提供了右值引用，使用&amp;&amp;来表示，右值引用可以关联到右值，但是不能对其应用地址运算符。右值包括字面常量，诸如x+y等表达式以及函数的返回值（前提是返回不能是引用）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x=<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> y=<span class="number">20</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;&amp;z=x;	<span class="comment">//非法</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;&amp;z=x;	<span class="comment">//非法</span></span><br><span class="line"><span class="keyword">int</span> &amp;&amp;r1=<span class="number">13</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;&amp;r2=x+y;</span><br><span class="line"><span class="keyword">double</span> &amp;&amp;r3=std::<span class="built_in">sqrt</span>(<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;value:&quot;</span> &lt;&lt; r1 &lt;&lt; <span class="string">&quot; address:&quot;</span> &lt;&lt; &amp;r1 &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h1><p>在某些场景下，使用一个对象初始化另一个对象，可以通过复制构造函数进行深拷贝完成，但是有时候用于的旧对象不再使用，可以通过移动构造函数提高效率。移动构造函数只调整记录，是将所有权转移到新对象的过程，这个过程中可能修改其实参，这意味着右值引用参数不应是const。通俗的将就类似于在计算机中移动文件的情形：实际文件还留在原来的地方，而只是修改了记录，这就是移动语义。  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Useless</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> n;</span><br><span class="line">   <span class="keyword">char</span> *p;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">int</span> ct;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">showobject</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Useless</span>();</span><br><span class="line">   <span class="function"><span class="keyword">explicit</span> <span class="title">Useless</span><span class="params">(<span class="keyword">int</span> k)</span></span>;</span><br><span class="line">   <span class="built_in">Useless</span>(<span class="keyword">int</span> k,<span class="keyword">char</span> c);</span><br><span class="line">   <span class="built_in">Useless</span>(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   <span class="built_in">Useless</span>(Useless&amp;&amp;ul);</span><br><span class="line">   Useless&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   Useless&amp; <span class="keyword">operator</span>=(Useless&amp;&amp;nl);</span><br><span class="line">   Useless <span class="keyword">operator</span>+(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   ~Useless <span class="keyword">operator</span>+(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">ShowData</span><span class="params">()</span><span class="keyword">const</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 左值引用</span></span><br><span class="line">Useless::<span class="built_in">Useless</span>(<span class="keyword">const</span> Useless &amp; ul)</span><br><span class="line">&#123;</span><br><span class="line">	++ct;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;copy const called;numbers ofobject:&quot;</span> &lt;&lt; ct &lt;&lt; std::endl;</span><br><span class="line">	n = ul.n;</span><br><span class="line">	p = <span class="keyword">new</span> <span class="keyword">char</span>[n];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">		p[i] = ul.p[i];</span><br><span class="line">	<span class="built_in">showobject</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 右值引用</span></span><br><span class="line">Useless::<span class="built_in">Useless</span>(Useless &amp;&amp; ul)</span><br><span class="line">&#123;</span><br><span class="line">	++ct;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;move constructor called;numbers ofobject:&quot;</span> &lt;&lt; ct &lt;&lt; std::endl;</span><br><span class="line">	n = ul.n;</span><br><span class="line">	p = ul.p;</span><br><span class="line">	ul.n = <span class="number">0</span>;</span><br><span class="line">	ul.p = <span class="literal">nullptr</span>;</span><br><span class="line">	<span class="built_in">showobject</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1059,99 +1143,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/17/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/17/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">进程通信方式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-17 23:12:00" itemprop="dateCreated datePublished" datetime="2021-02-17T23:12:00+08:00">2021-02-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li>管道/匿名管道(pipe) 管道是半双工的，数据只能向一个方向流动；需要双方通信时，需要建立起两个管道。 …</li>
-<li>有名管道(FIFO) …</li>
-<li>信号(Signal) …</li>
-<li>消息(Message)队列 …</li>
-<li>共享内存(share memory) …</li>
-<li>信号量(semaphore) …</li>
-<li>套接字(socket)</li>
-</ol>
-<h1 id="匿名管道"><a href="#匿名管道" class="headerlink" title="匿名管道"></a>匿名管道</h1><ul>
-<li>管道是半双工的，只能单向通信，一端读入，一端写，如果需要双向通信需要建立两个管道。  </li>
-<li>只能用于父子进程或者兄弟进程之间。  </li>
-<li>实质上是一个内核缓冲区，每次写入在缓冲区的末尾，从缓冲区头部读入。  </li>
-</ul>
-<h1 id="有名管道"><a href="#有名管道" class="headerlink" title="有名管道"></a>有名管道</h1><p>有名管道可以用于在任意进程之间通信。它以文件的形式存在，只要可以访问该路径就可以访问该管道，内容存放在内存中。有名管道遵循先入先出的规定，不支持文件定位操作。  </p>
-<h1 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h1><p>信号是Linux系统中用于进程互相通信或者操作的一种机制，信号可以在任何时候发给某一进程，而无需知道该进程的状态。如果该进程当时未处于执行的状态，则该信号就由内核保存起来，知道该进程回复执行并传递给它未知。<br>信号是软件层次上对中断机制的一种模拟，是一种异步通信方式。常见的信号比如<code>Ctrl+C</code>就是给进程发送中断信号。  </p>
-<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>消息队列是存放在内核中的消息链表，每个消息队列由消息队列标识符标识。  </p>
-<h1 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h1><p>多个进程可以直接读写同一块内存空间，是最快的可用IPC形式。是针对其他通信机制运行效率较低而设计的。  </p>
-<h1 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h1><p>信号量是一个计数器，用于多进程对共享数据的访问，信号量的意图在于进程同步。  </p>
-<h1 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h1><p>这是一种不同主机的进程之间通信的方式。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1223,7 +1214,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

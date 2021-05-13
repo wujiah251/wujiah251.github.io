@@ -191,6 +191,120 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/Linux%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/15/Linux%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Linux命令学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-15 22:19:00" itemprop="dateCreated datePublished" datetime="2021-02-15T22:19:00+08:00">2021-02-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="网络相关"><a href="#网络相关" class="headerlink" title="网络相关"></a>网络相关</h1><h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><p><code>tcpdump</code>是一个抓包命令。有如下参数：  </p>
+<p>-<strong>i</strong>:指定需要抓包的网卡。如果未指定的话，tcpdump会默认选择搜索到的系统中状态为up的最小数字的网卡，一般情况下是eth0。-i lo抓取回环的数据包。<br>-<strong>nnn</strong>：禁用tcpdump展示时把IP、端口等转换为域名、端口知名服务名称。这样看起来会更清晰<br>-<strong>s</strong>：指定抓包的包大小。使用-s 0指定数据包大小为262144。可以使抓到的数据包不被截断，完整反映数据包的内容。默认68字节。<br>-<strong>c</strong>：指定抓包的数量。<br>-<strong>w</strong>：指定抓包结果保存的文件，以便后续用wireshark等工具进行分析。<br>-<strong>P</strong>：in/out/inout，指定要抓取的包是流入还是流出的包。默认inout<br>-<strong>F</strong>：使用文件作为过滤条件表达式的输入, 此时命令行上的输入将被忽略.<br>-<strong>p</strong>： 一般情况下, 把网络接口设置为非’混杂’模式。  </p>
+<h1 id="进程、线程相关"><a href="#进程、线程相关" class="headerlink" title="进程、线程相关"></a>进程、线程相关</h1><h2 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h2><p><code>ps</code>可以用来查看当前有哪些进程，涉及很多参数，不一一列举，要用再查。<br>加上<code>-T</code>选项可以开启线程查看，比如下面命令可以查看进程<code>&lt;pid&gt;</code>创建的所有线程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; ps -T -p &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><p><code>top</code>可以实时查看各个线程的情况，以下命令可以查看Linux所有线程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; top -H</span><br></pre></td></tr></table></figure>
+
+<p>而以下命令可以只查看进程<code>&lt;pid&gt;</code>的所有线程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; top -H -p &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h2><p><code>strace</code>是用来跟踪进程的系统调用的，可以用如下命令跟踪进程<code>&lt;pid&gt;</code>的所有系统调用并将结果输出到output.txt文件中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; sudo strace -o output.txt -p &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+<p><code>strace</code>还有很多其他参数，比如<code>-e expr</code>，expr是一个表达式，比方说<code>-e trace=open</code>就是跟踪系统调用open。参数很多，这里不一一列举了。  </p>
+<h2 id="pstack"><a href="#pstack" class="headerlink" title="pstack"></a>pstack</h2><p><code>pstack</code>使用来跟踪进程的栈的命令。如下命令可以查看进程<code>&lt;pid&gt;</code>的栈。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; pstack &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="memstat"><a href="#memstat" class="headerlink" title="memstat"></a>memstat</h2><p><code>memstat</code>可以用来查询共享库的信息，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; memstat -w | sort -rn</span><br><span class="line">&#x2F;&#x2F; -w标识全部打印（没有会截断长度超过80的字符串），然后按照字节数来排序</span><br></pre></td></tr></table></figure>
+
+<h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><p><code>free</code>可以显示内存情况，可用参数有：  </p>
+<ul>
+<li>b，以字节为单位显示；  </li>
+<li>k，以kb为单位显示；  </li>
+<li>m，以mb为单位显示；<br>….<br>不一一列举，需要再查。</li>
+</ul>
+<h1 id="网络状态和防火墙"><a href="#网络状态和防火墙" class="headerlink" title="网络状态和防火墙"></a>网络状态和防火墙</h1><h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><p><code>netstat</code>命令用于显示Linux系统网络链接状态。netstat命令用于显示与IP、TCP、UDP和ICMP协议相关的统计数据，一般用于检验本机各端口的网络连接情况。如果我们要显示当前的TCP连接，可以这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; netstat --tcp</span><br></pre></td></tr></table></figure>
+
+<h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h2><p>这个命令就是用来显示或设置网络设备：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; ifconfig</span><br><span class="line">Linux&gt; ifconfig eth0 down</span><br><span class="line">Linux&gt; ifconfig eth0 up</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/%E5%93%88%E5%B8%8C%E8%A1%A8%E6%89%A9%E5%AE%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1182,76 +1296,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/12/%E6%9E%84%E5%BB%BAWeb%E5%86%85%E5%AE%B9%E7%9A%84%E6%8A%80%E6%9C%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/12/%E6%9E%84%E5%BB%BAWeb%E5%86%85%E5%AE%B9%E7%9A%84%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">构建Web内容的技术</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-12 16:09:00" itemprop="dateCreated datePublished" datetime="2021-02-12T16:09:00+08:00">2021-02-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h1><h2 id="Web页面几乎全由HTML构建"><a href="#Web页面几乎全由HTML构建" class="headerlink" title="Web页面几乎全由HTML构建"></a>Web页面几乎全由HTML构建</h2><p>HTML（HypeTest Markup Language，超文本标记语言）是为了发送Web上的超文本而开发的标记语言。超文本是一种文档系统，可将文档中任意位置的信息与其他嘻嘻你系建立关联，即超链接文本。标记语言是指通过在文档的某部分穿插特别的字符串标签，用来修饰文档的语言。我们把出现在HTML文档内的这种特殊字符串叫做HTML标签（Tag）。</p>
-<h2 id="涉及应用CSS"><a href="#涉及应用CSS" class="headerlink" title="涉及应用CSS"></a>涉及应用CSS</h2><p>CSS（Cascading Style 层叠样式表）可以指定如何展现HTML内的各种元素，属于样式表标准之一。即使是相同的HTML文档，通过改变应用的CSS，用浏览器看到页面外观也会随之改变。CSS的理念就是让文档的结构和设计分离，达到解耦的目的。  </p>
-<h1 id="动态HTML"><a href="#动态HTML" class="headerlink" title="动态HTML"></a>动态HTML</h1><p>所谓动态HTML，是指使用客户端脚本语言将静态的HTML内容变为动态技术的总称。鼠标单击点开的新闻、Google Maps等可滚动的地图就用到了动态HTML。  </p>
-<h1 id="Web应用"><a href="#Web应用" class="headerlink" title="Web应用"></a>Web应用</h1><h2 id="通过Web提供功能的Web应用"><a href="#通过Web提供功能的Web应用" class="headerlink" title="通过Web提供功能的Web应用"></a>通过Web提供功能的Web应用</h2><p>Web应用是指通过Web功能提供的应用程序。比如购物网站、网上银行等。</p>
-<h2 id="与Web服务器及程序协作的CGI"><a href="#与Web服务器及程序协作的CGI" class="headerlink" title="与Web服务器及程序协作的CGI"></a>与Web服务器及程序协作的CGI</h2><p>CGI（Common Gateway Interface，通用网关接口）是指Web服务器在接收到客户端发送过来的请求后转发给程序的一组机制。在CGI的作用下，程序会对请求内容做出相应的动作，比如创建HTML等动态内容。<br>使用CGI的程序叫做CGI程序，通常是Perl、PHP、Ruby和C等编程语言编写而成。</p>
-<h1 id="数据发布的格式及语言"><a href="#数据发布的格式及语言" class="headerlink" title="数据发布的格式及语言"></a>数据发布的格式及语言</h1><h2 id="可扩展标记语言"><a href="#可扩展标记语言" class="headerlink" title="可扩展标记语言"></a>可扩展标记语言</h2><p>XML（Extensible Markup Language，可扩展标记语言）是一种可按应用目标进行扩展的通用标记语言。旨在通过使用XML，使互联网数据共享更容易。<br>XML和HTML都是从通用标记语言SGML简化而成的。与HTML相比，它对数据的记录方式做了特殊处理。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1323,7 +1367,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

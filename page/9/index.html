@@ -191,6 +191,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/28/%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">使用存储过程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-28 16:40:45" itemprop="dateCreated datePublished" datetime="2021-01-28T16:40:45+08:00">2021-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h1><p>实际使用MySQL经常会有一个完整得操作需要多条语句才能完成。可以创建存储过程来简化这个问题，存储过程可以视为批文件，虽然它们得作用不仅局限于批处理。</p>
+<h1 id="为什么要使用存储过程"><a href="#为什么要使用存储过程" class="headerlink" title="为什么要使用存储过程"></a>为什么要使用存储过程</h1><ol>
+<li>简化复杂操作。  </li>
+<li>保证数据的完整性。  </li>
+<li>简化对变动的管理。  </li>
+</ol>
+<h1 id="使用存储过程"><a href="#使用存储过程" class="headerlink" title="使用存储过程"></a>使用存储过程</h1><p>使用存储过程需要知道如何执行它们。存储过程的执行远比其定义更经常遇到，因此，我们将从执行存储过程开始介绍。然后再介绍创建和使用存储过程。</p>
+<h2 id="执行存储过程"><a href="#执行存储过程" class="headerlink" title="执行存储过程"></a>执行存储过程</h2><p>MySQL称存储过程的执行为调用，因此MySQL执行存储过程的语句为CALL。CALL接受存储过程的名字以及需要传递给它的任意参数。请看例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CALL productpricing(@pricelow,@pricehigh,@priceaverage);</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建存储过程"><a href="#创建存储过程" class="headerlink" title="创建存储过程"></a>创建存储过程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE productpricing()</span><br><span class="line">BEGIN</span><br><span class="line">	SELECT Avg(prod_prices) as priceaverage</span><br><span class="line">   from products;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
+<p>注意：如果使用的是mysql命令行实用程序，应该修改默认的语句分隔符（原来是;）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER &#x2F;&#x2F;</span><br><span class="line">CREATE PROCEDURE productpricing()</span><br><span class="line">BEGIN</span><br><span class="line">	SELECT Avg(prod_prices) as priceaverage</span><br><span class="line">   from products;</span><br><span class="line">END &#x2F;&#x2F;</span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除存储过程"><a href="#删除存储过程" class="headerlink" title="删除存储过程"></a>删除存储过程</h2><p>存储过程在创建之后被保存在服务器上以供使用。删除可以使用如下语句：<br><code>DROP PROCEDURE productpricing;</code></p>
+<h2 id="使用参数"><a href="#使用参数" class="headerlink" title="使用参数"></a>使用参数</h2><p>一般存储过程不显示结果，只是把结果返回到指定的变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delimiter &#x2F;&#x2F;</span><br><span class="line">mysql&gt; create procedure productpricing(</span><br><span class="line">    -&gt; out pl decimal(8,2),</span><br><span class="line">    -&gt; out ph decimal(8,2),</span><br><span class="line">    -&gt; out pa decimal(8,2))</span><br><span class="line">    -&gt; begin</span><br><span class="line">    -&gt; select min(prod_price)</span><br><span class="line">    -&gt; into pl</span><br><span class="line">    -&gt; from products;</span><br><span class="line">    -&gt; select max(prod_price)</span><br><span class="line">    -&gt; into ph</span><br><span class="line">    -&gt; from products;</span><br><span class="line">    -&gt; select avg(prod_price)</span><br><span class="line">    -&gt; into pa</span><br><span class="line">    -&gt; from products;</span><br><span class="line">    -&gt; end &#x2F;&#x2F;</span><br><span class="line">mysql&gt; delimiter ;</span><br></pre></td></tr></table></figure>
+<p><code>in</code>是输入，<code>out</code>是输出。</p>
+<p>执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; call productpricing(@pricelow,@pricehigh,@priceaverage);</span><br><span class="line">Query OK, 1 row affected, 1 warning (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select @pricehigh;</span><br><span class="line">+------------+</span><br><span class="line">| @pricehigh |</span><br><span class="line">+------------+</span><br><span class="line">|      55.00 |</span><br><span class="line">+------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="建立智能存储过程"><a href="#建立智能存储过程" class="headerlink" title="建立智能存储过程"></a>建立智能存储过程</h2><h2 id="检查存储过程"><a href="#检查存储过程" class="headerlink" title="检查存储过程"></a>检查存储过程</h2><p>为了显示创建一个存储过程的CREATE语句，使用show create procedure语句。例如：<br><code>show create procedure ordertotal;</code></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -993,130 +1088,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">分组数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 15:21:35" itemprop="dateCreated datePublished" datetime="2021-01-27T15:21:35+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="分组数据"><a href="#分组数据" class="headerlink" title="分组数据"></a>分组数据</h1><h2 id="创建分组"><a href="#创建分组" class="headerlink" title="创建分组"></a>创建分组</h2><p>分组是在<code>SELECT</code>语句的GROUP BY子句中创建的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, count(*) as num_prods</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; group by vend_id;</span><br><span class="line">+---------+-----------+</span><br><span class="line">| vend_id | num_prods |</span><br><span class="line">+---------+-----------+</span><br><span class="line">|    1001 |         3 |</span><br><span class="line">|    1002 |         2 |</span><br><span class="line">|    1003 |         7 |</span><br><span class="line">|    1005 |         2 |</span><br><span class="line">+---------+-----------+</span><br></pre></td></tr></table></figure>
-<p><code>GROUP BY</code>按照<code>vend_id</code>排序并分组数据。这导致对每个vend_id而不是整个表计算<code>num_prods</code>计算一次。</p>
-<h2 id="过滤分组"><a href="#过滤分组" class="headerlink" title="过滤分组"></a>过滤分组</h2><p>这里不能使用<code>WHERE</code>来过滤分组（where过滤的是行）。而实使用<code>HAVING</code>来过滤分组。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_id,count(*) as orders</span><br><span class="line">    -&gt; from orders</span><br><span class="line">    -&gt; group by cust_id</span><br><span class="line">    -&gt; having count(*)&gt;&#x3D;2;</span><br><span class="line">+---------+--------+</span><br><span class="line">| cust_id | orders |</span><br><span class="line">+---------+--------+</span><br><span class="line">|   10001 |      2 |</span><br><span class="line">+---------+--------+</span><br></pre></td></tr></table></figure>
-<p>同时使用<code>WHERE</code>和<code>HAVING</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, count(*) as num_prods</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price &gt;&#x3D; 10</span><br><span class="line">    -&gt; group by vend_id</span><br><span class="line">    -&gt; having count(*)&gt;&#x3D;2;</span><br><span class="line">+---------+-----------+</span><br><span class="line">| vend_id | num_prods |</span><br><span class="line">+---------+-----------+</span><br><span class="line">|    1003 |         4 |</span><br><span class="line">|    1005 |         2 |</span><br><span class="line">+---------+-----------+</span><br></pre></td></tr></table></figure>
-<p>这条语句中，第一行使用了聚集函数的基本<code>SELECT</code>。<code>WHERE</code>先过滤所有prod_price至少为10的行。然后按照vend_id分组数据，<code>having</code>子句过滤计数为2或2以上的分组。</p>
-<h2 id="分组和排序"><a href="#分组和排序" class="headerlink" title="分组和排序"></a>分组和排序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select order_num, SUM(quantity*item_price) as ordertotal</span><br><span class="line">    -&gt; from orderitems</span><br><span class="line">    -&gt; group by order_num</span><br><span class="line">    -&gt; having sum(quantity*item_price) &gt;&#x3D; 50</span><br><span class="line">    -&gt; order by ordertotal;</span><br><span class="line">+-----------+------------+</span><br><span class="line">| order_num | ordertotal |</span><br><span class="line">+-----------+------------+</span><br><span class="line">|     20006 |      55.00 |</span><br><span class="line">|     20008 |     125.00 |</span><br><span class="line">|     20005 |     149.87 |</span><br><span class="line">|     20007 |    1000.00 |</span><br><span class="line">+-----------+------------+</span><br></pre></td></tr></table></figure>
-
-<h2 id="SELECT子句顺序"><a href="#SELECT子句顺序" class="headerlink" title="SELECT子句顺序"></a>SELECT子句顺序</h2><table>
-  <tr>
-    <td>子句</td>
-    <td>说明</td>
-    <td>是否必须使用</td>
-  </tr>
-  <tr>
-    <td>SELECT</td>
-    <td>要返回的列或表达式</td>
-    <td>是</td>
-  </tr>
-  <tr>
-    <td>FROM</td>
-    <td>从中检索数据的表</td>
-    <td>仅在从表选择数据时候用到</td>
-  </tr>
-  <tr>
-    <td>WHERE</td>
-    <td>行级过滤</td>
-    <td>否</td>
-  </tr>
-  <tr>
-    <td>GROUP BY</td>
-    <td>大分组说明</td>
-    <td>仅在按组计算聚集时使用</td>
-  </tr>
-  <tr>
-    <td>HAVING</td>
-    <td>组级过滤</td>
-    <td>否</td>
-  </tr>
-  <tr>
-    <td>ORDER BY</td>
-    <td>输出排序顺序</td>
-    <td>否</td>
-  </tr>
-  <tr>
-    <td>LIMIT</td>
-    <td>要检索的行数</td>
-    <td>否</td>
-  </tr>
-</table>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1188,7 +1159,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">123</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
