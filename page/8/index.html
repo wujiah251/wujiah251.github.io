@@ -191,7 +191,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/Linux%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/09/HTTP%E4%B8%8EHTTPS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -205,7 +205,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/15/Linux%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Linux命令学习</a>
+            <a href="/2021/02/09/HTTP%E4%B8%8EHTTPS/" class="post-title-link" itemprop="url">HTTP与HTTPS</a>
         </h2>
 
         <div class="post-meta">
@@ -215,439 +215,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-02-15 22:19:00" itemprop="dateCreated datePublished" datetime="2021-02-15T22:19:00+08:00">2021-02-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="网络相关"><a href="#网络相关" class="headerlink" title="网络相关"></a>网络相关</h1><h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><p><code>tcpdump</code>是一个抓包命令。有如下参数：  </p>
-<p>-<strong>i</strong>:指定需要抓包的网卡。如果未指定的话，tcpdump会默认选择搜索到的系统中状态为up的最小数字的网卡，一般情况下是eth0。-i lo抓取回环的数据包。<br>-<strong>nnn</strong>：禁用tcpdump展示时把IP、端口等转换为域名、端口知名服务名称。这样看起来会更清晰<br>-<strong>s</strong>：指定抓包的包大小。使用-s 0指定数据包大小为262144。可以使抓到的数据包不被截断，完整反映数据包的内容。默认68字节。<br>-<strong>c</strong>：指定抓包的数量。<br>-<strong>w</strong>：指定抓包结果保存的文件，以便后续用wireshark等工具进行分析。<br>-<strong>P</strong>：in/out/inout，指定要抓取的包是流入还是流出的包。默认inout<br>-<strong>F</strong>：使用文件作为过滤条件表达式的输入, 此时命令行上的输入将被忽略.<br>-<strong>p</strong>： 一般情况下, 把网络接口设置为非’混杂’模式。  </p>
-<h1 id="进程、线程相关"><a href="#进程、线程相关" class="headerlink" title="进程、线程相关"></a>进程、线程相关</h1><h2 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h2><p><code>ps</code>可以用来查看当前有哪些进程，涉及很多参数，不一一列举，要用再查。<br>加上<code>-T</code>选项可以开启线程查看，比如下面命令可以查看进程<code>&lt;pid&gt;</code>创建的所有线程：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; ps -T -p &lt;pid&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><p><code>top</code>可以实时查看各个线程的情况，以下命令可以查看Linux所有线程：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; top -H</span><br></pre></td></tr></table></figure>
-
-<p>而以下命令可以只查看进程<code>&lt;pid&gt;</code>的所有线程：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; top -H -p &lt;pid&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h2><p><code>strace</code>是用来跟踪进程的系统调用的，可以用如下命令跟踪进程<code>&lt;pid&gt;</code>的所有系统调用并将结果输出到output.txt文件中：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; sudo strace -o output.txt -p &lt;pid&gt;</span><br></pre></td></tr></table></figure>
-<p><code>strace</code>还有很多其他参数，比如<code>-e expr</code>，expr是一个表达式，比方说<code>-e trace=open</code>就是跟踪系统调用open。参数很多，这里不一一列举了。  </p>
-<h2 id="pstack"><a href="#pstack" class="headerlink" title="pstack"></a>pstack</h2><p><code>pstack</code>使用来跟踪进程的栈的命令。如下命令可以查看进程<code>&lt;pid&gt;</code>的栈。  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; pstack &lt;pid&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="memstat"><a href="#memstat" class="headerlink" title="memstat"></a>memstat</h2><p><code>memstat</code>可以用来查询共享库的信息，命令如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; memstat -w | sort -rn</span><br><span class="line">&#x2F;&#x2F; -w标识全部打印（没有会截断长度超过80的字符串），然后按照字节数来排序</span><br></pre></td></tr></table></figure>
-
-<h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><p><code>free</code>可以显示内存情况，可用参数有：  </p>
-<ul>
-<li>b，以字节为单位显示；  </li>
-<li>k，以kb为单位显示；  </li>
-<li>m，以mb为单位显示；<br>….<br>不一一列举，需要再查。</li>
-</ul>
-<h1 id="网络状态和防火墙"><a href="#网络状态和防火墙" class="headerlink" title="网络状态和防火墙"></a>网络状态和防火墙</h1><h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><p><code>netstat</code>命令用于显示Linux系统网络链接状态。netstat命令用于显示与IP、TCP、UDP和ICMP协议相关的统计数据，一般用于检验本机各端口的网络连接情况。如果我们要显示当前的TCP连接，可以这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; netstat --tcp</span><br></pre></td></tr></table></figure>
-
-<h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h2><p>这个命令就是用来显示或设置网络设备：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; ifconfig</span><br><span class="line">Linux&gt; ifconfig eth0 down</span><br><span class="line">Linux&gt; ifconfig eth0 up</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/%E5%93%88%E5%B8%8C%E8%A1%A8%E6%89%A9%E5%AE%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/15/%E5%93%88%E5%B8%8C%E8%A1%A8%E6%89%A9%E5%AE%B9/" class="post-title-link" itemprop="url">哈希表扩容</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-15 16:41:03" itemprop="dateCreated datePublished" datetime="2021-02-15T16:41:03+08:00">2021-02-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>HashMap的实例具有两个影响其性能的参数：初始容量和负载因子。容量是哈希表中存储桶的数量，初始容量只是哈希表创建时的容量。负载因子是在自动增加其散列表容量之前允许散列表获得的满度的度量。当哈希表中的条目数超过负载因子和当前容量的乘积时，哈希表将被重新哈希（即，内部数据结构将被重建），因此哈希表的存储桶数约为两倍。  </p>
-<p>通常，默认负载因子（.75）在时间和空间成本之间提供了一个很好的权衡。较高的值会减少空间开销，但会增加查找成本（在HashMap类的大多数操作中都得到体现，包括get和put）。设置其初始容量时，应考虑映射中的预期条目数及其负载因子，以最大程度地减少重新哈希操作的次数。如果初始容量大于最大条目数除以负载系数，则将不会发生任何重新哈希操作。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/%E5%A0%86%E5%92%8C%E6%A0%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/15/%E5%A0%86%E5%92%8C%E6%A0%88/" class="post-title-link" itemprop="url">堆和栈</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-15 15:49:07" itemprop="dateCreated datePublished" datetime="2021-02-15T15:49:07+08:00">2021-02-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h1><p>栈溢出指的是程序向栈中某个变量中写入的字节数超过了这个变量本身所申请的字节数，因而导致栈中与其相邻的变量的值被改变。</p>
-<p>栈溢出的原因有：  </p>
-<ol>
-<li>局部数组过大。当函数内部的数组过大时，有可能导致堆栈溢出。局部变量是存储在栈中的，因此这个很好理解。解决这类问题的办法有两个，一是增大栈空间,二是改用动态分配，使用堆（heap）而不是栈（stack）；  </li>
-<li>递归调用层次太多。递归函数在运行时会执行压栈操作，当压栈次数太多时，也会导致堆栈溢出；  </li>
-<li>指针或数组越界。这种情况最常见，例如进行字符串拷贝，或处理用户输入等等。  </li>
-</ol>
-<h1 id="堆和栈的区别："><a href="#堆和栈的区别：" class="headerlink" title="堆和栈的区别："></a>堆和栈的区别：</h1><p>堆是由低地址向高地址扩展；栈是由高地址向低地址扩展；<br>堆中的内存需要手动申请和手动释放；栈中内存是由OS自动申请和自动释放，存放着参数、局部变量等内存；<br>堆中频繁调用malloc和free,会产生内存碎片，降低程序效率；而栈由于其先进后出的特性，不会产生内存碎片；<br>堆的分配效率较低，而栈的分配效率较高。  </p>
-<p>栈的效率高的原因：<br>栈是操作系统提供的数据结构，计算机底层对栈提供了一系列支持：分配专门的寄存器存储栈的地址，压栈和入栈有专门的指令执行；而堆是由C/C++函数库提供的，机制复杂，需要一些列分配内存、合并内存和释放内存的算法，因此效率较低。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/B%E6%A0%91%E4%B8%8EB+%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/15/B%E6%A0%91%E4%B8%8EB+%E6%A0%91/" class="post-title-link" itemprop="url">B树与B+树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-15 14:32:00" itemprop="dateCreated datePublished" datetime="2021-02-15T14:32:00+08:00">2021-02-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h1><p>B树也称B-树,它是一颗多路平衡查找树。性质如下：  </p>
-<ol>
-<li>每个节点最多有m-1个关键字（可以存有的键值对）；  </li>
-<li>根节点最少可以只有1个关键字；  </li>
-<li>非根节点至少有m/2个关键字；  </li>
-<li>每个节点中的关键字都按照从小到大的顺序排列，每个关键字的左子树中的所有关键字都小于它，而右子树中的所有关键字都大于它；  </li>
-<li>所有叶子节点都位于同一层，或者说根节点到每个叶子节点的长度都相同；  </li>
-<li>每个节点都存有索引和数据，也就是对应的key和value；<br>所以，根节点的关键字数量范围：1 &lt;= k &lt;= m-1，非根节点的关键字数量范围：m/2 &lt;= k &lt;= m-1。  </li>
-</ol>
-<h1 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h1><p>B+树其实和B树是非常相似的，我们首先看看相同点：  </p>
-<ol>
-<li>根节点至少一个元素；  </li>
-<li>非根节点元素范围：m/2 &lt;= k &lt;= m-1。  </li>
-</ol>
-<p>不同点：  </p>
-<ol>
-<li>B+树有两种类型的节点：内部结点（也称索引结点）和叶子结点。内部节点就是非叶子节点，内部节点不存储数据，只存储索引，数据都存储在叶子节点；  </li>
-<li>内部结点中的key都按照从小到大的顺序排列，对于内部结点中的一个key，左树中的所有key都小于它，右子树中的key都大于等于它。叶子结点中的记录也按照key的大小排列。</li>
-<li>每个叶子结点都存有相邻叶子结点的指针，叶子结点本身依关键字的大小自小而大顺序链接。</li>
-<li>父节点存有右孩子的第一个元素的索引。</li>
-</ol>
-<h1 id="B-树和B树相比的优点"><a href="#B-树和B树相比的优点" class="headerlink" title="B+树和B树相比的优点"></a>B+树和B树相比的优点</h1><p><strong>效率高</strong>：B+树非叶子结点不存储数据，所以能够有更多的子结点，降低了树的高度，减少磁盘IO次数，效率更高。此外由于叶结点保存的数据多，对访问的局部性原理利用更好，缓存命中率高。<br><strong>更适合于范围查找</strong>：在B树中进行范围查找时，需要先找到下限制，在进行中序遍历，直到找到上限；而B+树只要找到下限后，通过链表向前遍历即可。<br><strong>更稳定的查询效率</strong>：B+树的每个叶子结点到根结点的距离是一样的，所以磁盘IO次数是稳定的，而B树查询每次磁盘IO次数是不确定的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/%E7%BA%A2%E9%BB%91%E6%A0%91%E4%B8%8EAVL%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/15/%E7%BA%A2%E9%BB%91%E6%A0%91%E4%B8%8EAVL%E6%A0%91/" class="post-title-link" itemprop="url">红黑树与AVL树</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-15 10:57:00" itemprop="dateCreated datePublished" datetime="2021-02-15T10:57:00+08:00">2021-02-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a>AVL树</h1><p>AVL树也称平衡二叉树，是一种特殊的二叉查找树。它满足性质，左右子树都是AVL树，左右子树高度之差不超过1。<br>AVL树的定义非常简单，通过限制左右子树的高度之差能够保证AVL树的平衡性，避免一头太大。  </p>
-<h1 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h1><p>红黑树是一种二叉查找树，但在每个节点增加一个存储位表示节点的颜色，可以是红或黑（非红即黑）。通过对任何一条从根到叶子的路径上各个节点着色的方式的限制，红黑树确保没有一条路径会比其它路径长出两倍，因此，红黑树是一种弱平衡二叉树，相对于要求严格的AVL树来说，它的旋转次数少，所以对于搜索，插入，删除操作较多的情况下，通常使用红黑树。  </p>
-<p>性质：  </p>
-<ol>
-<li>每个节点非红即黑；  </li>
-<li>根节点是黑的；  </li>
-<li>每个叶节点（叶节点即树尾端NULL指针或NULL节点）都是黑的；  </li>
-<li>如果一个节点是红色的，则它的子节点必须是黑色的；  </li>
-<li>对于任意节点而言，其到叶子点树NULL指针的每条路径都包含相同数目的黑节点。  </li>
-</ol>
-<h2 id="为什么map底层要用红黑树"><a href="#为什么map底层要用红黑树" class="headerlink" title="为什么map底层要用红黑树"></a>为什么map底层要用红黑树</h2><p>AVL 树是高度平衡的，频繁的插入和删除，会引起频繁的rebalance，导致效率下降；红黑树不是高度平衡的，算是一种折中，插入最多两次旋转，删除最多三次旋转。所以红黑树在查找，插入删除的性能都是O(logn)，且性能稳定，所以STL里面很多结构包括map底层实现都是使用的红黑树。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/14/GET%E5%92%8CPOST%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/14/GET%E5%92%8CPOST%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">GET和POST的区别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-14 21:43:00" itemprop="dateCreated datePublished" datetime="2021-02-14T21:43:00+08:00">2021-02-14</time>
+              <time title="创建时间：2021-02-09 19:39:00" itemprop="dateCreated datePublished" datetime="2021-02-09T19:39:00+08:00">2021-02-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -677,313 +245,97 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><p>GET是“读取”一个资源，比如GET到一个HTML文件，反复读取不应该对访问的数据有副作用。就像是读取内存一样。因为GET是读取，就可以对GET请求的数据做缓存。这个缓存可以在浏览器上也可以在代理服务器上。  </p>
-<p>POST是提交一个表单。这个操作是不能缓存的，返回的页面可以理解为一次性消耗品。  </p>
-<h1 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h1><ol>
-<li>一般来说，GET报文中URL包含参数，而POST报文中参数会在body里面；  </li>
-<li>由于URL对浏览器是可见的，GET报文不如POST报文安全，不要用GET报文来发送账号-密码这类数据；  </li>
-<li>重复发送GET报文是无害的，重复发送POST报文可能是有害的；  </li>
-<li>GET报文的结果可以缓存，而POST不行。  </li>
-</ol>
+          <h1 id="TCP-IP协议族"><a href="#TCP-IP协议族" class="headerlink" title="TCP/IP协议族"></a>TCP/IP协议族</h1><p>为了传输方便，在传输层（TCP协议）把从应用层处收到的数据（HTTP请求报文）进行分割，并在各个报文上打上标记序号及端口号转发给网络层。<br>在网络层（IP协议），增加作为通信目的地的MAC地址后转发给链路层。这样一来，发往玩过的通信请求就准备齐全了。<br>接收端的服务器在链路层接收到数据，按序往上层发送，一直刀应用层。<br>发送端在层与层之间传输数据时，每经过一层时必定会被打上一个该层所属的首部信息。反之，接收端在层与层之间传输数据时，每经过一层时必定会被打上一个该层所属的首部信息。反之，接收端在层与层之间传输数据时，没经过一层时都会把对应的首部消去。  </p>
+<h2 id="负责传输的IP协议"><a href="#负责传输的IP协议" class="headerlink" title="负责传输的IP协议"></a>负责传输的IP协议</h2><p>IP协议的作用是把各种数据包传送给对方。保证确实传送刀对方那里，则需要满足各类条件。其中两个重要的条件是IP地址和MAC地址。</p>
+<h3 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h3><p>IP地址指明了节点被分配到的地址，MAC地址是指网卡所属的固定地址。IP地址可以和MAC地址进行配对。IP地址可变换，但MAC地址基本不会更改。  </p>
+<h3 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h3><p>IP间的通信依赖MAC地址。在网络上，通信的双方在同一局域网（LAN）内的情况是很少的，通常是经过多台计算机和网络设备中转才能连接到对方。而在进行中转时，会利用下一站中转设备的MAC地址来搜索下一个中转目标。这时，会采用ARP协议。ARP协议是一种用以解析地址的协议，根据通信双方的IP地址就可以反查出对应的MAC地址。  </p>
+<h3 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h3><p>按层次分，TCP位于传输层，提供可靠的字节流服务。所谓字节流服务是指，为了方便传输，将大块数据分割成以报文段为单位的数据包进行管理。而可靠数据服务是指，能够把数据准确可靠地传输给对方。一言以蔽之，TCP协议为了更容易传送大数据才把数据分割，而且TCP协议能够确认数据最终是否送达对方。  </p>
+<h3 id="负责域名解析的DNS服务"><a href="#负责域名解析的DNS服务" class="headerlink" title="负责域名解析的DNS服务"></a>负责域名解析的DNS服务</h3><p>DNS服务是和HTTP协议一样位于应用层的协议。它提供域名到IP地址的解析服务。  </p>
+<h3 id="各种协议与HTTP协议的关系"><a href="#各种协议与HTTP协议的关系" class="headerlink" title="各种协议与HTTP协议的关系"></a>各种协议与HTTP协议的关系</h3><p>如果我们想浏览<a target="_blank" rel="noopener" href="http://xxx.com/">http://xxx.com/</a> Web页面，过程如下：<br>想DNS服务器请求xxx.com的IP地址，DNS服务器返回xxx.com对应的IP地址20X.189.105.112；<br>HTTP协议：生成针对目标Web服务器的HTTP请求报文；<br>TCP协议：将报文分割成报文段，把每个报文可靠地传输给对方。<br>IP协议：搜索地方的地址，一边中转一边传送；<br>TCP协议：从对方那里接收到报文段，按序号重组请求报文；<br>HTTP协议：对Web服务器请求的内容处理；<br>请求的结果按照TCP/IP通信协议向用户进行回传。  </p>
+<h1 id="统一资源标识符"><a href="#统一资源标识符" class="headerlink" title="统一资源标识符"></a>统一资源标识符</h1><p>URI是Uniform Resource Identifier的缩写。URI用字符串标识某一互联网资源，而URL标识资源的地址。URL是URI的子集。  </p>
+<h2 id="URI格式"><a href="#URI格式" class="headerlink" title="URI格式"></a>URI格式</h2><p>例子：<code>http://user:pass@www.example.jp:80/dir/index.htm?uid=1#ch1</code><br><code>http://</code>：协议方案名；<br><code>user:pass</code>：登录信息（认证）；<br><code>www.example.jp</code>：服务器地址；<br><code>80</code>：服务器端口号；<br><code>dir/index.htm</code>：带层次的文件路径；<br><code>uid=1</code>：查询字符串，可用于传入参数；<br><code>ch1</code>：片段标识符。  </p>
+<h1 id="HTTP报文"><a href="#HTTP报文" class="headerlink" title="HTTP报文"></a>HTTP报文</h1><h2 id="请求报文格式"><a href="#请求报文格式" class="headerlink" title="请求报文格式"></a>请求报文格式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 请求行：请求方法+URI+协议版本</span><br><span class="line">POST &#x2F;form&#x2F;entry HTTP&#x2F;1.1</span><br><span class="line">&#x2F;&#x2F; 首部行</span><br><span class="line">Host: hackr.jp</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 16</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 内容实体</span><br><span class="line">name&#x3D;ueno&amp;age&#x3D;37</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
+<h2 id="响应报文格式"><a href="#响应报文格式" class="headerlink" title="响应报文格式"></a>响应报文格式</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 状态行：协议版本+状态码+状态码原因短语</span><br><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br><span class="line">// 首部行</span><br><span class="line"><span class="attribute">Date</span><span class="punctuation">: </span>Tue, 10 Jul 2012 06:50:15 GMT</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>362</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/html</span><br><span class="line"></span><br><span class="line">// 内容实体</span><br><span class="line">&lt;html&gt;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/14/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/14/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/" class="post-title-link" itemprop="url">数据库事务</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-14 17:14:26" itemprop="dateCreated datePublished" datetime="2021-02-14T17:14:26+08:00">2021-02-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h1><p>数据库事务(Database Transaction) ，是指作为单个逻辑工作单元执行的一系列操作，要么完全地执行，要么完全地不执行。  </p>
-<p>事务具有4个基本特征：原子性（Automicity）、一致性（Consistency）、隔离性（Isolation）、持久性（Duration），简称ACID。  </p>
-<ol>
-<li>原子性：事务被视为不可分割的最小单元，事物的所有操作要不成功，要不失败回滚，而回滚可以通过日志来实现，日志记录着事务所执行的修改操作，在回滚时反向执行这些修改操作。  </li>
-<li>一致性：数据库在事务执行前后都保持一致性状态，在一致性状态下，所有事务对一个数据的读取结果都是相同的。  </li>
-<li>隔离性：一个事务所做的修改在最终提交以前，对其他事务是可不见的。  </li>
-<li>持久性：一旦事务提交，则其所做的修改将会永远保存到数据库中。  </li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/13/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/13/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">服务器事务处理模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-13 22:18:46" itemprop="dateCreated datePublished" datetime="2021-02-13T22:18:46+08:00">2021-02-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>服务器通常要处理3种类型的事件：IO事件、信号、定时事件。而有两种高效处理时间的方式，分别是Reactor模式与Proactor模式。  </p>
-<h1 id="Reactor"><a href="#Reactor" class="headerlink" title="Reactor"></a>Reactor</h1><p>Reactor模式要求主线程只负责事件监听描述符上是否事件发生，有事件发生后通知工作线程，除此以外，主线程不做任何工作，读写数据、接收新的连接、处理客户请求都在工作线程上完成。<br>使用同步IO（<code>epoll_wait()</code>为例子）实现的Reactor模式的工作流程如下：  </p>
-<ol>
-<li>主线程往epoll内核事件表注册socket上的读就绪时间；  </li>
-<li>主线程调用<code>epoll_wait()</code>等待socket上有数据可读；  </li>
-<li>当socket上数据可读时，<code>epolll_wait()</code>通知主线程。主线程将socket可读事件放入请求队列；  </li>
-<li>睡眠在请求队列上的某个工作线程被唤醒，它从socket读取数据，并处理客户请求，然后往epoll内核事件表中注册该socket上的写事件。  </li>
-<li>主线程调用<code>epoll_wait()</code>等待socket可写；  </li>
-<li>当socket可写时，epoll_wait()通知主线程。主线程将socket可写事件放入请求队列；  </li>
-<li>睡眠在请求队列上的某个工作线程被唤醒，它往socket上写入服务器处理客户请求的结果。  </li>
-</ol>
-<h1 id="Proactor"><a href="#Proactor" class="headerlink" title="Proactor"></a>Proactor</h1><p>与Reactor模式不通，Proactor模式将所有I/O操作都交给主线程和内核来处理，工作线程仅仅负责业务逻辑。  </p>
-<p>使用异步IO（<code>aio_read()</code>和<code>aio_write()</code>为例）实现的Proactor模式工作流程如下：  </p>
-<ol>
-<li>主线程调用<code>aio_read()</code>函数向内核注册socket上的读完成事件，并告诉内核用户读缓冲区的位置，以及读操作完成时候如何通知应用程序（信号机制）；  </li>
-<li>主线程继续处理其他逻辑；  </li>
-<li>应用程序预先定义好信号处理函数并选择一个工作线程来处理客户请求；工作线程处理完客户请求之后，调用<code>aio_write()</code>想内核注册socket上的写完成事件，并告诉内核缓冲区的位置，以及写操作完成时应如何通知应用程序（信号）；  </li>
-<li>主线程继续处理其他逻辑；  </li>
-<li>当用户缓冲区的数据被写入socket之后，内核将向应用程序发送一个信号，以通知程序数据以及传送完毕；  </li>
-<li>应用程序预先定义好的信号处理函数选择一个工作线程来做善后处理，比如是否决定关闭socket。  </li>
-</ol>
-<p>使用同步IO也可以实现的Proactor模式。原理是这样的：主线程执行数据读写操作，读写完成之后，主线程向工作线程通知这一“完成事件”，那么工作线程直接获得了读写结果，接下来要做的只是对读写结果的处理。工作流程如下：  </p>
-<ol>
-<li>主线程调用<code>epoll_ctl()</code>向epoll内核事件表中注册描述符；  </li>
-<li>主线程调用<code>epoll_wait()</code>等待socket上有数据可读；  </li>
-<li>当socket上有数据可读时，epoll_wait()通知主线程。主线程从socket循环读取数据，直到没有更多数据可读，然后将多有数据封装成一个请求对象并插入请求队列中；  </li>
-<li>睡眠在请求队列中的某个工作线程被唤醒，它获得请求对象并处理客户请求，然后往epoll内核事件表中注册socket上的写就绪事件；  </li>
-<li>主线程调用<code>epoll_wait()</code>等待socket可写；  </li>
-<li>当sockt可写时，<code>epoll_wait()</code>通知主线程。主线程往socket上写入服务器处理客户请求的结果。  </li>
-</ol>
-<p>这里同步模拟和异步模拟Proactor的区别在于，同步模拟是主线程自己进行I/O操作，需要等待读完数据，而异步I/O是通过aio_read()异步读取，主线程不需要等待I/O完成。</p>
-<p>其实通过上述描述我们还可以发现同步IO和异步IO的一个区别。同步IO注册的是就绪事件（<code>epoll_wait()</code>），而异步IO是注册完成事件（<code>aio_read()</code>、<code>aio_write()</code>）。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/13/TCP%E5%8D%8F%E8%AE%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/13/TCP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">TCP协议</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-13 11:03:00" itemprop="dateCreated datePublished" datetime="2021-02-13T11:03:00+08:00">2021-02-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TCP是可靠传输协议，提供了可靠传输、拥塞控制等服务，接下来我们介绍TCP如何实现这些服务。  </p>
-<h1 id="序列号、确认应答、超时重传"><a href="#序列号、确认应答、超时重传" class="headerlink" title="序列号、确认应答、超时重传"></a>序列号、确认应答、超时重传</h1><p>数据到达接收方后，接收方需要发出一个确认应答，表示已经收到数据号，并且序号指出了下一个需要传入的数据段。如果接收方迟迟没有收到应答，可能是发送的数据丢失，也可能是应答丢失。这时发送方会等待一段时间，然后会进行重传。  </p>
-<h1 id="窗口控制和高速重发控制-快速重传（重复确认应答）"><a href="#窗口控制和高速重发控制-快速重传（重复确认应答）" class="headerlink" title="窗口控制和高速重发控制/快速重传（重复确认应答）"></a>窗口控制和高速重发控制/快速重传（重复确认应答）</h1><p>TCP会利用窗口控制来提高传输速度，意思是在一个窗口大小内，不用一定要等到应答才能发送下一段数据，窗口大小就是无需等待确认而可以继续发送数据的最大值。如果不使用窗口控制，每一个没收到确认应答的数据都要重发。<br>使用窗口控制，如果数据段1001-2000丢失，后面数据每次传输，确认应答都会不停地发送序号为1001的应答，表示我要接收1001开始的数据，发送端如果收到3次相同应答，就会立刻进行重发；但还有种情况有可能是数据都收到了，但是有的应答丢失了，这种情况不会进行重发，因为发送端知道，如果是数据段丢失，接收端不会放过它的，会疯狂向它提醒。  </p>
-<h1 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h1><p>如果把窗口定的很大，发送端连续发送大量的数据，可能会造成网络的拥堵（大家都在用网，你在这狂发，吞吐量就那么大，当然会堵），甚至造成网络的瘫痪。所以TCP在为了防止这种情况而进行了拥塞控制。  </p>
-<h2 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h2><p>定义拥塞窗口，一开始将该窗口大小设为1，之后每次收到确认应答（经过一个rtt），将拥塞窗口大小*2。</p>
-<h2 id="拥塞避免"><a href="#拥塞避免" class="headerlink" title="拥塞避免"></a>拥塞避免</h2><p>设置慢启动阈值，一般开始都设为65536。拥塞避免是指当拥塞窗口大小达到这个阈值，拥塞窗口的值不再指数上升，而是加法增加（每次确认应答/每个rtt，拥塞窗口大小+1），以此来避免拥塞。</p>
-<p>将报文段的超时重传看做拥塞，则一旦发生超时重传，我们需要先将阈值设为当前窗口大小的一半，并且将窗口大小设为初值1，然后重新进入慢启动过程。</p>
-<h2 id="快速重传"><a href="#快速重传" class="headerlink" title="快速重传"></a>快速重传</h2><p>在遇到3次重复确认应答（高速重发控制）时，代表收到了3个报文段，但是这之前的1个段丢失了，便对它进行立即重传。</p>
-<p>然后，先将阈值设为当前窗口大小的一半，然后将拥塞窗口大小设为慢启动阈值+3的大小。</p>
-<p>这样可以达到：在TCP通信时，网络吞吐量呈现逐渐的上升，并且随着拥堵来降低吞吐量，再进入慢慢上升的过程，网络不会轻易的发生瘫痪。  </p>
-<h2 id="TCP协议和UDP协议比较"><a href="#TCP协议和UDP协议比较" class="headerlink" title="TCP协议和UDP协议比较"></a>TCP协议和UDP协议比较</h2><ol>
-<li>TCP是面向连接的协议，UDP是面向报文的协议，不进行连接；  </li>
-<li>TCP是一对一的，UDP支持单播，多播，广播；  </li>
-<li>TCP比UDP可靠，TCP提供了超时重传、拥塞控制等服务，UDP只提供发送报文的功能，并且不保证发送到；  </li>
-<li>UDP的开销比TCP小，UDP头部需要存储的信息较少；  </li>
-<li>UDP由于美誉拥塞控制，所以UDP流量在网络中比TCP流量更危险，举个例子：UDP流量较大，导致网络阻塞，而TCP拥塞控制算法减小了TCP流量，UDP流量占比进一步提高，最后可能整个网络都是TCP流量；</li>
-<li>对于文件等流量更适合TCP协议，而视频、音频等实时性要求高，准确性要求相对低的流量可能适合UDP协议。  </li>
-<li>TCP是全双工的，UDP是单向的。</li>
-</ol>
-<h3 id="TCP协议和UDP协议应用场景"><a href="#TCP协议和UDP协议应用场景" class="headerlink" title="TCP协议和UDP协议应用场景"></a>TCP协议和UDP协议应用场景</h3><table>
+<h2 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h2><p><strong>GET</strong>：获取资源；<br><strong>POST</strong>：传输实体的主体；<br><strong>PUT</strong>：传输文件；<br><strong>HEAD</strong>：获得报文首部，用于确认URI的有效性和资源更新的日期时间等；<br><strong>DELETE</strong>：删除文件，是与PUT相反的方法。DELETE方法按请求URI删除指定的资源；<br><strong>OPTIONS</strong>：询问支持的方法，用来查询针对请求URI指定的资源支持的方法。<br><strong>TRACE</strong>：追踪路径；<br><strong>CONNECT</strong>：要求用隧道协议连接代理，实现用隧道协议进行TCP通信，主要使用SSL（Secure Sockets Layer）和TLS（Transport Layer Security，传输层安全）协议把通信内容加密后经网络隧道传输。  </p>
+<h2 id="Cookie技术"><a href="#Cookie技术" class="headerlink" title="Cookie技术"></a>Cookie技术</h2><p>由于HTTP协议是无状态协议，它不对之前发生过的请求和响应的状态进行管理。也就是说，无法根据之前的状态进行本次的请求处理。<br>Cookie技术通过在请求和响应报文中写入Cookie信息来控制客户端的状态。<br>Cookie会根据从服务器端发送的响应报文内的一个叫做Set-Cookie的首部字段信息，通知客户端保存Cookie。<br>当客户端再次往该服务器发送该请求时，客户端会自动在请求报文中加如Cookie值后发送出去。<br>服务器端发现客户端发送过来的Cookie后，回去检查究竟是从哪个客户端发送来的连接请求，然后对比服务器上的记录，最后得到之前的状态信息。  </p>
+<h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><table>
   <tr>
     <th></th>
-    <th>TCP</th>
-    <th>UDP</th>
+    <th>类别</th>
+    <th>原因短语</th>
   </tr>
   <tr>
-    <td>可靠性</td>
-    <td>可靠</td>
-    <td>不可靠</td>
+    <td>1XX</td>
+    <td>Informational（信息性状态码）</td>
+    <td>接收的请求正在处理</td>
   </tr>
   <tr>
-    <td>思想</td>
-    <td>面向字节流</td>
-    <td>面向报文</td>
+    <td>2XX</td>
+    <td>Sucess（成功状态码）</td>
+    <td>请求正常处理完毕</td>
   </tr>
   <tr>
-    <td>拥塞控制</td>
-    <td>慢启动、快速恢复、拥塞避免</td>
-    <td>不提供拥塞控制</td>
+    <td>3XX</td>
+    <td>Redirection（重定向状态码）</td>
+    <td>需要附加操作以完成请求</td>
   </tr>
   <tr>
-    <td>双工性</td>
-    <td>全双工</td>
-    <td>一对一、多对一、一对多、多对多</td>
+    <td>4XX</td>
+    <td>Client Error（客户端错误状态码）</td>
+    <td>服务器无法处理请求</td>
   </tr>
   <tr>
-    <td>效率</td>
-    <td>传输效率低</td>
-    <td>传输效率高</td>
+    <td>5XX</td>
+    <td>Server Error</td>
+    <td>服务器处理请求出错</td>
   </tr>
-  <tr>
-    <td>应用场景</td>
-    <td>准确率要求高，效率要求低</td>
-    <td>效率要求高，准确率要求低</td>
-  </tr>
-  
-  
 </table>
+
+<h3 id="2XX成功"><a href="#2XX成功" class="headerlink" title="2XX成功"></a>2XX成功</h3><h4 id="200-OK"><a href="#200-OK" class="headerlink" title="200 OK"></a>200 OK</h4><p>表示从客户端发来的请求在服务器端被正常处理了。</p>
+<h4 id="204-No-Content"><a href="#204-No-Content" class="headerlink" title="204 No Content"></a>204 No Content</h4><p>该状态码表示服务器接收的请求已经处理，但是返回的响应报文不包含实体的主体部分。  </p>
+<h4 id="206-Partial-Content"><a href="#206-Partial-Content" class="headerlink" title="206 Partial Content"></a>206 Partial Content</h4><p>表示客户端进行了范围请求，而服务器成功执行了这部分的GET请求。响应报文中包含由Content-Range指定的范围的实体内容。  </p>
+<h3 id="3XX重定向"><a href="#3XX重定向" class="headerlink" title="3XX重定向"></a>3XX重定向</h3><h4 id="301-Moved-Permanently"><a href="#301-Moved-Permanently" class="headerlink" title="301 Moved Permanently"></a>301 Moved Permanently</h4><p>永久性重定向。该状态码表示请求的资源已经分配了新的URI。</p>
+<h4 id="302-Found"><a href="#302-Found" class="headerlink" title="302 Found"></a>302 Found</h4><p>临时重定向。状态码表示请求的资源已经被分配了新的URI，希望用于（本次）使用新的URI访问。  </p>
+<h4 id="303-See-Other"><a href="#303-See-Other" class="headerlink" title="303 See Other"></a>303 See Other</h4><p>该状态码表示由于请求对应的资源存在另一个URI，应该使用GET方法定向获取请求的资源。  </p>
+<h4 id="304-Not-Modified"><a href="#304-Not-Modified" class="headerlink" title="304 Not Modified"></a>304 Not Modified</h4><p>该状态码表示客户端发送附带条件的请求时，服务器端允许请求访问资源，但未满足条件的情况。304状态码返回时，不包含任何响应的主体部分。304虽然被划分在3XX类别中，但是和重定向没有关系。  </p>
+<h4 id="307-Temporary-Redirect"><a href="#307-Temporary-Redirect" class="headerlink" title="307 Temporary Redirect"></a>307 Temporary Redirect</h4><p>临时重定向，和302 Found有着相同的含义。  </p>
+<h3 id="4XX客户端错误"><a href="#4XX客户端错误" class="headerlink" title="4XX客户端错误"></a>4XX客户端错误</h3><h4 id="400-Bad-Request"><a href="#400-Bad-Request" class="headerlink" title="400 Bad Request"></a>400 Bad Request</h4><p>该状态码表示请求报文中存在语法错误。当错误发生时，需修改请求的内容后再次发送请求。另外，浏览器会像 200 OK 一样对待该状态码。  </p>
+<h4 id="401-Unauthorized"><a href="#401-Unauthorized" class="headerlink" title="401 Unauthorized"></a>401 Unauthorized</h4><p>该状态码表示发送的请求需要有通过 HTTP 认证（BASIC 认证、DIGEST 认证）的认证信息。另外若之前已进行过1次请求，则表示用户认证失败。返回含有 401 的响应必须包含一个适用于被请求资源的 WWW-Authenticate 首部用以质询（challenge）用户信息。当浏览器初次接收到 401 响应，会弹出认证用的对话窗口。  </p>
+<h4 id="403-Forbbiden"><a href="#403-Forbbiden" class="headerlink" title="403 Forbbiden"></a>403 Forbbiden</h4><p>该状态码表明对请求资源的访问被服务器拒绝了。  </p>
+<h4 id="404-Not-Found"><a href="#404-Not-Found" class="headerlink" title="404 Not Found"></a>404 Not Found</h4><p>该状态码表明服务器上无法找到请求的资源。除此之外，也可以在服务器端拒绝请求且不想说明理由时使用。这个状态码非常常见。</p>
+<h3 id="5XX-服务器错误"><a href="#5XX-服务器错误" class="headerlink" title="5XX 服务器错误"></a>5XX 服务器错误</h3><h4 id="500-Internet-Server-Error"><a href="#500-Internet-Server-Error" class="headerlink" title="500 Internet Server Error"></a>500 Internet Server Error</h4><p>该状态码表明服务器端在执行请求时发生了错误。也有可能是Web应用存在的 bug 或某些临时的故障。  </p>
+<h4 id="503-Service-Unavailable"><a href="#503-Service-Unavailable" class="headerlink" title="503 Service Unavailable"></a>503 Service Unavailable</h4><p>该状态码表明服务器暂时处于超负载或正在进行停机维护，现在无法处理请求。</p>
+<h1 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h1><h2 id="HTTP缺点"><a href="#HTTP缺点" class="headerlink" title="HTTP缺点"></a>HTTP缺点</h2><ul>
+<li>通信使用明文，内容可能会被窃听；  </li>
+<li>不验证通信方的身份，因此有可能遭遇伪装；  </li>
+<li>无法证明报文的完整性，所以有可能已遭篡改。  </li>
+</ul>
+<h2 id="加密方式"><a href="#加密方式" class="headerlink" title="加密方式"></a>加密方式</h2><h3 id="通信的加密"><a href="#通信的加密" class="headerlink" title="通信的加密"></a>通信的加密</h3><p>一种加密方式就是将通信加密。HTTP协议中没有加密机制，但可以通过和SSL（Secure Socket Layer，安全套接层）或TLS的组合使用，加密HTTP的通信内容。  </p>
+<p>用SSL建立安全通信线路之后，就可以在这条线路上进行HTTP通信了。与SSL组合使用的HTTP被称为HTTPS（HTTP Secure，超文本传输安全协议）。  </p>
+<h3 id="内容的加密"><a href="#内容的加密" class="headerlink" title="内容的加密"></a>内容的加密</h3><p>还有一种将参与通信的内容本身加密的方式。由于HTTP协议中没有加密机制，那么就对HTTP报文进行加密处理后再发送请求。  </p>
+<h2 id="HTTPS是身披SSL外壳的HTTP"><a href="#HTTPS是身披SSL外壳的HTTP" class="headerlink" title="HTTPS是身披SSL外壳的HTTP"></a>HTTPS是身披SSL外壳的HTTP</h2><p>SSL是独立于HTTP的协议，所以不光是HTTP协议，其他运行在应用层的SMTP和Tenet等协议均可配合SSL协议使用。可以说SSL是当今世界上应用最为广泛的网络安全技术。</p>
+<h2 id="相互交换密钥的公开密钥加密技术"><a href="#相互交换密钥的公开密钥加密技术" class="headerlink" title="相互交换密钥的公开密钥加密技术"></a>相互交换密钥的公开密钥加密技术</h2><p>SSL采用一个种叫做公开密钥加密的加密处理方式。</p>
+<ul>
+<li>共享密钥加密：<br>加密和解密使用同一个密钥的方式称为共享密钥加密，也被称为对称密钥加密。<br>但是问题是如何安全地将密钥发给对方？如果中间被攻击者获得，这种加密方式也会失去意义。  </li>
+<li>使用两把密钥的公开密钥加密：<br>公开密钥加密使用一对非对称的密钥。一把叫做私有密钥，一把叫做公开密钥。<br>使用公开密钥加密的方式，发送密文的一方使用对方的公开密钥进行加密处理，对方收到被加密的信息后，再使用自己的私有密钥进行解密。利用这种方式，不需要发送用来解密的私有密钥，也不必担心密钥被攻击者窃听而盗走。  </li>
+<li>HTTPS采用混合加密机制：<br>由于非对称的加密方式较慢，所以可以混合使用上述两种加密方式，先利用非对称加密方式将共享密钥发送给对方，然后之后利用共享密钥加密报文。</li>
+</ul>
+<h2 id="HTTPS握手过程"><a href="#HTTPS握手过程" class="headerlink" title="HTTPS握手过程"></a>HTTPS握手过程</h2><p>握手主要分为三步：  </p>
+<ol>
+<li>客户端发起连接，创建一个条TCP连接（三次握手）；  </li>
+<li>验证服务端Server是真实的Server；  </li>
+<li>发送给Server一个主密钥，然后双方持有该主密钥生成SSL会话所需要的所有对称密钥。<br>假设服务端为Alice，客户端为Bob，那么一旦建立TCP连接，Bob就向Alice发送一个hello报文，Alice则用她的证书进行响应，证书中包含她的公钥。因为该证书已被CA证实过，Bob准确无误地知道该公钥属于Alice。然后Bob产生一个主密钥用Alice的公钥加密该主密钥然后发送给Alice，Alice用她的私钥解密出该公钥，之后双方用此密钥进行加密通信。</li>
+</ol>
+<h1 id="HTTP协议和HTTPS协议区别如下"><a href="#HTTP协议和HTTPS协议区别如下" class="headerlink" title="HTTP协议和HTTPS协议区别如下"></a>HTTP协议和HTTPS协议区别如下</h1><ol>
+<li>HTTP协议是以明文的方式在网络中传输数据，而HTTPS协议传输的数据则是经过TLS加密后的，HTTPS具有更高的安全性；  </li>
+<li>HTTPS在TCP三次握手阶段之后，还需要进行SSL 的handshake，协商加密使用的对称加密密钥；  </li>
+<li>HTTPS协议需要服务端申请证书，浏览器端安装对应的根证书；  </li>
+<li>HTTP协议端口是80，HTTPS协议端口是443。</li>
+</ol>
+
       
     </div>
 
@@ -1002,7 +354,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/12/%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%AB%98%E6%80%A7%E8%83%BDWeb%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/05/ET-LT%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -1016,7 +368,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/12/%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%AB%98%E6%80%A7%E8%83%BDWeb%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%80%E5%8F%91/" class="post-title-link" itemprop="url">轻量级高性能Web服务器开发</a>
+            <a href="/2021/02/05/ET-LT%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">I/O多路复用</a>
         </h2>
 
         <div class="post-meta">
@@ -1026,7 +378,103 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-02-12 21:26:43" itemprop="dateCreated datePublished" datetime="2021-02-12T21:26:43+08:00">2021-02-12</time>
+              <time title="创建时间：2021-02-05 21:13:50" itemprop="dateCreated datePublished" datetime="2021-02-05T21:13:50+08:00">2021-02-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>I/O多路复用是一种机制：一个进程监听多个描述符，一旦一个某个描述符就绪（读就绪或者写就绪），通知进程进行相应的读写操作。<br>这个机制在Linux中有3个常见实现（select、poll、epoll），但是他们本质都是同步I/O，因为他们都需要在读写事件就绪后自己负责读写。而异步I/O不需要负责读写，异步I/O的实现会负责将数据从内核空间拷贝到内核空间。  </p>
+<h2 id="Select机制"><a href="#Select机制" class="headerlink" title="Select机制"></a>Select机制</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span> <span class="params">(<span class="keyword">int</span> n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *fdset)</span></span>;	<span class="comment">//清空一个fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;	<span class="comment">//添加一个fd进入fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_CTR</span><span class="params">(<span class="keyword">int</span> fd,fd_set *fdset)</span></span>;	<span class="comment">//从fdset删除一个fd</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;	<span class="comment">//判断fdset里面是否有某个fd</span></span><br></pre></td></tr></table></figure>
+<p>select函数监听的文件描述符分3类，分别是writefds、readfds和exceptfds。调用后select函数会阻塞，知道有描述符就绪，或者超时，函数返回。当select函数返回后，可以通过遍历fdset来找到就绪的描述符。<br>select目前在几乎所有平台上支持，其良好的跨平台支持也是它的一个优点。缺点就是单个进程能够监听的描述符的数量存在最大限制，在Linux上一般为1024，可以通过修改宏定义来提升这一限制，但是会降低效率。</p>
+<h2 id="Poll机制"><a href="#Poll机制" class="headerlink" title="Poll机制"></a>Poll机制</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span> <span class="params">(struct pollfd *fds, <span class="keyword">unsigned</span> <span class="keyword">int</span> nfds, <span class="keyword">int</span> timeout)</span></span>; </span><br></pre></td></tr></table></figure>
+<p>不同于select使用3个位图来表示3个fdset的方式，poll使用一个pollfd的指针实现。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> fd;</span><br><span class="line">	<span class="keyword">short</span> events;</span><br><span class="line">   <span class="keyword">short</span> revents;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>pollfd结构包含了要监视的event和发生的event，不再使用select“参数-值”传递方式。同时，pollfd并没有最大数量限制（但是数量大了性能变差）。和select一样，poll返回后需要轮询pollfd来获取就绪的描述符。</p>
+<p>从上面的例子看，select和poll都需要在返回后同遍历文件描述符来获取已经就绪的socket。事实上，同时连接的大量客户端在一时刻可能只有很少的处于就绪状态，因此随着监听的描述符数量增长，其效率线性下降。</p>
+<h2 id="Epoll"><a href="#Epoll" class="headerlink" title="Epoll"></a>Epoll</h2><p>epoll是select和poll的增强版本。epoll更加灵活，没有数量限制。epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放在内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。  </p>
+<h3 id="Epoll具体使用"><a href="#Epoll具体使用" class="headerlink" title="Epoll具体使用"></a>Epoll具体使用</h3><p>epoll操作过程需要3个接口，分别如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_ctl</span><span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, struct epoll_event *event)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span><span class="params">(<span class="keyword">int</span> epfd, struct epoll_event * events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li><code>epoll_create()</code>创建一个epoll句柄，size用来告诉内核这个监听的数目一共多大，这个参数无法限制epoll监听的最大数目，而是给出一个建议。 epoll句柄会占用一个fd值。 </li>
+<li><code>epoll_ctl()</code>对指定的描述符fd执行op操作，可以添加（EPOLL_CTL_ADD）/删除（EPOLL_CTL_DEL）/修改（EPOLL_CTL_MOD）对fd的监听事件。event是告诉我们内核需要监听数目事件。<code>struct epoll_event</code>结构如下所示：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span>&#123;</span></span><br><span class="line">	<span class="keyword">_uint32_t</span> events;	<span class="comment">/* Epoll events */</span></span><br><span class="line">   <span class="keyword">epoll_data_t</span> data;  <span class="comment">/* User data variable */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//events可以表示为以下几个宏的集合</span></span><br><span class="line">EPOLLIN ：表示对应的文件描述符可以读（包括对端SOCKET正常关闭）；</span><br><span class="line">EPOLLOUT：表示对应的文件描述符可以写；</span><br><span class="line">EPOLLPRI：表示对应的文件描述符有紧急的数据可读（这里应该表示有带外数据到来）；</span><br><span class="line">EPOLLERR：表示对应的文件描述符发生错误；</span><br><span class="line">EPOLLHUP：表示对应的文件描述符被挂断；</span><br><span class="line">EPOLLET： 将EPOLL设为边缘触发(Edge Triggered)模式，这是相对于水平触发(Level Triggered)来说的。</span><br><span class="line">EPOLLONESHOT：只监听一次事件，当监听完这次事件之后，如果还需要继续监听这个socket的话，需要再次把这个socket加入到EPOLL队列里 </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>epoll_wait()</code>等待epfd上的I/O事件，最多返回maxevents个事件。参数events用来从内核得到事件的集合，maxevents告知内核这个events有多大。</li>
+</ul>
+<h3 id="Epoll底层机制"><a href="#Epoll底层机制" class="headerlink" title="Epoll底层机制"></a>Epoll底层机制</h3><p>Epoll在内核维护了两个数据结构，一个红黑树用来存储监听IO事件的fd，另一个用来存储IO事件的双链表。红黑树能够提供高效的fd查找、修改、删除操作（<code>epoll_ctl()</code>）。一旦某个fd发生了IO事件，就会触发fd的回调函数，将事件添加到双链表中。而<code>epoll_wait()</code>只需要检查链表是否为空即可，不为空等待返回，否则等待IO事件发生触发回调函数。  </p>
+<h2 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h2><p>epoll对文件描述符有两种工作模式：<strong>LT（level trigger，水平触发）和ET（edge trigger，边沿触发）</strong>：LT模式是默认模式，LT模式与ET模式区别如下所示：<br><strong>LT</strong>：当epoll检测到描述符事件发生并将此事件通知主程序，应用程序可以不立即处理该事件。下次调用epoll_wait时，会再次响应应用程序并通知此事件。<br><strong>ET模式</strong>：当epoll_wait()检测到描述符事件发生并将此事件通知注应用程序，应用程序必须立即处理该事件。如果不处理，下次调用epoll_wait()时，不会再次响应应用程序并通知此事件。  </p>
+<h3 id="LT模式"><a href="#LT模式" class="headerlink" title="LT模式"></a>LT模式</h3><p>LT是epoll默认的工作方式，支持阻塞和非阻塞两种机制。LT模式下内核会持续通知你文件描述符就绪了，然后你可以对这个就绪的fd进行I/O操作。如果不做任何操作，内核还是会继续通知你的。  </p>
+<h3 id="ET模式"><a href="#ET模式" class="headerlink" title="ET模式"></a>ET模式</h3><p>ET模式相对LT模式更加高效，只支持非阻塞模式。在这个模式下，当描述符从未就绪变为就绪时，内核通过epoll告诉你。然后它会假设你知道文件描述符已经就绪，并且不再为那个文件描述符发生更多的就绪通知。直到你做了某些操作导致那个文件描述符不再为就绪状态了。<br>ET模式在很大程度上减少了epoll事件被重复触发的次数，因此效率要比LT模式高。epoll工作在ET模式时，必须使用非阻塞套接口，以避免一个文件句柄的阻塞导致把其他文件描述符饿死。  </p>
+<h2 id="Epoll总结"><a href="#Epoll总结" class="headerlink" title="Epoll总结"></a>Epoll总结</h2><p>在select/poll中，进程只有在调用一定的方法后才对所有监视的文件描述符进行扫描，而epoll事先通过epoll_ctl()注册一个文件描述符，一旦某个文件描述符就绪时，内核会采取回调机制，迅速激活这个文件描述符，当进程调用epoll_wait()时便得到通知。  </p>
+<p>epoll的优点主要是以下几个方面：  </p>
+<ol>
+<li>监听的文件描述符不受限制，它所支持的fd上限是最大可打开文件数目；  </li>
+<li>I/O效率不会随着监听的文件描述符规模增大而下降。不同于select/poll轮询的方式，epoll通过每个fd定义的回调函数来实现。只有就绪的fd才会执行回调函数。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/04/IO%E5%A4%8D%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/04/IO%E5%A4%8D%E7%94%A8/" class="post-title-link" itemprop="url">I/O复用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-04 22:08:00" itemprop="dateCreated datePublished" datetime="2021-02-04T22:08:00+08:00">2021-02-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -1041,7 +489,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
                 </span>
             </span>
 
@@ -1056,231 +504,846 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>笔者这学期先后学习了《深入理解计算机系统》、《计算机网络：自顶向下方法》、《操作系统概念》，想要做一个项目来巩固这段时间所学的知识，考虑到CSAPP中实现了一个TinyWebServer，我打算开发一个高性能Web服务器。  </p>
-<h1 id="相关环境配置"><a href="#相关环境配置" class="headerlink" title="相关环境配置"></a>相关环境配置</h1><ul>
-<li>服务器测试环境  </li>
-<li>Ubuntu版本16.04</li>
-<li>MySQL版本5.7.32</li>
-<li>浏览器测试</li>
-<li>FireFox</li>
-<li>创建数据库  </li>
+          <h1 id="I-O模型介绍"><a href="#I-O模型介绍" class="headerlink" title="I/O模型介绍"></a>I/O模型介绍</h1><p>同步和异步、阻塞和非阻塞在I/O操作中总是容易分不清楚。<br>I/O操作可以分为：发起I/O请求，执行I/O操作，得到I/O操作结果，返回结果。  </p>
+<h2 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h2><p>同步和异步实际上是一种通信机制，涉及调用方和被调用方。<br><strong>同步</strong>：调用方等待被调用方完成操作然后返回结果；<br><strong>异步</strong>：调用方不需要等待调用方操作，而是被调用方自己操作完成后通知调用方。<br>同步和异步适合用于描述I/O操作的执行部分。</p>
+<h2 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h2><p>阻塞和非阻塞其实是一种调用机制，只涉及调用方，关注的是I/O操作的执行状态，不同点在于请求I/O操作后，针对I/O操作，被调用方的行为。<br>如果调用方等待IO操作完成后返回，则是阻塞的；如果调用方不需要等待I/O操作完成就立即返回，则是非阻塞的，非阻塞的情况下，常常需要多次调用去检查，才能获得I/O操作的结果。</p>
+<h2 id="I-O模型总结"><a href="#I-O模型总结" class="headerlink" title="I/O模型总结"></a>I/O模型总结</h2><ol>
+<li>阻塞I/O<br>当发生系统调用时候，比如recv，用户进程要一直等待到数据拷贝到用户空间，这段时间内进程始终阻塞。它是同步I/O。  </li>
+<li>非阻塞I/O<br>还是以recv为例子，不管有没有数据都返回，如果没有数据，过一会再调用recv看看，如此循环。但是如果有数据，它要等待数据拷贝到用户空间，因此还是同步I/O。（相当于没有数据读的时候阻塞，读的时候还是非阻塞）  </li>
+<li>I/O复用<br>同时监听多个文件描述符，当有可读/可写/异常事件发生的时候，通知进程，进行读写或者处理异常。当没有事件发生时候，正常运行。就当前例子来看还是同步I/O，因为依旧要等待数据读完或者写完才能继续运行。I/O复用可用于同步I/O也可用于异步I/O。</li>
+<li>信号驱动的I/O模型<br>通过调用sigaction注册信号函数，等内核数据准备好的时候，系统中断当前程序，执行信号函数（在这里调用recv）。这还是同步I/O。</li>
+<li>异步I/O模型<br>调用aio_read，让内核等数据准本好，并且复制到用户进程空间后执行实现指定好的函数。这样子省去了进程等待读数据的事件。这是真正的异步I/O。</li>
+<li>I/O的两个阶段<br>内核数据的准备阶段和内核数据复制到用户缓冲区阶段。只有进程不用等待这两个阶段，才是真正的异步I/O。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/04/%E6%AD%BB%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/04/%E6%AD%BB%E9%94%81/" class="post-title-link" itemprop="url">死锁</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-04 18:37:00" itemprop="dateCreated datePublished" datetime="2021-02-04T18:37:00+08:00">2021-02-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h1><h2 id="可抢占资源和不可抢占资源"><a href="#可抢占资源和不可抢占资源" class="headerlink" title="可抢占资源和不可抢占资源"></a>可抢占资源和不可抢占资源</h2><ul>
+<li>可抢占资源：可以从拥有它的进程中抢占而不会产生任何副作用<br>可抢占资源不易产生死锁，因为这种潜在风险可以由进程之间资源的重新分配来化解。  </li>
+<li>不可抢占资源：无法把它从占有它的进程处抢占过来。  </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">create database webserver_database;</span><br><span class="line">&#x2F;&#x2F; 创建一个名为webserver_database的数据库</span><br><span class="line">user database webserver_database;</span><br><span class="line">&#x2F;&#x2F; 在这个数据库中创建表user，关系为(username,passwd)</span><br><span class="line">&#x2F;&#x2F; 保存用户名-密码</span><br><span class="line">create table user(</span><br><span class="line">	username char(50) NULL,</span><br><span class="line">   passwd char(50) NULL</span><br><span class="line">);</span><br><span class="line">&#x2F;&#x2F; 添加一条数据，内容可以填上任意的用户名和密码</span><br><span class="line">INSERT INTO user(username, passwd) VALUES(&#39;wujiahao&#39;,&#39;wujiahao&#39;);</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line"></span><br><span class="line">这个数据库只有一个表user，其保存的是用户的用户名、密码。  </span><br><span class="line">- 文件管理  </span><br><span class="line"> - makefile  </span><br><span class="line"> - 运行方式  </span><br><span class="line"> </span><br><span class="line"> &#96;&#96;&#96;shell</span><br><span class="line"> linux&gt; make</span><br><span class="line"> linux&gt; .&#x2F;server</span><br></pre></td></tr></table></figure>
+<h2 id="资源获取"><a href="#资源获取" class="headerlink" title="资源获取"></a>资源获取</h2><p>一种允许用户管理资源的方式是为每个资源配置一个信号量，我们看下面两个例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> semaphore;</span><br><span class="line">	semaphore resource_1;</span><br><span class="line">	semaphore resource_2;</span><br><span class="line">	</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_A</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_B</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>上面这个例子，不会发生死锁，而下面这个例子有可能出现死锁：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> semaphore;</span><br><span class="line">	semaphore resource_1;</span><br><span class="line">	semaphore resource_2;</span><br><span class="line">	</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_A</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_B</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
 
-<h1 id="知识基础"><a href="#知识基础" class="headerlink" title="知识基础"></a>知识基础</h1><p>本项目中主要涉及以下知识。  </p>
-<ul>
-<li>C++基础  </li>
-<li>数据结构基础  </li>
-<li>计算机网络基础  </li>
-<li>操作系统基础  </li>
-<li>Linux基础  </li>
-<li>服务器开发规范  </li>
-</ul>
-<p>项目中参考的书籍：  </p>
-<ul>
-<li>《深入理解计算机系统》  </li>
-<li>《计算机网络：自顶向下方法》  </li>
-<li>《UNIX环境高级编程》  </li>
-<li>《UNIX网络编程 卷一：套接字联网API》  </li>
-<li>《鸟哥的Linux私房菜：基础篇》  </li>
-<li>《Linux高性能服务器编程》  </li>
-</ul>
-<h2 id="计算机系统"><a href="#计算机系统" class="headerlink" title="计算机系统"></a>计算机系统</h2><p>CSAPP主要是理解进程、线程的相关概念，对多进程、多线程编程有一个基本的认识。其中涉及到的进程、线程、信号量、互斥锁、生产者-消费者模型等概念在本项目中用到最多。重点参考本书的第三部分（第10章系统级I/O、第11章网络编程、第12章并发编程）。另外可以读一读第7章链接和第8章异常控制流，对项目文件的管理和理解用户态/内核态有帮助。 </p>
-<h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><p>《计算机网络：自顶向下方法》本书我实际上只看了前5章，包括应用层、传输层、网络层，由于计算机网络是一个层次结构，所以只需要掌握这部分内容，在进行服务器开发时，就不存在较大的知识盲区了。</p>
-<h2 id="UNIX编程"><a href="#UNIX编程" class="headerlink" title="UNIX编程"></a>UNIX编程</h2><p>《UNIX环境高级编程》、《UNIX网络编程 卷一：套接字联网API》主要是作为字典，遇到需要用的函数或者不理解的知识时进行查询用的。</p>
-<h2 id="Linux基础"><a href="#Linux基础" class="headerlink" title="Linux基础"></a>Linux基础</h2><p>《鸟哥的Linux私房菜：基础篇》比较好的Linux入门书籍，由于笔者时间紧迫，就没有先系统学习了，只在需要的时候查询相关命令。</p>
-<h2 id="服务器开发规范"><a href="#服务器开发规范" class="headerlink" title="服务器开发规范"></a>服务器开发规范</h2><p>主要参考了游双的《Linux高性能服务器编程》，这本书提供了很多服务器开发中运用的技术，并提供了相应的代码（笔者在实际开发中很多代码是基于本书提供的代码所写）：  </p>
-<ul>
-<li><p>主流服务器模型：C/S模型和P2P模型  </p>
-</li>
-<li><p>C/S模型<br>也就是客户端/服务器模型，这个模型很简单，就是所有的资源都被服务器所拥有，客户端需要访问服务器来获取所需的资源。  </p>
-</li>
-<li><p>P2P模型<br>P2P模型比C/S模型更接近网络通信的实际情况，摒弃了以服务器为中心的格局，让网络中所有主机重新回到对等的地位。  </p>
-</li>
-<li><p>比较<br>C/S模型适合资源相对集中的场合，它的实现也更为简单，缺点是当访问量过大的时候，可能所有客户都将得到很慢的响应。P2P模型使得每台机器在消耗服务的同时也给别人提供服务，这样资源能够充分、自由地共享。但是当用户之间传输的请求过多时，网络的负载将会加重。  </p>
-</li>
-<li><p>I/O模型：同步I/O与异步I/O  </p>
-</li>
-<li><p>阻塞I/O<br>当发生系统调用时候，比如recv，用户进程要一直等待到数据拷贝到用户空间，这段时间内进程始终阻塞。它是同步I/O。  </p>
-</li>
-<li><p>非阻塞I/O<br>还是以recv为例子，不管有没有数据都返回，如果没有数据，过一会再调用recv看看，如此循环。但是如果有数据，它要等待数据拷贝到用户空间，因此还是同步I/O。  </p>
-</li>
-<li><p>I/O复用<br>同时监听多个文件描述符，当有可读/可写/异常事件发生的时候，通知进程，进行读写或者处理异常。当没有事件发生时候，正常运行。就当前例子来看还是同步I/O，因为依旧要等待数据读完或者写完才能继续运行。I/O复用可用于同步I/O也可用于异步I/O。  </p>
-</li>
-<li><p>信号驱动的I/O模型<br>通过调用sigaction注册信号函数，等内核数据准备好的时候，系统中断当前程序，执行信号函数（在这里调用recv）。这还是同步I/O。  </p>
-</li>
-<li><p>异步I/O模型<br>调用aio_read，让内核等数据准本好，并且复制到用户进程空间后执行实现指定好的函数。这样子省去了进程等待读数据的事件。这是真正的异步I/O。  </p>
-</li>
-<li><p>I/O的两个阶段<br>内核数据的准备阶段和内核数据复制到用户缓冲区阶段。只有进程不用等待这两个阶段，才是真正的异步I/O。  </p>
-</li>
-<li><p>事件处理模式：Reactor模式/Proactor模式<br>服务器程序通常要处理3类事件，I/O事件、信号和定时事件。在处理事件上有两种高效的事件处理模式：Reactor和Proactor。这两种其实也都是I/O复用模型  </p>
-</li>
-<li><p>Reactor模式<br>Reactor是这样一种模式，它要求主线程只负责监听文件描述上是否有事件发生，有的话就立即将该事件通知工作线程。除此之外，主线程不做任何其他实质性的工作，读写数据、接收新的连接，以及处理客户请求均在工作线程中完成。<br>使用同步I/O模型（以<code>epoll_wait()</code>为例）实现的Reacotr模式的工作流程如下：<br>1）主线程往epoll内核事件表中注册socket上的读就绪事件。<br>2）主线程调用<code>epoll_wait()</code>等待socket上有数据可读。<br>3）当socket上有数据可读时，<code>epoll_wait()</code>通知主线程。主线程将socket可读事件放入请求队列。<br>4）睡眠在请求队列上的某个工作线程被唤醒，它从socket读取数据，并处理客户请求，然后往epoll内核事件表中注册该socket上的写事件。<br>5）主线程调用<code>epoll_wait()</code>等待socket可写。<br>6）当socket可写时，<code>epoll_wait()</code>通知主线程。主线程将socket可写事件放入请求队列。<br>7）睡眠在请求队列上的某个工作线程被唤醒，它往socket上写入服务器处理客户请求的结果。<br>重点：要有一个read/write事件处理器。  </p>
-</li>
-<li><p>Proactor模式<br>与Reactor模式不通，Proactor模式将所有I/O操作都交给主线程和内核来处理，工作线程仅仅负责业务逻辑。<br>使用异步I/O模型（<code>aio_read</code>和<code>aio_write</code>为例）实现得Proactor模式工作流程。<br>1）主线程调用aio_read函数向内核注册socket上的读完成事件，并告诉内核用户读缓冲区的位置，以及读操作完成时如何通知应用程序。（信号）<br>2）主线程继续处理其他逻辑。<br>3）应用程序预先定义好的信号处理函数选择一个工作线程来处理客户请求。工作线程处理完客户请求之后，调用<code>aio_write</code>函数向内核注册socket上的写完成事件，并告诉内核用户缓冲区的位置，以及写操作完成时如何通知应用程序（信号）。<br>4）主线程继续处理其他逻辑。<br>5）当用户缓冲区的数据被写入socket之后，内核将向应用程序发送一个信号，以通知应用程序数据已经发送完毕。<br>6）当用户缓冲区的数据写入socket之后，内核向应用程序发送一个信号，以通知应用程序数据已经传送完毕。<br>7）应用程序预先定义好的信号处理函数选择一个工作线程来做善后处理，比如决定是否关闭socket。  </p>
-</li>
-<li><p>同步模拟Proactor模型<br>《Linux高性能服务器编程》一书中提到了一种用同步I/O来模拟Proactor模式的方法。其原理是：主线程执行数据读写操作，读写完成之后，主线程向工作线程通知这一“完成事件”。那么工作线程直接获得了读写结果，接下来只要做的只是对读写结果的处理。<br>1）主线程调用<code>epoll_wait()</code>内核事件表中注册socket上的读就绪事件。<br>2）主线程调用<code>epoll_wait()</code>等大socket上有数据可读。<br>3）当socket上有数据可读时，<code>epoll_wait()</code>通知主线程。主线程从socket循环读取数据，直到没有更多数据可读，然后将所有数据封装成一个请求对象并插入请求队列。<br>4）睡眠在请求队列中的某个工作流程被唤醒，它获得请求对象并处理客户请求，然后往epoll内核事件表中注册socket上的写就绪事件。<br>5）主线程调用<code>epoll_wait()</code>等待socket可写。<br>6）当socket可写时，<code>epoll_wait()</code>通知主线程。主线程往socket上写入服务器处理客户请求的结果。<br>这里同步模拟和异步模拟Proactor的区别在于，同步模拟是主线程自己进行I/O操作，需要等待读完数据，而异步I/O是通过<code>aio_read()</code>异步读取，主线程不需要等待I/O完成。  </p>
-</li>
-<li><p>总结<br>Reactor和Proactor的本质区别在于谁负责I/O操作，其实它们都可以分别利用同步I/O或者异步I/O来实现。</p>
-</li>
-<li><p>并发模式<br>并发编程的目的是让程序“同时”执行多个任务，如果程序是计算密集型的，并发编程并没有优势，反而由于任务切换使得效率低。但如果程序是I/O密集型，则情况不通。和IO不通的是，在并发模式中，同步指的是程序完全按照代码序列的顺序执行；异步指的是程序的执行需要由系统事件来驱动。同步线程效率低，实时性差，但是逻辑简单，异步线程实时性强，效率高，但是相对复杂难以调试。对于服务器而言，既追求实时性，也要同时处理多个请求，我们应该采用半同步半异步模式。  </p>
-</li>
-<li><p>半同步/半异步模式<br>同步线程处理客户逻辑，异步线程处理I/O事件。  </p>
-</li>
-<li><p>领导者/追随者模式<br>多个工作线程轮流获得事件源，轮流监听、分发并处理事件。在任意时刻，程序都仅有一个领导者线程，它负责监听I/O事件。而其他线程则是追随者，它们休眠在线程池，然后等待处理I/O事件。此时新的领导者等待I/O事件，原来的领导者处理I/O事件，二者实现了并发。  </p>
-</li>
-</ul>
-<p>以上就是《Linux高性能服务器编程》中关于服务器开发的一些重要技术和规范。  </p>
-<h1 id="框架设计"><a href="#框架设计" class="headerlink" title="框架设计"></a>框架设计</h1><h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><p>文件<code>lock/locker.h</code>提供了3类，分别是sem、locker、cond，是对信号量、互斥锁、条件变量的封装。  </p>
-<h2 id="sem类"><a href="#sem类" class="headerlink" title="sem类"></a>sem类</h2><p>信号量，提供函数如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sem</span>();          <span class="comment">//默认构造函数</span></span><br><span class="line"><span class="built_in">sem</span>(<span class="keyword">int</span> num);   <span class="comment">//构造函数，信号量初始为num</span></span><br><span class="line">~<span class="built_in">sem</span>(); <span class="comment">//析构函数</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">wait</span><span class="params">()</span></span>;    <span class="comment">//V操作，信号量-1</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">post</span><span class="params">()</span></span>;    <span class="comment">//P操作，信号+1</span></span><br></pre></td></tr></table></figure>
+<h1 id="死锁概述"><a href="#死锁概述" class="headerlink" title="死锁概述"></a>死锁概述</h1><p>死锁的规范定义：<strong>如果一个进程集合中的每个进程集合都在等待只能由该进程集合中的其他进程才能引发的事件，那么该进程集合就是死锁的</strong>。  </p>
+<h2 id="资源死锁的条件"><a href="#资源死锁的条件" class="headerlink" title="资源死锁的条件"></a>资源死锁的条件</h2><ol>
+<li>互斥条件：每个资源要么已经分配给一个进程，要么可用；  </li>
+<li>占有和等待条件：已经得到某个资源的进程可以再请求新的资源；  </li>
+<li>不可抢占条件：一个资源已经分配给某个进程，那么只能由这个进程释放这个资源；  </li>
+<li>环路等待条件：死锁发生时，系统中一定有两个或两个以上进程组成了一条环路，这个环路上每个进程都在等待下一个进程释放资源。  </li>
+</ol>
+<p>所以如果想避免死锁发生，我们可以从破坏这四个条件入手。  </p>
+<h1 id="死锁检测和死锁恢复"><a href="#死锁检测和死锁恢复" class="headerlink" title="死锁检测和死锁恢复"></a>死锁检测和死锁恢复</h1><h2 id="每种类型一个资源的死锁检测"><a href="#每种类型一个资源的死锁检测" class="headerlink" title="每种类型一个资源的死锁检测"></a>每种类型一个资源的死锁检测</h2><p>用普通的检测有向图是否有环路的算法即可检测死锁。</p>
+<h2 id="每种类型多个资源的死锁检测"><a href="#每种类型多个资源的死锁检测" class="headerlink" title="每种类型多个资源的死锁检测"></a>每种类型多个资源的死锁检测</h2><p>假设两个矩阵C、R，C(i,j)代表当前第i个进程对第j种资源占有个数，R(i,j)代表第i个进程还需要多少个j类资源。然后假设两个向量E、A，E(i)代表资源类型1的个数，A(i)代表资源类型i总共可用个数。那么我们可以用如下算法检测死锁：<br>死锁检测算法如下：<br>1）寻找一个没有标记的进程Pi，对于R矩阵而言第i行向量小于等于A；<br>2）如果找到了这样一个进程，那么将C矩阵的第i行向量加到A中，标记该进程，并转到第一步（可以理解为这个进程可以被分配资源然后完成再释放资源）；<br>3）如果没有找到这样的进程，算法终止。<br>算法结束时，没有被标记的进程都是死锁进程（如果有的话）。</p>
+<h2 id="从死锁中恢复"><a href="#从死锁中恢复" class="headerlink" title="从死锁中恢复"></a>从死锁中恢复</h2><ol>
+<li>利用抢占恢复：这通常需要人工干预。  </li>
+<li>利用回滚恢复：周期性对进程进行检查，并将检查点检查也就是进程的状态写入一个文件以备以后重启（类似于日志）。一旦检测到死锁，那么就很容易发现需要哪些资源。为了进行恢复，要从一个较早的检查点开始，这样所有需要资源的进程会回滚到一个时间点，在此时间点之前该进程获得了一些其他的资源。在检查点之后的所有工作都会丢失。  </li>
+<li>通过杀死进程恢复：注意不要杀死环外的进程。  </li>
+</ol>
+<h1 id="死锁避免"><a href="#死锁避免" class="headerlink" title="死锁避免"></a>死锁避免</h1><h2 id="安全状态和不完全状态"><a href="#安全状态和不完全状态" class="headerlink" title="安全状态和不完全状态"></a>安全状态和不完全状态</h2><p>如果没有死锁发生，且即使所有进程突然请求对资源的最大需求，也仍然存在某种调度次序能够使得每一个进程运行完毕，则称状态是安全的。  </p>
+<p>安全状态下，系统能保证不发生死锁。不安全状态则没有这个保证。  </p>
+<h2 id="单个资源的银行家算法"><a href="#单个资源的银行家算法" class="headerlink" title="单个资源的银行家算法"></a>单个资源的银行家算法</h2><p>算法：判断对请求的满足是否会导致进入不安全状态。如果是，就拒绝请求，如果满足请求后仍是安全的，就予以分配。  </p>
+<h2 id="多个资源的银行家算法"><a href="#多个资源的银行家算法" class="headerlink" title="多个资源的银行家算法"></a>多个资源的银行家算法</h2><p>和单个资源类似，用前面所说的多个资源的死锁检测来判断是否安全。<br>但是值得一提的是银行家算法并不实用，一方面很难一开始就知道这个进程所需要的最大资源数目，另一方面系统中进程的数目不是固定的，这可能导致原本可用的资源也变得不可用起来。  </p>
+<h1 id="死锁预防"><a href="#死锁预防" class="headerlink" title="死锁预防"></a>死锁预防</h1><h2 id="破坏互斥条件"><a href="#破坏互斥条件" class="headerlink" title="破坏互斥条件"></a>破坏互斥条件</h2><p>如果一个资源不会被一个进程独占，那么死锁肯定不会发生。  </p>
+<h2 id="破坏占有和等待条件"><a href="#破坏占有和等待条件" class="headerlink" title="破坏占有和等待条件"></a>破坏占有和等待条件</h2><p>只要在一开始将所有需要的资源都读入即可，但是判断需要多少资源时间麻烦事。  </p>
+<h2 id="破坏不可抢占条件"><a href="#破坏不可抢占条件" class="headerlink" title="破坏不可抢占条件"></a>破坏不可抢占条件</h2><p>但是并不是所有资源的都可以修改为可抢占。  </p>
+<h2 id="破坏环路等待条件"><a href="#破坏环路等待条件" class="headerlink" title="破坏环路等待条件"></a>破坏环路等待条件</h2><p>对资源编号，要求进程按照顺序来请求资源。  </p>
+<h1 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h1><h2 id="饥饿"><a href="#饥饿" class="headerlink" title="饥饿"></a>饥饿</h2><p>饥饿是指系统不能保证某个进程的等待时间上界，从而使该进程长时间等待，当等待时间给进程推进和响应带来明显影响时，称发生了进程饥饿。当饥饿到一定程度的进程所赋予的任务即使完成也不再具有实际意义时称该进程被饿死。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/02/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/02/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">进程和线程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-02 19:04:11" itemprop="dateCreated datePublished" datetime="2021-02-02T19:04:11+08:00">2021-02-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><p>在多道程序设计系统中，CPU由一个进程快速切换至另一个进程，使每个进程各运行几十或几百毫秒。但是实际上一个CPU同时只能运行一个进程，但1s内它可能运行了多个进程，这样就产生了并行的错觉。为了对多个并行活动进行跟踪，操作系统设计者发展了一个概念模型-进程（运行程序时的抽象），使得并行更容易处理。  </p>
+<h2 id="进程模型"><a href="#进程模型" class="headerlink" title="进程模型"></a>进程模型</h2><p>进程就是一个正在执行程序的实例，包括程序计数器，寄存器和变量的当前值。  </p>
+<h2 id="创建进程"><a href="#创建进程" class="headerlink" title="创建进程"></a>创建进程</h2><p>UNIX系统中，只有一个系统调用可以创建新的进程：<code>fork</code>。这个系统调用会创建一个与调用进程相同的副本，这两个进程会拥有相同的存储映像、同样的环境字符串和同样的打开文件。这就是全部情形通常，子进程接着执行<code>execeve</code>以修改器存储映像并允许一个新的程序。  </p>
+<h2 id="进程的终止"><a href="#进程的终止" class="headerlink" title="进程的终止"></a>进程的终止</h2><ol>
+<li>正常退出（自愿的）：通知操作系统它的工作已经完成，在UNIX中该调用<code>exit</code>；  </li>
+<li>出错退出（自愿的）：进程出现错误，捕获错误，然后退出；  </li>
+<li>严重错误（非自愿的）：比如引用不存在的内存、除数是0等，这类错误中，进程可以通知操作系统来处理；  </li>
+<li>被其他进程杀死（非自愿的）：其他进程通过执行一个系统调用：<code>kill</code>来杀死某个进程。  </li>
+</ol>
+<h2 id="进程的层次结构"><a href="#进程的层次结构" class="headerlink" title="进程的层次结构"></a>进程的层次结构</h2><p>当一个进程创建出来了后，父进程和子进程以某种形式继续保持联系。自进程可以接着再创建进程，这就形成了进程的层次结构。  </p>
+<h2 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h2><ol>
+<li>运行态（该时刻进程实际占用CPU）；  </li>
+<li>就绪态（可运行，但因为其他进程正在运行而暂时停止）；  </li>
+<li>阻塞态（除非某种外部事件发生，否则进程不能运行）。  </li>
+</ol>
+<p>运行态可以转变成就绪态和阻塞态，就绪态可以转变成运行态，阻塞态可以转变成就绪态。  </p>
+<h2 id="进程的实现"><a href="#进程的实现" class="headerlink" title="进程的实现"></a>进程的实现</h2><p>为了实现进程模型，操作系统维护一张表格，即进程表。每个进程占用一个进程表项。该表项包含了进程状态的重要信息：程序计数器、堆栈指针、内存分配情况、所打开文件的状态、账号和调度信息，以及其他在进程由运行态转换成就绪态或阻塞态时需要保存的信息。</p>
+<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><p>为什么需要多线程：在许多应用中同时发生着多种活动。其中某些活动随着时间的推移会被阻塞。通过将这些应用程序分解成可以准并行运行的多个顺序线程，程序设计模型会变得更简单。<br>这其实和前面所说的进程看起来并无区别，但是线程引入了一个新的元素：并行实体共享同一地址空间和所有可用数据的能力；另一方面，线程更加轻量级，创建一个线程需要的时间较创建一个进程快10-100倍。<br>需要多线程的第三个原因涉及性能方面的讨论：若多个线程都是CPU密集型的，那么并不能获得性能上的增强，但是如果存在大量的计算和I/O，同游多个线程允许这些活动彼此重叠进行，从而会加快应用程序执行的速度。</p>
+<h2 id="经典的线程模型"><a href="#经典的线程模型" class="headerlink" title="经典的线程模型"></a>经典的线程模型</h2><table>
+  <tr>
+    <th>每个进程中的内容</th>
+    <th>每个线程中的内容</th>
+  </tr>
+  <tr>
+    <td>地址空间</td>
+    <td>程序计数器</td>
+  </tr>
+  <tr>
+    <td>全局变量</td>
+    <td>寄存器</td>
+  </tr>
+  <tr>
+    <td>打开文件</td>
+    <td>堆栈</td>
+  </tr>
+  <tr>
+    <td>子进程</td>
+    <td>状态</td>
+  </tr>
+  <tr>
+    <td>即将发生的报警</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>信号与信号处理程序</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>账户信息</td>
+    <td></td>
+  </tr>
+</table>
 
 
-<h2 id="locker类"><a href="#locker类" class="headerlink" title="locker类"></a>locker类</h2><p>互斥锁，提供函数如下：  </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">locker</span>();   <span class="comment">//构造函数</span></span><br><span class="line">~<span class="built_in">locker</span>()； <span class="comment">//析构函数</span></span><br><span class="line"><span class="built_in">lock</span>()；    <span class="comment">//上锁</span></span><br><span class="line"><span class="built_in">unlock</span>()；  <span class="comment">//解锁</span></span><br><span class="line">pthread_mutex_t *get()；    //返回互斥锁指针</span><br></pre></td></tr></table></figure>
 
-
-<h2 id="cond类"><a href="#cond类" class="headerlink" title="cond类"></a>cond类</h2><p>条件变量，提供的函数如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cond</span>();<span class="comment">//构造函数</span></span><br><span class="line">~<span class="built_in">cond</span>();<span class="comment">//析构函数</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">wait</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *m_mutex)</span></span>;<span class="comment">//等待目标条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">timewait</span><span class="params">(<span class="keyword">pthread_mutex_t</span> *m_mutex, struct timespec t)</span></span>;<span class="comment">//等待目标条件变量一定时间</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">signal</span><span class="params">()</span></span>;<span class="comment">//信号唤醒</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">broadcast</span><span class="params">()</span></span>;<span class="comment">//信号唤醒</span></span><br></pre></td></tr></table></figure>
-<p><code>wait(pthread_mutex_t *m_mutex)</code>内部调用<code>pthread_cond_wait()</code>，此函数内部操作分为以下步骤：</p>
-<ul>
-<li>先传入一个互斥锁和条件变量，将线程放在条件变量的请求队列后，内部解锁</li>
-<li>线程等待被pthread_cond_broadcast信号唤醒或者pthread_cond_signal信号唤醒，唤醒后去竞争锁，若竞争到锁，则内部再次加锁。<br>使用方式举例说明，下面这是我们设计的用来处理日志事件的循环队列，利用上述三个类，这个队列实现了线程安全。条件变量这样使用：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">push</span><span class="params">(<span class="keyword">const</span> T &amp;item)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    m_mutex.<span class="built_in">lock</span>();</span><br><span class="line">    <span class="keyword">if</span> (m_size &gt;= m_max_size)</span><br><span class="line">    &#123;</span><br><span class="line">        m_cond.<span class="built_in">broadcast</span>();</span><br><span class="line">        m_mutex.<span class="built_in">unlock</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    m_back = (m_back + <span class="number">1</span>) % m_max_size;</span><br><span class="line">    m_array[m_back] = item;</span><br><span class="line">    m_size++;</span><br><span class="line">    m_cond.<span class="built_in">broadcast</span>();</span><br><span class="line">    m_mutex.<span class="built_in">unlock</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//pop时,如果当前队列没有元素,将会等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">pop</span><span class="params">(T &amp;item)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    m_mutex.<span class="built_in">lock</span>();</span><br><span class="line">    <span class="keyword">while</span> (m_size &lt;= <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!m_cond.<span class="built_in">wait</span>(m_mutex.<span class="built_in">get</span>()))</span><br><span class="line">        &#123;</span><br><span class="line">            m_mutex.<span class="built_in">unlock</span>();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    m_front = (m_front + <span class="number">1</span>) % m_max_size;</span><br><span class="line">    item = m_array[m_front];</span><br><span class="line">    m_size--;</span><br><span class="line">    m_mutex.<span class="built_in">unlock</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-将事件<code>push</code>进队列之前现对互斥锁<code>m_mutex</code>上锁，然后添加成功后，解锁，并广播<code>m_cond.wait()</code>，因为<code>pop</code>可能因为队列为空而被阻塞，广播将唤醒等待队列中的条件变量。<br><code>pop</code>中先将<code>m_mutex</code>上锁，然后<code>m_cond_wait()</code>函数将条件变量添加到等待队列中后，将mutex_解锁（这样条件变量不会错过条件判断和加入等待队列之间的所有变化）。然后当条件变量满足时，将会去竞争互斥锁，然后竞争成功的条件变量加锁并返回（因为会有多个条件变量被满足来竞争互斥锁）。  </li>
-</ul>
-<h1 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h1><p>在<code>log/block_queue.h</code>中实现了一个线程安全的循环队列，其功能和一般的队列区别不大。这个队列用于处理日志事件。<br>在<code>log/log.h,log/log.cc</code>中声明并实现了日志类。</p>
-<h2 id="block-queue类"><a href="#block-queue类" class="headerlink" title="block_queue类"></a>block_queue类</h2><p>一个线程安全的循环队列，操作和普通队列基本一致，不做过多说明。</p>
-<h2 id="log类"><a href="#log类" class="headerlink" title="log类"></a>log类</h2><p>日志类，采用单例模式。<br>单例模式是最常用的设计模式之一，保证一个类只有一个实例，并提供一个访问它的全局访问点，该实例被所有程序模块共享。<br>实现思路：私有化它的构造函数，以防止外界创建单例类的对象；使用类的私有静态指针变量窒息那个类的唯一实例，并用一个公有的静态方法获取该实例。<br>单例模式有两种实现方法，分别是懒汉和饿汉模式。顾名思义，懒汉模式，即非常懒，不用的时候不去初始化，所以在第一次被使用时才进行初始化；饿汉模式，即迫不及待，在程序运行时立即初始化。<br>我的实现是这样的：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Log</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">//C++11以后,使用局部变量懒汉不用加锁</span></span><br><span class="line">    <span class="function"><span class="keyword">static</span> Log *<span class="title">get_instance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> Log instance;</span><br><span class="line">        <span class="keyword">return</span> &amp;instance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//其他</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">Log</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Log</span>();</span><br><span class="line">    <span class="comment">//其他</span></span><br></pre></td></tr></table></figure>
-<p>静态成员instance只会被生成一次保证了单例。不过需要注意的是C++11之前的在创建<code>instance</code>需要加锁，因为编译器不保证内部静态变量的线程安全。C++11之后不需要了。  </p>
-<p>log包含如下变量：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> dir_name[<span class="number">128</span>]; <span class="comment">//路径名</span></span><br><span class="line"><span class="keyword">char</span> log_name[<span class="number">128</span>]; <span class="comment">//log文件名</span></span><br><span class="line"><span class="keyword">int</span> m_split_lines;  <span class="comment">//日志最大行数</span></span><br><span class="line"><span class="keyword">int</span> m_log_buf_size; <span class="comment">//日志缓冲区大小</span></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> m_count;  <span class="comment">//日志行数记录</span></span><br><span class="line"><span class="keyword">int</span> m_today;        <span class="comment">//因为按天分类,记录当前时间是那一天</span></span><br><span class="line">FILE *m_fp;         <span class="comment">//打开log的文件指针</span></span><br><span class="line"><span class="keyword">char</span> *m_buf;</span><br><span class="line">block_queue&lt;string&gt; *m_log_queue;   <span class="comment">//阻塞队列</span></span><br><span class="line">locker m_mutex;                     <span class="comment">//互斥锁</span></span><br><span class="line"><span class="keyword">int</span> m_close_log;                    <span class="comment">//关闭日志</span></span><br></pre></td></tr></table></figure>
-<p>提供了如下成员函数：</p>
-<h3 id="bool-init-const-char-file-name-int-close-log-int-log-buf-size-8192-int-split-lines-int-max-queue-size"><a href="#bool-init-const-char-file-name-int-close-log-int-log-buf-size-8192-int-split-lines-int-max-queue-size" class="headerlink" title="bool init(const char *file_name,int close_log,int log_buf_size=8192,int split_lines,int max_queue_size)"></a><code>bool init(const char *file_name,int close_log,int log_buf_size=8192,int split_lines,int max_queue_size)</code></h3><p>分为异步写入和同步写入两种方式,如果参数max_queue_size&gt;=1表示采取异步。<br>异步模式：<br>初始化阻塞队列，并且创建一个线程（调用flush_log_thread）读取阻塞队列写日志。<br>生成日志文件名（添加时间信息）。<br>创建/打开日志文件。  </p>
-<h3 id="void-write-log-int-level-const-char-format"><a href="#void-write-log-int-level-const-char-format" class="headerlink" title="void write_log(int level, const char *format, ...)"></a><code>void write_log(int level, const char *format, ...)</code></h3><p>生成日志写入条目，包括类型（INFO、ERROR）、时间等信息。<br>判断当前日期和类的日期是否一致，不一致则刷新该文件写入缓冲区并关闭之前的文件描述符，打开新的文件。<br>判断异步写入还是同步写入：<br>如果同步，直接写入文件。<br>如果异步，将代写入信息push进阻塞队列。</p>
-<h3 id="void-flush-void"><a href="#void-flush-void" class="headerlink" title="void flush(void)"></a><code>void flush(void)</code></h3><p>线程安全的刷新文件缓冲区（加互斥锁）。</p>
-<h3 id="static-void-flush-log-thread-void-args"><a href="#static-void-flush-log-thread-void-args" class="headerlink" title="static void *flush_log_thread(void *args)"></a><code>static void *flush_log_thread(void *args)</code></h3><p>提供给写日志工作线程的调用函数。这个函数调用私有成员函数<code>async_write_log()</code></p>
-<h3 id="void-async-write-log"><a href="#void-async-write-log" class="headerlink" title="void *async_write_log()"></a><code>void *async_write_log()</code></h3><p>异步写入日志函数，从阻塞队列取出日志条目，并写入日志。</p>
-<h2 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a>宏定义</h2><p><code>log.h</code>中提供了几个宏定义，实现了对日志写入的包装，让其他函数能够更加轻松的调用日志类：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG_DEBUG(format, ...) <span class="meta-keyword">if</span> (0 == m_close_log)&#123;Log::get_instance()-&gt;write_log(0, format,##__VA_ARGS__);Log::get_instance()-&gt;flush();&#125;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG_INFO(format, ...) <span class="meta-keyword">if</span> (0 == m_close_log)&#123;Log::get_instance()-&gt;write_log(1, format, ##__VA_ARGS__);Log::get_instance()-&gt;flush();&#125;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG_WARN(format, ...) <span class="meta-keyword">if</span> (0 == m_close_log)&#123;Log::get_instance()-&gt;write_log(2, format, ##__VA_ARGS__);Log::get_instance()-&gt;flush();&#125;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG_ERROR(format, ...)<span class="meta-keyword">if</span> (0 == m_close_log)&#123;Log::get_instance()-&gt;write_log(3, format, ##__VA_ARGS__);Log::get_instance()-&gt;flush();&#125;</span></span><br></pre></td></tr></table></figure>
-
-
-<h1 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h1><h2 id="client-data类"><a href="#client-data类" class="headerlink" title="client_data类"></a>client_data类</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">client_data</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    sockaddr_in address;</span><br><span class="line">    <span class="keyword">int</span> sockfd;</span><br><span class="line">    util_timer *timer;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>客户数据类，数据成员有套接字描述符、地址、定时器。  </p>
-<h2 id="util-timer类"><a href="#util-timer类" class="headerlink" title="util_timer类"></a>util_timer类</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">util_timer</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">util_timer</span>() : <span class="built_in">prev</span>(<span class="literal">NULL</span>), <span class="built_in">next</span>(<span class="literal">NULL</span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">time_t</span> expire;  <span class="comment">//定时器终止时间</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span> (*cb_func)(client_data *);</span><br><span class="line">    client_data *user_data;</span><br><span class="line">    util_timer *prev;</span><br><span class="line">    util_timer *next;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>定时器类，数据成员包括前继结点、后继结点、终止时间、客户数据类。此类服务于定时器链表。</p>
-<h3 id="cb-func-client-data"><a href="#cb-func-client-data" class="headerlink" title="cb_func(client_data *)"></a><code>cb_func(client_data *)</code></h3><p>功能：关闭已连接套接字，并设置epoll内核事件注册表（删除套接字）。<br>此函数在定时器超时时候调用。</p>
-<h2 id="sort-timer-lst类"><a href="#sort-timer-lst类" class="headerlink" title="sort_timer_lst类"></a>sort_timer_lst类</h2><p>升序定时器链表。<br>按照终止时间升序排列的定时器双向链表。<br>包括数据成员头指针、尾指针。<br>提供公有成员函数：<br>void add_timer(util_timer*)<br>void adjust_timer(util_timer*)<br>void del_timer(util_timer*)<br>void tick()  </p>
-<h3 id="add-timer-util-timer"><a href="#add-timer-util-timer" class="headerlink" title="add_timer(util_timer*)"></a><code>add_timer(util_timer*)</code></h3><p>添加定时器到链表中</p>
-<h3 id="adjust-timer-util-timer"><a href="#adjust-timer-util-timer" class="headerlink" title="adjust_timer(util_timer*)"></a><code>adjust_timer(util_timer*)</code></h3><p>调整定时器在链表中的位置。由于事件的发生定时器终止时间可能会发生变化，也需要相应的调整其在链表中的位置。同时插入新的定时器，也需要调整位置</p>
-<h3 id="del-timer-utile-timer"><a href="#del-timer-utile-timer" class="headerlink" title="del_timer(utile_timer*)"></a><code>del_timer(utile_timer*)</code></h3><p>删除定时器。</p>
-<h3 id="tick"><a href="#tick" class="headerlink" title="tick()"></a><code>tick()</code></h3><p>可以理解为滴答，即查看当前时间，将定时器链表中超时间的定时器对象删除，并调用<code>cb_func()</code>删除相应的注册事件和关闭套接字描述符。</p>
-<h2 id="Utils类"><a href="#Utils类" class="headerlink" title="Utils类"></a>Utils类</h2><p>这是一个工具类，直接面向服务器类<code>webserver</code>，负责管理连接的定时器链表、通信管道。<br>包含静态数据成员有：<code>int *u_pipefd</code>：这是管道，用于通信；<code>int u_epollfd</code>：这是epoll文件描述符。  包含数据成员：<code>sort_timer_lst m_timer_lst</code>：定时器链表；<code>int m_TIMESLOT</code>：时间间隔。<br>提供的成员函数：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(<span class="keyword">int</span> timeslot)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setnonblocking</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;  </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addfd</span><span class="params">(<span class="keyword">int</span> epollfd, <span class="keyword">int</span> fd, <span class="keyword">bool</span> one_shot, <span class="keyword">int</span> TRIGMode)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sig_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addsig</span><span class="params">(<span class="keyword">int</span> sig, <span class="keyword">void</span>(handler)(<span class="keyword">int</span>), <span class="keyword">bool</span> restart = <span class="literal">true</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">timer_handler</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show_error</span><span class="params">(<span class="keyword">int</span> connfd, <span class="keyword">const</span> <span class="keyword">char</span> *info)</span></span>;</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="void-init-int-timeslot"><a href="#void-init-int-timeslot" class="headerlink" title="void init(int timeslot)"></a><code>void init(int timeslot)</code></h3><p>设置定时器时间间隔</p>
-<h3 id="int-setnonblocking-int-fd"><a href="#int-setnonblocking-int-fd" class="headerlink" title="int setnonblocking(int fd)"></a><code>int setnonblocking(int fd)</code></h3><p>将文件描述符设置为非阻塞，即立即返回，不等待I/O。</p>
-<h3 id="void-addfd-int-epollfd-int-fd-bool-one-shot-int-TRIGMode"><a href="#void-addfd-int-epollfd-int-fd-bool-one-shot-int-TRIGMode" class="headerlink" title="void addfd(int epollfd, int fd, bool one_shot, int TRIGMode)"></a><code>void addfd(int epollfd, int fd, bool one_shot, int TRIGMode)</code></h3><p>向epoll内核注册表注册套接字描述符号，并设置触发模式LT/ET。one_shot用于设置同一套接字能否被多个线程处理。</p>
-<h3 id="void-sig-handler-int-sig"><a href="#void-sig-handler-int-sig" class="headerlink" title="void sig_handler(int sig)"></a><code>void sig_handler(int sig)</code></h3><p>静态成员函数。信号处理函数：设计成将传递信号到管道。</p>
-<h3 id="void-addsig-int-sig-void-handler-int-bool-restart-true"><a href="#void-addsig-int-sig-void-handler-int-bool-restart-true" class="headerlink" title="void addsig(int sig, void(handler)(int), bool restart = true)"></a><code>void addsig(int sig, void(handler)(int), bool restart = true)</code></h3><p>为sig信号设置信号处理函数handler。</p>
-<h3 id="void-timer-handler"><a href="#void-timer-handler" class="headerlink" title="void timer_handler()"></a><code>void timer_handler()</code></h3><p>定时任务处理，包括<code>tick()</code>、和发出SIGALRM信号。</p>
-<h3 id="void-show-error-int-connfd-const-char-info"><a href="#void-show-error-int-connfd-const-char-info" class="headerlink" title="void show_error(int connfd, const char *info)"></a><code>void show_error(int connfd, const char *info)</code></h3><p>向套接字输出错误，一般只用于输出超时信息。</p>
-<h1 id="数据库连接池"><a href="#数据库连接池" class="headerlink" title="数据库连接池"></a>数据库连接池</h1><p><code>mysql/sql_connection_pool.h</code>、<code>mysql/sql_connection_pool.cc</code>申明了数据库连接池类<code>connection_pool</code>、数据库连接类<code>connectionRAII</code>。<br><code>connection_pool</code>提供数据库连接服务，先初始化好数据库连接，<code>connectionRAII</code>可以理解为前者的一个接口，只获得一个数据库连接，当http服务需要进行数据库连接时，只需要创建一个<code>connectionRAII</code>对象并从连接池获取连接即可。  </p>
-<h2 id="connection-pool"><a href="#connection-pool" class="headerlink" title="connection_pool"></a>connection_pool</h2><p>单例模式实现，包含下列数据成员：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> m_MaxConn;  <span class="comment">//最大连接数</span></span><br><span class="line">	<span class="keyword">int</span> m_CurConn;  <span class="comment">//当前已使用的连接数</span></span><br><span class="line">	<span class="keyword">int</span> m_FreeConn; <span class="comment">//当前空闲的连接数</span></span><br><span class="line">	locker lock;    <span class="comment">//互斥锁</span></span><br><span class="line">	list&lt;MYSQL *&gt; connList; <span class="comment">//连接池</span></span><br><span class="line">	sem reserve;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	string m_url;           <span class="comment">//主机地址</span></span><br><span class="line">	string m_Port;	    	<span class="comment">//数据库端口号</span></span><br><span class="line">	string m_User;  		<span class="comment">//登陆数据库用户名</span></span><br><span class="line">	string m_PassWord;	    <span class="comment">//登陆数据库密码</span></span><br><span class="line">	string m_DatabaseName;  <span class="comment">//使用数据库名</span></span><br><span class="line">	<span class="keyword">int</span> m_close_log;	    <span class="comment">//日志开关</span></span><br></pre></td></tr></table></figure>
-<p>提供的成员函数包括：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">MYSQL *<span class="title">GetConnection</span><span class="params">()</span></span>;				 <span class="comment">//返回一个数据库连接</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">ReleaseConnection</span><span class="params">(MYSQL *conn)</span></span>; <span class="comment">//释放连接</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">GetFreeConn</span><span class="params">()</span></span>;					 <span class="comment">//获取连接</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DestroyPool</span><span class="params">()</span></span>;					 <span class="comment">//销毁所有连接</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> connection_pool *<span class="title">GetInstance</span><span class="params">()</span></span>;	<span class="comment">//单例模式，获取唯一实例</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(string url, string User, string PassWord, string DataBaseName, <span class="keyword">int</span> Port, <span class="keyword">int</span> MaxConn, <span class="keyword">int</span> close_log)</span></span>; <span class="comment">//初始化连接池</span></span><br></pre></td></tr></table></figure>
-
-
-<h2 id="connectionRAII"><a href="#connectionRAII" class="headerlink" title="connectionRAII"></a>connectionRAII</h2><p>数据成员包括：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	MYSQL *conRAII;<span class="comment">//数据连接</span></span><br><span class="line">	connection_pool *poolRAII;<span class="comment">//数据库连接池</span></span><br></pre></td></tr></table></figure>
-<p>成员函数有：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">connectionRAII</span>(MYSQL **con, connection_pool *connPool); </span><br><span class="line"><span class="comment">//构造时直接从数据库连接池中获取数据库连接</span></span><br><span class="line">~<span class="built_in">connectionRAII</span>();</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="HTTP服务"><a href="#HTTP服务" class="headerlink" title="HTTP服务"></a>HTTP服务</h1><p><code>http_connect.h</code>、<code>http_connect.cc</code>中实现了http服务类-http_connect(为连接提供http服务，一个连接对应一个http_connect对象），还是实现了<code>setnoblocking()</code>、<code>addfd()</code>、<code>removefd()</code>、<code>modfd()</code>等功能函数。<br>上述功能函数用于设置epoll描述符的相关属性、向epoll内核事件表中添加/删除事件的功能。</p>
-<h2 id="http-connect"><a href="#http-connect" class="headerlink" title="http_connect"></a>http_connect</h2><p>本类提供以下成员函数</p>
-<h3 id="void-http-connect-initmysql-result-connection-pool-connPool"><a href="#void-http-connect-initmysql-result-connection-pool-connPool" class="headerlink" title="void http_connect::initmysql_result(connection_pool* connPool)"></a><code>void http_connect::initmysql_result(connection_pool* connPool)</code></h3><p>初始化对象的mysql连接，并将用户数据库数据读入到外部变量查找表users中。  </p>
-<h3 id="void-http-connect-close-conn"><a href="#void-http-connect-close-conn" class="headerlink" title="void http_connect::close_conn()"></a><code>void http_connect::close_conn()</code></h3><p>关闭一个连接</p>
-<h3 id="void-http-connect-init-int-sockfd-const-sockaddr-in-amp-addr-char-root-int-TRIGMode-int-close-log-string-user-string-passwd-string-sqlname"><a href="#void-http-connect-init-int-sockfd-const-sockaddr-in-amp-addr-char-root-int-TRIGMode-int-close-log-string-user-string-passwd-string-sqlname" class="headerlink" title="void http_connect::init(int sockfd, const sockaddr_in &amp;addr, char *root, int TRIGMode,int close_log, string user, string passwd, string sqlname)"></a><code>void http_connect::init(int sockfd, const sockaddr_in &amp;addr, char *root, int TRIGMode,int close_log, string user, string passwd, string sqlname)</code></h3><p>初始化连接：  </p>
+<h2 id="用户级线程和内核级线程"><a href="#用户级线程和内核级线程" class="headerlink" title="用户级线程和内核级线程"></a>用户级线程和内核级线程</h2><p>用户级线程是指不需要内核支持，在用户程序中实现的线程。它的内核的切换由用户程序自己控制，不需要内核的干涉。但是不能像内核级线程一样更好的运用多核CPU。<br>优点：  </p>
 <ol>
-<li>将文件描述符添加到内核事件表中（addfd()）；  </li>
-<li>设置http响应方式；  </li>
-<li>设置日志是否关闭；  </li>
-<li>设置数据库信息；  </li>
-<li>调用init()初始化状态信息以及缓冲区。  </li>
+<li>线程调度不需要内核参与，控制起来简单；  </li>
+<li>可以在不支持线程的操作系统中实现。  </li>
 </ol>
-<h3 id="void-http-connect-init"><a href="#void-http-connect-init" class="headerlink" title="void http_connect::init()"></a><code>void http_connect::init()</code></h3><p>初始化http_connect对象的各种信息以及缓冲区。  </p>
-<h3 id="http-connect-LINE-STATUS-http-connect-parse-line"><a href="#http-connect-LINE-STATUS-http-connect-parse-line" class="headerlink" title="http_connect::LINE_STATUS http_connect::parse_line()"></a><code>http_connect::LINE_STATUS http_connect::parse_line()</code></h3><p>状态机，用于分析出一行内容，返回值为行的读取状态，有LINE_OK,LINE_BAD,LINE_OPEN</p>
-<h3 id="bool-http-connect-read-once"><a href="#bool-http-connect-read-once" class="headerlink" title="bool http_connect::read_once()"></a><code>bool http_connect::read_once()</code></h3><p>读取客户数据，直到数据读取完毕或者无数据可读。  </p>
+<p>缺点：  </p>
 <ol>
-<li>读缓冲区用完，返回false；  </li>
-<li>选择读取方式LT或者ET；  </li>
-<li>选择LT模式则只调用一次recv读取数据，并返回；  </li>
-<li>选择ET模式则循环调用recv直到读取完毕或者发生错误；  </li>
+<li>用户级线程的阻塞回引起整个进程的阻塞；  </li>
+<li>用户级线程不能利用系统的多重处理，只有一个用户级线程可以被执行。  </li>
 </ol>
-<h3 id="http-connect-HTTP-CODE-http-connect-parse-request-line"><a href="#http-connect-HTTP-CODE-http-connect-parse-request-line" class="headerlink" title="http_connect::HTTP_CODE http_connect::parse_request_line()"></a><code>http_connect::HTTP_CODE http_connect::parse_request_line()</code></h3><p>读取http请求报文，并解析返回状态码。  </p>
+<p>内核级线程：切换由内核控制，由用户态转化为内核态。切换完毕要从内核态返回用户态。可以很好地运用多核CPU。<br>优点：  </p>
 <ol>
-<li>检测是否是有效http请求，否则返回BAD_REQUEST；  </li>
-<li>读取url和http版本；  </li>
-<li>确认是否为主界面url（登陆/注册）；  </li>
-<li>修改请求行状态m_check_state为CHECK_STATE_HEADER并返回NO_REQUEST;</li>
+<li>多核时，一个进程的多个线程可以同时执行；  </li>
+<li>由于内核级线程只有很小的数据结构和堆栈，切换速度快。  </li>
 </ol>
-<h3 id="http-connect-HTTP-CODE-http-connect-parse-headers-char-text"><a href="#http-connect-HTTP-CODE-http-connect-parse-headers-char-text" class="headerlink" title="http_connect::HTTP_CODE http_connect::parse_headers(char *text)"></a><code>http_connect::HTTP_CODE http_connect::parse_headers(char *text)</code></h3><p>解析一个http请求的首部行信息。  </p>
+<p>缺点：<br>线程在用户态的运行，而线程的调度和管理在内核实现，在控制权从一个线程传送到另一个线程需要用户态到内核态再到用户态的模式切换，比较占用系统资源。（就是必须要受到内核的监控）。  </p>
+<p>区别：  </p>
 <ol>
-<li>为空则返回GET_REQUESt；    </li>
-<li>匹配Connection（长连接或者短连接）；    </li>
-<li>匹配Content-length（实体部分长度）；  </li>
-<li>匹配Host（客户主机）；  </li>
-<li>如果前面无法匹配，则向日志写入信息；  </li>
-<li>返回NO_REQUEST。  </li>
+<li>内核支持线程是OS内核可感知的，而用户级线程是OS内核不可感知的；  </li>
+<li>用户级线程的创建、撤消和调度不需要OS内核的支持，所以性能上差一些；  </li>
+<li>用户级线程执行系统调用指令时将导致其所属进程被中断，而内核支持线程执行系统调用指令时，只导致该线程被中断。  </li>
 </ol>
-<h3 id="http-connect-HTTP-CODE-http-connect-parse-content-char-text"><a href="#http-connect-HTTP-CODE-http-connect-parse-content-char-text" class="headerlink" title="http_connect::HTTP_CODE http_connect::parse_content(char *text)"></a><code>http_connect::HTTP_CODE http_connect::parse_content(char *text)</code></h3><p>判断http请求是否被完整的读入缓冲区。</p>
-<h3 id="http-connect-HTTP-CODE-http-connect-process-read"><a href="#http-connect-HTTP-CODE-http-connect-process-read" class="headerlink" title="http_connect::HTTP_CODE http_connect::process_read()"></a><code>http_connect::HTTP_CODE http_connect::process_read()</code></h3><ol>
-<li>定位到读缓冲区内开始位置；  </li>
-<li>修改开始位置到m_checked_idx；  </li>
-<li>判断http请求的读取状态；  </li>
-<li>如果是正在解析请求行，则调用parse_request_line()；  </li>
-<li>如果是正在解析首部行，则调用parse_headers(text)，若返回GET_REQUEST则调用do_request()执行响应；  </li>
-<li>如果是正在解析实体，则调用parse_content()，若返回GET_REQUEST则调用do_request()执行响应，者之LINE_OPEN；  </li>
-<li>如果都不是，返回内部错误。  </li>
+<h2 id="混合实现"><a href="#混合实现" class="headerlink" title="混合实现"></a>混合实现</h2><p>编程人员可以决定有多少内核级线程和多少用户级线程彼此多路复用，这一模型最灵活。  </p>
+<h1 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h1><p>三个问题：  </p>
+<ol>
+<li>一个进程如何把信息传递给另一个进程？  </li>
+<li>确保两个或更多进程在关键活动中不会出现交叉；  </li>
+<li>进程运行顺序。  </li>
 </ol>
-<h3 id="void-http-connect-unmap"><a href="#void-http-connect-unmap" class="headerlink" title="void http_connect::unmap()"></a><code>void http_connect::unmap()</code></h3><p>释放读入到内存的被请求资源。</p>
-<h3 id="bool-http-connect-add-reponse-const-char-format"><a href="#bool-http-connect-add-reponse-const-char-format" class="headerlink" title="bool http_connect::add_reponse(const char *format, ...)"></a><code>bool http_connect::add_reponse(const char *format, ...)</code></h3><p>向要返回的报文中添加响应，即写入缓冲区中。<br>还有相关函数<code>add_status_line()</code>、<code>add_headers()</code>、<code>add_content()</code>，分别表示写入状态行，写入首部行，写入实体。</p>
-<h3 id="bool-http-connect-process-write-HTTP-CODE-ret"><a href="#bool-http-connect-process-write-HTTP-CODE-ret" class="headerlink" title="bool http_connect::process_write(HTTP_CODE ret)"></a><code>bool http_connect::process_write(HTTP_CODE ret)</code></h3><p>写事件处理函数，通过调用本函数来实现对返回HTTP报文的写。</p>
-<h3 id="void-http-connect-process"><a href="#void-http-connect-process" class="headerlink" title="void http_connect::process()"></a><code>void http_connect::process()</code></h3><p>读取或写入数据，并向内核事件表注册IO就绪事件。</p>
-<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p><code>threadpool.h</code>实现了threadpool类，该类能够提供多线程的http服务。</p>
-<h2 id="threadpool类"><a href="#threadpool类" class="headerlink" title="threadpool类"></a>threadpool类</h2><p>提供了如下成员函数：</p>
-<h3 id="threadpool-threadpool"><a href="#threadpool-threadpool" class="headerlink" title="threadpool::threadpool(...)"></a><code>threadpool::threadpool(...)</code></h3><p>构造函数，初始化对象参数并且创建线程(将线程设置成分离的)。</p>
-<h3 id="threadpool-threadpool-1"><a href="#threadpool-threadpool-1" class="headerlink" title="threadpool::~threadpool()"></a><code>threadpool::~threadpool()</code></h3><p>释放线程数组资源。</p>
-<h3 id="bool-threadpool-append-reactor-http-connect-request-int-state"><a href="#bool-threadpool-append-reactor-http-connect-request-int-state" class="headerlink" title="bool threadpool::append_reactor(http_connect *request, int state)"></a><code>bool threadpool::append_reactor(http_connect *request, int state)</code></h3><p>将一个http_connect对象添加到请求队列中（Reactor模式）。</p>
-<h3 id="bool-threadpool-append-proactor-http-connect-request"><a href="#bool-threadpool-append-proactor-http-connect-request" class="headerlink" title="bool threadpool::append_proactor(http_connect *request)"></a><code>bool threadpool::append_proactor(http_connect *request)</code></h3><p>将一个http_connect对象添加到请求队列中（Proactor模式）。</p>
-<h3 id="void-threadpool-worker-void-arg"><a href="#void-threadpool-worker-void-arg" class="headerlink" title="void *threadpool::worker(void* arg)"></a><code>void *threadpool::worker(void* arg)</code></h3><p>线程函数，调用run()函数。</p>
-<h3 id="void-threadpool-run"><a href="#void-threadpool-run" class="headerlink" title="void threadpool::run()"></a><code>void threadpool::run()</code></h3><ol>
-<li>从请求队列读取http_connect对象；  </li>
-<li>判断事件处理模式；  </li>
-<li>如果是Reactor模式则进行I/O操作并向内核注册写事件就绪；  </li>
-<li>如果是Proactor模式则调用process()处理。</li>
+<h2 id="竞争条件"><a href="#竞争条件" class="headerlink" title="竞争条件"></a>竞争条件</h2><p>两个或多个进程读写某些共享数据，而最后的结果取决于进程运行的精确时序，称为竞争条件。  </p>
+<h2 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h2><p>我们需要互斥，即以某种手短确保当一个进程在使用某个共享变量或文件时，其他进程不能做同样的操作。<br>我们把对共享内存进行访问的程序片段称作临界区域或临界区。如果我们能够适当地安排，使得两个进程不可能同时处于临界区中，就能够避免竞争条件。  </p>
+<h2 id="忙等待的互斥"><a href="#忙等待的互斥" class="headerlink" title="忙等待的互斥"></a>忙等待的互斥</h2><ol>
+<li>屏蔽中断：当进程进入临界区后立即屏蔽所有中断，并在就要离开时打开中断。这样子的问题是将屏蔽中断的权力交给用户进程是不明智的，如果没有打开中断，可能导致系统因此终止。  </li>
+<li>锁变量；  </li>
+<li>严格轮换法；  </li>
+<li>Peterson解法；  </li>
+<li>TSL指令<br>那些设计为多处理器的计算机，都有下面一条指令：<br><code>TSL RX, LOCK</code>  </li>
 </ol>
-<h1 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h1><p><code>webserver.h</code>、<code>webserver.cc</code>定义并且实现了服务器类webserver，该类是本项目最核心的类，所有类围绕webserver提供服务。</p>
-<h1 id="webserver类"><a href="#webserver类" class="headerlink" title="webserver类"></a>webserver类</h1><h3 id="void-init-int-string-string-string-int-int-int-int-int-int-int"><a href="#void-init-int-string-string-string-int-int-int-int-int-int-int" class="headerlink" title="void init(int,string,string,string,int,int,int,int,int,int,int)"></a><code>void init(int,string,string,string,int,int,int,int,int,int,int)</code></h3><p>初始化相关参数，包括服务器端口、数据库用户名、数据库密码等等。</p>
-<h3 id="void-thread-pool"><a href="#void-thread-pool" class="headerlink" title="void thread_pool()"></a><code>void thread_pool()</code></h3><p>初始化线程池</p>
-<h3 id="void-sql-pool"><a href="#void-sql-pool" class="headerlink" title="void sql_pool()"></a><code>void sql_pool()</code></h3><p>初始化数据库连接池</p>
-<h3 id="void-log-write"><a href="#void-log-write" class="headerlink" title="void log_write()"></a><code>void log_write()</code></h3><p>初始化日志类，并且打开一个日志文件</p>
-<h3 id="void-trig-mode"><a href="#void-trig-mode" class="headerlink" title="void trig_mode"></a><code>void trig_mode</code></h3><p>设置监听套接字和已连接套接字的触发模式（LT/ET）</p>
-<h3 id="void-eventListen"><a href="#void-eventListen" class="headerlink" title="void eventListen()"></a><code>void eventListen()</code></h3><p>事件监听函数：<br>1）打开一个监听套接字<br>2）设置这个监听套接字的相关参数<br>3）设置Uilts类成员utils<br>4）创建epoll内核事件表<br>5）向utils添加套接字事件（包括设置定时器和将套接字和epoll关联起来）<br>6）创建通信管道，并将读管道和epoll关联起来<br>7）将管道变量、epoll套接字描述符赋值给Utils<br>8）设置信号SIGPIPE、SIGALRM、SIGTERM的处理<br>9）发出SIGALRM信号</p>
-<h3 id="void-eventLoop"><a href="#void-eventLoop" class="headerlink" title="void eventLoop()"></a><code>void eventLoop()</code></h3><p>事件循环函数。<br>1）调用<code>epoll_wait()</code>等待IO事件发生。<br>2）处理事件：<br>如果是监听套接字，则处理监听数据。<br>如果对应文件描述符断开连接/发生错误，则阐述对应的管理类（定时器），调用deal_timer()。<br>如果是信号管道的读端口且有可读事件发生，则调用信号处理函数，并返回服务器停止、超时信息。<br>如果是读事件，处理客户连接上的读事件（dealwithdata）。<br>如果是写事件，处理客户连接上的写事件（dealwithwrite）。<br>3）如果超时，则调用utils的定时任务，并输出日志信息</p>
-<h3 id="void-timer-int-connfd-struct-sockaddr-in，client-address"><a href="#void-timer-int-connfd-struct-sockaddr-in，client-address" class="headerlink" title="void timer(int connfd, struct sockaddr_in，client_address)"></a><code>void timer(int connfd, struct sockaddr_in，client_address)</code></h3><p>1）初始化套接字对应的http连接类<br>2）初始化定时器，并加入定时器链表</p>
-<h3 id="void-adjust-timer-util-timer-timer"><a href="#void-adjust-timer-util-timer-timer" class="headerlink" title="void adjust_timer(util_timer *timer)"></a><code>void adjust_timer(util_timer *timer)</code></h3><p>修改定时器终止时间，调整定时器在链表中的位置。</p>
-<h3 id="void-deal-timer-util-timer-timer-int-sockfd"><a href="#void-deal-timer-util-timer-timer-int-sockfd" class="headerlink" title="void deal_timer(util_timer *timer, int sockfd)"></a><code>void deal_timer(util_timer *timer, int sockfd)</code></h3><p>删除定时器，关闭套接字。</p>
-<h3 id="bool-dealclinetdata"><a href="#bool-dealclinetdata" class="headerlink" title="bool dealclinetdata()"></a><code>bool dealclinetdata()</code></h3><p>1）接收客户端连接，其中有LT/ET模式可选。<br>2）在http连接管理类、定时器管理类中初始化这个连接。</p>
-<h3 id="bool-dealwithsignal-bool-amp-timeout-bool-amp-stop-server"><a href="#bool-dealwithsignal-bool-amp-timeout-bool-amp-stop-server" class="headerlink" title="bool dealwithsignal(bool &amp;timeout, bool &amp;stop_server)"></a><code>bool dealwithsignal(bool &amp;timeout, bool &amp;stop_server)</code></h3><p>1）从管道读取信号到缓冲区。<br>2）处理SIGARM信号（返回timeout信息）<br>3）处理终止信号（返回stop_server信息）</p>
-<h3 id="void-dealwithread-int-sockfd"><a href="#void-dealwithread-int-sockfd" class="headerlink" title="void dealwithread(int sockfd)"></a><code>void dealwithread(int sockfd)</code></h3><p>提供了Reactor和Proacotr两种事件处理模式。<br>Reactor：<br>调整定时器。<br>将事件放入请求队列。<br>Proactor：<br>读取数据，若读取失败调用deal_timer()，读取成功则将事件添加进入请求队列，调整定时器（adjust_timer）。</p>
-<h3 id="void-dealwithwrite-int-sockfd"><a href="#void-dealwithwrite-int-sockfd" class="headerlink" title="void dealwithwrite(int sockfd)"></a><code>void dealwithwrite(int sockfd)</code></h3><p>提供了Reactor和Proacotr两种事件处理模式。<br>Reactor：<br>调整定时器。<br>将事件放入请求队列。<br>Proactor：<br>读取数据，若读取失败调用deal_timer()，读取成功则将事件添加进入请求队列，调整定时器（adjust_timer）。</p>
-<h1 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h1><p>服务器项目仅仅只是完成项目还是不够的，我们还需要进行压力测试来检验这个服务器的性能如何，只要经过了压力测试，才说说明这个服务器是稳定的。</p>
-<h2 id="Webbench"><a href="#Webbench" class="headerlink" title="Webbench"></a>Webbench</h2><p>在本项目中我使用Webbench来进行压力测试。Webbench是知名的网站压力测试工具，它是由<a target="_blank" rel="noopener" href="http://www.51testing.com/">Lionbridge公司</a>开发。Webbench能测试处在相同硬件上，不同服务的性能以及不同硬件上同一个服务的运行状况。webbench的标准测试可以向我们展示服务器的两项内容：每秒钟相应请求数和每秒钟传输数据量。webbench不但能具有便准静态页面的测试能力，还能对动态页面（ASP,PHP,JAVA,CGI）进 行测试的能力。还有就是他支持对含有SSL的安全网站例如电子商务网站进行静态或动态的性能测试。Webbench最多可以模拟3万个并发连接去测试网站的负载能力。</p>
+<p>这个指令可以将一个内存字lock读到寄存器RX中，然后该内存地址上存一个非零值。这个读操作和写操作是不可分割的，即该指令结束之前其他处理器不允许访问该内存字。这通过锁住内存总线来实现，静止其他CPU在本指令结束之前访问内存。  </p>
+<h2 id="信号量-amp-amp-互斥量"><a href="#信号量-amp-amp-互斥量" class="headerlink" title="信号量&amp;&amp;互斥量"></a>信号量&amp;&amp;互斥量</h2><p>信号量、互斥量可以参考我在《CSAPP》的读书笔记第12章的内容。  </p>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p>条件变量允许线程由于一些未达到的条件而阻塞。直到另外的线程向它发送信号。</p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>举例：<br>消费者-生产者问题中，如果缓冲区大小为0，这时候消费者先对互斥量加锁，再对信号量进行P操作，将被阻塞，而由于互斥量加锁，生产者也无法对信号量进行V操作，这种现象叫做死锁。  </p>
+<h2 id="管程"><a href="#管程" class="headerlink" title="管程"></a>管程</h2><p>管程是一种程序结构，由过程、变量及数据结构等组成的一个集合。管程是在编译器层次实现的，在编写程序时可以理解成一个软件包，它提供如下服务：  </p>
+<ul>
+<li>多个彼此可以交互并共用资源的线程  </li>
+<li>多个与资源使用有关的变量  </li>
+<li>一个互斥锁  </li>
+<li>一个用来避免竞态条件的不变量  </li>
+</ul>
+<h1 id="调度"><a href="#调度" class="headerlink" title="调度"></a>调度</h1><p>当计算机系统是多道程序设计系统时，就会发生多个进程或者多个线程竞争CPU。在操作系统中，完成选择工作得这一部分称为调度程序。  </p>
+<h2 id="调度介绍"><a href="#调度介绍" class="headerlink" title="调度介绍"></a>调度介绍</h2><ul>
+<li><p>进程行为：<br>几乎所有进程都是I/O或计算交替突发的，典型地，CPU不停顿地运行一段时间，然后发出一个系统调用以便读写文件。<br>进程也可以分为I/O密集型和计算密集型。  </p>
+</li>
+<li><p>何时调度：  </p>
+</li>
+</ul>
+<p>第一，在创建一个新进程时，选择运行父进程还是子进程；<br>第二，在进程退出时必须做出调度决策，一个进程不再运行，所以必须从就绪进程中选择另外的某个进程；<br>第三，当一个进程阻塞在I/O和信号量上或由于其他原因阻塞时，必须选择另一个进程运行。有时，阻塞原因会成为选择的因素。  </p>
+<ul>
+<li>调度算法分类和目标：<br>不同环境需要不通的调度算法，这里有必要划出的三种环境。<br>1）批处理（吞吐量、周转时间、CPU利用率）；<br>2）交互式（响应时间、均衡性）；<br>3）实时（满足截止时间、可预测性）。  </li>
+</ul>
+<h1 id="经典的IPC问题"><a href="#经典的IPC问题" class="headerlink" title="经典的IPC问题"></a>经典的IPC问题</h1><h2 id="哲学家就餐问题"><a href="#哲学家就餐问题" class="headerlink" title="哲学家就餐问题"></a>哲学家就餐问题</h2><p>问题：5个哲学家5把叉子，需要两把叉子才能吃饭：<br>如果同时拿起右边的叉子，则会发生死锁。<br>如何解决：<br>用信号量对5个哲学家提供保护，在开始拿叉子之前，先对相邻两个哲学家的互斥量进行访问，如果他们都没有在吃饭，则拿起叉子。<br>这种解法可以获得最大的并行度。  </p>
+<h2 id="读者-写者问题"><a href="#读者-写者问题" class="headerlink" title="读者-写者问题"></a>读者-写者问题</h2><p>举例：一个进程正在更新数据库，而这时候，其他读数据库的请求将被阻塞；而一个进程在读数据，其他进程也可以读数据库。这就是典型的读者-写者问题，读者不具有排他性，而写者会排他。<br>解决方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> semaphore;</span><br><span class="line">semaphore mutex = <span class="number">1</span>;</span><br><span class="line">semaphore db = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> rc = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reader</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;mutex);</span><br><span class="line">		rc = rc + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">if</span>(rc==<span class="number">1</span>)<span class="built_in">down</span>(&amp;db);</span><br><span class="line">		<span class="built_in">up</span>(&amp;mutex);</span><br><span class="line">		<span class="built_in">read_data_base</span>();</span><br><span class="line">		<span class="built_in">down</span>(&amp;mutex);</span><br><span class="line">		rc = rc - <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">if</span>(rc == <span class="number">0</span>)<span class="built_in">up</span>(&amp;db);</span><br><span class="line">		<span class="built_in">up</span>(&amp;mutex);</span><br><span class="line">		<span class="built_in">use_data_read</span>();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writer</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">		<span class="built_in">think_up_data</span>();</span><br><span class="line">		<span class="built_in">down</span>(&amp;db);</span><br><span class="line">		<span class="built_in">write</span>(&amp;db);</span><br><span class="line">		<span class="built_in">write_data_base</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;db);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="进程和线程需要维护的状态"><a href="#进程和线程需要维护的状态" class="headerlink" title="进程和线程需要维护的状态"></a>进程和线程需要维护的状态</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/29/%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/29/%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">存储管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-29 23:22:49" itemprop="dateCreated datePublished" datetime="2021-01-29T23:22:49+08:00">2021-01-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="为什么要使用虚拟地址空间？"><a href="#为什么要使用虚拟地址空间？" class="headerlink" title="为什么要使用虚拟地址空间？"></a>为什么要使用虚拟地址空间？</h1><ol>
+<li>程序大小的增长速度总是很快，使用虚拟地址空间可以扩大地址空间。  </li>
+<li>如果使用物理地址空间，进程之间共享物理内存，容易造成竞争和程序的崩溃，使用虚拟地址空间还可以增加程序的安全性。  </li>
+<li>使用物理地址空间，同时运行多个程序是困难的。  </li>
+</ol>
+<h1 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h1><h2 id="地址空间的概念"><a href="#地址空间的概念" class="headerlink" title="地址空间的概念"></a>地址空间的概念</h2><p><strong>地址空间</strong> 是一个进程可用于寻址内存的一套地址集合。每个进程都有自己的地址空间，并且这个地址空间独立于其他进程的地址空间。</p>
+<h3 id="基址寄存器和界限寄存器"><a href="#基址寄存器和界限寄存器" class="headerlink" title="基址寄存器和界限寄存器"></a>基址寄存器和界限寄存器</h3><p>经典的重定位方法。基址寄存器存储程序的起始物理地址，界限寄存器存储程序长度。<br>每次一个进程进行访问内存，取一条指令、读取或写一个数据字，CPU会把地址发送到内存总线前，自动把基址值加到进程发出的地址值之上。<br>这个方法比较容易，但是由于每次访问内存都需要进行加法和比较运算，会消耗很多时间。</p>
+<h2 id="交换技术"><a href="#交换技术" class="headerlink" title="交换技术"></a>交换技术</h2><p>现实中我们常常要打开多个程序，每个进程都需要占据一定的内存，如果打开程序比较多，会造成内存不足的问题，有一种简单的处理内存超载的方法，<strong>交换（swapping）技术</strong>。当一个进程空闲时，存放在磁盘上，所以它不运行时不占用内存。另一个方法是<strong>虚拟内存</strong>，虚拟内存使得程序可以只有在一部分被读入内存时运行。  </p>
+<p>交换技术很好理解，我们讨论一下其可能面临的一些问题，我们知道很多程序设计语言都可以动态地分配内存，那么当进程空间视图增大的时候，就会出现问题：  </p>
+<ul>
+<li>有相邻空闲区：将相邻空闲区分配给进程；  </li>
+<li>没有相邻空闲区：把一个或多个进程换出，以便生成足够大的空闲区。<br>如果大部分进程运行时都需要增长，为了减少换入换出的开销，我们在最开始的时候为进程额外分配一些内存，这个预留空间位于堆栈和数据段之间，他们都可以使用其。</li>
+</ul>
+<h2 id="空闲内存管理"><a href="#空闲内存管理" class="headerlink" title="空闲内存管理"></a>空闲内存管理</h2><h3 id="位图"><a href="#位图" class="headerlink" title="位图"></a>位图</h3><p>我们可以把内存划分为小到几个字达到几千字的内存单元，然后用位图来记录使用情况。<br>问题：当我们需要分配占k个单位内存时，，需要在位图中匹配长度为k的0串，这是一个耗时操作。  </p>
+<h3 id="使用链表的存储管理"><a href="#使用链表的存储管理" class="headerlink" title="使用链表的存储管理"></a>使用链表的存储管理</h3><p>维护一个记录已分配内存段和空闲内存段的链表。链表一个结点或者包含一个进程，或者包含一个位于两个进程之间的空闲区。  </p>
+<p>如果按照地址顺序来存放进程和空闲区时，有几种算法可以来为进程分配内存：  </p>
+<ul>
+<li>首次适配算法；  </li>
+<li>下次适配算法；</li>
+<li>最佳适配算法；  </li>
+<li>最差适配算法。  </li>
+</ul>
+<p>如果单独维护空闲区链表和进程链表，可以提高以上四个算法的速度，但是释放内存将内存从进程表中删除并插入到空闲区链表的时间成本高昂。  </p>
+<p>当然如果我们单独维护空闲区链表和进程链表，可以按照大小升序排列，这样可以提高最佳适配的效率。  </p>
+<p>还有一种分配算法叫做<strong>快速适配</strong>，为空闲区维护一个单独的链表。例如，这个表的第一项指向一个大小为4KB的空闲区，第二项指向一个大小为8KB的空闲区，第三项指向一个大小为12KB的空闲区。这样子寻找一个指定大小的空闲区是非常迅速的，但是缺点是合并空闲区相当费时。  </p>
+<h1 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h1><p>尽管基址寄存器和界限寄存器可以用于创建地址空间的抽象，但无法解决程序大小的膨胀问题。虚拟内存的基本思想是每个程序都拥有自己的地址空间，空间被分为多个块，每一块称作一页。  </p>
+<h2 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h2><p>内存管理单元（Memory Management Unit，MMU），MMU把虚拟地址映射为物理内存地址。  </p>
+<p>访问虚拟内存，首先查询页表项（以一级页表为例），如果页表项显示不存在（缓存为命中），则引起缺页中断，陷入内核，由内核将需要的页写入到内存中（如果内存已满，会替换掉一个不常用的页，然后将被替换页写入磁盘）；如果显示存在，从页表项索引到页所在位置；找到物理内存的页后，根据虚拟地址的偏移量来确定最终物理地址。<br>注：页表项还可以添加其他信息，比如读写控制等。  </p>
+<h2 id="转换检测缓冲区（TLB）"><a href="#转换检测缓冲区（TLB）" class="headerlink" title="转换检测缓冲区（TLB）"></a>转换检测缓冲区（TLB）</h2><p>每次内存访问都需要多次访问页表也就是多次访问内存，为了节约时间，使用一种缓存技术TLB，TLB通常在MMU中（硬件实现，所以快），包含少量的表项，每个表项记录一个页面信息，包括虚拟页号，页面的修改位、保护码和该页所对应的物理页框。在每次内存访问时，都会首先访问TLB，寻找匹配表项，如果TLB命中，则不再访问页表，如果不命中，再访问页表，然后再将这次表项读入到TLB（也会淘汰一个TLB表项），下次再访问这个页表，自然会命中了。  </p>
+<h1 id="页面置换算法"><a href="#页面置换算法" class="headerlink" title="页面置换算法"></a>页面置换算法</h1><h2 id="最优页面置换算法"><a href="#最优页面置换算法" class="headerlink" title="最优页面置换算法"></a>最优页面置换算法</h2><p>选择最晚将被使用的页面被置换，这个算法很好理解，而且被证明时最优的，但是问题在于我们无法预测页面何时将再被使用。当然可以跟踪页面使用情况来预测，但是这样是不划算的。  </p>
+<h2 id="最近未使用页面置换算法"><a href="#最近未使用页面置换算法" class="headerlink" title="最近未使用页面置换算法"></a>最近未使用页面置换算法</h2><p>最近未使用也很好理解，而且容易实现，性能也够用。  </p>
+<h2 id="先进先出页面置换算法"><a href="#先进先出页面置换算法" class="headerlink" title="先进先出页面置换算法"></a>先进先出页面置换算法</h2><p>还有很多其他页面置换算法，比如时钟页面置换算法，最近最少使用页面置换算法等等，不做赘述。</p>
+<h1 id="分页系统中的设计问题"><a href="#分页系统中的设计问题" class="headerlink" title="分页系统中的设计问题"></a>分页系统中的设计问题</h1><h2 id="局部分配策略和全局分配策略"><a href="#局部分配策略和全局分配策略" class="headerlink" title="局部分配策略和全局分配策略"></a>局部分配策略和全局分配策略</h2><p>局部就是指页面置换时只考虑同一进程的内存，而全局就是考虑所有进程的内存。一般来说，全局的性能更优，而且可以避免一个需要较大内存的进程只被分配了少量物理内存。<br>还有一些动态的分配策略，会实时参考缺页中断率来分配内存。</p>
+<h2 id="负载控制"><a href="#负载控制" class="headerlink" title="负载控制"></a>负载控制</h2><p>即使使用最优页面置换算法，系统也可能发生“抖动”，这在于每个进程都在渴求更多的内存，导致进程不断被频繁换入换出，解决方案是暂时从内存中去掉一些进程。  </p>
+<h3 id="共享页面"><a href="#共享页面" class="headerlink" title="共享页面"></a>共享页面</h3><p>如果不同进程之间共享某页面，可以让他们都指向同一个页面集合，然后当读的时候并不进行页面复制，仅有写发生时进行页面复制，这称为写时复制。  </p>
+<h3 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h3><p>通过一个系统调用把文件映射到虚拟地址空间的一部分。这样可以把文件当作一个大型的字符数组来访问，而且这样子可以通过共享内存来通信，一个进程在共享内存上完成了写操作，另一个进程在映射到这个文件的虚拟地址空间之上指向读操作时，它就可以立即看到上一个进程写操作了。这个机制为进程之间提供了一个高带宽通道。</p>
+<h1 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h1><p>一个编译器在编译过程中会创建许多表，其中可能包括：  </p>
+<ol>
+<li>被保存起来供打印清单用的程序正文；  </li>
+<li>符号表，包含变量的名字和属性；  </li>
+<li>包含用到的所有整型量和浮点常量的表；  </li>
+<li>语法分析树，包含程序语法分析的结果；  </li>
+<li>编译器内部过程调用使用的堆栈。  </li>
+</ol>
+<p>我们需要一个能够把程序员从管理表的扩张和收缩工作中解出来的方法，就像虚拟内存使程序员不用再为怎么样把程序划分称覆盖块担心一样。<br>一个直观并且通用的方法是在机器上提供多个互相独立的称为段的地址空间。<br>一个段一般不包含不通类型的内容。在分段系统中，修改一个过程不会影响其他无关的过程的起始地址。<br>分段是一个逻辑实体，程序员知道这一点并把它作为一个逻辑实体来使用。<br>页面的内容从某种意义上是随机的，程序员甚至察觉不到分页的事实，而分段对程序员是已知的。</p>
+<h2 id="分段和分页的结合"><a href="#分段和分页的结合" class="headerlink" title="分段和分页的结合"></a>分段和分页的结合</h2><p>分段和分页可以结合起来使用，一个例子就是MULTICS。具体细节参考《现代操作系统》P134-P135。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/28/%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/" class="post-title-link" itemprop="url">管理事务处理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-28 20:15:45" itemprop="dateCreated datePublished" datetime="2021-01-28T20:15:45+08:00">2021-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="事务处理"><a href="#事务处理" class="headerlink" title="事务处理"></a>事务处理</h1><p>事务处理是一种机制，用来管理成批执行的MySQL操作，以保证数据库不包含不完整的操作结果。利用事务处理，可以保证一组操作不会中途停止，它们或者作为整体执行，或者完全不执行。如果没有错误发生，整租语句提交给数据库表，如果发生错误，则进行回退，以恢复数据库到某个已知的完全的状态。</p>
+<h1 id="控制事务处理"><a href="#控制事务处理" class="headerlink" title="控制事务处理"></a>控制事务处理</h1><p>MySQL使用下面的语句来标识事务的开始：<br><code>START TRANSACTION;</code></p>
+<h2 id="使用ROLLBACK"><a href="#使用ROLLBACK" class="headerlink" title="使用ROLLBACK"></a>使用ROLLBACK</h2><p>MySQL的ROLLBACK命令用来回退（撤销）MySQL语句，举例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from ordertotals;</span><br><span class="line">	&gt; start transaction</span><br><span class="line">	&gt; delete from ordertotals;</span><br><span class="line">	&gt; select * from ordertotals;</span><br><span class="line">	&gt; ROLLBACK;</span><br><span class="line">	&gt; select * from ordertotals;</span><br></pre></td></tr></table></figure>
+<p>ROLLBACK只能在一个事务处理内使用（在执行了一条start transaction命令之后）。</p>
+<h2 id="使用COMMIT"><a href="#使用COMMIT" class="headerlink" title="使用COMMIT"></a>使用COMMIT</h2><p>一般的MySQL语句都是直接针对数据库表执行和编写的。这就是所谓的隐含提交，即提交操作时自动进行的，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">start transaction;</span><br><span class="line">delete from orderitems where order_num &#x3D; 20010;</span><br><span class="line">delete from orders where order_num &#x3D; 20010;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，从系统完全删除订单20010.因为涉及更新两个数据库表orders和orderitems，所以使用事务处理块来保证订单不被部分删除。  </p>
+<h2 id="使用保留点"><a href="#使用保留点" class="headerlink" title="使用保留点"></a>使用保留点</h2><p>简单的ROLLBACK和COMMIT语句就可以写入或撤销整个事务处理。但是，只是对简单的事务处理才能这样做，更复杂的事务处理可能需要部分提交或回退。<br>为了支持回退部分事务处理，必须能在事务处理块中合适的位置防止占位符。这样，如果需要回退，可以回退到某个占位符。这些占位符也被称为保留点，为了创建占位符，可如下使用SAVEPOINT语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SAVEPOINT delete1;</span><br></pre></td></tr></table></figure>
+<p>每个保留点都取标识它的唯一名字，以便在回退时，MySQL知道要回退到何处。为了回退到本例给出的保留点，可如下进行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROLLBACK TO delete1;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E8%A7%A6%E5%8F%91%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/28/%E4%BD%BF%E7%94%A8%E8%A7%A6%E5%8F%91%E5%99%A8/" class="post-title-link" itemprop="url">使用触发器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-28 19:52:41" itemprop="dateCreated datePublished" datetime="2021-01-28T19:52:41+08:00">2021-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h1><p><strong>触发器</strong> 是MySQL响应以下任意语句而自动执行的一条MySQL语句。</p>
+<h1 id="创建触发器"><a href="#创建触发器" class="headerlink" title="创建触发器"></a>创建触发器</h1><p>创建触发器需要4条信息：  </p>
+<ol>
+<li>唯一的触发名；  </li>
+<li>触发器关联的表；  </li>
+<li>触发器应该相应的活动；  </li>
+<li>触发器何时执行。  </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create trigger newproduct after insert on products </span><br><span class="line">    -&gt; for each row select &#39;Product added&#39; into @add;</span><br></pre></td></tr></table></figure>
+
+<p><code>create trigger</code>用来创建名为newproduct的新触发器。触发器可在一个操作发生之前或之后执行，这里给出了<code>AFTER INSERT</code>，所以此触发器将在insert语句成功执行后执行。</p>
+<h1 id="删除触发器"><a href="#删除触发器" class="headerlink" title="删除触发器"></a>删除触发器</h1><p>很简单，删除触发器的语法：<code>drop trigger newproduct;</code></p>
+<h1 id="使用触发器"><a href="#使用触发器" class="headerlink" title="使用触发器"></a>使用触发器</h1><h2 id="insert触发器"><a href="#insert触发器" class="headerlink" title="insert触发器"></a>insert触发器</h2><p>insert触发器在insert语句执行之前或之后执行：  </p>
+<ul>
+<li>在insert触发器代码内可以引用一个名为new的虚拟表，访问被插入的行；  </li>
+<li>在before insert触发器中，new中的值也可以被更新（允许修改被插入的值）；  </li>
+<li>对于AUTO_INCREMENT列，new在insert执行之前包含0，在insert执行之后包含新的自动生成值； </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create trigger neworder after insert on orders</span><br><span class="line">    -&gt; for each row select new.order_num into @new_order_num;</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into orders(order_date,cust_id)</span><br><span class="line">    -&gt; values(Now(),10001);</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select @new_order_num;</span><br><span class="line">+----------------+</span><br><span class="line">| @new_order_num |</span><br><span class="line">+----------------+</span><br><span class="line">|          20010 |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
+
+<h2 id="delete触发器"><a href="#delete触发器" class="headerlink" title="delete触发器"></a>delete触发器</h2><ul>
+<li>在delete触发器代码内，你可以引用一个名为OLD的虚拟表，访问被删除的行；  </li>
+<li>OLD中的值全都是只读，不能更新。  </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delimiter &#x2F;&#x2F;</span><br><span class="line">mysql&gt; create trigger deleteorder before delete on orders</span><br><span class="line">    -&gt; for each row</span><br><span class="line">    -&gt; begin</span><br><span class="line">    -&gt; insert into archive_orders(order_num,order_date,cust_id)</span><br><span class="line">    -&gt; values(OLD.order_num,OLD.order_date,OLD.cust_id);</span><br><span class="line">    -&gt; end &#x2F;&#x2F;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; delimiter ;</span><br></pre></td></tr></table></figure>
+
+<h2 id="update触发器"><a href="#update触发器" class="headerlink" title="update触发器"></a>update触发器</h2><ul>
+<li>在update触发器代码中，你可以引用一个名为OLD的虚拟表访问以前的值，引用一个名为new的虚拟表访问新更新的值；  </li>
+<li>在before update触发器中，new中的值可能也被更新；  </li>
+<li>OLD中的值全都是只读，不能更新。  </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E6%B8%B8%E6%A0%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/28/%E4%BD%BF%E7%94%A8%E6%B8%B8%E6%A0%87/" class="post-title-link" itemprop="url">使用游标</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-28 19:22:10" itemprop="dateCreated datePublished" datetime="2021-01-28T19:22:10+08:00">2021-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h1><p>游标只能用于存储过程。</p>
+<h1 id="使用游标"><a href="#使用游标" class="headerlink" title="使用游标"></a>使用游标</h1><h2 id="创建游标"><a href="#创建游标" class="headerlink" title="创建游标"></a>创建游标</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create procedure processorders()</span><br><span class="line">	-&gt; begin declare ordernumbers cursor</span><br><span class="line">   -&gt; for</span><br><span class="line">   -&gt; select order_num from orders;</span><br><span class="line">   -&gt; end;</span><br></pre></td></tr></table></figure>
+
+<h2 id="打开和关闭游标"><a href="#打开和关闭游标" class="headerlink" title="打开和关闭游标"></a>打开和关闭游标</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; open ordernumbers;</span><br><span class="line">mysql&gt; close ordernumbers;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/28/%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">使用存储过程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-28 16:40:45" itemprop="dateCreated datePublished" datetime="2021-01-28T16:40:45+08:00">2021-01-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h1><p>实际使用MySQL经常会有一个完整得操作需要多条语句才能完成。可以创建存储过程来简化这个问题，存储过程可以视为批文件，虽然它们得作用不仅局限于批处理。</p>
+<h1 id="为什么要使用存储过程"><a href="#为什么要使用存储过程" class="headerlink" title="为什么要使用存储过程"></a>为什么要使用存储过程</h1><ol>
+<li>简化复杂操作。  </li>
+<li>保证数据的完整性。  </li>
+<li>简化对变动的管理。  </li>
+</ol>
+<h1 id="使用存储过程"><a href="#使用存储过程" class="headerlink" title="使用存储过程"></a>使用存储过程</h1><p>使用存储过程需要知道如何执行它们。存储过程的执行远比其定义更经常遇到，因此，我们将从执行存储过程开始介绍。然后再介绍创建和使用存储过程。</p>
+<h2 id="执行存储过程"><a href="#执行存储过程" class="headerlink" title="执行存储过程"></a>执行存储过程</h2><p>MySQL称存储过程的执行为调用，因此MySQL执行存储过程的语句为CALL。CALL接受存储过程的名字以及需要传递给它的任意参数。请看例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CALL productpricing(@pricelow,@pricehigh,@priceaverage);</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建存储过程"><a href="#创建存储过程" class="headerlink" title="创建存储过程"></a>创建存储过程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE productpricing()</span><br><span class="line">BEGIN</span><br><span class="line">	SELECT Avg(prod_prices) as priceaverage</span><br><span class="line">   from products;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
+<p>注意：如果使用的是mysql命令行实用程序，应该修改默认的语句分隔符（原来是;）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER &#x2F;&#x2F;</span><br><span class="line">CREATE PROCEDURE productpricing()</span><br><span class="line">BEGIN</span><br><span class="line">	SELECT Avg(prod_prices) as priceaverage</span><br><span class="line">   from products;</span><br><span class="line">END &#x2F;&#x2F;</span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除存储过程"><a href="#删除存储过程" class="headerlink" title="删除存储过程"></a>删除存储过程</h2><p>存储过程在创建之后被保存在服务器上以供使用。删除可以使用如下语句：<br><code>DROP PROCEDURE productpricing;</code></p>
+<h2 id="使用参数"><a href="#使用参数" class="headerlink" title="使用参数"></a>使用参数</h2><p>一般存储过程不显示结果，只是把结果返回到指定的变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delimiter &#x2F;&#x2F;</span><br><span class="line">mysql&gt; create procedure productpricing(</span><br><span class="line">    -&gt; out pl decimal(8,2),</span><br><span class="line">    -&gt; out ph decimal(8,2),</span><br><span class="line">    -&gt; out pa decimal(8,2))</span><br><span class="line">    -&gt; begin</span><br><span class="line">    -&gt; select min(prod_price)</span><br><span class="line">    -&gt; into pl</span><br><span class="line">    -&gt; from products;</span><br><span class="line">    -&gt; select max(prod_price)</span><br><span class="line">    -&gt; into ph</span><br><span class="line">    -&gt; from products;</span><br><span class="line">    -&gt; select avg(prod_price)</span><br><span class="line">    -&gt; into pa</span><br><span class="line">    -&gt; from products;</span><br><span class="line">    -&gt; end &#x2F;&#x2F;</span><br><span class="line">mysql&gt; delimiter ;</span><br></pre></td></tr></table></figure>
+<p><code>in</code>是输入，<code>out</code>是输出。</p>
+<p>执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; call productpricing(@pricelow,@pricehigh,@priceaverage);</span><br><span class="line">Query OK, 1 row affected, 1 warning (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select @pricehigh;</span><br><span class="line">+------------+</span><br><span class="line">| @pricehigh |</span><br><span class="line">+------------+</span><br><span class="line">|      55.00 |</span><br><span class="line">+------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="建立智能存储过程"><a href="#建立智能存储过程" class="headerlink" title="建立智能存储过程"></a>建立智能存储过程</h2><h2 id="检查存储过程"><a href="#检查存储过程" class="headerlink" title="检查存储过程"></a>检查存储过程</h2><p>为了显示创建一个存储过程的CREATE语句，使用show create procedure语句。例如：<br><code>show create procedure ordertotal;</code></p>
 
       
     </div>
@@ -1299,7 +1362,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1367,14 +1430,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">123</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
