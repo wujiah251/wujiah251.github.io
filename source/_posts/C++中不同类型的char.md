@@ -1,6 +1,7 @@
 title: C++中不同类型的char
 author: Jiahao Wu
-tags: []
+tags:
+  - C++
 categories:
   - C++
 date: 2021-03-01 13:03:00

@@ -1,6 +1,7 @@
 title: Linux命令学习
 author: Jiahao Wu
-tags: []
+tags:
+  - Linux
 categories:
   - Linux C/C++
 date: 2021-02-15 22:19:00

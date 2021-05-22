@@ -1,7 +1,10 @@
 title: STL六大部件
 author: Jiahao Wu
-date: 2021-02-28 18:02:31
 tags:
+  - STL
+categories:
+  - C++
+date: 2021-02-28 18:02:00
 ---
 STL有六大部件（Components）：  
 - 容器（Containers）  

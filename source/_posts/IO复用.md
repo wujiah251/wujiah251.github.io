@@ -1,7 +1,11 @@
 title: I/O复用
 author: Jiahao Wu
-tags: []
-categories: 操作系统
+tags:
+  - IO复用
+  - 操作系统
+  - 网络编程
+categories:
+  - 操作系统
 date: 2021-02-04 22:08:00
 ---
 # I/O模型介绍

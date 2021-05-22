@@ -1,8 +1,10 @@
 title: CH6存储器层次结构
 author: Jiahao Wu
-categories: 深入理解计算机系统
-date: 2021-01-14 15:37:41
+categories:
+  - 深入理解计算机系统
 tags:
+  - CSAPP
+date: 2021-01-14 15:37:00
 ---
 # **存储器层次结构**
 

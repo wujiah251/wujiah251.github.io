@@ -1,6 +1,7 @@
 title: POD数据类型
 author: Jiahao Wu
-tags: []
+tags:
+  - C++
 categories:
   - C++
   - STL标准库与泛型编程

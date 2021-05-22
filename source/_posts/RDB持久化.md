@@ -1,6 +1,7 @@
 title: RDB持久化
 author: 乡村程序员
-tags: []
+tags:
+  - Redis
 categories:
   - Redis
   - 单机数据库的实现
