@@ -739,7 +739,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+                <time title="修改时间：2021-05-22 21:29:31" itemprop="dateModified" datetime="2021-05-22T21:29:31+08:00">2021-05-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -763,9 +763,7 @@
 
       
           <p>C++中提供了四种不同的char类型，分别是char、wchar_t、char16_t、char32_t。我们主要来看下他们的不同。</p>
-<h1 id="占用空间不同"><a href="#占用空间不同" class="headerlink" title="占用空间不同"></a>占用空间不同</h1><p>运行如下代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of char is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of wchar_t is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">wchar_t</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of char16_t is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char16_t</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of char32_t is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char32_t</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 结果如下：</span></span><br><span class="line">size of <span class="keyword">char</span> is <span class="number">1</span></span><br><span class="line">size of <span class="keyword">wchar_t</span> is <span class="number">2</span></span><br><span class="line">size of <span class="keyword">char16_t</span> is <span class="number">2</span></span><br><span class="line">size of <span class="keyword">char32_t</span> is <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<p>我们可以知道char、wchar_t、char16_t、char32_t分别是1、2、2、4个字节。  </p>
+<h1 id="占用空间不同"><a href="#占用空间不同" class="headerlink" title="占用空间不同"></a>占用空间不同</h1><p>运行如下代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of char is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of wchar_t is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">wchar_t</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of char16_t is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char16_t</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;size of char32_t is &quot;</span> &lt;&lt; <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char32_t</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 结果如下：</span></span><br><span class="line">size of <span class="keyword">char</span> is <span class="number">1</span></span><br><span class="line">size of <span class="keyword">wchar_t</span> is <span class="number">2</span></span><br><span class="line">size of <span class="keyword">char16_t</span> is <span class="number">2</span></span><br><span class="line">size of <span class="keyword">char32_t</span> is <span class="number">4</span></span><br></pre></td></tr></table></figure><br>我们可以知道char、wchar_t、char16_t、char32_t分别是1、2、2、4个字节。  </p>
 <h1 id="char和wchar-t"><a href="#char和wchar-t" class="headerlink" title="char和wchar_t"></a>char和wchar_t</h1><p>char是C和C++中的原始字符类型。<br>wchar_t是定义和实现的宽字符类型。<br>Char16_t和char32_t类型分别表示16位和32位宽字符；</p>
 <p>char和wchar_t分别是ANSI和Unicode编码方式，即ANSI中的字符采用8bit，而UNICODE中的字符采用16bit。（对于字符来说ANSI以单字节存放英文字符，以双字节存放中文等字符,而Unicode下，英文和中文的字符都以双字节存放）Unicode码也是一种国际标准编码，采用二个字节编码，与ANSI码不兼容。目前，在网络、Windows系统和很多大型软件中得到应用。8bit的ANSI编码只能表示256种字符，表示26个英文字母是绰绰有余的，但是表示汉字，韩国语等有着成千上万个字符的非西方字符肯定就不够了，正是如此才引入了UNICODE标准。  </p>
 
@@ -894,15 +892,24 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-02-28 18:02:31" itemprop="dateCreated datePublished" datetime="2021-02-28T18:02:31+08:00">2021-02-28</time>
+              <time title="创建时间：2021-02-28 18:02:00" itemprop="dateCreated datePublished" datetime="2021-02-28T18:02:00+08:00">2021-02-28</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+                <time title="修改时间：2021-05-22 21:29:55" itemprop="dateModified" datetime="2021-05-22T21:29:55+08:00">2021-05-22</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
 
           
 
@@ -1193,8 +1200,14 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

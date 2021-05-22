@@ -29,9 +29,10 @@
 <meta property="og:site_name" content="码码更健康">
 <meta property="og:description" content="打乱数组题目384打乱数组题目链接 题目描述给你一个整数数组 nums ，设计算法来打乱一个没有重复元素的数组。实现 Solution class:   Solution(int[] nums) 使用整数数组 nums 初始化对象 int[] reset() 重设数组到它的初始状态并返回 int[] shuffle() 返回数组随机打乱后的结果  代码模板123456789101112class">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-01-13T12:23:29.000Z">
-<meta property="article:modified_time" content="2021-04-22T08:40:39.335Z">
+<meta property="article:published_time" content="2021-01-13T12:23:00.000Z">
+<meta property="article:modified_time" content="2021-05-22T13:31:15.147Z">
 <meta property="article:author" content="乡村程序员">
+<meta property="article:tag" content="LeetCode">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://example.com/2021/01/13/%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84/">
@@ -219,14 +220,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-01-13 20:23:29" itemprop="dateCreated datePublished" datetime="2021-01-13T20:23:29+08:00">2021-01-13</time>
+              <time title="创建时间：2021-01-13 20:23:00" itemprop="dateCreated datePublished" datetime="2021-01-13T20:23:00+08:00">2021-01-13</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+                <time title="修改时间：2021-05-22 21:31:15" itemprop="dateModified" datetime="2021-05-22T21:31:15+08:00">2021-05-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -250,21 +251,19 @@
 
       
         <h1 id="打乱数组"><a href="#打乱数组" class="headerlink" title="打乱数组"></a><strong>打乱数组</strong></h1><h2 id="题目384打乱数组"><a href="#题目384打乱数组" class="headerlink" title="题目384打乱数组"></a><strong>题目384打乱数组</strong></h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/shuffle-an-array/">题目链接</a></p>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a><em><strong>题目描述</strong></em></h3><p>给你一个整数数组 nums ，设计算法来打乱一个没有重复元素的数组。<br>实现 Solution class: </p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a><strong><em>题目描述</em></strong></h3><p>给你一个整数数组 nums ，设计算法来打乱一个没有重复元素的数组。<br>实现 Solution class: </p>
 <ul>
 <li><code>Solution(int[] nums)</code> 使用整数数组 nums 初始化对象</li>
 <li><code>int[] reset()</code> 重设数组到它的初始状态并返回</li>
 <li><code>int[] shuffle()</code> 返回数组随机打乱后的结果</li>
 </ul>
 <h3 id="代码模板"><a href="#代码模板" class="headerlink" title="代码模板"></a><strong>代码模板</strong></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Solution</span>(vector&lt;<span class="keyword">int</span>&gt;&amp; nums) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">shuffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
 <h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a><strong>分析</strong></h3><ul>
 <li>设$P_{i,k}$表示第i个数被分到第k个位置的概率，其中$1&lt;=i,k&lt;=n$，$n$为数组规模</li>
 <li>假设前面n个数已经按要求排列好了，即$P_{i,k}=\frac{1}{n}$，那么对于第{n+1}个数应该有$P_{n+1,k}=\frac{1}{n+1}$，并且此次迭代将使得前面n个数有$P_{i,k}=\frac{1}{n}$更新为$P_{i,k}=\frac{1}{n+1}$。</li>
 <li>考虑这样操作：<br>以$\frac{1}{n+1}$的概率和$1-n+1$这$n+1$个数交换（可以和自己交换），那么第$n+1$个数满足条件，而对于前n个数中任意一个数$j$，它被交换到$n+1$位置的概率为$\frac{1}{n+1}$，它在前$n$个位置中第$k$个位置的概率$P_{i,k}^{new}=P(第i个数在n+1个数排列之前被放置在k位置)\times P(第i个数未与第n+1个数交换)=P_{i,k}^{old}\times\frac{n}{n+1}=\frac{1}{n}\times\frac{n}{n+1}=\frac{1}{n+1}$，所以上述操作满足条件。</li>
 </ul>
 <h4 id="代码如下"><a href="#代码如下" class="headerlink" title="代码如下"></a><strong>代码如下</strong></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; nums;</span><br><span class="line">    <span class="built_in">Solution</span>(vector&lt;<span class="keyword">int</span>&gt;&amp; nums):<span class="built_in">nums</span>(nums)&#123;</span><br><span class="line">        <span class="built_in">srand</span>(<span class="built_in">time</span>(<span class="literal">NULL</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nums;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">shuffle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; res=nums;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;res.<span class="built_in">size</span>();i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> index=<span class="built_in">rand</span>()%(i+<span class="number">1</span>);</span><br><span class="line">            <span class="built_in">swap</span>(res[index],res[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>&amp; a,<span class="keyword">int</span>&amp; b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp=a;</span><br><span class="line">        a=b;</span><br><span class="line">        b=temp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
 <h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a><strong>复杂度分析</strong></h3><ul>
 <li>时间复杂度O(n)，需要遍历一遍数组。</li>
 <li>空间复杂度O(n)，需要开一个新数组。</li>
@@ -277,6 +276,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+          </div>
 
         
 
@@ -372,8 +374,14 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
