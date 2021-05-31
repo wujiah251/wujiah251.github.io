@@ -30,7 +30,7 @@
 <meta property="og:description" content="无锁同步锁的代价锁是用来实现并发最简单的方式，但是其代价也是最高的。内核态的锁的时候需要操作系统进行一次上下文切换，加锁、释放锁会导致比较多的上下文切换和调度延时，等待锁的线程会被挂起直至锁释放。在上下文切换的时候，cpu之前缓存的指令和数据都将失效，对性能有很大的损失。   CAS无锁算法要实现无锁的非阻塞算法有多种实现，其中CAS（比较与交换，Compare and swap）是一种有名的无锁">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-17T10:01:00.000Z">
-<meta property="article:modified_time" content="2021-05-22T13:33:07.964Z">
+<meta property="article:modified_time" content="2021-05-22T13:36:34.492Z">
 <meta property="article:author" content="乡村程序员">
 <meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary">
@@ -227,7 +227,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-22 21:33:07" itemprop="dateModified" datetime="2021-05-22T21:33:07+08:00">2021-05-22</time>
+                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -355,14 +355,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-count">127</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

@@ -191,6 +191,259 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/19/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/19/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D/" class="post-title-link" itemprop="url">深拷贝和浅拷贝</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-19 20:00:00" itemprop="dateCreated datePublished" datetime="2021-02-19T20:00:00+08:00">2021-02-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>深拷贝和浅拷贝其实关键在于指针。<br>浅拷贝就是遇到指针只拷贝指针的值。深拷贝遇到指针，会去创建新的内存，然后拷贝指针指向的对象的值。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/19/C++%E7%9A%84%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/19/C++%E7%9A%84%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7/" class="post-title-link" itemprop="url">C++的三大特性</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-19 19:39:00" itemprop="dateCreated datePublished" datetime="2021-02-19T19:39:00+08:00">2021-02-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="封装性"><a href="#封装性" class="headerlink" title="封装性"></a>封装性</h1><p>C++语言支持封装的特性，类是C++实现封装的工具。封装使得能够把复杂功能集成在一个类中，并提供有限的接口（公有成员）供用户使用。这本质上是一种抽象。让用户不用了解类的实现只需要知道每个接口的作用就可以使用类。</p>
+<h1 id="继承性"><a href="#继承性" class="headerlink" title="继承性"></a>继承性</h1><p>C++支持单继承和多继承，这是面向对象语言的基本特性。继承是一种类和类之间的关系，更具需要开发者能够在基类的基础上派生出派生类。派生类继承了基类的成员，这种特性提高了现有程序资源的利用率，原来面向过程程序中，如果想要开发一个功能更加复杂的结构体（C），往往需要重新开发，而C++中可以通过继承利用原有程序资源。</p>
+<h1 id="多态性"><a href="#多态性" class="headerlink" title="多态性"></a>多态性</h1><p>多态是一种基于继承的特性，通过虚函数来实现，指的是对不同类型的对象发出同样的消息能够有不同的结果。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/18/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/18/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" class="post-title-link" itemprop="url">TCP三次握手与四次挥手</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-18 11:54:00" itemprop="dateCreated datePublished" datetime="2021-02-18T11:54:00+08:00">2021-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="TCP头部分析"><a href="#TCP头部分析" class="headerlink" title="TCP头部分析"></a>TCP头部分析</h1><p>TCP头部中有几个字段需要重点介绍下：</p>
+<ol>
+<li>序号：Seq序号，占32位，用来标识从TCP源端向目的端发送的字节流，发起方发送数据时对此进行标记；  </li>
+<li>确认序号：Ack序号，占32位，只有ACK标志位为1时，确认序号字段才有效，Ack=Seq+1；  </li>
+<li>标志位：共6个，即URG、ACK、PSH、RST、SYN、FIN等，具体含义如下：<ul>
+<li>URG：紧急指针（urgent pointer）有效；  </li>
+<li>ACK：确认序号有效；  </li>
+<li>PSH：接收方应该尽快将这个报文交给应用层；  </li>
+<li>RST：重置连接；  </li>
+<li>SYN：发起一个新连接；  </li>
+<li>FIN：释放一个连接。  </li>
+</ul>
+</li>
+</ol>
+<p>需要注意的是：<br>（A）不要将确认序号Ack与标志位中的ACK搞混了;<br>（B）确认方Ack=发起方Req+1，两端配对。</p>
+<h1 id="TCP握手协议"><a href="#TCP握手协议" class="headerlink" title="TCP握手协议"></a>TCP握手协议</h1><p>TCP协议通过三次握手来创建一个连接：  </p>
+<ol>
+<li>客户端发送一个SYN包（syn=1，seq=i）到服务器，并进入syn_send状态等待；<br>这个SYN包不包含应用层数据，首部的标志位SYN被置为1，所以称为SYN包，客户随机选择一个序号seq=client_i；  </li>
+<li>服务器在收到SYN包后，会为该连接分配TCP缓存和变量，并发送允许连接的报文段。这个允许连接的报文段也不包含应用层数据，包含以下信息：<code>SYN=1</code>，<code>seq=server_i</code>，<code>ack=client_i+1</code>。<code>server_i</code>是服务器随机选取的报文段序号，<code>ack=client_i+1</code>表示确认<code>client_i+1</code>以前的报文段都已经收到，这个报文段我们称为SYNACK报文段；  </li>
+<li>客户端收到SYNACK报文段后，客户也要给该连接分配缓存和变量。客户的主机则向服务器发送另一个报文段；这最后一个报文段对服务器的允许连接的报文段进行了确认（<code>SYN=0</code>、<code>seq=client_i+1</code>、<code>ack=server_i+1</code>），<code>SYN</code>被置为0是因为连接已经建立了。第三个阶段的报文段已经可以携带客户到服务器的数据了。</li>
+</ol>
+<h1 id="TCP挥手协议"><a href="#TCP挥手协议" class="headerlink" title="TCP挥手协议"></a>TCP挥手协议</h1><p>TCP通过四次挥手来释放一个连接：  </p>
+<ol>
+<li>客户端向服务器发送一个特殊的TCP报文段，其中FIN置为0；  </li>
+<li>服务器收到上述报文段后，回发一个确认报文段ACK；  </li>
+<li>然后服务器发送它自己的终止报文段，其FIN比特被置为1，这个时候在TCP眼中连接已经关闭了；  </li>
+<li>最后，该客户对这个服务器的终止报文段进行确认（ACK），发送之后定时等待关闭连接。  </li>
+</ol>
+<h1 id="为什么要三次握手四次挥手"><a href="#为什么要三次握手四次挥手" class="headerlink" title="为什么要三次握手四次挥手"></a>为什么要三次握手四次挥手</h1><p>用一个易于理解的视角来看为什么要3次握手：<br>客户端和服务端通信前要进行连接，“3次握手”的作用就是双方都能明确自己和对方的收、发能力是正常的。<br>第一次握手，客户端发送网络包，服务端收到了，服务端得到结论：客户端发送能力正常，服务端接受能力正常；<br>第二次握手，服务端发送网络包，客户端收到，客户端得到结论：服务端接收、发送能力正常，客户端发送、接受能力正常；<br>第三次握手，客户端发送网络包，服务端收到，服务端得到结论：客户端接受能力正常，服务端发送能力正常。<br>经过3次握手，客户端、服务端相互之间确认了对方和自己的接收、发收能力正常。  </p>
+<p>用半关闭来解释为什么需要4次挥手：<br><strong>半关闭</strong>：在TCP通信中客户端向服务端发送一条FIN包，当服务端收到FIN信息时就知道接下来客户端就不会再发送数据了，这在TCP协议中被称为半关闭。但是此时，服务端还能向客户端发送网络包，客户端也依然能接收。<br>一个FIN包意味着一方关闭连接，但是另一方可能数据还没有传完，需要传完才会关闭连接。所以需要在中间维持半关闭状态，等到需要关闭连接时，再发送一次FIN包。相当于客户端、服务端各自需要关闭属于自己的一半连接，每次都需要FIN-ACK两次挥手，总共就有4次挥手。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/17/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -804,255 +1057,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/%E8%99%9A%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/16/%E8%99%9A%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">虚函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-16 16:25:00" itemprop="dateCreated datePublished" datetime="2021-02-16T16:25:00+08:00">2021-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>C++中的虚函数的作用主要是实现了多态的机制。关于多态，简而言之就是用父类型别的指针指向其子类的实例，然后通过父类的指针调用实际子类的成员函数。这种技术可以让父类的指针有“多种形态”，这是一种泛型技术。所谓泛型技术，说白了就是试图使用不变的代码来实现可变的算法。比如：模板技术，RTTI技术，虚函数技术，要么是试图做到在编译时决议，要么试图做到运行时决议。</p>
-<h1 id="虚函数表"><a href="#虚函数表" class="headerlink" title="虚函数表"></a>虚函数表</h1><p>对C++ 了解的人都应该知道虚函数（Virtual Function）是通过一张虚函数表（Virtual Table）来实现的。简称为V-Table。在这个表中，主是要一个类的虚函数的地址表，这张表解决了继承、覆盖的问题，保证其容真实反应实际的函数。这样，在有虚函数的类的实例中这个表被分配在了这个实例的内存中，所以，当我们用父类的指针来操作一个子类的时候，这张虚函数表就显得由为重要了，它就像一个地图一样，指明了实际所应该调用的函数。</p>
-<h1 id="一般继承（无函数覆盖）"><a href="#一般继承（无函数覆盖）" class="headerlink" title="一般继承（无函数覆盖）"></a>一般继承（无函数覆盖）</h1><p>这种情况下虚函数表会存储基类和派生类的虚函数，且基类在前。</p>
-<h1 id="一般继承（有函数覆盖）"><a href="#一般继承（有函数覆盖）" class="headerlink" title="一般继承（有函数覆盖）"></a>一般继承（有函数覆盖）</h1><p>派生类重载了基类的虚函数，这时候在虚函数表中派生类的中的函数<code>f()</code>被放到了虚表中原来父类虚函数<code>f()</code>的位置，没有被覆盖的函数依旧。</p>
-<h1 id="多重继承（无函数覆盖）"><a href="#多重继承（无函数覆盖）" class="headerlink" title="多重继承（无函数覆盖）"></a>多重继承（无函数覆盖）</h1><p>会有多个虚函数表，每个基类都有自己的虚函数表，派生类的虚函数放在第一个虚函数表的末尾。</p>
-<h1 id="多重继承（有函数覆盖）"><a href="#多重继承（有函数覆盖）" class="headerlink" title="多重继承（有函数覆盖）"></a>多重继承（有函数覆盖）</h1><p>如果这个函数覆盖了多个基类的函数，则在每个对应的虚函数表中都会覆盖基类的函数。</p>
-<h1 id="纯虚函数"><a href="#纯虚函数" class="headerlink" title="纯虚函数"></a>纯虚函数</h1><p>这里再说一下纯虚函数吧，定义纯虚函数是为了实现一个接口，起到一个规范的作用，规范继承这个类的程序员必须实现这个函数。例子如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">funtion1</span><span class="params">()</span></span>=<span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/C++%E7%BB%A7%E6%89%BF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/16/C++%E7%BB%A7%E6%89%BF/" class="post-title-link" itemprop="url">C++继承</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-16 15:33:00" itemprop="dateCreated datePublished" datetime="2021-02-16T15:33:00+08:00">2021-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>考虑继承关系时，我们涉及三种成员，分别是私有成员、公有成员、保护成员，关键字依次是<code>private</code>、<code>public</code>、<code>protected</code>。</p>
-<p>保护成员在类的用户眼中，等价于私有成员，但是保护成员可以被类成员函数调用。  </p>
-<h1 id="公有继承"><a href="#公有继承" class="headerlink" title="公有继承"></a>公有继承</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derive</span>:</span><span class="keyword">public</span> Base</span><br><span class="line"><span class="comment">//public表示公有继承</span></span><br></pre></td></tr></table></figure>
-
-<p>基类的私有成员–&gt;派生类不可见；<br>基类的公有成员–&gt;派生类的公有成员；<br>基类的保护成员–&gt;派生类的保护成员。  </p>
-<h1 id="私有继承"><a href="#私有继承" class="headerlink" title="私有继承"></a>私有继承</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derive</span>:</span><span class="keyword">private</span> Base</span><br><span class="line"><span class="comment">//private表示私有继承</span></span><br><span class="line"><span class="comment">//私有继承也是默认的继承方式</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derive</span>:</span>Base</span><br></pre></td></tr></table></figure>
-
-<p>基类的私有成员–&gt;派生类不可见；<br>基类的公有成员–&gt;派生类的私有成员；<br>基类的保护成员–&gt;派生类的私有成员。 </p>
-<h1 id="保护继承"><a href="#保护继承" class="headerlink" title="保护继承"></a>保护继承</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derive</span>:</span><span class="keyword">protected</span> Base</span><br><span class="line"><span class="comment">//protected表示保护继承</span></span><br></pre></td></tr></table></figure>
-<p>基类的私有成员–&gt;派生类不可见；<br>基类的公有成员–&gt;派生类的保护成员；<br>基类的保护成员–&gt;派生类的保护成员。 </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%92%8C%E5%8A%A0%E8%BD%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/16/%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E5%92%8C%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">进程启动和加载</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-16 11:12:00" itemprop="dateCreated datePublished" datetime="2021-02-16T11:12:00+08:00">2021-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="启动进程"><a href="#启动进程" class="headerlink" title="启动进程"></a>启动进程</h1><p>在Linux系统中，每个进程都有唯一的进程号（PID），方便系统识别和调度进程。通过简单地输出运行程序的程序名，就可以运行该程序，其实也就是启动了一个进程。总地来说，启动一个进程主要有2种途径，手动启动和通过调度启动。  </p>
-<h2 id="手动启动"><a href="#手动启动" class="headerlink" title="手动启动"></a>手动启动</h2><p>指用户通过输入命令启动一个进程，又可以分为前台启动和后台启动。  </p>
-<h3 id="前台启动进程"><a href="#前台启动进程" class="headerlink" title="前台启动进程"></a>前台启动进程</h3><p>这是手动启动进程最常见的方式，在前台输入一个命令并运行，就能够启动一个前台进程。  </p>
-<h3 id="后台启动进程"><a href="#后台启动进程" class="headerlink" title="后台启动进程"></a>后台启动进程</h3><p>进程直接从后台启动用的比较少，大多是进程比较耗时，并且我们不急于看到运行结果，为了不使整个shell处于“被占用”状态，从后台启动这个进程是比较明智的选择。从后台启动进程，其实只要在命令结尾处添加一个“&amp;”符号即可。</p>
-<h2 id="Linux调度启动进程"><a href="#Linux调度启动进程" class="headerlink" title="Linux调度启动进程"></a>Linux调度启动进程</h2><p>在Linux系统种，任务可以被配置在指定的时间、日期或者系统平均负载量低于指定值时自动启动。实现调度启动的方法很多，例如通过crontab、at等命令。</p>
-<h1 id="进程加载"><a href="#进程加载" class="headerlink" title="进程加载"></a>进程加载</h1><p>进程加载需要如下过程：  </p>
-<ol>
-<li>创建一个独立的虚拟地址空间。主要是分配一个页目录。  </li>
-<li>读取可执行文件的头，并且建立虚拟空间和可执行文件的映射关系。主要是把可执行文件映射到虚拟地址空间，即做虚拟页和物理页的映射，以便“缺页”时载入。  </li>
-<li>讲CPU的指令寄存器设置成可执行文件的入口地址，启动运行。  </li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1124,14 +1128,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-count">127</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

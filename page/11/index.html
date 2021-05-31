@@ -191,6 +191,294 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E8%BF%87%E6%BB%A4%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E8%BF%87%E6%BB%A4%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">过滤数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 13:30:11" itemprop="dateCreated datePublished" datetime="2021-01-27T13:30:11+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="过滤数据"><a href="#过滤数据" class="headerlink" title="过滤数据"></a>过滤数据</h1><h2 id="使用WHERE子句"><a href="#使用WHERE子句" class="headerlink" title="使用WHERE子句"></a>使用WHERE子句</h2><p>在<code>select</code>语句中，数据根据<code>where</code>子句中指定的搜索条件进行过滤。<code>where</code>子句在表名之后给出，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, prod_price from products where prod_price &#x3D; 2.50;</span><br><span class="line">+---------------+------------+</span><br><span class="line">| prod_name     | prod_price |</span><br><span class="line">+---------------+------------+</span><br><span class="line">| Carrots       |       2.50 |</span><br><span class="line">| TNT (1 stick) |       2.50 |</span><br><span class="line">+---------------+------------+</span><br></pre></td></tr></table></figure>
+<p><strong>SQL过滤与应用过滤</strong> 数据也可以在应用层过滤。为此目的，SQL的SELECT语句为客户机应用检索超出实际所需的数据，然后客户机代码对返回数据进行循环，以提取出需要的行。但是在客户机上过滤数据，服务器将不得不通过网络发送多余的数据，这将导致网络带宽的浪费。<br><strong>WHERE子句的位置</strong> 在同时使用<code>ORDER BY</code>和<code>WHERE</code>子句时，应该让<code>ORDER BY</code>位于<code>WHERE</code>之后，否则将产生错误。</p>
+<h2 id="WHERE子句操作符"><a href="#WHERE子句操作符" class="headerlink" title="WHERE子句操作符"></a>WHERE子句操作符</h2><p><code>where</code>不仅能进行相等测试，还能进行其他测试，如下所示：  </p>
+<table>
+  <tr>
+    <th>操作符</th>
+    <th>说明</th>
+  </tr>
+  <tr>
+    <td>=</td>
+    <td>等于</td>
+  </tr>
+  <tr>
+    <td><\></td>
+    <td>不等于</td>
+  </tr>
+  <tr>
+    <td>!=</td>
+    <td>不等于</td>
+  </tr>
+  <tr>
+    <td>< </td>
+    <td>小于</td>
+  </tr>
+  <tr>
+    <td><= </td>
+    <td>小于等于</td>
+  </tr>
+  <tr>
+    <td>> </td>
+    <td>大于</td>
+  </tr>
+  <tr>
+    <td>>= </td>
+    <td>大于等于</td>
+  </tr>
+  <tr>
+    <td>BETWEEN</td>
+    <td>在指定的两个值之间</td>
+  </tr>
+</table>
+
+<h3 id="范围值检查"><a href="#范围值检查" class="headerlink" title="范围值检查"></a>范围值检查</h3><p>为了检查某个返回，我们使用<code>BETWEEN</code>操作符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price between 5 and 10;</span><br><span class="line">+----------------+------------+</span><br><span class="line">| prod_name      | prod_price |</span><br><span class="line">+----------------+------------+</span><br><span class="line">| .5 ton anvil   |       5.99 |</span><br><span class="line">| 1 ton anvil    |       9.99 |</span><br><span class="line">| Bird seed      |      10.00 |</span><br><span class="line">| Oil can        |       8.99 |</span><br><span class="line">| TNT (5 sticks) |      10.00 |</span><br><span class="line">+----------------+------------+</span><br></pre></td></tr></table></figure>
+<p>从这个例子中，我们可以看出，在使用<code>between</code>时，必须指定两个值–所需范围的最大值和最小值，然后这两个值要用<code>AND</code>分割开来，<code>between</code>匹配范围中的所有值，包括两个边界值。</p>
+<h3 id="空值检查"><a href="#空值检查" class="headerlink" title="空值检查"></a>空值检查</h3><p><code>IS NULL</code> 可以用于空值检查。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_id from customers</span><br><span class="line">    -&gt; where cust_email is null;</span><br><span class="line">+---------+</span><br><span class="line">| cust_id |</span><br><span class="line">+---------+</span><br><span class="line">|   10002 |</span><br><span class="line">|   10005 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%8E%92%E5%BA%8F%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E6%8E%92%E5%BA%8F%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">排序检索数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 00:01:45" itemprop="dateCreated datePublished" datetime="2021-01-27T00:01:45+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="排序检索数据"><a href="#排序检索数据" class="headerlink" title="排序检索数据"></a>排序检索数据</h1><h2 id="排序数据"><a href="#排序数据" class="headerlink" title="排序数据"></a>排序数据</h2><p><strong>子句</strong> SQL语句由子句构成，有些子句是必需的，而有些是可选的。一个子句通常由一个关键字和所提供的数据组成。子句的例子有SELECT语句的FROM子句。为了明确地排序用SELECT语句检索的数据，可使用<code>ORDER BY</code>子句。<code>ORDER BY</code>子句取一个或多个列的名字，据此对输出进行排序。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name from products order by prod_name;</span><br><span class="line">+----------------+</span><br><span class="line">| prod_name      |</span><br><span class="line">+----------------+</span><br><span class="line">| .5 ton anvil   |</span><br><span class="line">| 1 ton anvil    |</span><br><span class="line">| 2 ton anvil    |</span><br><span class="line">| Bird seed      |</span><br><span class="line">| Carrots        |</span><br><span class="line">| Detonator      |</span><br><span class="line">| Fuses          |</span><br><span class="line">| JetPack 1000   |</span><br><span class="line">| JetPack 2000   |</span><br><span class="line">| Oil can        |</span><br><span class="line">| Safe           |</span><br><span class="line">| Sling          |</span><br><span class="line">| TNT (1 stick)  |</span><br><span class="line">| TNT (5 sticks) |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="按多个列排序和指定排序方向"><a href="#按多个列排序和指定排序方向" class="headerlink" title="按多个列排序和指定排序方向"></a>按多个列排序和指定排序方向</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, prod_price, prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; order by prod_price DESC, prod_name;</span><br><span class="line">+----------------+------------+----------------+</span><br><span class="line">| prod_name      | prod_price | prod_name      |</span><br><span class="line">+----------------+------------+----------------+</span><br><span class="line">| JetPack 2000   |      55.00 | JetPack 2000   |</span><br><span class="line">| Safe           |      50.00 | Safe           |</span><br><span class="line">| JetPack 1000   |      35.00 | JetPack 1000   |</span><br><span class="line">| 2 ton anvil    |      14.99 | 2 ton anvil    |</span><br><span class="line">| Detonator      |      13.00 | Detonator      |</span><br><span class="line">| Bird seed      |      10.00 | Bird seed      |</span><br><span class="line">| TNT (5 sticks) |      10.00 | TNT (5 sticks) |</span><br><span class="line">| 1 ton anvil    |       9.99 | 1 ton anvil    |</span><br><span class="line">| Oil can        |       8.99 | Oil can        |</span><br><span class="line">| .5 ton anvil   |       5.99 | .5 ton anvil   |</span><br><span class="line">| Sling          |       4.49 | Sling          |</span><br><span class="line">| Fuses          |       3.42 | Fuses          |</span><br><span class="line">| Carrots        |       2.50 | Carrots        |</span><br><span class="line">| TNT (1 stick)  |       2.50 | TNT (1 stick)  |</span><br><span class="line">+----------------+------------+----------------+</span><br></pre></td></tr></table></figure>
+<p>这里先按照<code>prod_price</code>排序，如果其值相同，再按照<code>prod_name</code>排序，<code>DESC</code>是控制排序方向为降序，只作用于其前面的<code>prod_price</code>，然后<code>ASC</code>用来控制升序，但是由于默认升序，所以一般不用。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/26/%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">检索数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-26 23:42:14" itemprop="dateCreated datePublished" datetime="2021-01-26T23:42:14+08:00">2021-01-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="检索数据"><a href="#检索数据" class="headerlink" title="检索数据"></a>检索数据</h1><h2 id="SELECT语句"><a href="#SELECT语句" class="headerlink" title="SELECT语句"></a>SELECT语句</h2><p>检索一列：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name from products;</span><br><span class="line">+----------------+</span><br><span class="line">| prod_name      |</span><br><span class="line">+----------------+</span><br><span class="line">| .5 ton anvil   |</span><br><span class="line">| 1 ton anvil    |</span><br><span class="line">| 2 ton anvil    |</span><br><span class="line">| Detonator      |</span><br><span class="line">| Bird seed      |</span><br><span class="line">| Carrots        |</span><br><span class="line">| Fuses          |</span><br><span class="line">| JetPack 1000   |</span><br><span class="line">| JetPack 2000   |</span><br><span class="line">| Oil can        |</span><br><span class="line">| Safe           |</span><br><span class="line">| Sling          |</span><br><span class="line">| TNT (1 stick)  |</span><br><span class="line">| TNT (5 sticks) |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
+<p>注：多条sql语句必须以分号（；）分隔。SQL语句不区分大小写，所以SELECT和select是一样的。</p>
+<h2 id="检索多个列"><a href="#检索多个列" class="headerlink" title="检索多个列"></a>检索多个列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id,prod_name,prod_price from products;</span><br><span class="line">+---------+----------------+------------+</span><br><span class="line">| prod_id | prod_name      | prod_price |</span><br><span class="line">+---------+----------------+------------+</span><br><span class="line">| ANV01   | .5 ton anvil   |       5.99 |</span><br><span class="line">| ANV02   | 1 ton anvil    |       9.99 |</span><br><span class="line">| ANV03   | 2 ton anvil    |      14.99 |</span><br><span class="line">| DTNTR   | Detonator      |      13.00 |</span><br><span class="line">| FB      | Bird seed      |      10.00 |</span><br><span class="line">| FC      | Carrots        |       2.50 |</span><br><span class="line">| FU1     | Fuses          |       3.42 |</span><br><span class="line">| JP1000  | JetPack 1000   |      35.00 |</span><br><span class="line">| JP2000  | JetPack 2000   |      55.00 |</span><br><span class="line">| OL1     | Oil can        |       8.99 |</span><br><span class="line">| SAFE    | Safe           |      50.00 |</span><br><span class="line">| SLING   | Sling          |       4.49 |</span><br><span class="line">| TNT1    | TNT (1 stick)  |       2.50 |</span><br><span class="line">| TNT2    | TNT (5 sticks) |      10.00 |</span><br><span class="line">+---------+----------------+------------+</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="检索所有列"><a href="#检索所有列" class="headerlink" title="检索所有列"></a>检索所有列</h2><p>使用通配符*</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from products;</span><br><span class="line">&#x2F;&#x2F;结果比较长不做展示</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="检索不同的行"><a href="#检索不同的行" class="headerlink" title="检索不同的行"></a>检索不同的行</h2><p>如果我们想保证输出是不通的怎么办呢，这是后就需要关键字<code>DISTINCT</code>了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id from products;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1005 |</span><br><span class="line">|    1005 |</span><br><span class="line">+---------+</span><br><span class="line">mysql&gt; select distinct vend_id from products;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1005 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
+<p>可以看出，再添加了<code>distinct</code>之后，输出保证了，<code>vend_id</code>每个取值不重复出现。<br>注：<code>distinct</code>不能部分使用，如果给出<code>select distinct vend_id, prod_price from products;</code>，除非指定的两个列都相同，否则所有行都将被检索出来。</p>
+<h2 id="限制结果"><a href="#限制结果" class="headerlink" title="限制结果"></a>限制结果</h2><p>可以使用<code>limit</code>语句来限制结果输出的行数，举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id from products limit 5;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1002 |</span><br><span class="line">+---------+</span><br><span class="line">mysql&gt; select vend_id from products limit 5,3;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
+<p><code>limit 5</code>限制了只输出前五行，然后第二个sql语句中的<code>limit 5,3</code>是从第5行开始输出3行（前面输出了0-5行，行数从0开始计算）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/%E4%BD%BF%E7%94%A8MySQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -922,453 +1210,6 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH9%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/14/CH9%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" class="post-title-link" itemprop="url">CH9虚拟内存</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-14 15:38:41" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:41+08:00">2021-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="虚拟内存（Virtual-Memory）"><a href="#虚拟内存（Virtual-Memory）" class="headerlink" title="虚拟内存（Virtual Memory）"></a>虚拟内存（Virtual Memory）</h1><p>虚拟内存是硬件异常、硬件地址翻译、主存、磁盘文件和内核软件的完美交互，它为每个进程提供了一个大的、一致的和私有的地址空间。它有三个重要的能力：  </p>
-<ol>
-<li>它将主存看成是一个存储在磁盘上的地址空间的高速缓存，在主存中只保存活动区域，并根据需要在主存和磁盘之间来回传送数据，通过这种方式，它高效地使用了主存。  </li>
-<li>他为每个进程提供了一致的地址空间，它高效地使用了主存。  </li>
-<li>它保护了每个进程的地址空间不被其他进程破坏。  </li>
-</ol>
-<h2 id="物理和虚拟寻址"><a href="#物理和虚拟寻址" class="headerlink" title="物理和虚拟寻址"></a>物理和虚拟寻址</h2><p>使用虚拟寻址，CPU通过生成一个虚拟地址来访问主存（被组织成一个由M个连续字节大小的单元组成的数组，每个字节都有唯一的物理地址），这个虚拟地址在被送到内存之前，先转换成适当的物理地址。地址翻译需要CPU硬件和操作系统之间的紧密合作。CPU芯片上叫做内存管理单元（Memory Management Unit，MMU）的专用硬件，利用存放在主存中的查询表来动态翻译。</p>
-<h2 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h2><p>虚拟地址空间：${0,1,2,…,N-1}$，$N=2^n$。<br>物理地址空间：${0,1,2,…,M-1}$，M不一定要素2的幂。</p>
-<h2 id="虚拟内存作为缓存的工具"><a href="#虚拟内存作为缓存的工具" class="headerlink" title="虚拟内存作为缓存的工具"></a>虚拟内存作为缓存的工具</h2><p>磁盘上的数据被分割为块，作为主存和磁盘之间的传输单元。VM系统通过将虚拟内存分割为称为虚拟页的大小固定的块来处理这个问题，每个虚拟页大小为$P=2^p$字节。类似地，物理内存被分割为物理页，大小也为P字节（物理页被称为页帧）。<br>在任何时刻，虚拟页吗被分为三个不相交的子集：  </p>
-<ul>
-<li>为分配的：还未分配（或者创建）的页。  </li>
-<li>缓存的：已缓存在物理内存中的已分配页。  </li>
-<li>未缓存的：未缓存在物理内存中的已分配页。  </li>
-</ul>
-<h3 id="DRAM缓存的组织结构"><a href="#DRAM缓存的组织结构" class="headerlink" title="DRAM缓存的组织结构"></a>DRAM缓存的组织结构</h3><p>由于磁盘访问要比DRAM慢太多，所以DRAM缓存不命中比起SRAM缓存（L1、L2、L3）要昂贵得多。</p>
-<h3 id="页表"><a href="#页表" class="headerlink" title="页表"></a>页表</h3><p>不命中-&gt;系统判定这个虚拟页在磁盘哪个位置，并将虚拟页复制到DRAM中，替换牺牲页。<br>页表：虚拟页-&gt;物理页。<br>页表实际上是页表条目（Page Table Entry，PTE）的数组，虚拟地址空间中的每个页在页表中一个固定偏移量处都有一个PTE，每个PTE都由一个有效位和一个n位地址字段组成。有效位表明该虚拟页是否被缓存在DRAM中。如果有效，地址字段是指向该虚拟页在DRAM中相应的物理页的起始位置；如果无效，那么一个空地址表明这个虚拟页还未分配，如果地址非空就是已分配但未被保存，地址指向虚拟页在磁盘上的起始位置。  </p>
-<h3 id="页命中"><a href="#页命中" class="headerlink" title="页命中"></a>页命中</h3><p>地址翻译硬件将虚拟地址作为一个索引来定位PTE-&gt;如果设置了有效位，则利用PTE中的物理内存地址构造出这个字的物理地址。</p>
-<h3 id="缺页"><a href="#缺页" class="headerlink" title="缺页"></a>缺页</h3><p>DRAM缓存不命中称为缺页（page fault）。<br>未命中则从磁盘复制到内存中的牺牲页中（牺牲页如果修改过则写回磁盘）。<br>在磁盘和内存之间传送页的活动叫做交换（swapping）或者页面调度（paging）。页从磁盘换入DRAM和从DRAM换出磁盘。</p>
-<h3 id="分配页面"><a href="#分配页面" class="headerlink" title="分配页面"></a>分配页面</h3><p>例如，调用malloc，在磁盘上创建空间并且更新页表上该条目的（能够分配页面必然有剩余虚拟内存可分配）地址。</p>
-<h3 id="又是局部性救了我们"><a href="#又是局部性救了我们" class="headerlink" title="又是局部性救了我们"></a>又是局部性救了我们</h3><p>如果工作集的大小超出了物理内存的大小，那么程序将处于一种不信的状态，叫做抖动（thrashing），这时页面将不断地换进换出。</p>
-<h2 id="虚拟内存作为内存管理工具"><a href="#虚拟内存作为内存管理工具" class="headerlink" title="虚拟内存作为内存管理工具"></a>虚拟内存作为内存管理工具</h2><ul>
-<li>简化链接：没搞太懂  </li>
-<li>简化加载：没搞太懂  </li>
-<li>简化共享：不同虚拟页映射到同一物理页来实现共享。  </li>
-<li>简化内存分配  </li>
-</ul>
-<h2 id="虚拟内存作为内存保护的工具"><a href="#虚拟内存作为内存保护的工具" class="headerlink" title="虚拟内存作为内存保护的工具"></a>虚拟内存作为内存保护的工具</h2><p>通过在PTE上添加一些额外的许可位来控制对一个虚拟页面内容的访问十分简单。比如：</p>
-<ul>
-<li>SUP：是否进程必须运行在内核模式才能访问该页。  </li>
-<li>READ：控制读访问  </li>
-<li>WRITE：控制写访问  </li>
-</ul>
-<h2 id="地址翻译"><a href="#地址翻译" class="headerlink" title="地址翻译"></a>地址翻译</h2><p>如果违反了这些许可条件，那么CPU就会触发一般保护故障，将控制传递给内核中的异常处理程序。Linux shell一般将这种异常报告为“段错误（segmental fault）”。</p>
-<h2 id="地址翻译-1"><a href="#地址翻译-1" class="headerlink" title="地址翻译"></a>地址翻译</h2><p>$N=2^n$：虚拟地址空间中的地址数量<br>$M=2^m$：物理地址空间中的地址数量<br>$P=2^p$：页的大小<br>页表基址寄存器（Page Table Register，PTBR）指向当前页表。n位的虚拟地址包含两部分：一个p位的虚拟页面偏移（Virtual Page Offset，VPO）和一个（n-p）位的虚拟页号（VirtualPage Number，VPN）。MMU利用页表基址寄存器和VPN找到对应的PTE，然后将页表条目中的物理页号（PPN，m-p位）和虚拟地址中的虚拟页面偏移串联期来就得到相应的物理地址。注：物理页面和虚拟页面的页面偏移是一样的。</p>
-<h3 id="结合高速换粗和虚拟内存"><a href="#结合高速换粗和虚拟内存" class="headerlink" title="结合高速换粗和虚拟内存"></a>结合高速换粗和虚拟内存</h3><h3 id="利用TLB加速地址翻译"><a href="#利用TLB加速地址翻译" class="headerlink" title="利用TLB加速地址翻译"></a>利用TLB加速地址翻译</h3><p>每次产生一个虚拟地址，MMU就必须查阅一个PTE（代价很大），以便将虚拟地址翻译为物理地址。如果PTE碰巧在L1中，那么开销就下降很多。然而，许多系统都试图消除即使是这样的开销，它们在MMU中包括了一个关于PTE的小的缓存，称为翻译后备缓冲器（TranslationLookaside Buffer，TLB）。<br>TLB（TLB索引+TLB标记+PTE）是一个小的、虚拟寻址的缓存，其每一行都保存者一个由单个PTE组成的块，如果保存$T=2^t$个组，那么TLB索引由虚拟页号的t个最低位组成的，而TLB标记由VPN中剩余的位组成。TLB通常有高度的相联度。TLB命中的步骤：</p>
-<ol>
-<li>CPU产生一个虚拟地址。  </li>
-<li>MMU从TLB中取出相应的PTE。  </li>
-<li>MMU将这个虚拟地址翻译成一个物理地址，并且将它发送到高速缓存/主存。  </li>
-<li>高速缓存/主存将所请求的数据字返回给CPU。  </li>
-</ol>
-<p>当TLB不命中时，MMU必须从L1缓存中取出相应的PTE，新取出的PTE存放在TLB中，可能会覆盖一个已经存在的条目。  </p>
-<h3 id="多级页表"><a href="#多级页表" class="headerlink" title="多级页表"></a>多级页表</h3><p>如果一级页表的一个PTE是空的，那么相应的二级页表就根本不会存在。这代表一种巨大的节约。<br>对于k级别页表层次结构的地址翻译：<br>虚拟地址：$VPN_1|VPN_2|…|VPN_k|VPO$<br>一级页表,$VPN_1$-&gt;二级页表,$VPN_2$-&gt;…-&gt;k级页表$VPN_k$-&gt;$PPN$,$PPO$，$PPO==VPO$，物理页面偏移量==虚拟页面偏移量。  </p>
-<h3 id="综合：端到端的地址翻译"><a href="#综合：端到端的地址翻译" class="headerlink" title="综合：端到端的地址翻译"></a>综合：端到端的地址翻译</h3><p>虚拟地址：VPN（虚拟页码）+VPO（虚拟页偏移）<br>VPN：TLBT（TLB标记）+TLBI（TLB索引）<br>MMU从虚拟地址中抽取VPN，并检查TLB，看它是否因为前面某个内存引用缓存了VPN的条目的一个副本。TLB从VPN中抽取TLB索引，和TLB标记，检查TLBI组中是否有匹配，若存在匹配项，则命中，然后将缓存的PPN返回给MMU。<br>如果TLB不命中，那么MMU就需要从主存中取出相应的PTE（页表条目，存放在物理内存中）。将PTE中的PPN和来自虚拟地址的VPO连接起来，这就形成了物理地址。</p>
-<h2 id="案例研究：Intel-Core-i7-Linux内存系统"><a href="#案例研究：Intel-Core-i7-Linux内存系统" class="headerlink" title="案例研究：Intel Core i7/Linux内存系统"></a>案例研究：Intel Core i7/Linux内存系统</h2><p>处理器：四个核、一个大的所有核共享的L3高速缓存，以及一个DRR3内存控制器。每个核包含一个层次结构的TLB、一个层次结构的数据和指令高速缓存，以及一组快速到店链路，这种链路基于QuickPath技术，是为了让一个核与其他核核外部I/O桥直接通信。TLB是虚拟寻址的，是四路组相联的。L1、L2、L3高速缓存是物理寻址的，块大小为64字节。L1和L2是8路相联的，而L3是16路相联的。</p>
-<h3 id="Core-i7-地址翻译"><a href="#Core-i7-地址翻译" class="headerlink" title="Core i7 地址翻译"></a>Core i7 地址翻译</h3><p>Core i7使用四级页表翻译。<br>物理页表要求4KB对齐。<br>页表条目PTE：<br>位  </p>
-<ul>
-<li>0：P（子页表是否在内存中存在）  </li>
-<li>1：R/W（对于所有可访问页，只读或者读写访问权限）  </li>
-<li>2：U/S（对于所有可访问页，用户或者超级用户（内核）模式访问权限）  </li>
-<li>3：WT（子页表直写或者写回缓存策略）  </li>
-<li>4：CD（能/不能缓存子页表）  </li>
-<li>5：A（引用位，由MMU在读和写时设置，由软件清除）  </li>
-<li>7：PS（页大小为4KB或4MB（只对第一层PTE定义））  </li>
-<li>12-51：Base addr（子页表的物理基地址的最高40位）  </li>
-<li>63：XD（能/不能从这个PTE可访问的所有页中取指令）<br>注：还有第四级页表条目格式：  </li>
-<li>0：P（子页表是否在内存中存在，如果P为0，则剩余63位操作系统可用）  </li>
-<li>1：R/W（对于所有可访问页，只读或者读写访问权限）  </li>
-<li>2：U/S（对于所有可访问页，用户或者超级用户（内核）模式访问权限）  </li>
-<li>3：WT（子页表直写或者写回缓存策略）  </li>
-<li>4：CD（能/不能缓存子页表）  </li>
-<li>5：A（引用位，由MMU在读和写时设置，由软件清除）  </li>
-<li>6：D（修改位，由MMU在读和写时设置，由软件清除）  </li>
-<li>7：0  </li>
-<li>8：G（全局页，在任务切换时，不从TLB驱逐出去）  </li>
-<li>12-51：Base addr（子页表的物理基地址的最高40位）  </li>
-<li>63：XD（能/不能从这个子页中取指令）<br>引用位：每次访问，MMU都会设置A位，称为引用位，内核可以利用引用位来设计页替换算法。<br>修改位：告诉内核替换页之前是否必须写回牺牲页。  </li>
-</ul>
-<h3 id="9-7-2-Linux虚拟内存系统"><a href="#9-7-2-Linux虚拟内存系统" class="headerlink" title="9.7.2 Linux虚拟内存系统"></a>9.7.2 Linux虚拟内存系统</h3><ol>
-<li>Linux虚拟内存区域<br>区域的概念；每个存在的虚拟页面都必然属于某个区域；这允许虚拟地址空间有间隙。<br>内核为系统进程维护一个单独的任务结构，这中的元素包含或者指向内核运行该进程所需要的所有信息（例如PID、指向用户栈的指针，可执行目标文件的名字，以及程序计数器）。  </li>
-<li>Linux缺页异常处理<br>MMU视图翻译A时触发一个缺页，这个异常导致控制转移到内核的缺页处理程序，随后执行如下步骤：<br>1）虚拟地址A时合法的吗？（即A是否在某个区域结构定义的区域内）<br>2）试图进行内存访问是否合法？进程是否有读、写或者执行这个区域内页面的权限。<br>3）内核知道这个缺页是由于对合法的虚拟地址进行合法的操作造成的。然后，选择一个牺牲页面（如果修改过，写回），换入新的页面并更新页表，当缺页处理程序返回时，CPU重新启动引起缺页的指令。  </li>
-</ol>
-<h2 id="内存映射"><a href="#内存映射" class="headerlink" title="内存映射"></a>内存映射</h2><p>Linux将一个虚拟内存区域与一个磁盘上的对象关联起来，以初始化这个虚拟内存的内容，这个过程称为内存映射。<br>1）Linux文件系统中的普通文件<br>2）匿名文件<br>3）交换文件  </p>
-<h3 id="再看共享对象"><a href="#再看共享对象" class="headerlink" title="再看共享对象"></a>再看共享对象</h3><p>一个映射到共享对象的虚拟内存区域叫做共享区域，类似地，也有私有区域。<br>私有对象使用一种叫做写时复制的巧妙技术被映射到虚拟内存中。举例：两个进程共享了一个对象同一个物理副本。对于每个映射私有对象的进程，相应的页表条目标记为只读，并在区域结构被标记为私有写时复制。只要没有进程试图写它自己的私有区域，它们就可以继续共享物理内存中对象的一个单独副本，然而只要有一个进程试图写私有区域内的某个页面，那么这个写操作会触发一个保护故障。当故障处理程序注意到保护异常是由于进程试图写私有的写时复制区域中的一个页面而引起的，它就会在物理内存中创建这个页面的一个新副本，更新页表条目指向这个新的副本，然后恢复这个页面的写权限。</p>
-<h3 id="再看fork函数"><a href="#再看fork函数" class="headerlink" title="再看fork函数"></a>再看fork函数</h3><h3 id="再看execve函数"><a href="#再看execve函数" class="headerlink" title="再看execve函数"></a>再看execve函数</h3><p>一个execve调用：<br><code>execve(&quot;a.out&quot;,NULL,NULL)</code><br>该函数加载并允许可执行目标程序a.out中的程序，用a.out程序有效替代了当前的程序。加载并允许a.out需要一下几个步骤：  </p>
-<ul>
-<li><p>删除已存在的用户区域</p>
-</li>
-<li><p>映射私有区域</p>
-</li>
-<li><p>映射共享区域</p>
-</li>
-<li><p>设置程序计数器（PC）</p>
-</li>
-</ul>
-<h3 id="使用mmap函数的用户级内存映射"><a href="#使用mmap函数的用户级内存映射" class="headerlink" title="使用mmap函数的用户级内存映射"></a>使用mmap函数的用户级内存映射</h3><p>mmap函数要求内核创建一个新的虚拟内存区域，并将指定的一各连续的片（chunk）映射到这个新的<br>区域。</p>
-<h2 id="动态内存分配"><a href="#动态内存分配" class="headerlink" title="动态内存分配"></a>动态内存分配</h2><p>虽然可以使用低级的mmap和munmap函数来创建和删除虚拟内存区域，但是C程序员还会觉得当运行时需要额外的虚拟内存时，用动态内存分配器（dynamic memory allocator）更方便，也有更好的可以移植性。<br>动态内存分配器维护者一个进程的虚拟内存区域，称为堆（heap）。<br>分配器将堆视为一组不同大小的块的集合来维护。每个块就是一个连续的虚拟内存片，要么是已分配的，要么是空闲的。  </p>
-<ol>
-<li>显示分配器（例如C语言的malloc函数）  </li>
-<li>隐式分配器（也叫做垃圾收集器，要求分配器检测一个已分配块何时不再被程序所使用）  </li>
-</ol>
-<h3 id="malloc和free函数"><a href="#malloc和free函数" class="headerlink" title="malloc和free函数"></a>malloc和free函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">malloc</span><span class="params">(<span class="keyword">size_t</span> size)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>malloc函数返回一个指针，指向为至少size字节的内存块，这个块会为可能包含在这个块内的任何数据对象型做对齐。在32位模式中，地址总是8的倍数，在64位模式中地址总是16的倍数。<br>如果malloc遇到问题（例如要求的内存块比可用的虚拟内存还大），就返回NULL，并设置errno。如果想要改变一个已分配块的大小，可以使用realloc函数。</p>
-<h3 id="分配器的要求和目标"><a href="#分配器的要求和目标" class="headerlink" title="分配器的要求和目标"></a>分配器的要求和目标</h3><ol>
-<li>处理任意请求序列。一个应用可以有任意的分配请求序列何释放请求序列  </li>
-<li>立即响应请求  </li>
-<li>只使用堆  </li>
-<li>对齐块（对齐要求）<br>一个分配请求的最糟糕运行时间与空闲块的数量成线性关系，而一个释放请求的运行时间是一个常数。<br>一个系统中被所有进程分配的虚拟内存的全部数量是受磁盘上交换空间的数量限制的。</li>
-</ol>
-<h3 id="碎片"><a href="#碎片" class="headerlink" title="碎片"></a>碎片</h3><p>内部碎片何外部碎片。  </p>
-<ol>
-<li>内部碎片<br>实际中为了满足对齐条件，分配器可能增加块的大小。  </li>
-<li>外部碎片<br>当空闲内存合起来满足一个分配请求，但是没有一个单独的空闲块足够来满足这个请求，那么如果不向内核请求额外的虚拟内存就无法满足这个请求。<br>分配器通常采用启发式策略来试图维持少量的大空闲块。  </li>
-</ol>
-<h3 id="实现问题"><a href="#实现问题" class="headerlink" title="实现问题"></a>实现问题</h3><h3 id="隐式空闲链表"><a href="#隐式空闲链表" class="headerlink" title="隐式空闲链表"></a>隐式空闲链表</h3><p>优点是简单，缺点是任何操作的开销都要对空闲链表进行搜索。</p>
-<h3 id="放置已分配的块"><a href="#放置已分配的块" class="headerlink" title="放置已分配的块"></a>放置已分配的块</h3><p>三种放置策略：首次适配、下一次适配、最佳适配</p>
-<h3 id="分割空闲块"><a href="#分割空闲块" class="headerlink" title="分割空闲块"></a>分割空闲块</h3><p>如果放置策略趋向于产生好的匹配，那么额外的内部碎片也是可以接受的。<br>如果匹配不太好，那么分配器通常会把这个空闲块分割为两部分。第一部分变成分配块，而剩下的变成一个新的空闲块。  </p>
-<h3 id="获取额外的内存"><a href="#获取额外的内存" class="headerlink" title="获取额外的内存"></a>获取额外的内存</h3><h3 id="合并内存块"><a href="#合并内存块" class="headerlink" title="合并内存块"></a>合并内存块</h3><p>假设一个对4字（16字节）有效载荷的请求，但是只有两个相邻的有效载荷为3字的空闲块，这种现象叫做假碎片。为了解决假碎片问题，任何实际的分配器都必须合并相邻的空闲块，这个过程称为合并。这就出现了一个重要的策略决定，那就是何视执行合并。分配器可以选择立即合并（也就是在每次一个块被释放时，就合并所有相邻的块），或者它也可以选择推迟合并（也就是等到某个稍晚的时候再合并空闲块，例如可以等到某个分配请求失败，再扫描整个堆，合并所有空闲块）。立即合并简单明了，但会产生某种形式的抖动（频繁的合并和分割），快速分配器通常会选择某种形式的推迟合并。</p>
-<h3 id="带边界标记的合并"><a href="#带边界标记的合并" class="headerlink" title="带边界标记的合并"></a>带边界标记的合并</h3><p>头部、脚部，两者一样，各占一字。<br>头部可以让前面的块确定后继块的范围，脚部可以让后面的块确定前面块的范围。为了节省空间，已分配块没有脚部。</p>
-<h3 id="综合：实现一个简单的分配器"><a href="#综合：实现一个简单的分配器" class="headerlink" title="综合：实现一个简单的分配器"></a>综合：实现一个简单的分配器</h3><p>跳过，之后再看。</p>
-<h3 id="显示空闲链表"><a href="#显示空闲链表" class="headerlink" title="显示空闲链表"></a>显示空闲链表</h3><p>可以将堆组织成一个双向空闲链表，每个空闲块中，都包含一个pred（前驱）、succ（后继）指针。<br>使用双向链表而不是隐式空闲链表，使首次适配的分配时间从块数量的线性时间降低到空闲块数量的线性时间。不过释放一个块的时间可以是线性的也可以是常数，这取决于我们所选择的空闲链表中块的排序策略。<br>一种方法是：LIFO（先进后出，将新释放的块放置在链表的开始处，这样子释放将是常数时间，如果使用了边界标记，合并也是常数时间）<br>另一种方法是按地址顺序维护链表，其中链表中每个块的地址都小于它的后继的地址。在这种情况下，释放一个块需要线性时间的搜索来定位合适的前驱。但是这相对于LIFO排序有更高的内存利用率，接近最佳适配的利用率。</p>
-<h3 id="分离的空闲链表"><a href="#分离的空闲链表" class="headerlink" title="分离的空闲链表"></a>分离的空闲链表</h3><p>一种流行的减少分配时间的方法是分离存储，维护多个空闲链表，其中每个链表中的块有大致相等的大小。一般的思路是将所有可能的块大小分成一些等价类，也叫做大小类。有很多种方式来定义大小类。例如根据2的幂：<br>{1},{2},{3，4},{5<del>8},…,{1025</del>2048},{2049<del>4096},{4097</del>$\infin$}  </p>
-<ol>
-<li>简单分离存储<br>使用简单分离存储，每个大小类的空闲链表包含大小相等的块，每个块的大小就算这个大小类中的最大元素的大小。<br>优点：释放和分配块，都是常数时间操作。而且每个片中都是大小相等的块，不分割，不合并。显著的缺点是：很容易造成内部碎片和外部碎片。  </li>
-<li>分离适配<br>C标准库中的malloc包就是采用这种方法。这种方法既快速，对内存的使用也很有效率。搜索时间减少了，因为搜索被限制在堆的某个部分，而不是整个堆。<br>为了分配一个块，先确定请求的大小类，并且对适当的空闲链表做首次适配，查找一个合适的块，如果找到一个，那么就分割它，并将剩余的部分插入到适当的空闲链表中，如果找不到合适的块，那么就搜索下一个更大的大小类的空闲链表。如此重复知道找到一个合适的块。如果空闲链表中没有合适的块，那么就像操作系统请求额外堆内存，从这个新的堆内存中分配出一个块，将剩余部分放置在适当的大小类中。要释放一个块，我们执行合并，并将结果放置在相应的空闲链表中。  </li>
-<li>伙伴系统<br>一种特殊的分离适配，为每个块大小$2^k$维护一个分离空闲链表。请求块大小，向上舍入到最近的2的幂，找到一可用的块大小为$2^j$，然后递归地分割这个块，直到j=k。当分割时每个剩下的半块被放置在相应的空闲链表中。<br>优点：快速搜索和合并，可能导致显著的内部碎片。不过如果，块大小预知时2的幂，伙伴系统分配器就很有吸引力了。  </li>
-</ol>
-<h2 id="垃圾收集"><a href="#垃圾收集" class="headerlink" title="垃圾收集"></a>垃圾收集</h2><p>垃圾收集器（garbage collector）是一种动态内存分配器，它自动释放程序不再需要的已分配块。这些块被称为垃圾。</p>
-<h3 id="垃圾收集器的基本知识"><a href="#垃圾收集器的基本知识" class="headerlink" title="垃圾收集器的基本知识"></a>垃圾收集器的基本知识</h3><p>垃圾收集器将内存视为一张有向可达图，包含根节点（包含指向堆中的指针）和堆节点（对应于一个堆中的已分配块）。当存在一条从任意根结点出发并达到p的有向路径时，我们说p节点时可达的。不可达节点对应于垃圾。<br>向ML和Java这样的语言能够维护可达图的一种精确表示，也因此能够回收所有垃圾。例如C/C++这样的语言通常不能维持可达图的精确表示，这样的收集器也叫做保守的垃圾收集器，每个可达块都被正确标记为可达了，但是某些不可达节点可能被错误标记为可达了。<br>需要堆空间时：应用通常会调用malloc，如果malloc找不到一个合适的空闲块，那么它就调用垃圾收集器，希望能够回收一些垃圾到空闲链表。</p>
-<h3 id="Mark-amp-Sweep垃圾收集器"><a href="#Mark-amp-Sweep垃圾收集器" class="headerlink" title="Mark&amp;Sweep垃圾收集器"></a>Mark&amp;Sweep垃圾收集器</h3><p>Mark&amp;Sweep垃圾收集器通常由标记（Mark）和清除（sweep）阶段组成。  标记：标记出根节点的所有可达和已分配的后继。<br>清除：释放每个未标记的已分配块。<br>块头部中空闲的低位中的一位通常用来表示这个快是否被标记了。</p>
-<h3 id="C程序的保守Mark-amp-Sweep"><a href="#C程序的保守Mark-amp-Sweep" class="headerlink" title="C程序的保守Mark&amp;Sweep"></a>C程序的保守Mark&amp;Sweep</h3><p>C语言的Mark&amp;Sweep收集器必须是保守的，其根本原因是C语言不会用类型信息来标记内存位置。因此像int或者float这样的标量可以伪装成指针。</p>
-<h2 id="C程序中的常见的与内存相关的错误"><a href="#C程序中的常见的与内存相关的错误" class="headerlink" title="C程序中的常见的与内存相关的错误"></a>C程序中的常见的与内存相关的错误</h2><h3 id="间接引用坏指针"><a href="#间接引用坏指针" class="headerlink" title="间接引用坏指针"></a>间接引用坏指针</h3><h3 id="读未初始化的内存"><a href="#读未初始化的内存" class="headerlink" title="读未初始化的内存"></a>读未初始化的内存</h3><h3 id="允许栈缓冲区溢出"><a href="#允许栈缓冲区溢出" class="headerlink" title="允许栈缓冲区溢出"></a>允许栈缓冲区溢出</h3><h3 id="假设指针和它们指向的对象是相同大小的"><a href="#假设指针和它们指向的对象是相同大小的" class="headerlink" title="假设指针和它们指向的对象是相同大小的"></a>假设指针和它们指向的对象是相同大小的</h3><h3 id="造成错位错误"><a href="#造成错位错误" class="headerlink" title="造成错位错误"></a>造成错位错误</h3><h3 id="引用指针而不是它所指向的对象"><a href="#引用指针而不是它所指向的对象" class="headerlink" title="引用指针而不是它所指向的对象"></a>引用指针而不是它所指向的对象</h3><h3 id="误解指针运算"><a href="#误解指针运算" class="headerlink" title="误解指针运算"></a>误解指针运算</h3><h3 id="引用不存在的变量"><a href="#引用不存在的变量" class="headerlink" title="引用不存在的变量"></a>引用不存在的变量</h3><h3 id="引用空闲堆块中的数据"><a href="#引用空闲堆块中的数据" class="headerlink" title="引用空闲堆块中的数据"></a>引用空闲堆块中的数据</h3><h3 id="引起内存泄漏"><a href="#引起内存泄漏" class="headerlink" title="引起内存泄漏"></a>引起内存泄漏</h3>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH8%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/14/CH8%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" class="post-title-link" itemprop="url">CH8异常控制流</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-14 15:38:24" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:24+08:00">2021-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="异常控制流"><a href="#异常控制流" class="headerlink" title="异常控制流"></a>异常控制流</h1><p>现代系统通过使控制流发生突变来应对这些情况（如程序向磁盘请求数据、子进程终止同制父进程等），一般而言我们把这些突变称为异常控制流（Exceptional Control Folw，ECF）。</p>
-<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p>异常（Exception）就是控制流中的突变。<br>处理器检测到事件发生时，它会通过一张叫做异常表（exception table）<br>的跳转表，进行一个间接过程调用（异常），到一个专门设计用来处理这类事件得操作系统子程序（异常处理程序，exception handler）。当异常处理程序完成处理后，根据引起异常得事件类型，会发生以下3种情况中得一种：  </p>
-<ol>
-<li>处理程序将控制返回给当前指令$I_{curr}$，即当事件发生时正在执行得指令。  </li>
-<li>处理程序将控制返回给$I_{next}$，如果没有发生异常将会执行下一条指令。  </li>
-<li>处理程序终止被终端的程序。  </li>
-</ol>
-<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p>系统中每种可能得异常都分配了唯一的非负整数的异常号（exception number）。其中一些号码是由处理器（CPU）的设计者分配的，其他号码是由操作系统内核的设计者分配的。前者的示例包括零除、缺页、内存访问为例、断点以及算术运算溢出。后者示例包括系统调用和来自外部I/O设备的信号。<br>异常-&gt;异常表基地址寄存器-&gt;异常表-&gt;相应的处理程序。</p>
-<h3 id="异常的类别"><a href="#异常的类别" class="headerlink" title="异常的类别"></a>异常的类别</h3><p>分为四类：中断（interrupt）、陷阱（trap）、故障（fault）和终止（abort）。</p>
-<table>
-<thead>
-<tr>
-<th>类别</th>
-<th align="center">原因</th>
-<th>异步/同步</th>
-<th align="right">返回行为</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>中断</td>
-<td align="center">来自I/O设备的信号</td>
-<td>异步</td>
-<td align="right">总是返回到下一条指令</td>
-</tr>
-<tr>
-<td>陷阱</td>
-<td align="center">有意的异常</td>
-<td>同步</td>
-<td align="right">总是返回到下一条指令</td>
-</tr>
-<tr>
-<td>故障</td>
-<td align="center">潜在可恢复的错误</td>
-<td>同步</td>
-<td align="right">可能返回到当前指令</td>
-</tr>
-<tr>
-<td>终止</td>
-<td align="center">不可恢复的错误</td>
-<td>同步</td>
-<td align="right">不会返回</td>
-</tr>
-</tbody></table>
-<ol>
-<li>中断<br>中断是异步发生的，来自处理器外部的I/O设备信号的结果。硬件中断不是由任何一条专门的指令造成的，从这个意义上说它是异步的。  </li>
-<li>陷阱和系统调用<br>陷阱是有意的异常，陷阱最重要的用途是在用户程序和内核之间提供一个像过程一样的接口，叫做系统调用。为了允许用户程序对内核服务受控的访问，处理器提供了一条特殊的“syscall n”指令，当用户程序想要请求服务n时，可以执行这条指令，执行syscall指令会导致一个到异常处理程序的陷阱，这个处理程序解析参数，并调用适当的内核程序。  </li>
-<li>故障<br>故障时由错误情况引起的，它可能够被故障处理程序修正。当故障发生时，处理器将控制转移给故障处理程序。如果处理程序能够修正这个错误情况，它就将控制返回到引起故障的指令，从而重新执行它。<br>一个经典故障时缺页异常，当指令引用一个虚拟地址，而与地址相对应的物理页面不在内存中，因此必须从磁盘中取出来。  </li>
-<li>终止<br>终止是不可恢复的致命错误造成的结果，通常是一些硬件错误，比如DRAM或者SRAM位被损坏时发生了奇偶错误。终止处理程序从不将控制返回给应用程序。</li>
-</ol>
-<h3 id="Linux-x86-64系统中的异常"><a href="#Linux-x86-64系统中的异常" class="headerlink" title="Linux/x86-64系统中的异常"></a>Linux/x86-64系统中的异常</h3><p>在X86-64系统中，系统调用是通过一条称为syscall的陷阱指令来提供的。C程序用syscall函数可以直接调用任何系统调用，标准C库提供了一组方便的包装函数。这些包装函数将参数打包到一起，以适当的系统调用指令陷入内核，然后将系统调用的返回状态传递回调用程序。系统调用和它们相关的包装函数都成为系统级函数。</p>
-<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>经典定义：一个执行中程序的实例。系统中每个进程都运行在某个进程的上下文（context）中。上下文是由程序正确运行所需的状态组成的。这个状态包括存放在内存中的程序的代码和数据，它的栈、通用目的寄存器的内容、程序计数器、环境变量以及打开文件描述符的集合。</p>
-<h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>程序在执行过程中的一系列的程序计数器（PC）的值。</p>
-<h3 id="并发流"><a href="#并发流" class="headerlink" title="并发流"></a>并发流</h3><p>一个逻辑流在执行的时间上和另一个流重叠，称为并发流，这两个流称为并发地运行。<br>多任务：一个进程和其他进程轮流运行的概念称为多任务。<br>两个流并发地运行在不同处理器核或者计算机上，那么我们称它们为并行流，它们并行地运行并且并行地执行。</p>
-<h3 id="私有地址空间"><a href="#私有地址空间" class="headerlink" title="私有地址空间"></a>私有地址空间</h3><p>进程为每个程序提供它自己的私有地址空间，一般来说是不能被其他进程读或写的。</p>
-<h3 id="用户模式核内核模式"><a href="#用户模式核内核模式" class="headerlink" title="用户模式核内核模式"></a>用户模式核内核模式</h3><p>处理器通常是用某个控制寄存器中的一个模式位（mode bit）来限制应用可以执行的指令以及它可以访问的地址空间范围。<br>没有设置模式位时，进程就允许用户模式。<br>进程进入内核模式的唯一方法就算通过中断、故障或者陷入系统调用这样的异常。</p>
-<h3 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h3><p>内核使用一种称为上下文切换的较高层次的异常控制流来实现多任务。<br>内核为每个进程维持一个上下文，这就是内核重新启动一个被抢占的进程所需的状态。它由一些对象的值组成，这些对象包括通用目的寄存器、浮点寄存器、程序计数器、用户栈、状态寄存器、内核栈核各种内核数据结构。</p>
-<h2 id="系统调用错误处理"><a href="#系统调用错误处理" class="headerlink" title="系统调用错误处理"></a>系统调用错误处理</h2><p>当Unix系统级函数遇到错误时，它们通常回返回-1，并设置全局整数变量errno来表示什么出错了。程序员应该总是检查错误，但不信的时，许多人都忽略了错误检查，因为它时代码变得臃肿，而且难以读懂。</p>
-<h2 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h2><p>Unix提供了大量从C程序中操作进程的系统调用。</p>
-<h3 id="获取进程ID"><a href="#获取进程ID" class="headerlink" title="获取进程ID"></a>获取进程ID</h3><p>每个进程都有一个唯一正数进程ID（PID）。<code>getpid</code>函数返回调用进程的PID。<code>getppid</code>返回它的父进程的PID（创建调用进程的进程）。<br>返回类型为pid_t，在Linux系统上它在type.h里被定义为int。</p>
-<h3 id="创建和终止进程"><a href="#创建和终止进程" class="headerlink" title="创建和终止进程"></a>创建和终止进程</h3><p>进程总是处于下面三种状态之一：</p>
-<ul>
-<li>运行：进程要么在CPU上执行，要么在等待被执行且最终会被内核调度。</li>
-<li>停止：进程的执行被挂起（suspended），且不会被调度。</li>
-<li>终止：进程永远的停止了。三个原因：收到一个信号，该信号的默认行为是终止进程；从主程序返回，调用exit函数。<br>父进程通过<code>fork</code>函数创建新的子进程。<br>父进程和子进程有相同但是独立的地址空间，它们共享文件。</li>
-</ul>
-<h3 id="回收子进程"><a href="#回收子进程" class="headerlink" title="回收子进程"></a>回收子进程</h3><p>当一个子进程由于某种原因终止时，内核不是立即把它从系统中清除。相反，进程被保持在一种已终止的状态中，直到被它的父进程回收。当父进程回收已终止的子进程时，内核将子进程的退出状态传递给父进程，然后抛弃已终止的进程，从此时开始，该进程就不存在了。一个终止了但还未被回收的进程称为僵尸进程。如固父进程终止了，内核会安排init进程成为它的孤儿进程的养父。</p>
-<h3 id="让进程休眠"><a href="#让进程休眠" class="headerlink" title="让进程休眠"></a>让进程休眠</h3><p>sleep函数将一个进程挂起一段指定的时间。如固请求的时间量已经达到了，sleep返回0，否则返回还剩下的要休眠的秒数。</p>
-<h3 id="加载并运行程序"><a href="#加载并运行程序" class="headerlink" title="加载并运行程序"></a>加载并运行程序</h3><p>execve函数加载并运行可执行目标文件filename，只要但出现错误，如找不到filename，execve才会返回到调用程序。execve调用一次并从不返回。<br>在execve加载了filename之后，它调用启动代码，启动代码设置栈，并将控制传递给新程序的主函数，该主函数有如下形式的原型</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv,<span class="keyword">char</span> **envp)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>或等价的</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[],<span class="keyword">char</span> *envp[])</span></span>;</span><br></pre></td></tr></table></figure>
-<p>argc是命令参数的个数，argv是命令参数数组，<code>argv[0]-&gt;argv[argc-1]</code>，<code>argv[argc]=NULL</code>，envp变量指向一个以null结尾的指针数组，其中每个指针指向一个环境变量字符串，每个串都是形如<code>name=value</code>的名字-值对。<br>Linux提供了几个函数来操作环境数组：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>getenv函数在环境数组中搜索字符串<code>&quot;name=value&quot;</code>。如果找到了就返回一个指向value的指针，否则就返回<code>NULL</code>。<br>还有：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">setenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name,<span class="keyword">const</span> <span class="keyword">char</span> *newvalue,<span class="keyword">int</span> overwrite)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unsetenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>如果环境数组中包含一个形如<code>&quot;name=oldvalue&quot;</code>的字符串，那么unsetenv就会删除它，而setenv就会用newvalue代替oldvalue，但是只有在overwrite非零时才会这样。如果name不存在，那么setenv就把<code>&quot;name=newvalue&quot;</code>添加到数组中。</p>
-<ul>
-<li>程序和进程<br>fork函数在新的子进程中运行相同的程序，而execve函数在当前进程的上下文加载并运行一个新的程序。它会覆盖当前进程的地址空间，但并没有创建一个新进程，新的程序仍然具有相同的PID，并且继承了execve函数时已打开的所有文件描述符。</li>
-</ul>
-<h3 id="利用fork和execve运行程序"><a href="#利用fork和execve运行程序" class="headerlink" title="利用fork和execve运行程序"></a>利用fork和execve运行程序</h3><p>跳过</p>
-<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><p>Linux信号：一种更高层的软件形式的异常，它允许进程和内核中断其他进程。<br>低层的硬件异常是由内核处理程序处理的，正常情况这些对用户程序来说都是不可见的。信号提供了一种机制，通知用户进程发生了这些异常。</p>
-<h2 id="信号术语"><a href="#信号术语" class="headerlink" title="信号术语"></a>信号术语</h2><p>传送一个目的信号到进程由两个不同步骤组成：  </p>
-<ul>
-<li>发送信号：内核通过更新目的进程的上下文中的某个状态，发送（递送）一个信号给目的进程。发生信号可能有两个原因：内核检测到一个系统事件；一个进程调用了kill函数，显示地要求内核发送信号给目的进程。  </li>
-<li>接收信号：目的进程被内核强迫以某种方式对信号的发送做出反应时，它就接收到了信号。进程可以忽略这个信号，终止或通过执行一个称为信号处理程序的应用层函数来捕获这个信号。<br>一个发错而没有被接收的信号叫做待处理信号，在任何时刻，一种类型至多只有一个待处理信号（如果有一个该类信号，其他会被丢弃）。</li>
-</ul>
-<h3 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h3><ol>
-<li>进程组<br>每个进程都只属于一个进程组，由正整数进程组ID来唯一标识。<code>pid_t getpgrp(void)</code>返回当前进程的进程组ID。<br>子进程和父进程默认情况下属于同一个进程组，一个进程可以通过使用<code>setpgid</code>函数来改变自己或者其他进程的进程组：  </li>
-<li>用/bin/kill程序发送信号    </li>
-<li>从键盘发送信号<br>Unix shell使用作业（job）这个抽象概念来表示对一条命令行求值而创建的进程。在任何时刻至多只有一个前台作业和0个或多个后台作业。在键盘上输入Ctrl+C会导致内核发送一个SIGINT信号到前台进程组中的每一个进程。<br>默认情况下是终止前台作业；Ctrl+Z默认情况下挂起前台作业。  </li>
-<li>用kill函数发送信号<br>进程调用kill函数发送信号给其他进程（包括它们自己）。  </li>
-<li>用alarm函数发送信号<br>进程调用alarm函数发送SIGALRM信号给它自己。  </li>
-</ol>
-<h3 id="接收信号"><a href="#接收信号" class="headerlink" title="接收信号"></a>接收信号</h3><h3 id="阻塞和解除阻塞信号"><a href="#阻塞和解除阻塞信号" class="headerlink" title="阻塞和解除阻塞信号"></a>阻塞和解除阻塞信号</h3><p>隐式阻塞机制（内核默认阻塞任何当前处理程序正在处理信号类型的待处理的信号）、显式阻塞机制</p>
-<h3 id="编写信号处理程序"><a href="#编写信号处理程序" class="headerlink" title="编写信号处理程序"></a>编写信号处理程序</h3><p>跳过</p>
-<h3 id="同步流以避免讨厌的并发错误"><a href="#同步流以避免讨厌的并发错误" class="headerlink" title="同步流以避免讨厌的并发错误"></a>同步流以避免讨厌的并发错误</h3><h3 id="显式等待信号"><a href="#显式等待信号" class="headerlink" title="显式等待信号"></a>显式等待信号</h3><p>有时候主程序必须要显示地等待某个信号处理程序运行。</p>
-<h2 id="非本地跳转"><a href="#非本地跳转" class="headerlink" title="非本地跳转"></a>非本地跳转</h2><p>非本地跳转（nonlocal jump），一种C语言提供的用户及异常控制流形式。它将控制直接由一个函数转移到另一个当前正在执行的函数，而不需要经过正常的调用-返回序列。nonlocal jump通过<code>setjump</code>和<code>longjump</code>来提供。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH7%E9%93%BE%E6%8E%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/14/CH7%E9%93%BE%E6%8E%A5/" class="post-title-link" itemprop="url">CH7链接</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-14 15:38:00" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:00+08:00">2021-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a><strong>链接</strong></h1><p>链接（linking）是将各种代码和数据片段收集并组合成一个单一文件的过程，这个文件可被加载（复制）到内存并执行。链接可以执行于编译时（compile time），也就是在源代码被翻译成机器代码时；也可以执行于加载时（load time），也就是在程序被加载器（loader）加载到内存系统执行时；甚至执行于运行时（run time），也就是在程序被加载器（loader）加载到内存并执行时；甚至于运行时，也就是由应用程序来执行。在早期的计算机系统中，链接是手动执行的。在现代系统中，链接时由叫做连接器（linker）程序自动执行的。  </p>
-<h2 id="编译器驱动程序"><a href="#编译器驱动程序" class="headerlink" title="编译器驱动程序"></a><strong>编译器驱动程序</strong></h2><p>sum.c、main.c<br>预处理器将main.c翻译成一个ASCII码的中间文件main.i，然后编译器将main.i翻译成ASCII汇编语言文件main.s，然后驱动程序运行汇编器，将main.s翻译成一个可重定位目标文件main.o。<br>sum.c-&gt;sum.i-&gt;sum.s-&gt;sum.o<br>运行链接器程序ld将main.o、sum.o以及一些必要的系统目标文件组合起来，创建一个可执行目标文件prog。</p>
-<h2 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a><strong>静态链接</strong></h2><p>为了构造可执行文件，链接器必须完成两个主要任务：符号解析、重定位。  </p>
-<h2 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a><strong>目标文件</strong></h2><p>三种形式：可重定位目标文件（包含二进制代码和数据，其形式可以在编译时与其他可重定位目标文件合并起来，生成一个可执行目标文件）、可执行目标文件（包含二进制代码和数据，可以直接被复制到内存并执行）、共享目标文件（一种特殊类型的可重定位目标文件，可以在加载或者运行时加载进内存并链接）。</p>
-<h2 id="可重定位目标文件"><a href="#可重定位目标文件" class="headerlink" title="可重定位目标文件"></a><strong>可重定位目标文件</strong></h2><h2 id="符号和符号表"><a href="#符号和符号表" class="headerlink" title="符号和符号表"></a><strong>符号和符号表</strong></h2><p>每个可重定位目标模块m有一个符号表，包含：  </p>
-<ul>
-<li>由m模块定义并能被其他模块引用的全局符号。  </li>
-<li>由其他模块定义并能被模块m引用的全局符号。  </li>
-<li>只被模块m定义和引用的局部符号。  </li>
-</ul>
-<h2 id="符号解析"><a href="#符号解析" class="headerlink" title="符号解析"></a><strong>符号解析</strong></h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1440,14 +1281,14 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-count">127</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
