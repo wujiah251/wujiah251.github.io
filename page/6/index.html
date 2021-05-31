@@ -191,6 +191,536 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/25/MySQL%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E5%92%8C%E9%94%81/" class="post-title-link" itemprop="url">MySQL事务隔离级别和锁</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-25 17:36:00" itemprop="dateCreated datePublished" datetime="2021-02-25T17:36:00+08:00">2021-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h1><ol>
+<li>可串行化；  </li>
+<li>可重复读，只允许读取已提交数据，而且在一个事务两次读取同一数据之间，其他事务不能更新该数据；    </li>
+<li>已提交读，只允许读取已经提交的数据；  </li>
+<li>未提交读，允许读取未提交的数据。  </li>
+</ol>
+<p>以上隔离性级别都不允许脏写，即如果一个数据项已经被另一个尚未提交或终止的事务写入，则不允许对该数据项执行写操作。  </p>
+<table>
+<tr>
+    <th>隔离级别</th>
+    <th>脏读</th>
+    <th>不可重复读</th>
+    <th>幻读</th>
+</tr>
+<tr>
+    <td>未提交读</td>
+    <td>可能</td>
+    <td>可能</td>
+    <td>可能</td>
+</tr>
+<tr>
+    <td>已提交读</td>
+    <td>不可能</td>
+    <td>可能</td>
+    <td>可能</td>
+</tr>
+<tr>
+    <td>可重复读</td>
+    <td>不可能</td>
+    <td>不可能</td>
+    <td>可能</td>
+</tr>
+<tr>
+    <td>可串行化</td>
+    <td>不可能</td>
+    <td>不可能</td>
+    <td>不可能</td>
+</tr>
+</table>
+
+
+<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><p>DBMS中的并发控制的任务是确保在多个事务同时存取数据库中统一数据时不破坏事务的隔离性和一致性。常见的控制手段是乐观并发控制（乐观锁）和悲观并发控制（悲观锁）。  </p>
+<h2 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h2><p>假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。<br>使用方法：  </p>
+<ol>
+<li>对任意数据进行修改时，先尝试为该记录加上排他锁。  </li>
+<li>如果加锁失败就说明该记录正在被修改，等待锁被释放。  </li>
+<li>成功加锁后就可以对记录做修改，事务完成后就会解锁。  </li>
+</ol>
+<p>悲观锁适用于数据竞争激烈的环境，以及发生并发冲突时使用锁保护数据的成本低于回滚事务的成本的环境中。</p>
+<h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>假定不会发生并发冲突，只在提交操作时检查是否违反了数据完整性。在提交数据更新之前，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据。如果其他事务有更新的话，正在提交的事务会进行回滚。<br>使用方法：  </p>
+<ol>
+<li>在对数据库进行处理的时候，乐观锁并不会使用数据库提供的锁机制。一般的实现乐观锁的方式就是记录数据版本。  </li>
+<li>数据版本,为数据增加的一个版本标识。当读取数据时，将版本标识的值一同读出，数据每更新一次，同时对版本标识进行更新。</li>
+<li>当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的版本标识进行比对，如果数据库表当前版本号与第一次取出来的版本标识值相等，则予以更新，否则认为是过期数据。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/24/C++%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/24/C++%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">C++构造函数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-24 21:59:00" itemprop="dateCreated datePublished" datetime="2021-02-24T21:59:00+08:00">2021-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>C++的构造函数有四种，默认构造函数、参数构造函数、拷贝构造函数、转换构造函数</p>
+<h2 id="默认构造函数"><a href="#默认构造函数" class="headerlink" title="默认构造函数"></a>默认构造函数</h2><p>没有参数，如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">Student</span>()&#123;</span><br><span class="line">    num=<span class="number">100</span>;</span><br><span class="line">    age=<span class="number">18</span>;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参数构造函数"><a href="#参数构造函数" class="headerlink" title="参数构造函数"></a>参数构造函数</h2><p>传入了一些参数，如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">Student</span>(<span class="keyword">int</span> Age,<span class="keyword">int</span> Num)&#123;</span><br><span class="line">   		num=Num;</span><br><span class="line">      age=Age;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h2><p>形式参数是本类对象的引用：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="built_in">Student</span>(Student&amp; s)&#123;</span><br><span class="line">   		age=s.age;</span><br><span class="line">      num=s.num;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="转换构造函数"><a href="#转换构造函数" class="headerlink" title="转换构造函数"></a>转换构造函数</h2><p>转换构造函数能够将其他类型的变量转换为本类型，参数只有一个：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span>&#123;</span></span><br><span class="line">	<span class="built_in">Student</span>(<span class="keyword">int</span> r)&#123;</span><br><span class="line">   		num=r; </span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如果Student类重载了+号，则下面的加法会调用student(18);</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Student <span class="title">s1</span><span class="params">(<span class="number">10</span>,<span class="number">10</span>)</span></span>;</span><br><span class="line"><span class="function">Student <span class="title">s2</span><span class="params">(s1+<span class="number">18</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/24/MySQL%E5%BC%95%E6%93%8E%E5%92%8C%E7%B4%A2%E5%BC%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/24/MySQL%E5%BC%95%E6%93%8E%E5%92%8C%E7%B4%A2%E5%BC%95/" class="post-title-link" itemprop="url">MySQL引擎和索引</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-24 21:29:00" itemprop="dateCreated datePublished" datetime="2021-02-24T21:29:00+08:00">2021-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MySQL引擎"><a href="#MySQL引擎" class="headerlink" title="MySQL引擎"></a>MySQL引擎</h1><p>MySQL存储引擎有InnoDB、MyISAM、MEMORY。</p>
+<h2 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h2><p>InnoDB是事务型数据库的首选引擎，支持事务安全（ACID），支持行锁定和外键，InnoDB是MySQL默认的引擎。<br>主要特性：</p>
+<ol>
+<li>InnoDB提供了具有提交、回滚和崩溃恢复的事务安全存储引擎。  </li>
+<li>InnoDB存储引擎在主内存中缓存数据和索引而维持它的缓冲池。它表和索引放在一个逻辑表空间中，而MyISAM表中每个表被存放在分离的文件中。  </li>
+<li>InnoDB支持外键完整性约束。  </li>
+</ol>
+<h2 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h2><p>MyISAM基于ISAM，是在Web、数据仓储和其他应用环境下最常使用的存储引擎之一。MyISAM拥有较高的插入、查询，但不支持事务。<br>主要特性：  </p>
+<ol>
+<li>查询、插入效率高；  </li>
+<li>可以把数据文件和索引文件放在不同的目录中；  </li>
+<li>对事务的支持不好。  </li>
+</ol>
+<h2 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h2><p>MEMORY存储引擎将表中的数据存储到内存中，为查询和引用其他表数据提供快速访问。  </p>
+<p>DBMS中的并发控制的任务是确保在多个事务同时存取数据库中统一数据时不破坏事务的隔离性和一致性。常见的控制手段是乐观并发控制（乐观锁）和悲观并发控制（悲观锁）。  </p>
+<h1 id="悲观锁和乐观锁"><a href="#悲观锁和乐观锁" class="headerlink" title="悲观锁和乐观锁"></a>悲观锁和乐观锁</h1><h2 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h2><p>假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。<br>使用方法：  </p>
+<ol>
+<li>对任意数据进行修改时，先尝试为该记录加上排他锁。  </li>
+<li>如果加锁失败就说明该记录正在被修改，等待锁被释放。  </li>
+<li>成功加锁后就可以对记录做修改，事务完成后就会解锁。  </li>
+</ol>
+<p>悲观锁适用于数据竞争激烈的环境，以及发生并发冲突时使用锁保护数据的成本低于回滚事务的成本的环境中。</p>
+<h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>假定不会发生并发冲突，只在提交操作时检查是否违反了数据完整性。在提交数据更新之前，每个事务会先检查在该事务读取数据后，有没有其他事务又修改了该数据。如果其他事务有更新的话，正在提交的事务会进行回滚。<br>使用方法：  </p>
+<ol>
+<li>在对数据库进行处理的时候，乐观锁并不会使用数据库提供的锁机制。一般的实现乐观锁的方式就是记录数据版本。  </li>
+<li>数据版本,为数据增加的一个版本标识。当读取数据时，将版本标识的值一同读出，数据每更新一次，同时对版本标识进行更新。</li>
+<li>当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的版本标识进行比对，如果数据库表当前版本号与第一次取出来的版本标识值相等，则予以更新，否则认为是过期数据。</li>
+</ol>
+<h1 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h1><ol>
+<li>可串行化；  </li>
+<li>可重复读，只允许读取已提交数据，而且在一个事务两次读取同一数据之间，其他事务不能更新该数据；    </li>
+<li>已提交读，只允许读取已经提交的数据；  </li>
+<li>未提交读，允许读取未提交的数据。  </li>
+</ol>
+<p>以上隔离性级别都不允许脏写，即如果一个数据项已经被另一个尚未提交或终止的事务写入，则不允许对该数据项执行写操作。  </p>
+<table>
+<tr>
+    <th>隔离级别</th>
+    <th>脏读</th>
+    <th>不可重复读</th>
+    <th>幻读</th>
+</tr>
+<tr>
+    <td>未提交读</td>
+    <td>可能</td>
+    <td>可能</td>
+    <td>可能</td>
+</tr>
+<tr>
+    <td>已提交读</td>
+    <td>不可能</td>
+    <td>可能</td>
+    <td>可能</td>
+</tr>
+<tr>
+    <td>可重复读</td>
+    <td>不可能</td>
+    <td>不可能</td>
+    <td>可能</td>
+</tr>
+<tr>
+    <td>可串行化</td>
+    <td>不可能</td>
+    <td>不可能</td>
+    <td>不可能</td>
+</tr>
+</table>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/19/URL%E7%9A%84%E8%BE%93%E5%85%A5%E9%81%93%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/19/URL%E7%9A%84%E8%BE%93%E5%85%A5%E9%81%93%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%8E%B0/" class="post-title-link" itemprop="url">从URL的输入道页面展现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-19 21:07:00" itemprop="dateCreated datePublished" datetime="2021-02-19T21:07:00+08:00">2021-02-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>上网已经成为我们每个人生活中一项重要的内容了，当我们打开浏览器，在地址栏中输入相应的网址并按下了回车键，既会在页面中呈现所需的相关信息。那么，在这背后都进行了哪些技术步骤，才会将丰富的信息内容加载出来，展现在我们眼前呢。  </p>
+<ol>
+<li>键盘或触屏输入URL并回车确认；  </li>
+<li>URL解析和DNS解析查找域名IP地址;  </li>
+<li>网络连接发起HTTP请求;  </li>
+<li>HTTP报文传输过程;  </li>
+<li>服务器接收数据;    </li>
+<li>服务器处理请求并返回数据;    </li>
+<li>浏览器加载/渲染页面。    </li>
+</ol>
+<h1 id="URL解析"><a href="#URL解析" class="headerlink" title="URL解析"></a>URL解析</h1><h2 id="DNS域名解析"><a href="#DNS域名解析" class="headerlink" title="DNS域名解析"></a>DNS域名解析</h2><p>首先提取出URL中的域名部分，然后电脑会发送一个DNS请求，获得这个域名的IP地址。</p>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><p>将主机名和域名转换为IP地址。DNS协议使用UDP/TCP协议进行传输。早期主要是用UDP协议，但是随着DNS需要传输的数据变多，UDP协议能够传输的报文字节数较TCP少很多，所以DNS开始更多使用TCP协议了。  </p>
+<p>查找是递归查找，顺序是：本地DNS服务器-&gt;权威DNS服务器-&gt;顶级域DNS服务器-&gt;根DNS服务器。DNS存在多级缓存，比如浏览器缓存、系统缓存、路由器缓存、IPS服务器缓存、根域名服务器缓存、顶级域名服务器缓存、主域名服务器缓存。  </p>
+<h1 id="服务器处理请求"><a href="#服务器处理请求" class="headerlink" title="服务器处理请求"></a>服务器处理请求</h1><p>浏览器通过IP地址找到对应的服务器，要求建立TCP连接，连接建立后开始处理用户请求。服务器处理请求中使用一种称为MVC的设计模式。<br>MVC：<br>服务器接收到请求后触发Controller（控制器），控制器从Model（模型）和View（视图）中获取各种信息进行处理，最后视图（View）将数据渲染为HTML使得页面更加完整的呈献给用户。  </p>
+<ul>
+<li>Model：应用程序中处理数据逻辑的部分；  </li>
+<li>View：应用程序中处理数据显示的部分；  </li>
+<li>Controller：应用程序中处理用户交互的部分。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/19/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/19/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81/" class="post-title-link" itemprop="url">用户态和内核态</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-19 20:39:00" itemprop="dateCreated datePublished" datetime="2021-02-19T20:39:00+08:00">2021-02-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>操作系统维护着相当多的资源，而我们不能给每个进程以相同的权限，所以我们分出了内核态和用户态。用以区分进程能够访问的资源权限。  </p>
+<h1 id="划分"><a href="#划分" class="headerlink" title="划分"></a>划分</h1><p>CPU有不同的指令执行级别，再高执行级别下，代码可以执行特权指令，访问任意的物理地址，这种CPU级别就对应着内核态。而在相应的低级别执行状态下，代码的掌握范围会受到限制。只能在对应级别允许的范围内活动。Intel X86CPU有四种不同的执行级别，Linux只是用了其中0和3级分别表示内核态和用户态</p>
+<p>内核态和用户态之间的桥梁是系统调用，或者说系统调用将整个系统分为用户态和内核态。内核就是控制计算机的硬件资源，例如协调CPU资源，分配内存资源，并且提供稳定的环境供应用程序运行。 </p>
+<p>用户态中和系统调用最近的就是库函数和shell。</p>
+<p>库函数是为了封装系统调用的而存在的，将很多复杂操作封装起来，方便用户使用系统资源。比如可以通过open()来轻松打开文件，malloc()来分配内存，实际上，malloc()还是用了mmap()等系统调用。<br>shell顾名思义，就是外壳的意思。就好像把内核包裹起来的外壳。它是一种特殊的应用程序，俗称命令行。为了方便用户和系统交互，一般一个shell对应一个终端，呈现给用户交互窗口。当然shell也是编程的，它有标准的shell语法，符合其语法的文本叫shell脚本。很多人都会用shell脚本实现一些常用的功能，可以提高工作效率。  </p>
+<p>用户态和内核态切换的方法：  </p>
+<ol>
+<li>系统调用；  </li>
+<li>异常：发生异常后CPU会调用异常处理程序，触发切换，比如缺页异常；  </li>
+<li>外设中断：当外设完成用户的请求时，会向CPU发送中断信号。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/19/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -603,464 +1133,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/17/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/17/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" class="post-title-link" itemprop="url">C++多线程编程相关操作</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-17 20:16:00" itemprop="dateCreated datePublished" datetime="2021-02-17T20:16:00+08:00">2021-02-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>前段时间写了个轻量级的多线程Web服务器，今天顺便梳理一下相关的操作。  </p>
-<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_create</span><span class="params">(<span class="keyword">pthread_t</span> *tid,<span class="keyword">const</span> <span class="keyword">const</span> <span class="keyword">pthread_attr_t</span> *attr,<span class="keyword">void</span> *(*func)(<span class="keyword">void</span>*),<span class="keyword">void</span> *arg)</span></span>;</span><br><span class="line"><span class="comment">// 上述函数可以创建一个线程，如果创建成功，线程ID存入tid</span></span><br><span class="line"><span class="comment">// attr用于设置线程属性，优先级、栈大小等等</span></span><br><span class="line"><span class="comment">// func、arg是线程执行的函数及参数</span></span><br><span class="line"><span class="comment">// 创建成功返回0，否则非0</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_join</span><span class="params">(pthread *tid,<span class="keyword">void</span> **status)</span></span>;</span><br><span class="line"><span class="comment">// 等待一个线程结束，tid指针存储这个线程的id</span></span><br><span class="line"><span class="comment">// 如果status非空，用于存储这个线程的返回值</span></span><br><span class="line"><span class="function"><span class="keyword">ptherad_t</span> <span class="title">pthread_self</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="comment">// 返回自身线程的id</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_detach</span><span class="params">(<span class="keyword">pthread_t</span> tid)</span></span>;</span><br><span class="line"><span class="comment">// 将一个线程转变为脱离状态，即终止时就释放所有资源</span></span><br><span class="line"><span class="comment">// 另一个状态时joinable，这个状态下终止后将会等待其他线程对本线程调用pthread_join</span></span><br><span class="line"><span class="comment">// 此前将会保存ID和退出状态</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *status)</span></span>;</span><br><span class="line"><span class="comment">// 终止线程</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="线程之间的同步技术"><a href="#线程之间的同步技术" class="headerlink" title="线程之间的同步技术"></a>线程之间的同步技术</h1><h2 id="信号量sem"><a href="#信号量sem" class="headerlink" title="信号量sem"></a>信号量sem</h2><p>信号量类型是<code>sem_t</code>：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_init</span><span class="params">(<span class="keyword">sem_t</span>* sem,<span class="keyword">int</span> pshared,<span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span></span>;</span><br><span class="line"><span class="comment">// 初始化一个信号量</span></span><br><span class="line"><span class="comment">// pshared表示是否在进程间共享，0表示只在线程间共享，否则进程间共享</span></span><br><span class="line"><span class="comment">// value为设置的初始值</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_destroy</span><span class="params">(<span class="keyword">sem_t</span>* sem)</span></span>;</span><br><span class="line"><span class="comment">// 销毁一个线程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_wait</span><span class="params">(<span class="keyword">sem_t</span>* sem)</span></span>;</span><br><span class="line"><span class="comment">// P操作，对信号量-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_post</span><span class="params">(<span class="keyword">sem_t</span>* sem)</span></span>;</span><br><span class="line"><span class="comment">// V操作，信号量+1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_getvalue</span><span class="params">(<span class="keyword">sem_t</span>* sem, <span class="keyword">int</span>* valp)</span></span>;</span><br><span class="line"><span class="comment">// 返回信号量的值到valp</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="互斥锁mux"><a href="#互斥锁mux" class="headerlink" title="互斥锁mux"></a>互斥锁mux</h2><p>互斥锁：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_init</span><span class="params">(<span class="keyword">pthread_mutex_t</span>* mutex, <span class="keyword">const</span> <span class="keyword">thread_mutexattr_t</span>* mutexattr)</span></span>;</span><br><span class="line"><span class="comment">// 初始化一个互斥锁，mutexattr是相关设置参数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_lock</span><span class="params">(<span class="keyword">pthread_mutex_t</span>* mutex)</span></span>;</span><br><span class="line"><span class="comment">// 对互斥锁加锁</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_unlock</span><span class="params">(<span class="keyword">pthread_mutex_t</span>* mutex)</span></span>;</span><br><span class="line"><span class="comment">// 解锁</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_mutex_trylock</span><span class="params">(<span class="keyword">pthread_mutex_t</span>* mutex;</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="comment">// 非阻塞加锁，如果已经上锁，不会阻塞，避免死锁</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">int</span> pthread_mutex_destroy(<span class="keyword">pthread_mutex_t</span>* mutex);</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="comment">// 用来撤销互斥锁的资源。</span></span></span></span><br></pre></td></tr></table></figure>
-
-<h2 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h2><p>读写锁是用来处理读者-写者问题：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_init</span><span class="params">(<span class="keyword">pthread_rwlock_t</span>* rwlock, <span class="keyword">const</span> <span class="keyword">pthread_rwlockattr_t</span>* attr)</span></span>;</span><br><span class="line"><span class="comment">// 初始化读写锁</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_destroy</span><span class="params">(<span class="keyword">pthread_rwlock_t</span>* rwlock)</span></span>;</span><br><span class="line"><span class="comment">// 销毁读写锁</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_rdlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span>* rwlock)</span></span>;</span><br><span class="line"><span class="comment">// 加读锁</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_wrlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span>* rwlock)</span></span>;</span><br><span class="line"><span class="comment">// 加写锁</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_unlock</span><span class="params">(<span class="keyword">pthread_rwlock_t</span>* rwlock)</span></span>;</span><br><span class="line"><span class="comment">// 解锁</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h2><p>自旋锁和互斥锁差不多，区别是自旋锁阻塞方式和互斥锁不同，互斥锁是让线程睡眠来实现阻塞，而自旋锁是通过不断循环让线程忙等待，适用于占用自旋锁时间比较短的情况。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_init</span><span class="params">(<span class="keyword">__pthread_spinlock_t</span>* __lock, int__pshared)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_destroy</span><span class="params">(<span class="keyword">__pthread_spinlock_t</span>* __lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_trylock</span><span class="params">(<span class="keyword">__pthread_spinlock_t</span>* __lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_unlock</span><span class="params">(<span class="keyword">__pthread_spinlock_t</span>* __lock)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_spin_lock</span><span class="params">(<span class="keyword">__pthread_spinlock_t</span>* __lock)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<h1 id=""><a href="#" class="headerlink" title=""></a></h1>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/C++%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/16/C++%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">C++强制类型转换</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-16 20:35:00" itemprop="dateCreated datePublished" datetime="2021-02-16T20:35:00+08:00">2021-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>C++提供四种强制类型转换方式：static_cast, dynamic_cast, const_cast, reinterpret_cast。  </p>
-<h1 id="static-cast的使用"><a href="#static-cast的使用" class="headerlink" title="static_cast的使用"></a><code>static_cast</code>的使用</h1><p><code>static_cast</code>可以用于：  </p>
-<ol>
-<li>基本类型之间的类型转换；  </li>
-<li>void*指针转化为其他类型指针；  </li>
-<li>添加const属性（<code>static_cast&lt;const type&amp;&gt;(obj)</code>），强制转换的目标类型必须是指针或引用；  </li>
-<li>用于有继承关系对象之间的转换和类指针之间的转换：</li>
-</ol>
-<ul>
-<li>进行上行转换（把派生类的指针或引用转换成基类表示）是安全的；  </li>
-<li>进行下行转换（把基类的指针或引用转换为派生类表示），由于没有动态类型检查，所以是不安全的；</li>
-</ul>
-<h1 id="const-cast的使用"><a href="#const-cast的使用" class="headerlink" title="const_cast的使用"></a><code>const_cast</code>的使用</h1><p>用于去除变量的只读属性；<br>强制转换的目标类型必须是指针或引用；  </p>
-<h1 id="dynamic-cast的使用"><a href="#dynamic-cast的使用" class="headerlink" title="dynamic_cast的使用"></a><code>dynamic_cast</code>的使用</h1><ol>
-<li>用于有继承关系的类指针间的转换；</li>
-<li>用于有交叉关系的类指针间的转换；</li>
-<li>具有类型检查的功能；</li>
-<li>需要虚函数的支持。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/C++%E5%B8%B8%E8%A7%81%E5%85%B3%E9%94%AE%E5%AD%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/16/C++%E5%B8%B8%E8%A7%81%E5%85%B3%E9%94%AE%E5%AD%97/" class="post-title-link" itemprop="url">C++常见关键字</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-16 20:06:00" itemprop="dateCreated datePublished" datetime="2021-02-16T20:06:00+08:00">2021-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="static"><a href="#static" class="headerlink" title="static"></a>static</h1><h2 id="全局静态变量："><a href="#全局静态变量：" class="headerlink" title="全局静态变量："></a>全局静态变量：</h2><p>内存中的位置：静态存储区，在整个程序运行期间一直存在。<br>初始化：未经初始化的全局静态变量会被自动初始化为0（自动对象的值是任意的，除非他被显式初始化）；<br>作用域：全局静态变量在声明他的文件之外是不可见的，准确地说是从定义之处开始，到文件结尾。</p>
-<h2 id="局部静态变量："><a href="#局部静态变量：" class="headerlink" title="局部静态变量："></a>局部静态变量：</h2><p>在局部变量之前加上关键字static，局部变量就成为一个局部静态变量，它的生命周期变成了整个源文件。<br>内存中的位置：静态存储区。<br>初始化：未经初始化的全局静态变量会被自动初始化为0（自动对象的值是任意的，除非他被显式初始化）；<br>作用域：作用域仍为局部作用域，当定义它的函数或者语句块结束的时候，作用域结束。但是当局部静态变量离开作用域后，并没有销毁，而是仍然驻留在内存当中，只不过我们不能再对它进行访问，直到该函数再次被调用，并且值不变；  </p>
-<h2 id="类的静态成员"><a href="#类的静态成员" class="headerlink" title="类的静态成员"></a>类的静态成员</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> val=<span class="number">0</span>;</span><br><span class="line">　　<span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> x)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>在cpp中必须对类静态成员变量进行初始化，初始化时使用作用域运算符来标明他所属类，其属于该类的所有成员共有，只有一个拷贝。  </p>
-<p>类静态成员函数实现的时候不需要static的修饰，因为static是声明性关键字；类的静态函数是该类的范畴内的全局函数，不能访问类的私有成员，只能访问类的静态成员，不需要类的实例即可调用；实际上，他就是增加了类的访问权限的全局函数。类的静态成员函数可以继承或者覆盖，但是不能是虚函数。  </p>
-<h2 id="只在cpp内有效的全局变量："><a href="#只在cpp内有效的全局变量：" class="headerlink" title="只在cpp内有效的全局变量："></a>只在cpp内有效的全局变量：</h2><p>在cpp文件的全局范围内声明：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> val = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
-<p>这个变量的含义是该cpp内有效，但是其他的cpp文件不能访问这个变量；如果有两个cpp文件声明了同名的全局静态变量，那么他们实际上是独立的两个变量；</p>
-<h2 id="只在cpp内有效的全局函数："><a href="#只在cpp内有效的全局函数：" class="headerlink" title="只在cpp内有效的全局函数："></a>只在cpp内有效的全局函数：</h2><p>函数的实现使用static修饰，那么这个函数只可在本cpp内使用，不会同其他cpp中的同名函数引起冲突；<br>warning：不要再头文件中声明static的全局函数，不要在cpp内声明非static的全局函数，如果你要在多个cpp中复用该函数，就把它的声明提到头文件里去，否则cpp内部声明需加上static修饰。  </p>
-<h1 id="const"><a href="#const" class="headerlink" title="const"></a>const</h1><p>const名叫常量限定符，用来限定特定变量，以通知编译器该变量是不可修改的。习惯性的使用const，可以避免在函数中对某些不应修改的变量造成可能的改动。  </p>
-<h2 id="关于数组"><a href="#关于数组" class="headerlink" title="关于数组"></a>关于数组</h2><p>C++中数组的值实际上就是一个地址而且这个值不能修改，比如</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int a[]&#x3D;&#123;1,2,3&#125;;</span><br></pre></td></tr></table></figure>
-<p>数组变量一旦定义，就不可以在修改其地址，const可以在int之前修饰也可以在之后，都表示限定了数组内的元素值。  </p>
-<h2 id="关于指针"><a href="#关于指针" class="headerlink" title="关于指针"></a>关于指针</h2><p>const关于指针有两种用法，指针常量和常量指针：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int a&#x3D;1;</span><br><span class="line">const int *p1&#x3D;&amp;a;</span><br><span class="line">int const *p2&#x3D;&amp;a;</span><br></pre></td></tr></table></figure>
-<p>第一个const修饰了int，这是一个常量指针，不能修改指针指向的对象；<br>第二个cosnt修饰了*，表示这个是一个指针常量，指针值不能修改。  </p>
-<h2 id="用于函数"><a href="#用于函数" class="headerlink" title="用于函数"></a>用于函数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Rational <span class="keyword">operator</span>*(<span class="keyword">const</span> Rational&amp; lhs, <span class="keyword">const</span> Rational&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">return</span> <span class="built_in">Rational</span>(lhs.<span class="built_in">numerator</span>() * rhs.<span class="built_in">numerator</span>(),</span><br><span class="line">lhs.<span class="built_in">denominator</span>() * rhs.<span class="built_in">denominator</span>());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//返回值用const修饰可以防止允许这样的操作发生:</span></span><br><span class="line">Rational a,b;</span><br><span class="line">Radional c;</span><br><span class="line">(a*b) = c;</span><br></pre></td></tr></table></figure>
-<p>避免返回结果作为左值的情况。</p>
-<h1 id="extern"><a href="#extern" class="headerlink" title="extern"></a>extern</h1><p>它的作用是声明函数或全局变量的作用范围的关键字，其声明的函数和变量可以在本模块活其他模块中使用，记住它是一个声明不是定义!也就是说B模块(编译单元)要是引用模块(编译单元)A中定义的全局变量或函数时，它只要包含A模块的头文件即可,在编译阶段，模块B虽然找不到该函数或变量，但它不会报错，它会在连接时从模块A生成的目标代码中找到此函数。  </p>
-<h1 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h1><p>C/C++中volatile关键字和const对应，用来修饰变量，通常用于建立语言级别的memory barrier。用它申明的类型变量表示可以被某些编译器未知的因素更改，比如操作系统、硬件、其他线程等。遇到这个关键字申明的变量，编译器对访问该变量的时候不再优化，从而可以获得稳定的地址访问。<br>我们以下面的代码为例子：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">int</span> i=<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> a = i;</span><br><span class="line">...</span><br><span class="line"><span class="comment">// 其他代码，并未明确告诉编译器，对 i 进行过操作</span></span><br><span class="line"><span class="keyword">int</span> b = i;</span><br></pre></td></tr></table></figure>
-<p>volatile指出i是随时可能发生变化的，每次使用它的时候必须从i的地址中读取，因而编译器生成的汇编代码会重新从i的地址读取数据放再b中。而优化的做法是，由于编译器发现两次从i读数据的代码之间的代码没有对i进行过操作，它会自动把读的数据放在b中，而不是重新从i里面读取。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/RAII%E6%8A%80%E6%9C%AF%E5%92%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/16/RAII%E6%8A%80%E6%9C%AF%E5%92%8C%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" class="post-title-link" itemprop="url">RAII技术和智能指针</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-16 19:37:00" itemprop="dateCreated datePublished" datetime="2021-02-16T19:37:00+08:00">2021-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="RAII技术"><a href="#RAII技术" class="headerlink" title="RAII技术"></a>RAII技术</h1><p>RAII是C++的发明者Bjarne Stroustrup提出的概念，RAII全称是“Resource Acquisition is Initialization”，直译过来是“资源获取即初始化”，也就是说在构造函数中申请分配资源，在析构函数中释放资源。因为C++的语言机制保证了，当一个对象创建的时候，自动调用构造函数，当对象超出作用域的时候会自动调用析构函数。所以，在RAII的指导下，我们应该使用类来管理资源，将资源和对象的生命周期绑定。<br>智能指针（std::shared_ptr和std::unique_ptr）即RAII最具代表的实现，使用智能指针，可以实现自动的内存管理，再也不需要担心忘记delete造成的内存泄漏。毫不夸张的来讲，有了智能指针，代码中几乎不需要再出现delete了。</p>
-<h1 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h1><p>智能指针在C++11版本之后提供，包含在头文件<code>&lt;memory&gt;</code>中，<code>shared_ptr</code>、<code>unique_ptr</code>、<code>weak_ptr</code>。  </p>
-<h2 id="shared-ptr的使用"><a href="#shared-ptr的使用" class="headerlink" title="shared_ptr的使用"></a><code>shared_ptr</code>的使用</h2><p>shared_ptr多个指针指向相同的对象。shared_ptr使用引用计数，每一个shared_ptr的拷贝都指向相同的内存。每使用他一次，内部的引用计数加1，每析构一次，内部的引用计数减1，减为0时，自动删除所指向的堆内存。shared_ptr内部的引用计数是线程安全的，但是对象的读取需要加锁。  </p>
-<p><strong>初始化</strong>：智能指针是个模板类，可以指定类型，传入指针通过构造函数初始化。也可以使用make_shared函数初始化。不能将指针直接赋值给一个智能指针，一个是类，一个是指针。例如std::shared_ptr<int> p4 = new int(1);的写法是错误的。<br><strong>拷贝和赋值</strong>：拷贝使得对象的引用计数增加1，赋值使得原对象引用计数减1，当计数为0时，自动释放内存。后来指向的对象引用计数加1，指向后来的对象。<br>**get()**：获取原始指针，注意不要用一个原始指针初始化多个shared_ptr，否则会造成二次释放同一内存。<br><strong>陷阱</strong>：shared_ptr的一个最大的陷阱是循环引用，循环，循环引用会导致堆内存无法正确释放，导致内存泄漏。循环引用在weak_ptr中介绍。</p>
-<h2 id="unique-ptr的使用"><a href="#unique-ptr的使用" class="headerlink" title="unique_ptr的使用"></a><code>unique_ptr</code>的使用</h2><p><code>unique_ptr</code>“唯一”拥有其所指对象，同一时刻只能有一个unique_ptr指向给定对象（通过禁止拷贝语义、只有移动语义来实现）。相比与原始指针unique_ptr用于其RAII的特性，使得在出现异常的情况下，动态资源能得到释放。<br>unique_ptr指针本身的生命周期：从unique_ptr指针创建时开始，直到离开作用域。离开作用域时，若其指向对象，则将其所指对象销毁(默认使用delete操作符，用户可指定其他操作)。  unique_ptr指针与其所指对象的关系：在智能指针生命周期内，可以改变智能指针所指对象，如创建智能指针时通过构造函数指定、通过reset方法重新指定、通过release方法释放所有权、通过移动语义转移所有权。</p>
-<h2 id="weak-ptr的使用"><a href="#weak-ptr的使用" class="headerlink" title="weak_ptr的使用"></a><code>weak_ptr</code>的使用</h2><p>weak_ptr是为了配合shared_ptr而引入的一种智能指针，因为它不具有普通指针的行为，没有重载operator*和-&gt;,它的最大作用在于协助shared_ptr工作，像旁观者那样观测资源的使用情况。weak_ptr可以从一个shared_ptr或者另一个weak_ptr对象构造，获得资源的观测权。<br>但weak_ptr没有共享资源，它的构造不会引起指针引用计数的增加。使用weak_ptr的成员函数use_count()可以观测资源的引用计数，另一个成员函数expired()的功能等价于use_count()==0,但更快，表示被观测的资源(也就是shared_ptr的管理的资源)已经不复存在。weak_ptr可以使用一个非常重要的成员函数lock()从被观测的shared_ptr获得一个可用的shared_ptr对象， 从而操作资源。但当expired()==true的时候，lock()函数将返回一个存储空指针的shared_ptr。</p>
-<h2 id="野指针与预防"><a href="#野指针与预防" class="headerlink" title="野指针与预防"></a>野指针与预防</h2><p>野指针，又称迷途指针，即指向“垃圾”内存的指针。此时指针指向的内存已被操作系统回收，程序已无法再访问。野指针，不是NULL指针，而是看上去指向合法内存，却在实际上该内存已经释放。  </p>
-<ol>
-<li><p>声明指针时候积得初始化：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *p=<span class="literal">nullptr</span>;</span><br></pre></td></tr></table></figure></li>
-<li><p>当指针没有利用价值的时候，为该指针赋值为NULL：  </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="literal">NULL</span> != P)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> p;</span><br><span class="line">    p = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>如果用指针作为参数进行传递时候，最好做下检查，比如<code>assert(p!=NULL)</code>。  </p>
-</li>
-<li><p>尽量用引用代替指针。  </p>
-</li>
-<li><p>用智能指针代替野指针。  </p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/16/C%E5%92%8CC++%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/16/C%E5%92%8CC++%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">C和C++内存管理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-16 17:08:44" itemprop="dateCreated datePublished" datetime="2021-02-16T17:08:44+08:00">2021-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>C语言中我们一般用<code>malloc()</code>函数和<code>free()</code>函数来分配和释放内存。C++中我们一般用关键字<code>new</code>、<code>delete</code>来分配和释放内存。那他们有哪些区别呢？</p>
-<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Test* p_c = (Test*)<span class="built_in">malloc</span>(<span class="built_in"><span class="keyword">sizeof</span></span>(Test));</span><br><span class="line">  Test* p_cpp = <span class="keyword">new</span> Test;</span><br><span class="line">  <span class="built_in">free</span>(p_c);</span><br><span class="line">  <span class="keyword">delete</span> p_cpp;</span><br></pre></td></tr></table></figure>
-
-<h1 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h1><p><code>malloc()</code>以字节为单位分配内存，不会调用构造函数，而<code>new</code>以具体类型为单位分配内存，调用了构造函数。<br><code>free()</code>仅归还内存，析构函数未被调用。<code>delete</code>销毁对象，归还内存，析构函数被调用。  </p>
-<p><code>malloc()</code>和<code>new</code>区别：  </p>
-<ul>
-<li>new 在所有 C++ 编译器中都被支持  </li>
-<li>malloc 在某些系统开发中不能调用  </li>
-<li>new 能够触发构造函数的调用  </li>
-<li>malloc 仅分配需要的内存空间  </li>
-<li>对象的创建只能使用 new  </li>
-<li>malloc 不适合面向对象开发  </li>
-</ul>
-<p><code>free()</code>和<code>delete</code>区别：  </p>
-<ul>
-<li>delete 在所有 C++ 编译器中都被支持  </li>
-<li>free 在某些系统开发中不能调用  </li>
-<li>delete 能够触发析构函数的调用  </li>
-<li>free 仅归还之前分配的内存空间  </li>
-<li>对象的销毁只能使用 delete  </li>
-<li>free 不适合面向对象开发</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1128,7 +1204,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1141,7 +1217,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

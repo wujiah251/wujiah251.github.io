@@ -191,6 +191,604 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/05/ET-LT%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/05/ET-LT%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">I/O多路复用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-05 21:13:50" itemprop="dateCreated datePublished" datetime="2021-02-05T21:13:50+08:00">2021-02-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>I/O多路复用是一种机制：一个进程监听多个描述符，一旦一个某个描述符就绪（读就绪或者写就绪），通知进程进行相应的读写操作。<br>这个机制在Linux中有3个常见实现（select、poll、epoll），但是他们本质都是同步I/O，因为他们都需要在读写事件就绪后自己负责读写。而异步I/O不需要负责读写，异步I/O的实现会负责将数据从内核空间拷贝到内核空间。  </p>
+<h2 id="Select机制"><a href="#Select机制" class="headerlink" title="Select机制"></a>Select机制</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span> <span class="params">(<span class="keyword">int</span> n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *fdset)</span></span>;	<span class="comment">//清空一个fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;	<span class="comment">//添加一个fd进入fdset</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_CTR</span><span class="params">(<span class="keyword">int</span> fd,fd_set *fdset)</span></span>;	<span class="comment">//从fdset删除一个fd</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;	<span class="comment">//判断fdset里面是否有某个fd</span></span><br></pre></td></tr></table></figure>
+<p>select函数监听的文件描述符分3类，分别是writefds、readfds和exceptfds。调用后select函数会阻塞，知道有描述符就绪，或者超时，函数返回。当select函数返回后，可以通过遍历fdset来找到就绪的描述符。<br>select目前在几乎所有平台上支持，其良好的跨平台支持也是它的一个优点。缺点就是单个进程能够监听的描述符的数量存在最大限制，在Linux上一般为1024，可以通过修改宏定义来提升这一限制，但是会降低效率。</p>
+<h2 id="Poll机制"><a href="#Poll机制" class="headerlink" title="Poll机制"></a>Poll机制</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span> <span class="params">(struct pollfd *fds, <span class="keyword">unsigned</span> <span class="keyword">int</span> nfds, <span class="keyword">int</span> timeout)</span></span>; </span><br></pre></td></tr></table></figure>
+<p>不同于select使用3个位图来表示3个fdset的方式，poll使用一个pollfd的指针实现。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span>&#123;</span></span><br><span class="line">	<span class="keyword">int</span> fd;</span><br><span class="line">	<span class="keyword">short</span> events;</span><br><span class="line">   <span class="keyword">short</span> revents;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>pollfd结构包含了要监视的event和发生的event，不再使用select“参数-值”传递方式。同时，pollfd并没有最大数量限制（但是数量大了性能变差）。和select一样，poll返回后需要轮询pollfd来获取就绪的描述符。</p>
+<p>从上面的例子看，select和poll都需要在返回后同遍历文件描述符来获取已经就绪的socket。事实上，同时连接的大量客户端在一时刻可能只有很少的处于就绪状态，因此随着监听的描述符数量增长，其效率线性下降。</p>
+<h2 id="Epoll"><a href="#Epoll" class="headerlink" title="Epoll"></a>Epoll</h2><p>epoll是select和poll的增强版本。epoll更加灵活，没有数量限制。epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放在内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。  </p>
+<h3 id="Epoll具体使用"><a href="#Epoll具体使用" class="headerlink" title="Epoll具体使用"></a>Epoll具体使用</h3><p>epoll操作过程需要3个接口，分别如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_ctl</span><span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, struct epoll_event *event)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span><span class="params">(<span class="keyword">int</span> epfd, struct epoll_event * events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li><code>epoll_create()</code>创建一个epoll句柄，size用来告诉内核这个监听的数目一共多大，这个参数无法限制epoll监听的最大数目，而是给出一个建议。 epoll句柄会占用一个fd值。 </li>
+<li><code>epoll_ctl()</code>对指定的描述符fd执行op操作，可以添加（EPOLL_CTL_ADD）/删除（EPOLL_CTL_DEL）/修改（EPOLL_CTL_MOD）对fd的监听事件。event是告诉我们内核需要监听数目事件。<code>struct epoll_event</code>结构如下所示：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span>&#123;</span></span><br><span class="line">	<span class="keyword">_uint32_t</span> events;	<span class="comment">/* Epoll events */</span></span><br><span class="line">   <span class="keyword">epoll_data_t</span> data;  <span class="comment">/* User data variable */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//events可以表示为以下几个宏的集合</span></span><br><span class="line">EPOLLIN ：表示对应的文件描述符可以读（包括对端SOCKET正常关闭）；</span><br><span class="line">EPOLLOUT：表示对应的文件描述符可以写；</span><br><span class="line">EPOLLPRI：表示对应的文件描述符有紧急的数据可读（这里应该表示有带外数据到来）；</span><br><span class="line">EPOLLERR：表示对应的文件描述符发生错误；</span><br><span class="line">EPOLLHUP：表示对应的文件描述符被挂断；</span><br><span class="line">EPOLLET： 将EPOLL设为边缘触发(Edge Triggered)模式，这是相对于水平触发(Level Triggered)来说的。</span><br><span class="line">EPOLLONESHOT：只监听一次事件，当监听完这次事件之后，如果还需要继续监听这个socket的话，需要再次把这个socket加入到EPOLL队列里 </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>epoll_wait()</code>等待epfd上的I/O事件，最多返回maxevents个事件。参数events用来从内核得到事件的集合，maxevents告知内核这个events有多大。</li>
+</ul>
+<h3 id="Epoll底层机制"><a href="#Epoll底层机制" class="headerlink" title="Epoll底层机制"></a>Epoll底层机制</h3><p>Epoll在内核维护了两个数据结构，一个红黑树用来存储监听IO事件的fd，另一个用来存储IO事件的双链表。红黑树能够提供高效的fd查找、修改、删除操作（<code>epoll_ctl()</code>）。一旦某个fd发生了IO事件，就会触发fd的回调函数，将事件添加到双链表中。而<code>epoll_wait()</code>只需要检查链表是否为空即可，不为空等待返回，否则等待IO事件发生触发回调函数。  </p>
+<h2 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h2><p>epoll对文件描述符有两种工作模式：<strong>LT（level trigger，水平触发）和ET（edge trigger，边沿触发）</strong>：LT模式是默认模式，LT模式与ET模式区别如下所示：<br><strong>LT</strong>：当epoll检测到描述符事件发生并将此事件通知主程序，应用程序可以不立即处理该事件。下次调用epoll_wait时，会再次响应应用程序并通知此事件。<br><strong>ET模式</strong>：当epoll_wait()检测到描述符事件发生并将此事件通知注应用程序，应用程序必须立即处理该事件。如果不处理，下次调用epoll_wait()时，不会再次响应应用程序并通知此事件。  </p>
+<h3 id="LT模式"><a href="#LT模式" class="headerlink" title="LT模式"></a>LT模式</h3><p>LT是epoll默认的工作方式，支持阻塞和非阻塞两种机制。LT模式下内核会持续通知你文件描述符就绪了，然后你可以对这个就绪的fd进行I/O操作。如果不做任何操作，内核还是会继续通知你的。  </p>
+<h3 id="ET模式"><a href="#ET模式" class="headerlink" title="ET模式"></a>ET模式</h3><p>ET模式相对LT模式更加高效，只支持非阻塞模式。在这个模式下，当描述符从未就绪变为就绪时，内核通过epoll告诉你。然后它会假设你知道文件描述符已经就绪，并且不再为那个文件描述符发生更多的就绪通知。直到你做了某些操作导致那个文件描述符不再为就绪状态了。<br>ET模式在很大程度上减少了epoll事件被重复触发的次数，因此效率要比LT模式高。epoll工作在ET模式时，必须使用非阻塞套接口，以避免一个文件句柄的阻塞导致把其他文件描述符饿死。  </p>
+<h2 id="Epoll总结"><a href="#Epoll总结" class="headerlink" title="Epoll总结"></a>Epoll总结</h2><p>在select/poll中，进程只有在调用一定的方法后才对所有监视的文件描述符进行扫描，而epoll事先通过epoll_ctl()注册一个文件描述符，一旦某个文件描述符就绪时，内核会采取回调机制，迅速激活这个文件描述符，当进程调用epoll_wait()时便得到通知。  </p>
+<p>epoll的优点主要是以下几个方面：  </p>
+<ol>
+<li>监听的文件描述符不受限制，它所支持的fd上限是最大可打开文件数目；  </li>
+<li>I/O效率不会随着监听的文件描述符规模增大而下降。不同于select/poll轮询的方式，epoll通过每个fd定义的回调函数来实现。只有就绪的fd才会执行回调函数。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/04/IO%E5%A4%8D%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/04/IO%E5%A4%8D%E7%94%A8/" class="post-title-link" itemprop="url">I/O复用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-04 22:08:00" itemprop="dateCreated datePublished" datetime="2021-02-04T22:08:00+08:00">2021-02-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="I-O模型介绍"><a href="#I-O模型介绍" class="headerlink" title="I/O模型介绍"></a>I/O模型介绍</h1><p>同步和异步、阻塞和非阻塞在I/O操作中总是容易分不清楚。<br>I/O操作可以分为：发起I/O请求，执行I/O操作，得到I/O操作结果，返回结果。  </p>
+<h2 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h2><p>同步和异步实际上是一种通信机制，涉及调用方和被调用方。<br><strong>同步</strong>：调用方等待被调用方完成操作然后返回结果；<br><strong>异步</strong>：调用方不需要等待调用方操作，而是被调用方自己操作完成后通知调用方。<br>同步和异步适合用于描述I/O操作的执行部分。</p>
+<h2 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h2><p>阻塞和非阻塞其实是一种调用机制，只涉及调用方，关注的是I/O操作的执行状态，不同点在于请求I/O操作后，针对I/O操作，被调用方的行为。<br>如果调用方等待IO操作完成后返回，则是阻塞的；如果调用方不需要等待I/O操作完成就立即返回，则是非阻塞的，非阻塞的情况下，常常需要多次调用去检查，才能获得I/O操作的结果。</p>
+<h2 id="I-O模型总结"><a href="#I-O模型总结" class="headerlink" title="I/O模型总结"></a>I/O模型总结</h2><ol>
+<li>阻塞I/O<br>当发生系统调用时候，比如recv，用户进程要一直等待到数据拷贝到用户空间，这段时间内进程始终阻塞。它是同步I/O。  </li>
+<li>非阻塞I/O<br>还是以recv为例子，不管有没有数据都返回，如果没有数据，过一会再调用recv看看，如此循环。但是如果有数据，它要等待数据拷贝到用户空间，因此还是同步I/O。（相当于没有数据读的时候阻塞，读的时候还是非阻塞）  </li>
+<li>I/O复用<br>同时监听多个文件描述符，当有可读/可写/异常事件发生的时候，通知进程，进行读写或者处理异常。当没有事件发生时候，正常运行。就当前例子来看还是同步I/O，因为依旧要等待数据读完或者写完才能继续运行。I/O复用可用于同步I/O也可用于异步I/O。</li>
+<li>信号驱动的I/O模型<br>通过调用sigaction注册信号函数，等内核数据准备好的时候，系统中断当前程序，执行信号函数（在这里调用recv）。这还是同步I/O。</li>
+<li>异步I/O模型<br>调用aio_read，让内核等数据准本好，并且复制到用户进程空间后执行实现指定好的函数。这样子省去了进程等待读数据的事件。这是真正的异步I/O。</li>
+<li>I/O的两个阶段<br>内核数据的准备阶段和内核数据复制到用户缓冲区阶段。只有进程不用等待这两个阶段，才是真正的异步I/O。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/04/%E6%AD%BB%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/04/%E6%AD%BB%E9%94%81/" class="post-title-link" itemprop="url">死锁</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-04 18:37:00" itemprop="dateCreated datePublished" datetime="2021-02-04T18:37:00+08:00">2021-02-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h1><h2 id="可抢占资源和不可抢占资源"><a href="#可抢占资源和不可抢占资源" class="headerlink" title="可抢占资源和不可抢占资源"></a>可抢占资源和不可抢占资源</h2><ul>
+<li>可抢占资源：可以从拥有它的进程中抢占而不会产生任何副作用<br>可抢占资源不易产生死锁，因为这种潜在风险可以由进程之间资源的重新分配来化解。  </li>
+<li>不可抢占资源：无法把它从占有它的进程处抢占过来。  </li>
+</ul>
+<h2 id="资源获取"><a href="#资源获取" class="headerlink" title="资源获取"></a>资源获取</h2><p>一种允许用户管理资源的方式是为每个资源配置一个信号量，我们看下面两个例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> semaphore;</span><br><span class="line">	semaphore resource_1;</span><br><span class="line">	semaphore resource_2;</span><br><span class="line">	</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_A</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_B</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>上面这个例子，不会发生死锁，而下面这个例子有可能出现死锁：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> semaphore;</span><br><span class="line">	semaphore resource_1;</span><br><span class="line">	semaphore resource_2;</span><br><span class="line">	</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_A</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">process_B</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_2);</span><br><span class="line">		<span class="built_in">down</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">use_both_resources</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_1);</span><br><span class="line">		<span class="built_in">up</span>(&amp;resource_2);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="死锁概述"><a href="#死锁概述" class="headerlink" title="死锁概述"></a>死锁概述</h1><p>死锁的规范定义：<strong>如果一个进程集合中的每个进程集合都在等待只能由该进程集合中的其他进程才能引发的事件，那么该进程集合就是死锁的</strong>。  </p>
+<h2 id="资源死锁的条件"><a href="#资源死锁的条件" class="headerlink" title="资源死锁的条件"></a>资源死锁的条件</h2><ol>
+<li>互斥条件：每个资源要么已经分配给一个进程，要么可用；  </li>
+<li>占有和等待条件：已经得到某个资源的进程可以再请求新的资源；  </li>
+<li>不可抢占条件：一个资源已经分配给某个进程，那么只能由这个进程释放这个资源；  </li>
+<li>环路等待条件：死锁发生时，系统中一定有两个或两个以上进程组成了一条环路，这个环路上每个进程都在等待下一个进程释放资源。  </li>
+</ol>
+<p>所以如果想避免死锁发生，我们可以从破坏这四个条件入手。  </p>
+<h1 id="死锁检测和死锁恢复"><a href="#死锁检测和死锁恢复" class="headerlink" title="死锁检测和死锁恢复"></a>死锁检测和死锁恢复</h1><h2 id="每种类型一个资源的死锁检测"><a href="#每种类型一个资源的死锁检测" class="headerlink" title="每种类型一个资源的死锁检测"></a>每种类型一个资源的死锁检测</h2><p>用普通的检测有向图是否有环路的算法即可检测死锁。</p>
+<h2 id="每种类型多个资源的死锁检测"><a href="#每种类型多个资源的死锁检测" class="headerlink" title="每种类型多个资源的死锁检测"></a>每种类型多个资源的死锁检测</h2><p>假设两个矩阵C、R，C(i,j)代表当前第i个进程对第j种资源占有个数，R(i,j)代表第i个进程还需要多少个j类资源。然后假设两个向量E、A，E(i)代表资源类型1的个数，A(i)代表资源类型i总共可用个数。那么我们可以用如下算法检测死锁：<br>死锁检测算法如下：<br>1）寻找一个没有标记的进程Pi，对于R矩阵而言第i行向量小于等于A；<br>2）如果找到了这样一个进程，那么将C矩阵的第i行向量加到A中，标记该进程，并转到第一步（可以理解为这个进程可以被分配资源然后完成再释放资源）；<br>3）如果没有找到这样的进程，算法终止。<br>算法结束时，没有被标记的进程都是死锁进程（如果有的话）。</p>
+<h2 id="从死锁中恢复"><a href="#从死锁中恢复" class="headerlink" title="从死锁中恢复"></a>从死锁中恢复</h2><ol>
+<li>利用抢占恢复：这通常需要人工干预。  </li>
+<li>利用回滚恢复：周期性对进程进行检查，并将检查点检查也就是进程的状态写入一个文件以备以后重启（类似于日志）。一旦检测到死锁，那么就很容易发现需要哪些资源。为了进行恢复，要从一个较早的检查点开始，这样所有需要资源的进程会回滚到一个时间点，在此时间点之前该进程获得了一些其他的资源。在检查点之后的所有工作都会丢失。  </li>
+<li>通过杀死进程恢复：注意不要杀死环外的进程。  </li>
+</ol>
+<h1 id="死锁避免"><a href="#死锁避免" class="headerlink" title="死锁避免"></a>死锁避免</h1><h2 id="安全状态和不完全状态"><a href="#安全状态和不完全状态" class="headerlink" title="安全状态和不完全状态"></a>安全状态和不完全状态</h2><p>如果没有死锁发生，且即使所有进程突然请求对资源的最大需求，也仍然存在某种调度次序能够使得每一个进程运行完毕，则称状态是安全的。  </p>
+<p>安全状态下，系统能保证不发生死锁。不安全状态则没有这个保证。  </p>
+<h2 id="单个资源的银行家算法"><a href="#单个资源的银行家算法" class="headerlink" title="单个资源的银行家算法"></a>单个资源的银行家算法</h2><p>算法：判断对请求的满足是否会导致进入不安全状态。如果是，就拒绝请求，如果满足请求后仍是安全的，就予以分配。  </p>
+<h2 id="多个资源的银行家算法"><a href="#多个资源的银行家算法" class="headerlink" title="多个资源的银行家算法"></a>多个资源的银行家算法</h2><p>和单个资源类似，用前面所说的多个资源的死锁检测来判断是否安全。<br>但是值得一提的是银行家算法并不实用，一方面很难一开始就知道这个进程所需要的最大资源数目，另一方面系统中进程的数目不是固定的，这可能导致原本可用的资源也变得不可用起来。  </p>
+<h1 id="死锁预防"><a href="#死锁预防" class="headerlink" title="死锁预防"></a>死锁预防</h1><h2 id="破坏互斥条件"><a href="#破坏互斥条件" class="headerlink" title="破坏互斥条件"></a>破坏互斥条件</h2><p>如果一个资源不会被一个进程独占，那么死锁肯定不会发生。  </p>
+<h2 id="破坏占有和等待条件"><a href="#破坏占有和等待条件" class="headerlink" title="破坏占有和等待条件"></a>破坏占有和等待条件</h2><p>只要在一开始将所有需要的资源都读入即可，但是判断需要多少资源时间麻烦事。  </p>
+<h2 id="破坏不可抢占条件"><a href="#破坏不可抢占条件" class="headerlink" title="破坏不可抢占条件"></a>破坏不可抢占条件</h2><p>但是并不是所有资源的都可以修改为可抢占。  </p>
+<h2 id="破坏环路等待条件"><a href="#破坏环路等待条件" class="headerlink" title="破坏环路等待条件"></a>破坏环路等待条件</h2><p>对资源编号，要求进程按照顺序来请求资源。  </p>
+<h1 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h1><h2 id="饥饿"><a href="#饥饿" class="headerlink" title="饥饿"></a>饥饿</h2><p>饥饿是指系统不能保证某个进程的等待时间上界，从而使该进程长时间等待，当等待时间给进程推进和响应带来明显影响时，称发生了进程饥饿。当饥饿到一定程度的进程所赋予的任务即使完成也不再具有实际意义时称该进程被饿死。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/02/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/02/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">进程和线程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-02 19:04:11" itemprop="dateCreated datePublished" datetime="2021-02-02T19:04:11+08:00">2021-02-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><p>在多道程序设计系统中，CPU由一个进程快速切换至另一个进程，使每个进程各运行几十或几百毫秒。但是实际上一个CPU同时只能运行一个进程，但1s内它可能运行了多个进程，这样就产生了并行的错觉。为了对多个并行活动进行跟踪，操作系统设计者发展了一个概念模型-进程（运行程序时的抽象），使得并行更容易处理。  </p>
+<h2 id="进程模型"><a href="#进程模型" class="headerlink" title="进程模型"></a>进程模型</h2><p>进程就是一个正在执行程序的实例，包括程序计数器，寄存器和变量的当前值。  </p>
+<h2 id="创建进程"><a href="#创建进程" class="headerlink" title="创建进程"></a>创建进程</h2><p>UNIX系统中，只有一个系统调用可以创建新的进程：<code>fork</code>。这个系统调用会创建一个与调用进程相同的副本，这两个进程会拥有相同的存储映像、同样的环境字符串和同样的打开文件。这就是全部情形通常，子进程接着执行<code>execeve</code>以修改器存储映像并允许一个新的程序。  </p>
+<h2 id="进程的终止"><a href="#进程的终止" class="headerlink" title="进程的终止"></a>进程的终止</h2><ol>
+<li>正常退出（自愿的）：通知操作系统它的工作已经完成，在UNIX中该调用<code>exit</code>；  </li>
+<li>出错退出（自愿的）：进程出现错误，捕获错误，然后退出；  </li>
+<li>严重错误（非自愿的）：比如引用不存在的内存、除数是0等，这类错误中，进程可以通知操作系统来处理；  </li>
+<li>被其他进程杀死（非自愿的）：其他进程通过执行一个系统调用：<code>kill</code>来杀死某个进程。  </li>
+</ol>
+<h2 id="进程的层次结构"><a href="#进程的层次结构" class="headerlink" title="进程的层次结构"></a>进程的层次结构</h2><p>当一个进程创建出来了后，父进程和子进程以某种形式继续保持联系。自进程可以接着再创建进程，这就形成了进程的层次结构。  </p>
+<h2 id="进程的状态"><a href="#进程的状态" class="headerlink" title="进程的状态"></a>进程的状态</h2><ol>
+<li>运行态（该时刻进程实际占用CPU）；  </li>
+<li>就绪态（可运行，但因为其他进程正在运行而暂时停止）；  </li>
+<li>阻塞态（除非某种外部事件发生，否则进程不能运行）。  </li>
+</ol>
+<p>运行态可以转变成就绪态和阻塞态，就绪态可以转变成运行态，阻塞态可以转变成就绪态。  </p>
+<h2 id="进程的实现"><a href="#进程的实现" class="headerlink" title="进程的实现"></a>进程的实现</h2><p>为了实现进程模型，操作系统维护一张表格，即进程表。每个进程占用一个进程表项。该表项包含了进程状态的重要信息：程序计数器、堆栈指针、内存分配情况、所打开文件的状态、账号和调度信息，以及其他在进程由运行态转换成就绪态或阻塞态时需要保存的信息。</p>
+<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><p>为什么需要多线程：在许多应用中同时发生着多种活动。其中某些活动随着时间的推移会被阻塞。通过将这些应用程序分解成可以准并行运行的多个顺序线程，程序设计模型会变得更简单。<br>这其实和前面所说的进程看起来并无区别，但是线程引入了一个新的元素：并行实体共享同一地址空间和所有可用数据的能力；另一方面，线程更加轻量级，创建一个线程需要的时间较创建一个进程快10-100倍。<br>需要多线程的第三个原因涉及性能方面的讨论：若多个线程都是CPU密集型的，那么并不能获得性能上的增强，但是如果存在大量的计算和I/O，同游多个线程允许这些活动彼此重叠进行，从而会加快应用程序执行的速度。</p>
+<h2 id="经典的线程模型"><a href="#经典的线程模型" class="headerlink" title="经典的线程模型"></a>经典的线程模型</h2><table>
+  <tr>
+    <th>每个进程中的内容</th>
+    <th>每个线程中的内容</th>
+  </tr>
+  <tr>
+    <td>地址空间</td>
+    <td>程序计数器</td>
+  </tr>
+  <tr>
+    <td>全局变量</td>
+    <td>寄存器</td>
+  </tr>
+  <tr>
+    <td>打开文件</td>
+    <td>堆栈</td>
+  </tr>
+  <tr>
+    <td>子进程</td>
+    <td>状态</td>
+  </tr>
+  <tr>
+    <td>即将发生的报警</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>信号与信号处理程序</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>账户信息</td>
+    <td></td>
+  </tr>
+</table>
+
+
+
+<h2 id="用户级线程和内核级线程"><a href="#用户级线程和内核级线程" class="headerlink" title="用户级线程和内核级线程"></a>用户级线程和内核级线程</h2><p>用户级线程是指不需要内核支持，在用户程序中实现的线程。它的内核的切换由用户程序自己控制，不需要内核的干涉。但是不能像内核级线程一样更好的运用多核CPU。<br>优点：  </p>
+<ol>
+<li>线程调度不需要内核参与，控制起来简单；  </li>
+<li>可以在不支持线程的操作系统中实现。  </li>
+</ol>
+<p>缺点：  </p>
+<ol>
+<li>用户级线程的阻塞回引起整个进程的阻塞；  </li>
+<li>用户级线程不能利用系统的多重处理，只有一个用户级线程可以被执行。  </li>
+</ol>
+<p>内核级线程：切换由内核控制，由用户态转化为内核态。切换完毕要从内核态返回用户态。可以很好地运用多核CPU。<br>优点：  </p>
+<ol>
+<li>多核时，一个进程的多个线程可以同时执行；  </li>
+<li>由于内核级线程只有很小的数据结构和堆栈，切换速度快。  </li>
+</ol>
+<p>缺点：<br>线程在用户态的运行，而线程的调度和管理在内核实现，在控制权从一个线程传送到另一个线程需要用户态到内核态再到用户态的模式切换，比较占用系统资源。（就是必须要受到内核的监控）。  </p>
+<p>区别：  </p>
+<ol>
+<li>内核支持线程是OS内核可感知的，而用户级线程是OS内核不可感知的；  </li>
+<li>用户级线程的创建、撤消和调度不需要OS内核的支持，所以性能上差一些；  </li>
+<li>用户级线程执行系统调用指令时将导致其所属进程被中断，而内核支持线程执行系统调用指令时，只导致该线程被中断。  </li>
+</ol>
+<h2 id="混合实现"><a href="#混合实现" class="headerlink" title="混合实现"></a>混合实现</h2><p>编程人员可以决定有多少内核级线程和多少用户级线程彼此多路复用，这一模型最灵活。  </p>
+<h1 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h1><p>三个问题：  </p>
+<ol>
+<li>一个进程如何把信息传递给另一个进程？  </li>
+<li>确保两个或更多进程在关键活动中不会出现交叉；  </li>
+<li>进程运行顺序。  </li>
+</ol>
+<h2 id="竞争条件"><a href="#竞争条件" class="headerlink" title="竞争条件"></a>竞争条件</h2><p>两个或多个进程读写某些共享数据，而最后的结果取决于进程运行的精确时序，称为竞争条件。  </p>
+<h2 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h2><p>我们需要互斥，即以某种手短确保当一个进程在使用某个共享变量或文件时，其他进程不能做同样的操作。<br>我们把对共享内存进行访问的程序片段称作临界区域或临界区。如果我们能够适当地安排，使得两个进程不可能同时处于临界区中，就能够避免竞争条件。  </p>
+<h2 id="忙等待的互斥"><a href="#忙等待的互斥" class="headerlink" title="忙等待的互斥"></a>忙等待的互斥</h2><ol>
+<li>屏蔽中断：当进程进入临界区后立即屏蔽所有中断，并在就要离开时打开中断。这样子的问题是将屏蔽中断的权力交给用户进程是不明智的，如果没有打开中断，可能导致系统因此终止。  </li>
+<li>锁变量；  </li>
+<li>严格轮换法；  </li>
+<li>Peterson解法；  </li>
+<li>TSL指令<br>那些设计为多处理器的计算机，都有下面一条指令：<br><code>TSL RX, LOCK</code>  </li>
+</ol>
+<p>这个指令可以将一个内存字lock读到寄存器RX中，然后该内存地址上存一个非零值。这个读操作和写操作是不可分割的，即该指令结束之前其他处理器不允许访问该内存字。这通过锁住内存总线来实现，静止其他CPU在本指令结束之前访问内存。  </p>
+<h2 id="信号量-amp-amp-互斥量"><a href="#信号量-amp-amp-互斥量" class="headerlink" title="信号量&amp;&amp;互斥量"></a>信号量&amp;&amp;互斥量</h2><p>信号量、互斥量可以参考我在《CSAPP》的读书笔记第12章的内容。  </p>
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><p>条件变量允许线程由于一些未达到的条件而阻塞。直到另外的线程向它发送信号。</p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>举例：<br>消费者-生产者问题中，如果缓冲区大小为0，这时候消费者先对互斥量加锁，再对信号量进行P操作，将被阻塞，而由于互斥量加锁，生产者也无法对信号量进行V操作，这种现象叫做死锁。  </p>
+<h2 id="管程"><a href="#管程" class="headerlink" title="管程"></a>管程</h2><p>管程是一种程序结构，由过程、变量及数据结构等组成的一个集合。管程是在编译器层次实现的，在编写程序时可以理解成一个软件包，它提供如下服务：  </p>
+<ul>
+<li>多个彼此可以交互并共用资源的线程  </li>
+<li>多个与资源使用有关的变量  </li>
+<li>一个互斥锁  </li>
+<li>一个用来避免竞态条件的不变量  </li>
+</ul>
+<h1 id="调度"><a href="#调度" class="headerlink" title="调度"></a>调度</h1><p>当计算机系统是多道程序设计系统时，就会发生多个进程或者多个线程竞争CPU。在操作系统中，完成选择工作得这一部分称为调度程序。  </p>
+<h2 id="调度介绍"><a href="#调度介绍" class="headerlink" title="调度介绍"></a>调度介绍</h2><ul>
+<li><p>进程行为：<br>几乎所有进程都是I/O或计算交替突发的，典型地，CPU不停顿地运行一段时间，然后发出一个系统调用以便读写文件。<br>进程也可以分为I/O密集型和计算密集型。  </p>
+</li>
+<li><p>何时调度：  </p>
+</li>
+</ul>
+<p>第一，在创建一个新进程时，选择运行父进程还是子进程；<br>第二，在进程退出时必须做出调度决策，一个进程不再运行，所以必须从就绪进程中选择另外的某个进程；<br>第三，当一个进程阻塞在I/O和信号量上或由于其他原因阻塞时，必须选择另一个进程运行。有时，阻塞原因会成为选择的因素。  </p>
+<ul>
+<li>调度算法分类和目标：<br>不同环境需要不通的调度算法，这里有必要划出的三种环境。<br>1）批处理（吞吐量、周转时间、CPU利用率）；<br>2）交互式（响应时间、均衡性）；<br>3）实时（满足截止时间、可预测性）。  </li>
+</ul>
+<h1 id="经典的IPC问题"><a href="#经典的IPC问题" class="headerlink" title="经典的IPC问题"></a>经典的IPC问题</h1><h2 id="哲学家就餐问题"><a href="#哲学家就餐问题" class="headerlink" title="哲学家就餐问题"></a>哲学家就餐问题</h2><p>问题：5个哲学家5把叉子，需要两把叉子才能吃饭：<br>如果同时拿起右边的叉子，则会发生死锁。<br>如何解决：<br>用信号量对5个哲学家提供保护，在开始拿叉子之前，先对相邻两个哲学家的互斥量进行访问，如果他们都没有在吃饭，则拿起叉子。<br>这种解法可以获得最大的并行度。  </p>
+<h2 id="读者-写者问题"><a href="#读者-写者问题" class="headerlink" title="读者-写者问题"></a>读者-写者问题</h2><p>举例：一个进程正在更新数据库，而这时候，其他读数据库的请求将被阻塞；而一个进程在读数据，其他进程也可以读数据库。这就是典型的读者-写者问题，读者不具有排他性，而写者会排他。<br>解决方法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> semaphore;</span><br><span class="line">semaphore mutex = <span class="number">1</span>;</span><br><span class="line">semaphore db = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> rc = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reader</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">		<span class="built_in">down</span>(&amp;mutex);</span><br><span class="line">		rc = rc + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">if</span>(rc==<span class="number">1</span>)<span class="built_in">down</span>(&amp;db);</span><br><span class="line">		<span class="built_in">up</span>(&amp;mutex);</span><br><span class="line">		<span class="built_in">read_data_base</span>();</span><br><span class="line">		<span class="built_in">down</span>(&amp;mutex);</span><br><span class="line">		rc = rc - <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">if</span>(rc == <span class="number">0</span>)<span class="built_in">up</span>(&amp;db);</span><br><span class="line">		<span class="built_in">up</span>(&amp;mutex);</span><br><span class="line">		<span class="built_in">use_data_read</span>();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writer</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">		<span class="built_in">think_up_data</span>();</span><br><span class="line">		<span class="built_in">down</span>(&amp;db);</span><br><span class="line">		<span class="built_in">write</span>(&amp;db);</span><br><span class="line">		<span class="built_in">write_data_base</span>();</span><br><span class="line">		<span class="built_in">up</span>(&amp;db);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="进程和线程需要维护的状态"><a href="#进程和线程需要维护的状态" class="headerlink" title="进程和线程需要维护的状态"></a>进程和线程需要维护的状态</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/29/%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/29/%E5%AD%98%E5%82%A8%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">存储管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-29 23:22:49" itemprop="dateCreated datePublished" datetime="2021-01-29T23:22:49+08:00">2021-01-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="为什么要使用虚拟地址空间？"><a href="#为什么要使用虚拟地址空间？" class="headerlink" title="为什么要使用虚拟地址空间？"></a>为什么要使用虚拟地址空间？</h1><ol>
+<li>程序大小的增长速度总是很快，使用虚拟地址空间可以扩大地址空间。  </li>
+<li>如果使用物理地址空间，进程之间共享物理内存，容易造成竞争和程序的崩溃，使用虚拟地址空间还可以增加程序的安全性。  </li>
+<li>使用物理地址空间，同时运行多个程序是困难的。  </li>
+</ol>
+<h1 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h1><h2 id="地址空间的概念"><a href="#地址空间的概念" class="headerlink" title="地址空间的概念"></a>地址空间的概念</h2><p><strong>地址空间</strong> 是一个进程可用于寻址内存的一套地址集合。每个进程都有自己的地址空间，并且这个地址空间独立于其他进程的地址空间。</p>
+<h3 id="基址寄存器和界限寄存器"><a href="#基址寄存器和界限寄存器" class="headerlink" title="基址寄存器和界限寄存器"></a>基址寄存器和界限寄存器</h3><p>经典的重定位方法。基址寄存器存储程序的起始物理地址，界限寄存器存储程序长度。<br>每次一个进程进行访问内存，取一条指令、读取或写一个数据字，CPU会把地址发送到内存总线前，自动把基址值加到进程发出的地址值之上。<br>这个方法比较容易，但是由于每次访问内存都需要进行加法和比较运算，会消耗很多时间。</p>
+<h2 id="交换技术"><a href="#交换技术" class="headerlink" title="交换技术"></a>交换技术</h2><p>现实中我们常常要打开多个程序，每个进程都需要占据一定的内存，如果打开程序比较多，会造成内存不足的问题，有一种简单的处理内存超载的方法，<strong>交换（swapping）技术</strong>。当一个进程空闲时，存放在磁盘上，所以它不运行时不占用内存。另一个方法是<strong>虚拟内存</strong>，虚拟内存使得程序可以只有在一部分被读入内存时运行。  </p>
+<p>交换技术很好理解，我们讨论一下其可能面临的一些问题，我们知道很多程序设计语言都可以动态地分配内存，那么当进程空间视图增大的时候，就会出现问题：  </p>
+<ul>
+<li>有相邻空闲区：将相邻空闲区分配给进程；  </li>
+<li>没有相邻空闲区：把一个或多个进程换出，以便生成足够大的空闲区。<br>如果大部分进程运行时都需要增长，为了减少换入换出的开销，我们在最开始的时候为进程额外分配一些内存，这个预留空间位于堆栈和数据段之间，他们都可以使用其。</li>
+</ul>
+<h2 id="空闲内存管理"><a href="#空闲内存管理" class="headerlink" title="空闲内存管理"></a>空闲内存管理</h2><h3 id="位图"><a href="#位图" class="headerlink" title="位图"></a>位图</h3><p>我们可以把内存划分为小到几个字达到几千字的内存单元，然后用位图来记录使用情况。<br>问题：当我们需要分配占k个单位内存时，，需要在位图中匹配长度为k的0串，这是一个耗时操作。  </p>
+<h3 id="使用链表的存储管理"><a href="#使用链表的存储管理" class="headerlink" title="使用链表的存储管理"></a>使用链表的存储管理</h3><p>维护一个记录已分配内存段和空闲内存段的链表。链表一个结点或者包含一个进程，或者包含一个位于两个进程之间的空闲区。  </p>
+<p>如果按照地址顺序来存放进程和空闲区时，有几种算法可以来为进程分配内存：  </p>
+<ul>
+<li>首次适配算法；  </li>
+<li>下次适配算法；</li>
+<li>最佳适配算法；  </li>
+<li>最差适配算法。  </li>
+</ul>
+<p>如果单独维护空闲区链表和进程链表，可以提高以上四个算法的速度，但是释放内存将内存从进程表中删除并插入到空闲区链表的时间成本高昂。  </p>
+<p>当然如果我们单独维护空闲区链表和进程链表，可以按照大小升序排列，这样可以提高最佳适配的效率。  </p>
+<p>还有一种分配算法叫做<strong>快速适配</strong>，为空闲区维护一个单独的链表。例如，这个表的第一项指向一个大小为4KB的空闲区，第二项指向一个大小为8KB的空闲区，第三项指向一个大小为12KB的空闲区。这样子寻找一个指定大小的空闲区是非常迅速的，但是缺点是合并空闲区相当费时。  </p>
+<h1 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h1><p>尽管基址寄存器和界限寄存器可以用于创建地址空间的抽象，但无法解决程序大小的膨胀问题。虚拟内存的基本思想是每个程序都拥有自己的地址空间，空间被分为多个块，每一块称作一页。  </p>
+<h2 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h2><p>内存管理单元（Memory Management Unit，MMU），MMU把虚拟地址映射为物理内存地址。  </p>
+<p>访问虚拟内存，首先查询页表项（以一级页表为例），如果页表项显示不存在（缓存为命中），则引起缺页中断，陷入内核，由内核将需要的页写入到内存中（如果内存已满，会替换掉一个不常用的页，然后将被替换页写入磁盘）；如果显示存在，从页表项索引到页所在位置；找到物理内存的页后，根据虚拟地址的偏移量来确定最终物理地址。<br>注：页表项还可以添加其他信息，比如读写控制等。  </p>
+<h2 id="转换检测缓冲区（TLB）"><a href="#转换检测缓冲区（TLB）" class="headerlink" title="转换检测缓冲区（TLB）"></a>转换检测缓冲区（TLB）</h2><p>每次内存访问都需要多次访问页表也就是多次访问内存，为了节约时间，使用一种缓存技术TLB，TLB通常在MMU中（硬件实现，所以快），包含少量的表项，每个表项记录一个页面信息，包括虚拟页号，页面的修改位、保护码和该页所对应的物理页框。在每次内存访问时，都会首先访问TLB，寻找匹配表项，如果TLB命中，则不再访问页表，如果不命中，再访问页表，然后再将这次表项读入到TLB（也会淘汰一个TLB表项），下次再访问这个页表，自然会命中了。  </p>
+<h1 id="页面置换算法"><a href="#页面置换算法" class="headerlink" title="页面置换算法"></a>页面置换算法</h1><h2 id="最优页面置换算法"><a href="#最优页面置换算法" class="headerlink" title="最优页面置换算法"></a>最优页面置换算法</h2><p>选择最晚将被使用的页面被置换，这个算法很好理解，而且被证明时最优的，但是问题在于我们无法预测页面何时将再被使用。当然可以跟踪页面使用情况来预测，但是这样是不划算的。  </p>
+<h2 id="最近未使用页面置换算法"><a href="#最近未使用页面置换算法" class="headerlink" title="最近未使用页面置换算法"></a>最近未使用页面置换算法</h2><p>最近未使用也很好理解，而且容易实现，性能也够用。  </p>
+<h2 id="先进先出页面置换算法"><a href="#先进先出页面置换算法" class="headerlink" title="先进先出页面置换算法"></a>先进先出页面置换算法</h2><p>还有很多其他页面置换算法，比如时钟页面置换算法，最近最少使用页面置换算法等等，不做赘述。</p>
+<h1 id="分页系统中的设计问题"><a href="#分页系统中的设计问题" class="headerlink" title="分页系统中的设计问题"></a>分页系统中的设计问题</h1><h2 id="局部分配策略和全局分配策略"><a href="#局部分配策略和全局分配策略" class="headerlink" title="局部分配策略和全局分配策略"></a>局部分配策略和全局分配策略</h2><p>局部就是指页面置换时只考虑同一进程的内存，而全局就是考虑所有进程的内存。一般来说，全局的性能更优，而且可以避免一个需要较大内存的进程只被分配了少量物理内存。<br>还有一些动态的分配策略，会实时参考缺页中断率来分配内存。</p>
+<h2 id="负载控制"><a href="#负载控制" class="headerlink" title="负载控制"></a>负载控制</h2><p>即使使用最优页面置换算法，系统也可能发生“抖动”，这在于每个进程都在渴求更多的内存，导致进程不断被频繁换入换出，解决方案是暂时从内存中去掉一些进程。  </p>
+<h3 id="共享页面"><a href="#共享页面" class="headerlink" title="共享页面"></a>共享页面</h3><p>如果不同进程之间共享某页面，可以让他们都指向同一个页面集合，然后当读的时候并不进行页面复制，仅有写发生时进行页面复制，这称为写时复制。  </p>
+<h3 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h3><p>通过一个系统调用把文件映射到虚拟地址空间的一部分。这样可以把文件当作一个大型的字符数组来访问，而且这样子可以通过共享内存来通信，一个进程在共享内存上完成了写操作，另一个进程在映射到这个文件的虚拟地址空间之上指向读操作时，它就可以立即看到上一个进程写操作了。这个机制为进程之间提供了一个高带宽通道。</p>
+<h1 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h1><p>一个编译器在编译过程中会创建许多表，其中可能包括：  </p>
+<ol>
+<li>被保存起来供打印清单用的程序正文；  </li>
+<li>符号表，包含变量的名字和属性；  </li>
+<li>包含用到的所有整型量和浮点常量的表；  </li>
+<li>语法分析树，包含程序语法分析的结果；  </li>
+<li>编译器内部过程调用使用的堆栈。  </li>
+</ol>
+<p>我们需要一个能够把程序员从管理表的扩张和收缩工作中解出来的方法，就像虚拟内存使程序员不用再为怎么样把程序划分称覆盖块担心一样。<br>一个直观并且通用的方法是在机器上提供多个互相独立的称为段的地址空间。<br>一个段一般不包含不通类型的内容。在分段系统中，修改一个过程不会影响其他无关的过程的起始地址。<br>分段是一个逻辑实体，程序员知道这一点并把它作为一个逻辑实体来使用。<br>页面的内容从某种意义上是随机的，程序员甚至察觉不到分页的事实，而分段对程序员是已知的。</p>
+<h2 id="分段和分页的结合"><a href="#分段和分页的结合" class="headerlink" title="分段和分页的结合"></a>分段和分页的结合</h2><p>分段和分页可以结合起来使用，一个例子就是MULTICS。具体细节参考《现代操作系统》P134-P135。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -706,459 +1304,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E5%88%9B%E5%BB%BA%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/28/%E5%88%9B%E5%BB%BA%E8%A1%A8/" class="post-title-link" itemprop="url">创建表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-28 11:14:44" itemprop="dateCreated datePublished" datetime="2021-01-28T11:14:44+08:00">2021-01-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h1><h2 id="创建表基础"><a href="#创建表基础" class="headerlink" title="创建表基础"></a>创建表基础</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table customers(</span><br><span class="line">   -&gt; cust_id		int			NOT NULL AUTO_INCREMENT,</span><br><span class="line">   -&gt; cust_name		char(50)	NOT NULL ,</span><br><span class="line">   -&gt; cust_address	char(50)	NULL,</span><br><span class="line">   -&gt; cust_city		char(50)	NULL,</span><br><span class="line">   -&gt; cust_state	char(5)		NULL,</span><br><span class="line">   -&gt; cust_zip		char(10)	NULL,</span><br><span class="line">   -&gt; cust_country	char(50)	NULL,</span><br><span class="line">   -&gt; cust_contact	char(50)	NULL,</span><br><span class="line">   -&gt; cust_email	char(255)	NULL,</span><br><span class="line">   -&gt; PRIMARY KEY (cust_id)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用NULL值"><a href="#使用NULL值" class="headerlink" title="使用NULL值"></a>使用NULL值</h2><p>NULL值就是没有值或缺值，运行NULL值得列也允许在插入行时，不给出该列得值。</p>
-<h2 id="主键介绍"><a href="#主键介绍" class="headerlink" title="主键介绍"></a>主键介绍</h2><p>表中每个行都必须具有唯一的主键值。主键用下列语句定义：<br><code>PRIMARY KEY (vend_id)</code><br>当然也可以用多个作为主键，举例：  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table orderitems(</span><br><span class="line">   -&gt; order_num		int		   NOT NULL ,</span><br><span class="line">   -&gt; order_item	   int		   NOT NULL ,</span><br><span class="line">   -&gt; prod_id		  char(10)      NOT NULL ,</span><br><span class="line">   -&gt; quantity		 int		   NOT NULL ,</span><br><span class="line">   -&gt; item_price	   decimal(8,2)  NOT NULL ,</span><br><span class="line">   -&gt; PRIMARY KEY (order_num, order_item)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用AUTO-INCREMENT"><a href="#使用AUTO-INCREMENT" class="headerlink" title="使用AUTO_INCREMENT"></a>使用AUTO_INCREMENT</h2><p><code>AUTO_INCREMENT</code>告诉MySQL，本列每当增加一行时自动增量。每次执行一个INSERT操作时，MySQL自动对该列增量。</p>
-<h2 id="指定默认值"><a href="#指定默认值" class="headerlink" title="指定默认值"></a>指定默认值</h2><p>如果在插入行时没有给出值，MySQL允许使用默认值，默认值用CREATE TABLE语句得列定义中的DEFAULT关键字指定。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table orderitems(</span><br><span class="line">   -&gt; order_num		int		   NOT NULL ,</span><br><span class="line">   -&gt; order_item	   int		   NOT NULL ,</span><br><span class="line">   -&gt; prod_id		  char(10)      NOT NULL ,</span><br><span class="line">   -&gt; quantity		 int		   NOT NULL DEFAULT 1,</span><br><span class="line">   -&gt; item_price	   decimal(8,2)  NOT NULL ,</span><br><span class="line">   -&gt; PRIMARY KEY (order_num, order_item)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
-
-<h2 id="引擎类型"><a href="#引擎类型" class="headerlink" title="引擎类型"></a>引擎类型</h2><p>MySQL（其他DBMS也一样）有一个具体管理和处理数据的内部引擎。在你使用<code>create table</code>语句时，该引擎具体创建表，而在你使用select或进行其他数据库处理时，该引擎在内部处理你的请求。以下几个是需要知道的引擎：  </p>
-<ul>
-<li>InnoDB是一个可靠的事务处理引擎，它不支持全文本搜索。  </li>
-<li>MEMORY在功能商等同于MyISAM，但由于数据存储在内存中，速度很快。  </li>
-<li>MyISAM是一个性能极高的引擎，它支持全文本搜索，但不支持事务处理。  </li>
-</ul>
-<h1 id="更新表"><a href="#更新表" class="headerlink" title="更新表"></a>更新表</h1><p>为更新表定义，可使用ALTER TABLE语句（理想情况下表一旦被创建就不应该被更新）。  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER TABLE vendors</span><br><span class="line">    -&gt; ADD vend_phone CHAR(20);</span><br></pre></td></tr></table></figure>
-
-<p>如果想删除刚刚添加的列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER TABLE vendors </span><br><span class="line">    -&gt; DROP column vend_phone;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>ALTER TABLE的一种常见用途是定义外键。具体细节不做展开。</p>
-<h1 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h1><p>非常简单：<br><code>DROP TABLE customers2;</code></p>
-<h1 id="重命名表"><a href="#重命名表" class="headerlink" title="重命名表"></a>重命名表</h1><p>使用<code>RENAME TABLE</code>语句可以重新命名一张表：<br><code>RENAME TABLE customers2 TO customers;</code></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">更新和删除数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 23:56:26" itemprop="dateCreated datePublished" datetime="2021-01-27T23:56:26+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="更新数据"><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h1><p>为了更行（修改）表中的数据可以使用<code>UPDATE</code>语句。举例：  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update customers</span><br><span class="line">    -&gt; set cust_email &#x3D; &#39;elmer@fudd.com&#39;</span><br><span class="line">    -&gt; where cust_id &#x3D; 10005;</span><br></pre></td></tr></table></figure>
-<p>基本的update语句由3部分组成：  </p>
-<ul>
-<li>要更新的表  </li>
-<li>列名和它们的新值  </li>
-<li>确定要更新行的过滤条件  </li>
-</ul>
-<p>更新多个列的话：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update customers</span><br><span class="line">    -&gt; set cust_email &#x3D; &#39;elmer@fudd.com&#39;,cust_name &#x3D; &#39;the Fudds&#39;</span><br><span class="line">    -&gt; where cust_id &#x3D; 10005;</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h1><p>为了从表中删除数据，使用<code>DELETE</code>语句：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delete from customers</span><br><span class="line">    -&gt; where cust_id &#x3D; 10006;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">插入数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 23:40:22" itemprop="dateCreated datePublished" datetime="2021-01-27T23:40:22+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数据插入"><a href="#数据插入" class="headerlink" title="数据插入"></a>数据插入</h1><p>插入可以有几种方式：    </p>
-<ol>
-<li>插入完整的行  </li>
-<li>插入行的一部分  </li>
-<li>插入多行  </li>
-<li>插入某些查询结果  </li>
-</ol>
-<h1 id="插入完整的行"><a href="#插入完整的行" class="headerlink" title="插入完整的行"></a>插入完整的行</h1><p>使用基本的<code>INSERT</code>语法。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into customers</span><br><span class="line">    -&gt; values(null,&#39;Pep E. LaPew&#39;,</span><br><span class="line">    -&gt; &#39;100 Main Street&#39;,</span><br><span class="line">    -&gt; &#39;Los Angeles&#39;,</span><br><span class="line">    -&gt; &#39;CA&#39;,</span><br><span class="line">    -&gt; &#39;90046&#39;,</span><br><span class="line">    -&gt; &#39;USA&#39;,</span><br><span class="line">    -&gt; NULL,</span><br><span class="line">    -&gt; NULL);</span><br></pre></td></tr></table></figure>
-<p>虽然这种语法很简单，但并不安全，应该尽量避免使用。这高度依赖表中列定义的次序。<br>更安全的方式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into customers</span><br><span class="line">    -&gt; (cust_name,cust_address,cust_city,cust_state,cust_zip,</span><br><span class="line">    -&gt; cust_country,cust_contact,cust_email)</span><br><span class="line">    -&gt; values(&#39;Pep E. LaPew&#39;,&#39;100 Main Street&#39;,&#39;Log Angeles&#39;,</span><br><span class="line">    -&gt; &#39;CA&#39;,&#39;90046&#39;,&#39;USA&#39;,NULL,NULL);</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="插入多个行"><a href="#插入多个行" class="headerlink" title="插入多个行"></a>插入多个行</h1><p>如果我们想插入多个行，可以使用上面的语句，插入一行对应一个<code>values()</code>。</p>
-<h1 id="插入检索出的数据"><a href="#插入检索出的数据" class="headerlink" title="插入检索出的数据"></a>插入检索出的数据</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into customers</span><br><span class="line">    -&gt; (cust_id,cust_contact,cust_email,cust_name,cust_address,</span><br><span class="line">    -&gt; cust_city,cust_state,cust_zip,cust_country)</span><br><span class="line">    -&gt; select cust_id,cust_contact,cust_email,cust_name,cust_address,</span><br><span class="line">    -&gt; cust_city,cust_state,cust_zip,cust_country</span><br><span class="line">    -&gt; from custnew;</span><br></pre></td></tr></table></figure>
-<p>这个例子使用<code>INSERT SELECT</code>从custnew中将所有数据导入custmers中。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%85%A8%E6%96%87%E6%9C%AC%E6%90%9C%E7%B4%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E5%85%A8%E6%96%87%E6%9C%AC%E6%90%9C%E7%B4%A2/" class="post-title-link" itemprop="url">全文本搜索</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 23:04:36" itemprop="dateCreated datePublished" datetime="2021-01-27T23:04:36+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="理解全文本搜索"><a href="#理解全文本搜索" class="headerlink" title="理解全文本搜索"></a>理解全文本搜索</h1><p><strong>并非所有引擎都支持全文本搜索</strong> 两个最常用的引擎MyISAM和InnoDB，前者支持全文本搜索，而后者不支持。</p>
-<h1 id="使用全文本搜索"><a href="#使用全文本搜索" class="headerlink" title="使用全文本搜索"></a>使用全文本搜索</h1><h2 id="启用全文本搜索支持"><a href="#启用全文本搜索支持" class="headerlink" title="启用全文本搜索支持"></a>启用全文本搜索支持</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table productnotes(</span><br><span class="line">    -&gt; note_id	int				NOT NULL AUTO_INCREMENT,</span><br><span class="line">    -&gt; prod_id  char(10)		NOT NULL,</span><br><span class="line">    -&gt; note_date	datetime	NOT NULL,</span><br><span class="line">    -&gt; note_text text			NULL,</span><br><span class="line">    -&gt; PRIMARY KEY(note_id),</span><br><span class="line">    -&gt; FULLTEXT(note_text)</span><br><span class="line">    -&gt; )ENGINE&#x3D;MyISAM;</span><br></pre></td></tr></table></figure>
-
-<h2 id="进行全文本搜索"><a href="#进行全文本搜索" class="headerlink" title="进行全文本搜索"></a>进行全文本搜索</h2><p>在索引之后，使用两个函数<code>Match()</code>、<code>Against()</code>执行全文本搜索。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select note_text from productnotes </span><br><span class="line">    -&gt; where match(note_text) against(&#39;rabbit&#39;);</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| note_text                                                    |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Customer complaint: rabbit has been able to detect trap, food apparently less effective now.                         |</span><br><span class="line">| Quantity varies, sold by the sack load.</span><br><span class="line">All guaranteed to be bright and orange, and suitable for use as rabbit bait. |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="使用查询扩展"><a href="#使用查询扩展" class="headerlink" title="使用查询扩展"></a>使用查询扩展</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select note_text</span><br><span class="line">    -&gt; from productnotes</span><br><span class="line">    -&gt; where Match(note_text) against(&#39;anvils&#39; with query expansion);</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| note_text                                                                                                                                                |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Multiple customer returns, anvils failing to drop fast enough or falling backwards on purchaser. Recommend that customer considers using heavier anvils. |</span><br><span class="line">| Customer complaint:</span><br><span class="line">Sticks not individually wrapped, too easy to mistakenly detonate all at once.</span><br><span class="line">Recommend individual wrapping.                         |</span><br><span class="line">| Customer complaint:</span><br><span class="line">Not heavy enough to generate flying stars around head of victim. If being purchased for dropping, recommend ANV02 or ANV03 instead.  |</span><br><span class="line">| Please note that no returns will be accepted if safe opened using explosives.                                                                            |</span><br><span class="line">| Customer complaint: rabbit has been able to detect trap, food apparently less effective now.                                                             |</span><br><span class="line">| Customer complaint:</span><br><span class="line">Circular hole in safe floor can apparently be easily cut with handsaw.                                                               |</span><br><span class="line">| Matches not included, recommend purchase of matches or detonator (item DTNTR).                                                                           |</span><br><span class="line">+----------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="布尔文本搜索"><a href="#布尔文本搜索" class="headerlink" title="布尔文本搜索"></a>布尔文本搜索</h2><p>以布尔方式进行搜索，可以提供关于如下内容的细节：  </p>
-<ul>
-<li>要匹配的词；  </li>
-<li>要排斥的词；  </li>
-<li>排列提示；  </li>
-<li>表达式分组；  </li>
-<li>另外一些内容。  </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select note_text</span><br><span class="line">    -&gt; from productnotes</span><br><span class="line">    -&gt; where match(note_text) against(&#39;heavy&#39; in boolean mode);</span><br><span class="line">+---------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| note_text                                                                                                                                               |</span><br><span class="line">+---------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Item is extremely heavy. Designed for dropping, not recommended for use with slings, ropes, pulleys, or tightropes.                                     |</span><br><span class="line">| Customer complaint:</span><br><span class="line">Not heavy enough to generate flying stars around head of victim. If being purchased for dropping, recommend ANV02 or ANV03 instead. |</span><br><span class="line">+---------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
-
-<p>添加排斥信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select note_text from productnotes </span><br><span class="line">    -&gt; where match(note_text) against(&#39;heavy -rope*&#39; in boolean mode);</span><br><span class="line">+---------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| note_text                                                                                                                                               |</span><br><span class="line">+---------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Customer complaint:</span><br><span class="line">Not heavy enough to generate flying stars around head of victim. If being purchased for dropping, recommend ANV02 or ANV03 instead. |</span><br><span class="line">+---------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
-<p>这里就将包含<code>rope</code>的行排除掉了。<br>全文本布尔操作符还有很多，具体细节查找相关资料了解。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">组合查询</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 20:46:41" itemprop="dateCreated datePublished" datetime="2021-01-27T20:46:41+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="组合查询"><a href="#组合查询" class="headerlink" title="组合查询"></a>组合查询</h1><p>多数SQL查询都只包含从一个或多个表中返回数据的单条SELECT语句。MySQL也允许执行多个查询（多条SELECT语句），并将结果作为单个查询结果集返回。这些组合查询通常称为并（union）或复合查询。</p>
-<h1 id="创建组合查询"><a href="#创建组合查询" class="headerlink" title="创建组合查询"></a>创建组合查询</h1><h2 id="使用UNION"><a href="#使用UNION" class="headerlink" title="使用UNION"></a>使用UNION</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, prod_id,prod_price </span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price &lt;&#x3D; 5</span><br><span class="line">    -&gt; union </span><br><span class="line">    -&gt; select vend_id, prod_id, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id in (1001,1002);</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">| vend_id | prod_id | prod_price |</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">|    1003 | FC      |       2.50 |</span><br><span class="line">|    1002 | FU1     |       3.42 |</span><br><span class="line">|    1003 | SLING   |       4.49 |</span><br><span class="line">|    1003 | TNT1    |       2.50 |</span><br><span class="line">|    1001 | ANV01   |       5.99 |</span><br><span class="line">|    1001 | ANV02   |       9.99 |</span><br><span class="line">|    1001 | ANV03   |      14.99 |</span><br><span class="line">|    1002 | OL1     |       8.99 |</span><br><span class="line">+---------+---------+------------+</span><br></pre></td></tr></table></figure>
-
-<h3 id="包含或取消重复的行"><a href="#包含或取消重复的行" class="headerlink" title="包含或取消重复的行"></a>包含或取消重复的行</h3><p>union会自动去除重复的行，如果需要改变它，返回所有匹配行，则使用UNION ALL。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id,prod_id,prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price &lt;&#x3D; 5</span><br><span class="line">    -&gt; union all</span><br><span class="line">    -&gt; select vend_id, prod_id, prod_price</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where vend_id in (1001,1002);</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">| vend_id | prod_id | prod_price |</span><br><span class="line">+---------+---------+------------+</span><br><span class="line">|    1003 | FC      |       2.50 |</span><br><span class="line">|    1002 | FU1     |       3.42 |</span><br><span class="line">|    1003 | SLING   |       4.49 |</span><br><span class="line">|    1003 | TNT1    |       2.50 |</span><br><span class="line">|    1001 | ANV01   |       5.99 |</span><br><span class="line">|    1001 | ANV02   |       9.99 |</span><br><span class="line">|    1001 | ANV03   |      14.99 |</span><br><span class="line">|    1002 | FU1     |       3.42 |</span><br><span class="line">|    1002 | OL1     |       8.99 |</span><br><span class="line">+---------+---------+------------+</span><br></pre></td></tr></table></figure>
-
-<h3 id="对组合查询结果排序"><a href="#对组合查询结果排序" class="headerlink" title="对组合查询结果排序"></a>对组合查询结果排序</h3><p>在使用<code>union</code>组合查询时，只能使用一条<code>order by</code>子句，它必须出席那在最后一条<code>select</code>语句之后，对于结果集，不存在用一种方式排序一部分，而有用另一种方式排序另一部分的情况，因此不允许使用多条<code>order by</code>子句。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1226,7 +1375,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">127</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1239,7 +1388,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
