@@ -191,6 +191,177 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/26/MySQL%E5%BC%95%E6%93%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/26/MySQL%E5%BC%95%E6%93%8E/" class="post-title-link" itemprop="url">MySQL引擎</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-26 17:35:00" itemprop="dateCreated datePublished" datetime="2021-02-26T17:35:00+08:00">2021-02-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>MySQL存储引擎有InnoDB、MyISAM、MEMORY。</p>
+<h1 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h1><p>InnoDB是事务型数据库的首选引擎，支持事务安全（ACID），支持行锁定和外键，InnoDB是MySQL默认的引擎。<br>主要特性：</p>
+<ol>
+<li>InnoDB提供了具有提交、回滚和崩溃恢复的事务安全存储引擎。  </li>
+<li>InnoDB存储引擎在主内存中缓存数据和索引而维持它的缓冲池。它表和索引放在一个逻辑表空间中，而MyISAM表中每个表被存放在分离的文件中。  </li>
+<li>InnoDB支持外键完整性约束。  </li>
+</ol>
+<h1 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h1><p>MyISAM基于ISAM，是在Web、数据仓储和其他应用环境下最常使用的存储引擎之一。MyISAM拥有较高的插入、查询，但不支持事务。<br>主要特性：  </p>
+<ol>
+<li>查询、插入效率高；  </li>
+<li>可以把数据文件和索引文件放在不同的目录中；  </li>
+<li>对事务的支持不好。  </li>
+</ol>
+<h1 id="MEMORY"><a href="#MEMORY" class="headerlink" title="MEMORY"></a>MEMORY</h1><p>MEMORY存储引擎将表中的数据存储到内存中，为查询和引用其他表数据提供快速访问。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/25/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E5%92%8C%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" class="post-title-link" itemprop="url">右值引用和移动语义</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-25 20:44:00" itemprop="dateCreated datePublished" datetime="2021-02-25T20:44:00+08:00">2021-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="右值是啥"><a href="#右值是啥" class="headerlink" title="右值是啥"></a>右值是啥</h1><p>右值是区别与左值的存在，一般来说，表达式右边就是右值，左边就是左值，当然这是开玩笑的。最好的区分方式就是，左值可以取地址，而右值不可以。比方说：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x=<span class="number">1</span>;</span><br><span class="line"><span class="comment">// x是左值，1是右值</span></span><br><span class="line">y=x;</span><br><span class="line"><span class="comment">// y、x都是左值</span></span><br><span class="line">z=x+y;</span><br><span class="line"><span class="comment">// z是左值，x+y是右值</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h2><p>原来C++有左值引用，如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iny y=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;x=y;</span><br></pre></td></tr></table></figure>
+<p>也就是说，引用只能引用左值，但是C++11提供了右值引用，使用&amp;&amp;来表示，右值引用可以关联到右值，但是不能对其应用地址运算符。右值包括字面常量，诸如x+y等表达式以及函数的返回值（前提是返回不能是引用）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x=<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> y=<span class="number">20</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;&amp;z=x;	<span class="comment">//非法</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;&amp;z=x;	<span class="comment">//非法</span></span><br><span class="line"><span class="keyword">int</span> &amp;&amp;r1=<span class="number">13</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;&amp;r2=x+y;</span><br><span class="line"><span class="keyword">double</span> &amp;&amp;r3=std::<span class="built_in">sqrt</span>(<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;value:&quot;</span> &lt;&lt; r1 &lt;&lt; <span class="string">&quot; address:&quot;</span> &lt;&lt; &amp;r1 &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h1><p>在某些场景下，使用一个对象初始化另一个对象，可以通过复制构造函数进行深拷贝完成，但是有时候用于的旧对象不再使用，可以通过移动构造函数提高效率。移动构造函数只调整记录，是将所有权转移到新对象的过程，这个过程中可能修改其实参，这意味着右值引用参数不应是const。通俗的将就类似于在计算机中移动文件的情形：实际文件还留在原来的地方，而只是修改了记录，这就是移动语义。  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Useless</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> n;</span><br><span class="line">   <span class="keyword">char</span> *p;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">int</span> ct;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">showobject</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Useless</span>();</span><br><span class="line">   <span class="function"><span class="keyword">explicit</span> <span class="title">Useless</span><span class="params">(<span class="keyword">int</span> k)</span></span>;</span><br><span class="line">   <span class="built_in">Useless</span>(<span class="keyword">int</span> k,<span class="keyword">char</span> c);</span><br><span class="line">   <span class="built_in">Useless</span>(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   <span class="built_in">Useless</span>(Useless&amp;&amp;ul);</span><br><span class="line">   Useless&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   Useless&amp; <span class="keyword">operator</span>=(Useless&amp;&amp;nl);</span><br><span class="line">   Useless <span class="keyword">operator</span>+(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   ~Useless <span class="keyword">operator</span>+(<span class="keyword">const</span> Useless&amp;ul);</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">ShowData</span><span class="params">()</span><span class="keyword">const</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 左值引用</span></span><br><span class="line">Useless::<span class="built_in">Useless</span>(<span class="keyword">const</span> Useless &amp; ul)</span><br><span class="line">&#123;</span><br><span class="line">	++ct;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;copy const called;numbers ofobject:&quot;</span> &lt;&lt; ct &lt;&lt; std::endl;</span><br><span class="line">	n = ul.n;</span><br><span class="line">	p = <span class="keyword">new</span> <span class="keyword">char</span>[n];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">		p[i] = ul.p[i];</span><br><span class="line">	<span class="built_in">showobject</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 右值引用</span></span><br><span class="line">Useless::<span class="built_in">Useless</span>(Useless &amp;&amp; ul)</span><br><span class="line">&#123;</span><br><span class="line">	++ct;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;move constructor called;numbers ofobject:&quot;</span> &lt;&lt; ct &lt;&lt; std::endl;</span><br><span class="line">	n = ul.n;</span><br><span class="line">	p = ul.p;</span><br><span class="line">	ul.n = <span class="number">0</span>;</span><br><span class="line">	ul.p = <span class="literal">nullptr</span>;</span><br><span class="line">	<span class="built_in">showobject</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/25/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -956,202 +1127,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/18/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/18/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" class="post-title-link" itemprop="url">TCP三次握手与四次挥手</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-18 11:54:00" itemprop="dateCreated datePublished" datetime="2021-02-18T11:54:00+08:00">2021-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="TCP头部分析"><a href="#TCP头部分析" class="headerlink" title="TCP头部分析"></a>TCP头部分析</h1><p>TCP头部中有几个字段需要重点介绍下：</p>
-<ol>
-<li>序号：Seq序号，占32位，用来标识从TCP源端向目的端发送的字节流，发起方发送数据时对此进行标记；  </li>
-<li>确认序号：Ack序号，占32位，只有ACK标志位为1时，确认序号字段才有效，Ack=Seq+1；  </li>
-<li>标志位：共6个，即URG、ACK、PSH、RST、SYN、FIN等，具体含义如下：<ul>
-<li>URG：紧急指针（urgent pointer）有效；  </li>
-<li>ACK：确认序号有效；  </li>
-<li>PSH：接收方应该尽快将这个报文交给应用层；  </li>
-<li>RST：重置连接；  </li>
-<li>SYN：发起一个新连接；  </li>
-<li>FIN：释放一个连接。  </li>
-</ul>
-</li>
-</ol>
-<p>需要注意的是：<br>（A）不要将确认序号Ack与标志位中的ACK搞混了;<br>（B）确认方Ack=发起方Req+1，两端配对。</p>
-<h1 id="TCP握手协议"><a href="#TCP握手协议" class="headerlink" title="TCP握手协议"></a>TCP握手协议</h1><p>TCP协议通过三次握手来创建一个连接：  </p>
-<ol>
-<li>客户端发送一个SYN包（syn=1，seq=i）到服务器，并进入syn_send状态等待；<br>这个SYN包不包含应用层数据，首部的标志位SYN被置为1，所以称为SYN包，客户随机选择一个序号seq=client_i；  </li>
-<li>服务器在收到SYN包后，会为该连接分配TCP缓存和变量，并发送允许连接的报文段。这个允许连接的报文段也不包含应用层数据，包含以下信息：<code>SYN=1</code>，<code>seq=server_i</code>，<code>ack=client_i+1</code>。<code>server_i</code>是服务器随机选取的报文段序号，<code>ack=client_i+1</code>表示确认<code>client_i+1</code>以前的报文段都已经收到，这个报文段我们称为SYNACK报文段；  </li>
-<li>客户端收到SYNACK报文段后，客户也要给该连接分配缓存和变量。客户的主机则向服务器发送另一个报文段；这最后一个报文段对服务器的允许连接的报文段进行了确认（<code>SYN=0</code>、<code>seq=client_i+1</code>、<code>ack=server_i+1</code>），<code>SYN</code>被置为0是因为连接已经建立了。第三个阶段的报文段已经可以携带客户到服务器的数据了。</li>
-</ol>
-<h1 id="TCP挥手协议"><a href="#TCP挥手协议" class="headerlink" title="TCP挥手协议"></a>TCP挥手协议</h1><p>TCP通过四次挥手来释放一个连接：  </p>
-<ol>
-<li>客户端向服务器发送一个特殊的TCP报文段，其中FIN置为0；  </li>
-<li>服务器收到上述报文段后，回发一个确认报文段ACK；  </li>
-<li>然后服务器发送它自己的终止报文段，其FIN比特被置为1，这个时候在TCP眼中连接已经关闭了；  </li>
-<li>最后，该客户对这个服务器的终止报文段进行确认（ACK），发送之后定时等待关闭连接。  </li>
-</ol>
-<h1 id="为什么要三次握手四次挥手"><a href="#为什么要三次握手四次挥手" class="headerlink" title="为什么要三次握手四次挥手"></a>为什么要三次握手四次挥手</h1><p>用一个易于理解的视角来看为什么要3次握手：<br>客户端和服务端通信前要进行连接，“3次握手”的作用就是双方都能明确自己和对方的收、发能力是正常的。<br>第一次握手，客户端发送网络包，服务端收到了，服务端得到结论：客户端发送能力正常，服务端接受能力正常；<br>第二次握手，服务端发送网络包，客户端收到，客户端得到结论：服务端接收、发送能力正常，客户端发送、接受能力正常；<br>第三次握手，客户端发送网络包，服务端收到，服务端得到结论：客户端接受能力正常，服务端发送能力正常。<br>经过3次握手，客户端、服务端相互之间确认了对方和自己的接收、发收能力正常。  </p>
-<p>用半关闭来解释为什么需要4次挥手：<br><strong>半关闭</strong>：在TCP通信中客户端向服务端发送一条FIN包，当服务端收到FIN信息时就知道接下来客户端就不会再发送数据了，这在TCP协议中被称为半关闭。但是此时，服务端还能向客户端发送网络包，客户端也依然能接收。<br>一个FIN包意味着一方关闭连接，但是另一方可能数据还没有传完，需要传完才会关闭连接。所以需要在中间维持半关闭状态，等到需要关闭连接时，再发送一次FIN包。相当于客户端、服务端各自需要关闭属于自己的一半连接，每次都需要FIN-ACK两次挥手，总共就有4次挥手。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/17/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/17/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">进程通信方式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-17 23:12:00" itemprop="dateCreated datePublished" datetime="2021-02-17T23:12:00+08:00">2021-02-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li>管道/匿名管道(pipe) 管道是半双工的，数据只能向一个方向流动；需要双方通信时，需要建立起两个管道。 …</li>
-<li>有名管道(FIFO) …</li>
-<li>信号(Signal) …</li>
-<li>消息(Message)队列 …</li>
-<li>共享内存(share memory) …</li>
-<li>信号量(semaphore) …</li>
-<li>套接字(socket)</li>
-</ol>
-<h1 id="匿名管道"><a href="#匿名管道" class="headerlink" title="匿名管道"></a>匿名管道</h1><ul>
-<li>管道是半双工的，只能单向通信，一端读入，一端写，如果需要双向通信需要建立两个管道。  </li>
-<li>只能用于父子进程或者兄弟进程之间。  </li>
-<li>实质上是一个内核缓冲区，每次写入在缓冲区的末尾，从缓冲区头部读入。  </li>
-</ul>
-<h1 id="有名管道"><a href="#有名管道" class="headerlink" title="有名管道"></a>有名管道</h1><p>有名管道可以用于在任意进程之间通信。它以文件的形式存在，只要可以访问该路径就可以访问该管道，内容存放在内存中。有名管道遵循先入先出的规定，不支持文件定位操作。  </p>
-<h1 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h1><p>信号是Linux系统中用于进程互相通信或者操作的一种机制，信号可以在任何时候发给某一进程，而无需知道该进程的状态。如果该进程当时未处于执行的状态，则该信号就由内核保存起来，知道该进程回复执行并传递给它未知。<br>信号是软件层次上对中断机制的一种模拟，是一种异步通信方式。常见的信号比如<code>Ctrl+C</code>就是给进程发送中断信号。  </p>
-<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>消息队列是存放在内核中的消息链表，每个消息队列由消息队列标识符标识。  </p>
-<h1 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h1><p>多个进程可以直接读写同一块内存空间，是最快的可用IPC形式。是针对其他通信机制运行效率较低而设计的。  </p>
-<h1 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h1><p>信号量是一个计数器，用于多进程对共享数据的访问，信号量的意图在于进程同步。  </p>
-<h1 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h1><p>这是一种不同主机的进程之间通信的方式。  </p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1223,7 +1198,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1236,7 +1211,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

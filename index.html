@@ -191,6 +191,264 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">大数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-06-03 20:06:00" itemprop="dateCreated datePublished" datetime="2021-06-03T20:06:00+08:00">2021-06-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-04 00:37:03" itemprop="dateModified" datetime="2021-06-04T00:37:03+08:00">2021-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">分布式系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h1><p>大数据的特点：</p>
+<ul>
+<li>Volume，传统的数据仓库计数处理GB到TB级别的数据，大数据技术处理的数据量往往超过PB。数据容量增长速度大大超过了硬件计数的发展速度，以至于引发了数据存储和处理的危机。</li>
+<li>Variety：数据类型多。原来的数据都可以用二维表结构存储在数据库中,如常用的Excel软件所处理的数据，称为结构化数据。但是现在更多互联网多媒体应用的出现，使诸如图片、声音和视频等非结构化数据占到了很大比重。</li>
+<li>Velocity，数据增长迅速。如果说大数据的特点是海量和非结构化，那也是不全面的。大数据带来的挑战还在于它的实时处理。</li>
+<li>Value，价值密度低。以连续不间断的监控视频为例，可能有用的数据仅仅有一两秒钟。</li>
+</ul>
+<h2 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h2><p>Mapreduce使得普通程序员可以在不了解分布式底层细节的前提下开发分布式程序。使用者只需要编写两个称为MapReduce的函数即可，MapReduce框架会自动处理数据划分、多机并行执行、任务之间的协调，并且能够处理某个任务执行失败或者机器出现故障的情况。</p>
+<p>MapReduce框架 包含三种角色：</p>
+<p>主控进程（Master）：执行任务划分、调度、任务之间的协调等等；</p>
+<p>Map工作进程（Map）、Reduce工作进程（Reduce）。</p>
+<p>工作流程如下：</p>
+<p>1）首先从用户提交的程序fork出主控进程，主控进程启动后将切分任务并根据输入文件所在的位置和集群信息选择机器fork出Map或者Reduce进程。用户提交的程序可以根据不同的命令行参数执行不同的行为。</p>
+<p>2）主控进程将切分好的任务分配给Map进程和Reduce进程执行，任务切分和任务分配可以并行执行。</p>
+<p>3）Map进程执行Map任务：读取相应的输入文件，根据指定的输入格式不断地读取<Key,Value>对并对每个<key,value>对执行用户自定义的Map函数。</p>
+<p>4）Map进程执行用户定义的Map函数：不断地往本地内存缓冲区输出中间<key,value>对结果，等到缓冲区超过一定大小时写入到本地缓存中。Map进程根据分割函数将中间结果组织成R份，便于后续Reduce进程获取。</p>
+<p>5）Map任务执行完成时，Map进程通过心跳向主控进程汇报，主控进程进一步将该消息通知Reduce进程。Reduce进程向Map进程通过心跳向主控进程汇报，主控进程进一步将该消息通知Reduce进程。Reduce进程向Map进程请求传输生成的中间结果数据。这个过程称为Shuffle。当Reduce进程获取完所有的Map任务生成的中间结果时，需要进行排序操作。</p>
+<p>6）Reduce进程执行Reduce任务：对中间结果的每一个相同的key及value集合，执行用户自定义的Reduce函数。Reduce函数的输出结果被写入到最终的输出结果，例如分布式文件系统或者分布式表格。</p>
+<p>该框架实现时主要做了两点优化：</p>
+<ul>
+<li>本地化：尽量将任务分配给离输入文件最近的Map进程，如同一台机器或者同一个机架。通过本地化策略，能够大大减少传输的数据量。</li>
+<li>备份任务：如果某个Map或者Reduce任务执行的时间较长，主控进程会生成一个该任务的备份并分配给另外一个空闲的Map或者Reduce进程。在大集群环境下，即使所有机器的配置相同，机器的负载不同也会导致处理能力相差很大，通过备份任务减少“拖后腿”的任务，从而降低整个作业的总体执行时间。</li>
+</ul>
+<h2 id="流式计算"><a href="#流式计算" class="headerlink" title="流式计算"></a>流式计算</h2><p>MapReduce及其扩展解决了离线批处理问题，但是无法保证实时性。对于实时性要求高的场景，可以采用流式计算或者实时分析系统进行处理。</p>
+<p>流式计算解决在线聚合、在线过滤等问题，流氏计算同时具有存储系统和计算系统的特点，经常应用在一些类似反作弊、交易异常监控等场景。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>MapReduce系统主要解决的是对静态数据的批量处理，当MapReduce作业启动时，已经准备好了输入数据，比如保存在分布式文件系统上。而流式计算系统在启动时，输入数据一般并没有完全到位，而是经由外部数据流源源不断地流入。另外，流式计算并不像批处理系统那样，重视数据处理的总吞吐量，而是更加重视对数据处理的延迟。</p>
+<p>源数据写入到流处理节点，流处理节点内部运行用户自定义的钩子函数对输入流进行处理，处理完后根据一定的规则转发给下游的流处理节点继续处理。另外，系统中往往还有管理节点，用来管理流处理节点的状态以及节点之间的路由规则。</p>
+<p>典型钩子函数包括：</p>
+<ul>
+<li>聚合函数：计算最近一段时间窗口内的数据的聚合值。</li>
+<li>过滤函数：过滤最近一段时间窗口内满足某些特性的数据。</li>
+</ul>
+<p>如果考虑机器故障，问题变得复杂。上游的处理节点出席那故障时，下游有两种选择：第一种选择是等待上游恢复服务，保证数据一致性；第二种选择是继续处理，优先保证可用性，等到上游恢复后再修复错误的计算结果。</p>
+<p>流处理节点可以通过主备同步的方式容错，即将数据强同步到备机，如果主机出现故障，备机自动切换为主机继续提供服务。然而，这种方式的代价很高，且流式处理系统往往对错误有一定的容忍度，实际应用时经常选择其他代价更低的容错方式。</p>
+<h2 id="实时分析"><a href="#实时分析" class="headerlink" title="实时分析"></a>实时分析</h2><p>海量数据离线分析对于MapReduce这样的批处理系统挑战并不大，如果要求实时，又分为两种情况：如果查询模式单一，那么，可以通过MapReduce预处理后将最终结果导入到在线系统提供实时查询；如果查询模式复杂，例如涉及多个列任意组合查询，那么，只能通过实时分析系统解决。实时分析系统融合了并行数据库和云计算这类技术，能够从海量数据中快速分析出汇总结果。</p>
+<h3 id="MPP架构"><a href="#MPP架构" class="headerlink" title="MPP架构"></a>MPP架构</h3><p>并行数据库往往采用MPP（Massively Parallel Processing，大规模并行处理）架构。MPP架构是一种不共享的结构，每个节点可以运行自己的操作系统、数据库等。每个节点内的CPU不能访问一个节点的内存，节点之间的信息交互是通过节点互联网络实现的。</p>
+<p>将数据分布到多个节点，每个节点扫描本地数据，并由Merge操作符执行结果汇总。</p>
+<p>常见的数据分布算法有两种：</p>
+<ul>
+<li>范围分区（Range partitioning）：按照范围划分数据。</li>
+<li>哈希分区（Hashing）：根据哈希函数计算结果将每个元组分配给相应的节点。</li>
+</ul>
+<p>Merge操作符：系统中存在一个或者多个合并节点，它会发送命令给各个数据分片请求相应的数据。每个数据片所在节点扫描本地数据，排序后回复合并节点，由合并节点通过merge操作符执行数据汇总。</p>
+<p>如果Merge节点处理的数据特别大、可以通过Split操作符将数据划分到多个节点，每个节点对一部分数据执行group by、join等操作后再合并最终结果。</p>
+<p>并行数据库的SQL查询和MapReduce计算有些类似，可以认为MapReduce模型是一种更高层次的抽象。由于考虑问题的角度不同，并行数据库处理的SQL查询执行时间通常很短，出现异常时整个操作重做即可。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/03/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/03/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" class="post-title-link" itemprop="url">分布式存储引擎</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-03 13:26:00 / 修改时间：19:58:50" itemprop="dateCreated datePublished" datetime="2021-06-03T13:26:00+08:00">2021-06-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">分布式系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="分布式存储引擎"><a href="#分布式存储引擎" class="headerlink" title="分布式存储引擎"></a>分布式存储引擎</h1><h2 id="RootServer实现机制"><a href="#RootServer实现机制" class="headerlink" title="RootServer实现机制"></a>RootServer实现机制</h2><p>功能包括：</p>
+<ul>
+<li>管理集群中的所有ChunkServer，处理ChunkServer下线。</li>
+<li>管理所有UpdateServer，处理UpdateServer选主。</li>
+<li>管理集群中所有子表数据分布，发起子表复制、迁移以及合并操作。</li>
+<li>与ChunkServer保持心跳，接受ChunkServer汇报，处理子表分裂；</li>
+<li>接受UpdateServer汇报的大版本冻结消息，通知ChunkServer定期执行合并。</li>
+<li>实现主备RootServer，数据强同步，支持主RootServer宕机自动切换。</li>
+</ul>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p>RootServer的中心数据结构为一张存储了子表数据结构分布的有序表格，称为RootTable。每个子表存储的信息包括：子表主键范围、子表各个副本所在ChunkServer的编号、子表各个副本的数据行数、占用的磁盘空间、CRC校验值以及基线数据版本。</p>
+<p>RootTable读多写少，所以设计成了有序数组，每次要添加子表信息的时候，先拷贝当前RootTable，然后将子表信息追加到新的RootTable，并对新的RootTable重新排序。原子的修改指针使得当前服务的RootTable指向新的RootTable。</p>
+<p>为了提高性能，采取批处理优化，一次处理一批子表信息。</p>
+<h3 id="子表复制与负载均衡"><a href="#子表复制与负载均衡" class="headerlink" title="子表复制与负载均衡"></a>子表复制与负载均衡</h3><p>RootServer有一个线程定期执行子表复制与负载均衡：</p>
+<ol>
+<li>子表复制：扫描RootTable中的子表，如果某个<strong>子表的副本数小于阈值</strong>，选取某台包含子表副本的ChunkServer为迁移源，另一台符合要求的ChunkServer作为迁移目的地。</li>
+<li>负载均衡：扫描RootTable中的子表，如果某台<strong>ChunkServer包含的某个表格的子表</strong>个数超过平均个数以及可容忍个数之和，以这台ChunkServer为迁移源，并选择一台符合要求的ChunkServer，生成子表迁移任务。</li>
+</ol>
+<h3 id="子表分裂和合并"><a href="#子表分裂和合并" class="headerlink" title="子表分裂和合并"></a>子表分裂和合并</h3><p>难点：如何确保多个副本之间的分裂点保持一致称为问题的关键。</p>
+<p>OceanBase采用了一种比较直接的做法：每台ChunkServer使用相同的分裂规则。由于每个子表的不同副本之间的基线数据完全一致，并且定期合并过程中冻结的增量数据也完全相同，只要分裂规则一致，分裂后的子表主键范围也保证相同。</p>
+<p>分裂规则：只要定期合并过程产生的数据量超过256MB，就生成一个新的子表。</p>
+<p>合并步骤相对麻烦：</p>
+<ol>
+<li>合并准备：RootServer选择若干个主键范围连续的小子表。</li>
+<li>子表迁移：将待合并的若干个小子表迁移到相同的ChunkServer机器。</li>
+<li>子表合并：往ChunkServer机器发送子表合并命令，生成合并后的子表范围。</li>
+</ol>
+<h3 id="UpdateServer选主"><a href="#UpdateServer选主" class="headerlink" title="UpdateServer选主"></a>UpdateServer选主</h3><p>通过租约机制来保证只有一个主UpdateServer。每当租约快要过期时就请求延长租期。如果RootServer发现租约过期了，UpdateServer还没有请求延长租约，则选择其他UpdateServer为主UpdateServer。</p>
+<h3 id="RootServer主备"><a href="#RootServer主备" class="headerlink" title="RootServer主备"></a>RootServer主备</h3><p>RootServer主备之间需要同步的数据包括：RootTable中记录的子表分布信息、ChunkServerManager中记录的ChunkServer机器变化信息以及UpdateServer机器信息。这些数据的变化都将以操作日志的形式同步到备RootServer。备RootServer通过实时回放这些操作日志来与主RootServer保持同步。</p>
+<p>OceanBase中的其他模块，比如ChunkServer/UpdateServer，以及客户端都是通过VIP(virtual IP)来访问RootServer的。正常情况下，VIP总是指向主RootServer。当主RootServer出现故障之后，部署在备RootServer上的Linux HA，软件能够检测到，并将VIP漂移到备RootServer。</p>
+<h2 id="UpdateServer实现机制"><a href="#UpdateServer实现机制" class="headerlink" title="UpdateServer实现机制"></a>UpdateServer实现机制</h2><p>UpdateServer用于存储增量数据，它是一个单机存储系统，由如下几个部分组成：</p>
+<ul>
+<li><p>内存存储引擎，在内存中存储修改增量，支持冻结以及转储操作；</p>
+</li>
+<li><p>任务处理模型，包括网络框架、任务队列、工作线程等，针对小数据包做了专门的优化；</p>
+</li>
+<li>主备同步模块，将更新事务以操作日志的形式同步到备UpdateServer。</li>
+</ul>
+<p>UpdateServer是OceanBase性能瓶颈点，核心是高效、实现时对锁、索引结构、内存占用、任务处理模型以及主备同步都需要专门做优化。</p>
+<h3 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h3><p>UpdateServer存储引擎包含几个部分：操作日志、MemTable以及SSTable。更新操作首先记录到操作日志中，接着更新内存中活跃的MemTable，活跃的MemTable到达一定大小后将被冻结，称为Frozen MemTable，同时创建新的Active MemTable。冻结内存表将以SSTable的形式转储到SSD磁盘中。</p>
+<ol>
+<li><p>操作日志</p>
+<p>OceanBase中有一个专门的提交线程负责确定多个写事务的顺序，将这些写事务的操作追加到日志缓冲区，并将日志缓冲区的内容写入日志文件。为了防止写操作日志污染操作系统的缓存，写操作日志文件采用Direct IO的方式实现。</p>
+</li>
+<li><p>MemTable</p>
+<p>底层是要给高性能内存B树。每个叶子节点对应MemTable中的一行数据，key为行主键，value为行操作链表的指针。每行的操作按照时间顺序构成一个行操作链表。</p>
+</li>
+<li><p>SSTable</p>
+<p>当活跃的MenTable超过一定大小或者管理员主动发起冻结命令时，活跃的MemTable将被冻结，生成冻结的MemTable，并同时以SSTable的形式转储到SSD磁盘中。</p>
+<p>当然，如果内存不够时需要丢弃冻结MemTable，大量请求只能读取SSD磁盘，UpdateServer性能将大幅下降。因此，希望能够在丢弃冻结MemTable之前的一段时间，每隔一段时间，将一定比率的请求发给SSTable，而不是冻结MemTable。这样，SSTable上的读请求将从5%到10%，再到15%，依次类推，直到100%，很自然地实现了缓存预热。</p>
+</li>
+</ol>
+<h3 id="任务模型"><a href="#任务模型" class="headerlink" title="任务模型"></a>任务模型</h3><p>UpdateServer有多个网络读写线程，每个线程通过Linux epoll监听一个套接字集合上的网络读写事件，每个套接字只能同时分配给一个线程。当网络读写线程收到网络包后，立即调用任务处理函数，如果任务处理时间很短，可以很快完成并回复客户端，不需要加锁，避免了上下文切换。UpdateServer中大部分任务为短任务，比如随机读取内存表，另外还有少量任务需要等待共享资源上的锁，可以将这些任务加入到长任务队列中，交给专门的长任务处理线程处理。</p>
+<h3 id="主备同步"><a href="#主备同步" class="headerlink" title="主备同步"></a>主备同步</h3><p>OceanBase选择了强一致性，主UpdateServer往备UpdateServer同步操作日志，如果同步成功，主UpdateServer操作本地后返回客户端更新成功，否则，主UpdateServer之前需要通知RootServer，从而防止RootServer将不一致的备UpdateServer选为主UpdateServer。</p>
+<h2 id="ChunkServer实现机制"><a href="#ChunkServer实现机制" class="headerlink" title="ChunkServer实现机制"></a>ChunkServer实现机制</h2><p>ChunkServer用于存储基线数据，它由如下基本部分组成：</p>
+<ul>
+<li>管理子表，主动实现子表分裂，配合RootServer实现子表迁移、删除、合并；</li>
+<li>SSTable，根据主键有序存储每个子表的基线数据；</li>
+<li>基于LRU实现块缓存以及行缓存；</li>
+<li>实现Direct IO，磁盘IO和CPU计算并行化；</li>
+<li>通过定期合并&amp;数据分发获取UpdateServer的冻结数据。</li>
+</ul>
+<h3 id="缓存实现"><a href="#缓存实现" class="headerlink" title="缓存实现"></a>缓存实现</h3><ol>
+<li>OceanBase一次分配1MB的连续内存块，每个memblock包含若干缓存项。添加缓存项，只需要简单地将item追加到memblock的尾部。另外，缓存淘汰以memblock为单位，而不是以item为单位。</li>
+<li>OceanBase没有维护LRU链表，而是对每个memblock都维护了访问次数和最近频繁访问时间。访问memblock中的item时将增加memblock的访问次数，如果最近一段时间之内的访问次数超过了一定值，那么，更新最近频繁访问时间；淘汰memblock时，对所有的memblock按照最近频繁访问时间排序，淘汰最近一段时间访问较少的memblock。可以看出，读取时只需要更新memblock的访问次数和最近频繁访问事件，不需要移动LRU链表。这种实现方式通过牺牲LRU算法的精确性，来规避LRU链表的全局锁冲突。</li>
+<li><p>每个memblock维护了引用计数，读取缓存项时所在memblock的引用计数加1，淘汰memblock时引用计数减1，引用计数为0时，memblock可以挥手重用。通过引用计数，实现读取memblock中的缓存项不加锁。</p>
+</li>
+<li><p>惊群效应</p>
+</li>
+<li><p>缓存预热</p>
+<p>为了避免定期合并后，大量请求同时读取新的SSTable文件，将使得ChunkServer的服务能力在切换SSTable瞬间大幅下降。因此，这里需要一个缓存预热的过程。OceanBase这样做：扫描原来的缓存，根据每个缓存项的key读取新的SSTable并将结果加入到新的缓存中。例如，原来缓存数据项的主键分别为100、200、500，那么只需要从SSTable中读取主键为100、200、500的数据并加入新的缓存。</p>
+</li>
+</ol>
+<h3 id="IO实现"><a href="#IO实现" class="headerlink" title="IO实现"></a>IO实现</h3><p>TODO:</p>
+<h3 id="定期合并-amp-数据分发"><a href="#定期合并-amp-数据分发" class="headerlink" title="定期合并&amp;数据分发"></a>定期合并&amp;数据分发</h3><h3 id="定期合并限速"><a href="#定期合并限速" class="headerlink" title="定期合并限速"></a>定期合并限速</h3><h2 id="消除更新瓶颈"><a href="#消除更新瓶颈" class="headerlink" title="消除更新瓶颈"></a>消除更新瓶颈</h2><h3 id="读写优化回顾"><a href="#读写优化回顾" class="headerlink" title="读写优化回顾"></a>读写优化回顾</h3><h3 id="数据分区"><a href="#数据分区" class="headerlink" title="数据分区"></a>数据分区</h3><h2 id="消除更新瓶颈-1"><a href="#消除更新瓶颈-1" class="headerlink" title="消除更新瓶颈"></a>消除更新瓶颈</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/03/OceanBase%E5%88%9D%E6%8E%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1066,196 +1324,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/09/InnoDB%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/09/InnoDB%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7/" class="post-title-link" itemprop="url">InnoDB关键特性</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-09 22:35:48" itemprop="dateCreated datePublished" datetime="2021-05-09T22:35:48+08:00">2021-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-31 08:19:38" itemprop="dateModified" datetime="2021-05-31T08:19:38+08:00">2021-05-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="InnoDB关键特性"><a href="#InnoDB关键特性" class="headerlink" title="InnoDB关键特性"></a>InnoDB关键特性</h1><ul>
-<li>插入缓冲（Insert Buffer）</li>
-<li>两次写（Double Write）</li>
-<li>自适应哈希索引（Adaptive Hash Index）</li>
-<li>异步IO（Async IO）</li>
-<li>刷新邻接页（Flush Neighbor Page）</li>
-</ul>
-<h2 id="插入缓冲"><a href="#插入缓冲" class="headerlink" title="插入缓冲"></a>插入缓冲</h2><h3 id="Insert-Buffer"><a href="#Insert-Buffer" class="headerlink" title="Insert Buffer"></a>Insert Buffer</h3><p>Insert Buffer并不是缓冲池的一部分，而是物理页的一个组成部分（不过缓冲池中有Insert Buffer的信息）。</p>
-<p>对于非聚集索引的插入或者更新操作，不是每一次直接插入到索引页中，而是先判断插入的非聚集索引页是否在缓冲池中。若在，则直接插入；若不在，则先放入到一个Insert Buffer对象中，好似欺骗。数据库这个非聚集的索引已经插到了叶子节点，而实际并没有，只是存放在另一个位置。然后以一定频率合并到一个操作中。</p>
-<p>使用Insert Buffer的使用需要同时满足以下两种情况：</p>
-<ul>
-<li>索引是辅助索引；</li>
-<li>索引不是唯一；</li>
-</ul>
-<p>问题：如果服务器宕机了，可能会有大量的Insert Buffer并没有合并到实际的非聚集索引中去。</p>
-<h3 id="Change-Buffer"><a href="#Change-Buffer" class="headerlink" title="Change Buffer"></a>Change Buffer</h3><p>Insert Buffer是一颗B+树，因此其也由叶节点和非叶节点组成。非叶节点存放的是查询search key，构造如下：</p>
-<p>|space|marker|offset|。</p>
-<p>space占用4字节，标识待插入记录所在表的表空间id。</p>
-<p>marker占一个字节，用来兼容老版本的Insert Buffer。</p>
-<p>offset标识页所在的偏移量，占用4字节。</p>
-<p>当一个辅助索引要插入到页时，如果这个页不再缓冲池中，那么InnoDB存储引擎首先根据上述规则构造一个search key，接下来查询Insert Buffer这棵B+树，然后将这条记录插入到Insert Buffer B+树的叶子节点（所有表共享一个insert buffer）。</p>
-<h3 id="Merge-Insert-Buffer"><a href="#Merge-Insert-Buffer" class="headerlink" title="Merge Insert Buffer"></a>Merge Insert Buffer</h3><p>若需要实现插入记录的辅助索引在缓冲池中，那么需要将辅助索引记录首先插入到这棵B+树中。但是Insert Buffer中记录何时合并到真正的辅助索引中呢？这是本小节需要关注的重点。</p>
-<p>Merge可能会发生在以下三种情况：</p>
-<ul>
-<li>辅助索引页被读取到缓冲池时；</li>
-<li>Insert Buffer Bitmap页追踪到该辅助索引页已无可用空间时；</li>
-<li>Master Thread。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/09/Master-Thread%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/09/Master-Thread%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">Master Thread工作方式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-09 22:11:20" itemprop="dateCreated datePublished" datetime="2021-05-09T22:11:20+08:00">2021-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-31 08:19:38" itemprop="dateModified" datetime="2021-05-31T08:19:38+08:00">2021-05-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Master-Thread工作方式"><a href="#Master-Thread工作方式" class="headerlink" title="Master Thread工作方式"></a>Master Thread工作方式</h1><p>Master Thread具有最高级别的线程优先级。其内部又多个循环组成：</p>
-<ul>
-<li><p>主循环（loop）</p>
-</li>
-<li><p>后台循环（backgroup loop）</p>
-</li>
-<li>刷新循环（flush loop）</li>
-<li>暂停循环（suspend loop）</li>
-</ul>
-<p>Loop被称为主循环是因为大部分操作是在这个循环中完成的。包括每秒钟的操作和每十秒钟的操作：</p>
-<p>每秒一次的操作：</p>
-<ul>
-<li>日志刷新到磁盘（即使这个事务还没有提交）；</li>
-<li>合并插入缓冲（可能）；</li>
-<li>至多刷新100个InnoDB的缓冲池中脏页到磁盘；</li>
-<li>如果当前没有用户活动，则切换到backgroud loop、</li>
-</ul>
-<p>每十秒的操作：</p>
-<ul>
-<li>刷新100个脏页到磁盘；</li>
-<li>合并至多5个插入缓冲；</li>
-<li>将日志缓冲刷新到磁盘；</li>
-<li>删除无用的Undo页；</li>
-<li>刷新100个或者10个脏页到磁盘；</li>
-</ul>
-<p>若当前没有用户活动或者数据库关闭，就会切换到backgroud loop：</p>
-<ul>
-<li>删除无用的undo 页面；</li>
-<li>合并20个插入缓冲；</li>
-<li>跳回到主循环；</li>
-<li>不断刷新100个页直到符合条件（可能，跳转到flush loop中完成）。</li>
-</ul>
-<p>若flush loop 中也没有什么事情可以做，InnoDB会切换到suspend loop，将Master Thread挂起，等待时间发生。</p>
-<h2 id="InnoDB-1-2-x版本的Master-Thread"><a href="#InnoDB-1-2-x版本的Master-Thread" class="headerlink" title="InnoDB 1.2.x版本的Master Thread"></a>InnoDB 1.2.x版本的Master Thread</h2><p>在InnoDB 1.2.x版本中对Master Thread进行了优化，将对于刷新脏页的操作从Master线程分离到了一个单独的Page Cleaner Thread中，减轻了Master Thread的工作。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1327,7 +1395,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1340,7 +1408,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
