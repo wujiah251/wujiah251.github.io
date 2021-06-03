@@ -1,0 +1,108 @@
+title: OceanBase初探
+author: 乡村程序员
+tags:
+  - 分布式系统
+categories:
+  - 分布是系统
+date: 2021-06-03 10:27:00
+---
+# OceanBase架构初探
+
+## 设计思路
+
+OceanBase的设计目标是支持数百TB的数据量以及数十万的TPS、数百万的QPS的访问量。
+
+一种常见的做法就是对数据库进行水平拆分，通常的做法是根据某个业务字段哈希后取模，根据取模的结果将数据分布到不停的数据库服务器上，客户端请求通过数据库中间层路由到不同的分区。这种方式目前存在一定的弊端：
+
+- 数据和负载增加后添加机器的操作比较负载，往往需要人工介入；
+- 有些范围查询需要访问几乎所有的分区，例如，按照user_id分区，查询收藏了一个商品的所有用户需要访问的所有的分区。
+- 目前广泛使用的关系型数据库存储引擎都是针对机械硬盘的特点设计的，不能够完全发挥新硬件的能力。
+
+另一种做法是参考分布式表格系统的做法，例如Google Bigtable系统，将大表划分为几万、几十万甚至上百万的子表，子表之间按照主键有序，如果某台服务器发生故障，它上面服务的数据能够在很短时间内自动迁移到集群中所有的其他服务器。这种方式解决了可扩展性的问题，少量突发的服务器故障或者增加服务器对使用者基本是透明的，能够轻松应对促销或者热点事件等突发流量增长。
+
+万事有其利必有一弊，分布式表格系统虽然解决了可扩展性的问题，但是往往无法支持事务，例如Bigtable只支持单行事务。而OceanBase希望能够支持跨行跨表事务，这样使用起来会比较方便。
+
+通过分析，Oceanbase团队发现，虽然在线业务的数据量十分庞大，例如几十亿条、上百亿条甚至更多记录，但最近一段时间的修改量并不多。因此，他们决定采用单台更新服务器来记录最近一段时间的修改增量，而以前的数据保持不变，以前的数据成为基线数据。基线数据以类似分布式文件系统的方式存储于多台基线数据服务器上，每次查询都要把基线数据和增量数据融合后返回给客户端。这样，写事务都集中在单台更新服务器上，避免了复杂的分布式事务，高效地实现了跨行跨表事务；另外，更新服务器上的修改增量能够定期分发到多台基线数据服务器中，避免成为瓶颈，实现了良好的扩展性。
+
+## 系统架构
+
+OceanBase的整体架构如图所示：
+
+- 客户端：用户使用OceanBase的方式和MySQL数据库完全相同，支持JDBC、C客户端访问，等等。基于MySQL数据库开发的应用程序、工具能够直接迁移到OceanBase。
+- RootServer：管理处集群中的所有服务器，子表（tablet）数据分布以及副本管理。一般为一主一备，主备之间数据强同步。
+- UpdateServer：存储OceanBase系统的增量更新数据。UpdateServer一般为一主一备，可以配置不同的同步模式。部署时，UpdateServer进程和RootServer进程往往共用物理服务器。
+- ChunkServer：存储OceanBase系统的基线数据。基线数据一般存储两份或者三份，可配置。
+- MergeServer：接收并解析用户SQL请求，经过词法分析、语法分析、查询优化等一系列操作后转发给相应的ChunkServer或者UpdateServer。如果请求的数据分布在多台ChunkServer上面，MergeServer还需要对多台ChunkServer返回的结果进行合并。客户端和MergeServer之间采用原生的MySQL通信协议。
+
+### 客户端
+
+客户端只要将服务器的地址配置为任意一台MergeServer的地址，就可以直接使用了。
+
+集群有多台MergeServer，这些MergeServer的服务器地址存储在OceanBase服务器端的系统表内。OceanBase客户端先获取MergeServer地址列表，接着按照一定的策略将读写请求发送给某台MergeServer，并负责对出现事故的MergeServer进行容错处理。
+
+大致流程：
+
+1. 请求RootServer获取集群中MergeServer的地址列表。
+2. 按照一定的策略选择某台MergeServer发送读写请求。客户端与MergeServer之间的通信协议兼容原生的MySQL协议。客户端支持的策略主要有两种：随机以及一致性哈希。一致性hash的主要目的是将相同的SQL请求发送到同一台MergeServer，方便MergeServer对查询结果进行缓存。
+3. 如果请求MergeServer失败，则冲MergeServer列表中重新选择一台MergeServer重试。如果请求某台MergeServer失败超过一定的次数，将这台MergeServer加入黑名单并从MergeServer列表删除。
+
+### RootServer
+
+​	RootServer的功能主要包括：集群管理、数据分布以及副本管理。
+
+​	一个集群内部同一时刻只允许一个UpdateServer提供写服务，这个UpdateServer称为主UpdateServer。这种方式牺牲一定的可用性获取强一致性。
+
+​	RootServer通过租约机制选择唯一的主UpdateServer，当原先的主UpdateServer发生故障后，RootServer能够在原先的租约失效后选择一台新的UpdateServer作为主UpdateServer。当原先的主UpdateServer发生故障后，RootServer能给个在原先租约失效后选择一台新的UpdateServer作为主UpdateServer。另外，RootServer和MergeServer&ChunkServer之间保持心跳，从而能够感受到在线和已经下线的MergeServer&ChunkServer机器列表。
+
+​	OceanBase内部使用主键进行排序和存储。OceanBase采取的是根表一级索引结构。每个子表包含多个副本。分布在多台ChunkServer中。当其中某台ChunkServer发生故障时，RootServer能够检测到，并且触发对这台ChunkServer上的子表增加副本的操作。
+
+RootServer也会定期执行负载均衡，选择某些子表从负载较高的机器上迁移到负载较低的机器上。
+
+RootServer采用一主一备的结构，主备之间数据强同步，并通过Linux HA软件实现高可用性。
+
+### MergeServer
+
+功能：协议解析、SQL解析、请求转发、结果合并、多表操作。
+
+MergeServer缓存了子表分布信息，根据请求涉及到的子表将请求转发给多个孩子表所在的ChunkServer。如果是写操作，还会转发给UpdateServer。某些请求需要跨多个子表，此时MergeServer会将请求拆分后发送给多台ChunkServer，并合并这些ChunkServer返回的结果。MergeServer支持并发请求多台ChunkServer，即将多个请求发给多台ChunkServer。MergeServer本身无状态，宕机不会被用户感知到。
+
+### ChunkServer
+
+功能：存储子表、提供读取服务，执行定期合并以及数据分发。
+
+大表->子表->SSTable->块（4KB-64KB）。
+
+SSTable支持块缓存和行缓存。
+
+MergeServer将每个子表读取请求发送到子表所在ChunkServer，ChunkServer首先读取SSTable中包含的基线数据与增量更新融合后得到最终结果。
+
+由于每次读取都需要从UpdateServer中获取最新的增量更新，为了保证读取性能，需要限制UpdateServer中增量更新的数据量，最好能够全部存放在内存中。
+
+### UpdateServer
+
+UpdateServer是整个集群中唯一能接受写入的模块，每个集群中只有一个主UpdateServer。UpdateServer中的更新操作首先写入到内存表，当内存表的数据量超过一定值时，可以生成快照文件并转储到SSD中。快照的组织方式与ChunkServer中的SSTable类似。
+
+UpdateServer宕机重启后需要首先加载转储的快照文件，接着回放快照点之后的操作日志。由于集群中只有一台主UpdateServer提供写服务，因此，OceanBase很容易地实现跨表事务。而不需要采用传统的两阶段提交协议。当然，这样也带来了一系列的问题。由于整个集群所有的读写操作都必须经过UpdateServer，UpdateServer的性能至关重要。而UpdateServer只需要服务最新一段时间新增的数据，这些数据往往可以全部存放在内存当中。
+
+### 定期合并&数据分发
+
+定期合并和数据分发都将UpdateServer中的增量更新分发到ChunkServer中的手段，二者的整体流程比较类似：
+
+1）UpdateServer冻结当前的活跃内存表，生成冻结内存表，并开启新的活跃内存表，后续的更新操作都写入新的活跃内存表。
+
+2）UpdateServer通知RootServer数据版本发生了变化之后，之后RootServer通过心跳消息通知ChunkServer。
+
+3）每台ChunkServer启动定期合并或者数据分发操作，从UpdateServer获取每个子表对应的增量更新数据。
+
+定期合并的开销大于数据分发。数据分发只需要每个chunkserver获得updateServer冻结表中的增量更新数据缓存在本地即可。而定期合并需要ChunkServer将本地的SStable中的基线数据与冻结内存表的增量更新数据执行一次多路归并，融合后生成新的基线数据并存放到新的SSTable中。
+
+
+
+
+
+
+
+
+
+
+
