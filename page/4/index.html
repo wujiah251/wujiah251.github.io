@@ -191,6 +191,81 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/16/ARP%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/16/ARP%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">ARP协议</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-16 23:10:00" itemprop="dateCreated datePublished" datetime="2021-03-16T23:10:00+08:00">2021-03-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h1><h2 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h2><p>并不是所有的主机或者路由器都有链路层地址，而是他们的适配器（网络接口）具有链路层地址，这个地址一般称为MAC地址。这个地址具有唯一性，通过IEEE分配其前24位保证。格式为：<br><code>8bit:8bit:8bit:8bit:8bit:8bit</code>共计48位。<br>链路层转发帧通过MAC地址来实现。  </p>
+<h2 id="地址解析协议"><a href="#地址解析协议" class="headerlink" title="地址解析协议"></a>地址解析协议</h2><p>因为存在网络层地址（如IP）和链路层地址（MAC），所以需要在它们之间进行转换。对于因特网而言，这就是地址解析协议（ARP）。<br>和DNS协议不同，ARP协议只会在当前子网内解析MAC地址，如果试图解析其他子网的主机名，ARP协议会返回一个错误。<br>每台主机或者路由器在其内存中有一张ARP表，假设主机要发送一个数据报，发送主机需要获得目的主机IP地址对应的MAC地址，如果发送方的ARP表具有该目的主机的结点的表项，这个任务很容易完成。如果没有发送方会构造一个称为ARP分组的特殊分组，用广播地址作为目的地址，相当于去询问IP地址对应的MAC，每个适配器收到该帧会向上传递到ARP模块，如果自己有这个IP地址对应的MAC地址，就发送给源主机，然后源主机更新它的ARP表，并发送它的数据报。  </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/16/Keep-Alive%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1019,105 +1094,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/07/InnoDB%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/07/InnoDB%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">InnoDB体系结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-03-07 20:15:00" itemprop="dateCreated datePublished" datetime="2021-03-07T20:15:00+08:00">2021-03-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="InnoDB体系结构"><a href="#InnoDB体系结构" class="headerlink" title="InnoDB体系结构"></a>InnoDB体系结构</h1><ol>
-<li>后台线程；  </li>
-<li>InnoDB存储引擎内存池（所有进程、线程需要访问的多个内部数据结构；缓存磁盘上的数据，方便快速读取；重做日志缓冲）。  </li>
-</ol>
-<p>后台线程的主要作用是刷新内存池种的数据，保证缓存池中的内存缓存的时最近的数据。此外将已修复的数据文件刷新到磁盘文件，同时保证在数据库发生异常的情况下InnoDB能恢复到正常运行状态。  </p>
-<h2 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h2><ol>
-<li>Master Thread<br>这是一个非常核心的后台线程，主要负责将缓冲池中的数据异步刷新到磁盘，保证数据的一致性，包括脏页的刷新，合并插入缓冲等。  </li>
-<li>IO Thread<br>在InnoDB存储引擎中大量使用了AIO（Async IO）来处理写IO请求，这样可以极大提高数据库性能。而IO Thread的工作主要是负责这些IO请求的回调处理。  </li>
-<li>Purge Thread<br>事务被提交后，其所使用的undolog可能不再需要，因此需要PurgeThread来回收已经使用并分配的undo页。  </li>
-<li>Page Cleaner Thread<br>将之前版本中脏页的刷新操作都放入到单独的线程中来完成。  </li>
-</ol>
-<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ol>
-<li>缓冲池<br>缓冲池使用来减少磁盘IO的消耗而存在的，对于数据库中的页的修改操作，则首先修改在缓冲池中页，然后再以一定的频率刷新到磁盘。<br>具体来看缓存池中缓存了数据页、索引页、插入缓存、undo页、自适应哈希索引、InnoDB存储的锁消息、数据字典信息等。  </li>
-<li>LRU List、Free List和Flush List<br>缓存池是通过LRU算法管理的。LRU列表中的页被修改后，称该页为脏页（dirty page）。而Flush列表中的页即为脏页列表。  </li>
-<li>重做日志缓冲<br>InnoDB存储引擎首先将重做日志信息放入到这个混缓冲区，然后按一定频率将其刷新到重做日志文件。重做日志缓冲一般不需要设置得很大，因为一般情况下每一秒会将重做日志缓冲刷新到日志文件，因此用户只要保证每秒产生得事务量在这个缓冲大小之内即可。  </li>
-<li>额外的内存池  </li>
-</ol>
-<h1 id="Master-Thread工作方式"><a href="#Master-Thread工作方式" class="headerlink" title="Master Thread工作方式"></a>Master Thread工作方式</h1><p>Master Thread具有最高界别的线程优先级。其内部由多个循环组成：主循环（loop）、后台循环（background loop）、刷新循环（flush loop）、暂停循环。Master Thread会根据数据库运行状态在多个循环中切换。  </p>
-<h1 id="InnoDB关键特性"><a href="#InnoDB关键特性" class="headerlink" title="InnoDB关键特性"></a>InnoDB关键特性</h1><p>InnoDB存储引擎的关键特性包括：  </p>
-<ol>
-<li>插入缓存；  </li>
-<li>两次写；  </li>
-<li>自适应哈希索引；  </li>
-<li>异步IO；  </li>
-<li>刷新邻接页。  </li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1189,14 +1165,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

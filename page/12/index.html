@@ -191,6 +191,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/23/Makefile%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/23/Makefile%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Makefile学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-23 20:27:27" itemprop="dateCreated datePublished" datetime="2021-01-23T20:27:27+08:00">2021-01-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Linux编译过程"><a href="#Linux编译过程" class="headerlink" title="Linux编译过程"></a>Linux编译过程</h1><ol>
+<li>-E 预处理：把 .h、.c文件展开形成一个个文件。宏定义直接替换头文件、库文件。最后生成.i文件。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -E hello.c -o hello.i</span></span><br></pre></td></tr></table></figure></li>
+<li>-S 汇编： .i文件生成一个汇编代码文件 .s<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -S hello.i -o hello.s</span></span><br></pre></td></tr></table></figure></li>
+<li>-c 编译： .s文件生成一个.o文件<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -C hello.s -o hello.o</span></span><br></pre></td></tr></table></figure></li>
+<li>-o 链接：生成可运行文件 hello<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc hello.o hello</span></span><br></pre></td></tr></table></figure></li>
+<li>也可以直接来<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc hello.c -o hello</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="脚本语言：Makefile"><a href="#脚本语言：Makefile" class="headerlink" title="脚本语言：Makefile"></a>脚本语言：Makefile</h1><p>Linux C/C++ 必须要使用的一个编译脚本。<br>Makefile 大型项目开发。</p>
+<ol>
+<li>第一层：显示规则<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#是注释</span></span><br><span class="line"><span class="comment">#第一层：显示规则</span></span><br><span class="line"><span class="comment">#目标文件：依赖文件</span></span><br><span class="line"><span class="comment">#[TAB]指令</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#第一个目标文件应该是我的最终文件！！！（递归思维）</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#rm -rf hello.o hello.S hello.i hello</span></span><br><span class="line"><span class="comment">#伪目标：.PHONY</span></span><br><span class="line"><span class="section">hello:hello.o</span></span><br><span class="line">	gcc hello.o -o hello</span><br><span class="line"><span class="section">hello.o:hello.S</span></span><br><span class="line">	gcc -c hello.S -o hello.o</span><br><span class="line"><span class="section">hello.S:hello.i</span></span><br><span class="line">	gcc -S hello.i -o hello.S</span><br><span class="line"><span class="section">hello.i:hello.c</span></span><br><span class="line">	gcc -E hello.c -o hello.i</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:</span></span><br><span class="line"><span class="section">clearall:</span></span><br><span class="line">	rm -rf hello.o hello.S hello.i hello</span><br><span class="line"><span class="section">clear:</span></span><br><span class="line">    rm -rf hello.o hello.S hello.i</span><br></pre></td></tr></table></figure></li>
+<li>第二层<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#变量 =(替换)  +=(追加)  :=(常量)</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">    <span class="variable">$(CC)</span> -o <span class="variable">$(TAR)</span></span><br><span class="line"></span><br><span class="line"><span class="section">circle.o:circle.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c circle.c -o circle.o</span><br><span class="line"><span class="section">cube.o:cube.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c cube.c -o cube.o</span><br><span class="line"><span class="section">main.o:main.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c main.c -o main.o</span><br></pre></td></tr></table></figure></li>
+<li>第三层：隐含规则<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># %.c $.o 任意的.c或者.o   *.c *.o所有的.c .o</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(OBJ)</span> -o <span class="variable">$(TAR)</span></span><br><span class="line"></span><br><span class="line"><span class="section">%.o:%.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c %.c -o %.o </span><br></pre></td></tr></table></figure></li>
+<li>第四层：通配符<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># $@所有的目标文件</span></span><br><span class="line"><span class="comment"># $^所有的依赖文件</span></span><br><span class="line"><span class="comment"># $&lt;所有的依赖文件的第一个文件</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line">RMRF := rm -rf</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">%.o:%.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c <span class="variable">$^</span> -o <span class="variable">$@</span> </span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:</span></span><br><span class="line"><span class="section">clearall:</span></span><br><span class="line">    <span class="variable">$(RMRF)</span> <span class="variable">$(OBJ)</span> <span class="variable">$(TAR)</span></span><br><span class="line"><span class="section">clear:</span></span><br><span class="line">    <span class="variable">$(RMRF)</span> <span class="variable">$(OBJ)</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/22/MySQL-API/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1349,114 +1436,6 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">网络编程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-13 22:29:00" itemprop="dateCreated datePublished" datetime="2021-01-13T22:29:00+08:00">2021-01-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文主要总结C++网络编程中关于套接字编程的相关函数。  </p>
-<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="创建一个套接字：socket"><a href="#创建一个套接字：socket" class="headerlink" title="创建一个套接字：socket()"></a>创建一个套接字：<code>socket()</code></h2><p><code>int socket(int family, int type, int protocol);</code><br>其中family指明协议族，IPV4是<code>AF_INET</code>，IPv6<code>AF_INET6</code>；type指明套接字类型，TCP为<code>SOCK_STREAM</code>，UDP是<code>SOCK_DGRAM</code>。protocol参数设为某个协议的类型常值，或者设为0。</p>
-<h2 id="建立连接：connect"><a href="#建立连接：connect" class="headerlink" title="建立连接：connect()"></a>建立连接：<code>connect()</code></h2><p><code>int connect(int sockfd, const struct sockaddr *serveraddr, socklen_t addrlen);</code><br>sockfd是socket函数返回的套接字描述符，第二个参数是指向一个套接字地址的指针和该结构大小。连接成功返回0，否则-1。</p>
-<p>实际使用中，我们一般传入sockaddr_in指针，进行类型转换为sockaddr，sockaddr_in结构如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span>&#123;</span></span><br><span class="line">	<span class="keyword">short</span> <span class="keyword">int</span> sin_family;	<span class="comment">//协议族</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> <span class="keyword">int</span> sin_port;	<span class="comment">//存储端口号，只能用网络字顺序</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> <span class="title">sin_addr</span>;</span>	<span class="comment">//存储IP地址</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="绑定端口：bind"><a href="#绑定端口：bind" class="headerlink" title="绑定端口：bind()"></a>绑定端口：<code>bind()</code></h2><p><code>int bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen);</code><br>将一个本地协议地址和套接字描述符绑定起来。  </p>
-<p>一般来说，端口我们可以自己指定或者使用0让内核自己选择一个临时端口；IP地址可以选择统配地址让内核等套接字已连接再选择一个本地地址。  </p>
-<h2 id="监听：listen"><a href="#监听：listen" class="headerlink" title="监听：listen()"></a>监听：<code>listen()</code></h2><p>一般来说，服务器会打开一个监听套接字，用来等待来自client的连接请求：<br><code>int listen(int sockfd,int backlog);</code><br>sockfd是socket函数创建的套接字，然后backlog是为这个监听套接字维护的队列长度，队列包括已连接队列（established状态）和未连接队列（syn_recv状态）。  </p>
-<h2 id="生成已连接套接字：accept"><a href="#生成已连接套接字：accept" class="headerlink" title="生成已连接套接字：accept()"></a>生成已连接套接字：<code>accept()</code></h2><p><code>int accept(int sockfd, struct sockaddr *cliaddr, socklen_t * addrlen);</code><br>该函数会从监听套接字sockfd的已连接队列中取出一个连接，返回一个已连接套接字描述符，并且返回另一方套接字地址和地址结字节数。  </p>
-<h2 id="关闭套接字：close"><a href="#关闭套接字：close" class="headerlink" title="关闭套接字：close()"></a>关闭套接字：<code>close()</code></h2><p><code>int close(int sockfd);</code><br>该函数可以关闭一个套接字描述符，不过如果该套接字使用引用计数，如果被多个进程拥有，则只会计数-1，当计数为0时候才会真正的关闭。  </p>
-<h2 id="设置套接字参数：getsockopt-和setsockopt"><a href="#设置套接字参数：getsockopt-和setsockopt" class="headerlink" title="设置套接字参数：getsockopt()和setsockopt()"></a>设置套接字参数：<code>getsockopt()</code>和<code>setsockopt()</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen);</span><br><span class="line">int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);</span><br></pre></td></tr></table></figure>
-<p>上述两个函数分别用来获得套接字的参数和设置参数，一般情况下先获得已有参数，然后将想要加入的参数和以后参数做或运算，然后再设置参数即可。函数的各个参数具体使用建议参考《UNIX网络编程 卷1：套接字联网API》。  </p>
-<h1 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h1><h2 id="创建套接字：socket"><a href="#创建套接字：socket" class="headerlink" title="创建套接字：socket()"></a>创建套接字：<code>socket()</code></h2><p>创建套接字的方法上一章已经说过了：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> family, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>不加赘述了。  </p>
-<h2 id="接收数据：recvfrom"><a href="#接收数据：recvfrom" class="headerlink" title="接收数据：recvfrom()"></a>接收数据：<code>recvfrom()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recvfrom</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *from, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
-<p>参数sockfd是套接字描述符，buff是指向读缓冲区的指针，btybes是最大读入的字节数（避免缓冲区溢出）。 最后两个参数数数据发送方的套接字地址和结构字节数。  </p>
-<h2 id="发送数据：sendto"><a href="#发送数据：sendto" class="headerlink" title="发送数据：sendto()"></a>发送数据：<code>sendto()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">sendto</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *to, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
-<p>发送数据，buff为写缓冲区，btybe是待写入的字节数，后面是发送的目的地套接字地址和地址结构的字节数。</p>
-<h1 id="读写函数"><a href="#读写函数" class="headerlink" title="读写函数"></a>读写函数</h1><h2 id="recv-和send"><a href="#recv-和send" class="headerlink" title="recv()和send()"></a><code>recv()</code>和<code>send()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recv</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">send</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>前面3参数很好理解，flags是一个额外的参数，具体可看《UNIX网络编程 卷一：套接字联网API》。  </p>
-<h2 id="readv-和writev"><a href="#readv-和writev" class="headerlink" title="readv()和writev()"></a><code>readv()</code>和<code>writev()</code></h2><p>readv和writev允许单个系统调用读入到或写出自一个或多个缓冲区。这些操作被称为分散度和集中写。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readv</span><span class="params">(<span class="keyword">int</span> sockfd, cosnt struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">writev</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>这两个函数的第2个参数都是指向某个iovec结构数组的一个指针，其中iovec结构再头文件&lt;sys/uio.h&gt;中定义：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iovec</span>&#123;</span></span><br><span class="line">	<span class="keyword">void</span> *iov_base;	<span class="comment">//内存起始地址</span></span><br><span class="line">   <span class="keyword">size_t</span> iov_len;	<span class="comment">//内存大小</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这两个函数可以用于任何描述符，而不仅仅限于套接字。另外writev是一个原子操作，意味着对于一个基于记录的协议而言，一次writev调用只产生单个UDP数据报。</p>
-<h1 id="获取地址"><a href="#获取地址" class="headerlink" title="获取地址"></a>获取地址</h1><h2 id="gethostbyname"><a href="#gethostbyname" class="headerlink" title="gethostbyname()"></a><code>gethostbyname()</code></h2><p>gethostbyname()函数主要作用：用域名或者主机名获取地址，操作系统提供的库函数。以下的讨论基于linux环境。<br>域名系统（Domain Name System, DNS）主要用于主机名字与IP地址之间的映射。每个组织机构往往运行一个或多个名字服务器（name server），我们编写的客户端和服务器等应用程序通过调用解析器（resolver）的函数库中的函数接触DNS服务器。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyname</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>如果成功则返回一个hostent指针，否则返回NULL。当发生错误时，它不设置errno变量，设置全局整数变量h_errno。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> &#123;</span></span><br><span class="line">	<span class="keyword">char</span>  *h_name;            <span class="comment">/*主机规范名*/</span></span><br><span class="line">	<span class="keyword">char</span> **h_aliases;         <span class="comment">/*主机别名列表*/</span></span><br><span class="line">   <span class="keyword">int</span>	h_addrtype;        <span class="comment">/*地址类型，只能是IPv4，本函数无法解决IPv6*/</span></span><br><span class="line">   <span class="keyword">int</span> 	h_length;          <span class="comment">/*IP地址字节数*/</span></span><br><span class="line">   <span class="keyword">char</span> **h_addr_list;</span><br><span class="line">   <span class="comment">/*主机的IP地址，是网络字节序，需要通过inet_ntop函数转换*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="gethostbyaddr"><a href="#gethostbyaddr" class="headerlink" title="gethostbyaddr()"></a><code>gethostbyaddr()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyaddr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *addr, <span class="keyword">socklen_t</span> len, <span class="keyword">int</span> type)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>根据地址和地址类型来获得主机名。返回类型和gethostbyname一样。注意addr是网络字节序。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1528,14 +1507,14 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

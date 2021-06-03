@@ -191,6 +191,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%B1%87%E6%80%BB%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E6%B1%87%E6%80%BB%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">汇总数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 15:04:42" itemprop="dateCreated datePublished" datetime="2021-01-27T15:04:42+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="汇总数据"><a href="#汇总数据" class="headerlink" title="汇总数据"></a>汇总数据</h1><h2 id="聚集函数"><a href="#聚集函数" class="headerlink" title="聚集函数"></a>聚集函数</h2><p>我们经常需要汇总数据而不用把他们实际检索出来，为此，MySQL提供了专门的函数。<br><strong>聚集函数</strong> 运行在行组上，计算和返回单个值的函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AVG():返回某个列的平均值</span><br><span class="line">COUNT():返回某个列的行数</span><br><span class="line">MAX():返回某个列的最大值</span><br><span class="line">MIN():返回某个列的最小值</span><br><span class="line">SUM():返回某个列值之后</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="AVG-函数"><a href="#AVG-函数" class="headerlink" title="AVG()函数"></a>AVG()函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select avg(prod_price) as avg_price</span><br><span class="line">    -&gt; from products;</span><br><span class="line">+-----------+</span><br><span class="line">| avg_price |</span><br><span class="line">+-----------+</span><br><span class="line">| 16.133571 |</span><br><span class="line">+-----------+</span><br></pre></td></tr></table></figure>
+<p>默认忽略列值为NULL的行。</p>
+<h3 id="COUNT-函数"><a href="#COUNT-函数" class="headerlink" title="COUNT()函数"></a>COUNT()函数</h3><p><code>COUNT()</code>函数用来计数。可利用<code>COUNT()</code>确定表中的行的数目或符合特定条件的行的数目。<br>COUNT()函数有两种使用的方式：</p>
+<ul>
+<li>使用<code>COUNT(*)</code>对表中所有行进行计数。  </li>
+<li>使用<code>COUNT(column)</code>忽略值为NULL的行。  </li>
+</ul>
+<p>剩下的函数使用和AVG()类似，不做多讲。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -976,93 +1061,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/23/Makefile%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/23/Makefile%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Makefile学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-23 20:27:27" itemprop="dateCreated datePublished" datetime="2021-01-23T20:27:27+08:00">2021-01-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Linux编译过程"><a href="#Linux编译过程" class="headerlink" title="Linux编译过程"></a>Linux编译过程</h1><ol>
-<li>-E 预处理：把 .h、.c文件展开形成一个个文件。宏定义直接替换头文件、库文件。最后生成.i文件。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -E hello.c -o hello.i</span></span><br></pre></td></tr></table></figure></li>
-<li>-S 汇编： .i文件生成一个汇编代码文件 .s<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -S hello.i -o hello.s</span></span><br></pre></td></tr></table></figure></li>
-<li>-c 编译： .s文件生成一个.o文件<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -C hello.s -o hello.o</span></span><br></pre></td></tr></table></figure></li>
-<li>-o 链接：生成可运行文件 hello<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc hello.o hello</span></span><br></pre></td></tr></table></figure></li>
-<li>也可以直接来<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc hello.c -o hello</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<h1 id="脚本语言：Makefile"><a href="#脚本语言：Makefile" class="headerlink" title="脚本语言：Makefile"></a>脚本语言：Makefile</h1><p>Linux C/C++ 必须要使用的一个编译脚本。<br>Makefile 大型项目开发。</p>
-<ol>
-<li>第一层：显示规则<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#是注释</span></span><br><span class="line"><span class="comment">#第一层：显示规则</span></span><br><span class="line"><span class="comment">#目标文件：依赖文件</span></span><br><span class="line"><span class="comment">#[TAB]指令</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#第一个目标文件应该是我的最终文件！！！（递归思维）</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#rm -rf hello.o hello.S hello.i hello</span></span><br><span class="line"><span class="comment">#伪目标：.PHONY</span></span><br><span class="line"><span class="section">hello:hello.o</span></span><br><span class="line">	gcc hello.o -o hello</span><br><span class="line"><span class="section">hello.o:hello.S</span></span><br><span class="line">	gcc -c hello.S -o hello.o</span><br><span class="line"><span class="section">hello.S:hello.i</span></span><br><span class="line">	gcc -S hello.i -o hello.S</span><br><span class="line"><span class="section">hello.i:hello.c</span></span><br><span class="line">	gcc -E hello.c -o hello.i</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:</span></span><br><span class="line"><span class="section">clearall:</span></span><br><span class="line">	rm -rf hello.o hello.S hello.i hello</span><br><span class="line"><span class="section">clear:</span></span><br><span class="line">    rm -rf hello.o hello.S hello.i</span><br></pre></td></tr></table></figure></li>
-<li>第二层<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#变量 =(替换)  +=(追加)  :=(常量)</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">    <span class="variable">$(CC)</span> -o <span class="variable">$(TAR)</span></span><br><span class="line"></span><br><span class="line"><span class="section">circle.o:circle.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c circle.c -o circle.o</span><br><span class="line"><span class="section">cube.o:cube.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c cube.c -o cube.o</span><br><span class="line"><span class="section">main.o:main.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c main.c -o main.o</span><br></pre></td></tr></table></figure></li>
-<li>第三层：隐含规则<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># %.c $.o 任意的.c或者.o   *.c *.o所有的.c .o</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(OBJ)</span> -o <span class="variable">$(TAR)</span></span><br><span class="line"></span><br><span class="line"><span class="section">%.o:%.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c %.c -o %.o </span><br></pre></td></tr></table></figure></li>
-<li>第四层：通配符<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># $@所有的目标文件</span></span><br><span class="line"><span class="comment"># $^所有的依赖文件</span></span><br><span class="line"><span class="comment"># $&lt;所有的依赖文件的第一个文件</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line">RMRF := rm -rf</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">%.o:%.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c <span class="variable">$^</span> -o <span class="variable">$@</span> </span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:</span></span><br><span class="line"><span class="section">clearall:</span></span><br><span class="line">    <span class="variable">$(RMRF)</span> <span class="variable">$(OBJ)</span> <span class="variable">$(TAR)</span></span><br><span class="line"><span class="section">clear:</span></span><br><span class="line">    <span class="variable">$(RMRF)</span> <span class="variable">$(OBJ)</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1134,14 +1132,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">132</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
