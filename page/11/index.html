@@ -191,6 +191,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E8%81%94%E7%BB%93%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E8%81%94%E7%BB%93%E8%A1%A8/" class="post-title-link" itemprop="url">联结表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 16:05:30" itemprop="dateCreated datePublished" datetime="2021-01-27T16:05:30+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="联结表"><a href="#联结表" class="headerlink" title="联结表"></a>联结表</h1><h2 id="联结"><a href="#联结" class="headerlink" title="联结"></a>联结</h2><p><strong>外键</strong> 外键为某个表中的一列，它包含另一个表的主键值，定义了两个表之间的关系。<br><strong>可伸缩性</strong> 能够适应不断增加的工作量而不失败。设计良好的数据库或应用程序称之为可伸缩性好</p>
+<h2 id="创建联结"><a href="#创建联结" class="headerlink" title="创建联结"></a>创建联结</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_name, prod_name, prod_price </span><br><span class="line">    -&gt; from vendors,products</span><br><span class="line">    -&gt; where vendors.vend_id &#x3D; products.vend_id</span><br><span class="line">    -&gt; order by vend_name, prod_name;</span><br><span class="line">+-------------+----------------+------------+</span><br><span class="line">| vend_name   | prod_name      | prod_price |</span><br><span class="line">+-------------+----------------+------------+</span><br><span class="line">| ACME        | Bird seed      |      10.00 |</span><br><span class="line">| ACME        | Carrots        |       2.50 |</span><br><span class="line">| ACME        | Detonator      |      13.00 |</span><br><span class="line">| ACME        | Safe           |      50.00 |</span><br><span class="line">| ACME        | Sling          |       4.49 |</span><br><span class="line">| ACME        | TNT (1 stick)  |       2.50 |</span><br><span class="line">| ACME        | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Anvils R Us | .5 ton anvil   |       5.99 |</span><br><span class="line">| Anvils R Us | 1 ton anvil    |       9.99 |</span><br><span class="line">| Anvils R Us | 2 ton anvil    |      14.99 |</span><br><span class="line">| Jet Set     | JetPack 1000   |      35.00 |</span><br><span class="line">| Jet Set     | JetPack 2000   |      55.00 |</span><br><span class="line">| LT Supplies | Fuses          |       3.42 |</span><br><span class="line">| LT Supplies | Oil can        |       8.99 |</span><br><span class="line">+-------------+----------------+------------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>笛卡尔积</strong> 由没有联解条件的表关系返回的结果为笛卡尔积。检索出来的行的数目将是第一个表中的行数乘以第二个表中的行数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_name, prod_name, prod_price </span><br><span class="line">    -&gt; from vendors,products</span><br><span class="line">    -&gt; order by vend_name, prod_price;</span><br><span class="line">+----------------+----------------+------------+</span><br><span class="line">| vend_name      | prod_name      | prod_price |</span><br><span class="line">+----------------+----------------+------------+</span><br><span class="line">| ACME           | Carrots        |       2.50 |</span><br><span class="line">| ACME           | TNT (1 stick)  |       2.50 |</span><br><span class="line">| ACME           | Fuses          |       3.42 |</span><br><span class="line">| ACME           | Sling          |       4.49 |</span><br><span class="line">| ACME           | .5 ton anvil   |       5.99 |</span><br><span class="line">| ACME           | Oil can        |       8.99 |</span><br><span class="line">| ACME           | 1 ton anvil    |       9.99 |</span><br><span class="line">| ACME           | TNT (5 sticks) |      10.00 |</span><br><span class="line">| ACME           | Bird seed      |      10.00 |</span><br><span class="line">| ACME           | Detonator      |      13.00 |</span><br><span class="line">| ACME           | 2 ton anvil    |      14.99 |</span><br><span class="line">| ACME           | JetPack 1000   |      35.00 |</span><br><span class="line">| ACME           | Safe           |      50.00 |</span><br><span class="line">| ACME           | JetPack 2000   |      55.00 |</span><br><span class="line">| Anvils R Us    | Carrots        |       2.50 |</span><br><span class="line">| Anvils R Us    | TNT (1 stick)  |       2.50 |</span><br><span class="line">| Anvils R Us    | Fuses          |       3.42 |</span><br><span class="line">| Anvils R Us    | Sling          |       4.49 |</span><br><span class="line">| Anvils R Us    | .5 ton anvil   |       5.99 |</span><br><span class="line">| Anvils R Us    | Oil can        |       8.99 |</span><br><span class="line">| Anvils R Us    | 1 ton anvil    |       9.99 |</span><br><span class="line">| Anvils R Us    | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Anvils R Us    | Bird seed      |      10.00 |</span><br><span class="line">| Anvils R Us    | Detonator      |      13.00 |</span><br><span class="line">| Anvils R Us    | 2 ton anvil    |      14.99 |</span><br><span class="line">| Anvils R Us    | JetPack 1000   |      35.00 |</span><br><span class="line">| Anvils R Us    | Safe           |      50.00 |</span><br><span class="line">| Anvils R Us    | JetPack 2000   |      55.00 |</span><br><span class="line">| Furball Inc.   | Carrots        |       2.50 |</span><br><span class="line">| Furball Inc.   | TNT (1 stick)  |       2.50 |</span><br><span class="line">| Furball Inc.   | Fuses          |       3.42 |</span><br><span class="line">| Furball Inc.   | Sling          |       4.49 |</span><br><span class="line">| Furball Inc.   | .5 ton anvil   |       5.99 |</span><br><span class="line">| Furball Inc.   | Oil can        |       8.99 |</span><br><span class="line">| Furball Inc.   | 1 ton anvil    |       9.99 |</span><br><span class="line">| Furball Inc.   | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Furball Inc.   | Bird seed      |      10.00 |</span><br><span class="line">| Furball Inc.   | Detonator      |      13.00 |</span><br><span class="line">| Furball Inc.   | 2 ton anvil    |      14.99 |</span><br><span class="line">| Furball Inc.   | JetPack 1000   |      35.00 |</span><br><span class="line">| Furball Inc.   | Safe           |      50.00 |</span><br><span class="line">| Furball Inc.   | JetPack 2000   |      55.00 |</span><br><span class="line">| Jet Set        | TNT (1 stick)  |       2.50 |</span><br><span class="line">| Jet Set        | Carrots        |       2.50 |</span><br><span class="line">| Jet Set        | Fuses          |       3.42 |</span><br><span class="line">| Jet Set        | Sling          |       4.49 |</span><br><span class="line">| Jet Set        | .5 ton anvil   |       5.99 |</span><br><span class="line">| Jet Set        | Oil can        |       8.99 |</span><br><span class="line">| Jet Set        | 1 ton anvil    |       9.99 |</span><br><span class="line">| Jet Set        | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Jet Set        | Bird seed      |      10.00 |</span><br><span class="line">| Jet Set        | Detonator      |      13.00 |</span><br><span class="line">| Jet Set        | 2 ton anvil    |      14.99 |</span><br><span class="line">| Jet Set        | JetPack 1000   |      35.00 |</span><br><span class="line">| Jet Set        | Safe           |      50.00 |</span><br><span class="line">| Jet Set        | JetPack 2000   |      55.00 |</span><br><span class="line">| Jouets Et Ours | Carrots        |       2.50 |</span><br><span class="line">| Jouets Et Ours | TNT (1 stick)  |       2.50 |</span><br><span class="line">| Jouets Et Ours | Fuses          |       3.42 |</span><br><span class="line">| Jouets Et Ours | Sling          |       4.49 |</span><br><span class="line">| Jouets Et Ours | .5 ton anvil   |       5.99 |</span><br><span class="line">| Jouets Et Ours | Oil can        |       8.99 |</span><br><span class="line">| Jouets Et Ours | 1 ton anvil    |       9.99 |</span><br><span class="line">| Jouets Et Ours | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Jouets Et Ours | Bird seed      |      10.00 |</span><br><span class="line">| Jouets Et Ours | Detonator      |      13.00 |</span><br><span class="line">| Jouets Et Ours | 2 ton anvil    |      14.99 |</span><br><span class="line">| Jouets Et Ours | JetPack 1000   |      35.00 |</span><br><span class="line">| Jouets Et Ours | Safe           |      50.00 |</span><br><span class="line">| Jouets Et Ours | JetPack 2000   |      55.00 |</span><br><span class="line">| LT Supplies    | Carrots        |       2.50 |</span><br><span class="line">| LT Supplies    | TNT (1 stick)  |       2.50 |</span><br><span class="line">| LT Supplies    | Fuses          |       3.42 |</span><br><span class="line">| LT Supplies    | Sling          |       4.49 |</span><br><span class="line">| LT Supplies    | .5 ton anvil   |       5.99 |</span><br><span class="line">| LT Supplies    | Oil can        |       8.99 |</span><br><span class="line">| LT Supplies    | 1 ton anvil    |       9.99 |</span><br><span class="line">| LT Supplies    | TNT (5 sticks) |      10.00 |</span><br><span class="line">| LT Supplies    | Bird seed      |      10.00 |</span><br><span class="line">| LT Supplies    | Detonator      |      13.00 |</span><br><span class="line">| LT Supplies    | 2 ton anvil    |      14.99 |</span><br><span class="line">| LT Supplies    | JetPack 1000   |      35.00 |</span><br><span class="line">| LT Supplies    | Safe           |      50.00 |</span><br><span class="line">| LT Supplies    | JetPack 2000   |      55.00 |</span><br><span class="line">+----------------+----------------+------------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="内部联结"><a href="#内部联结" class="headerlink" title="内部联结"></a>内部联结</h3><p>目前为止所用的联结称为等值联结，它基于两个表之间的相等测试。其实，对于这种联结可以使用稍微不通的语法来明确指定联结的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_name,prod_name,prod_price </span><br><span class="line">    -&gt; from vendors inner join products on vendors.vend_id &#x3D; products.vend_id;</span><br><span class="line">+-------------+----------------+------------+</span><br><span class="line">| vend_name   | prod_name      | prod_price |</span><br><span class="line">+-------------+----------------+------------+</span><br><span class="line">| Anvils R Us | .5 ton anvil   |       5.99 |</span><br><span class="line">| Anvils R Us | 1 ton anvil    |       9.99 |</span><br><span class="line">| Anvils R Us | 2 ton anvil    |      14.99 |</span><br><span class="line">| LT Supplies | Fuses          |       3.42 |</span><br><span class="line">| LT Supplies | Oil can        |       8.99 |</span><br><span class="line">| ACME        | Detonator      |      13.00 |</span><br><span class="line">| ACME        | Bird seed      |      10.00 |</span><br><span class="line">| ACME        | Carrots        |       2.50 |</span><br><span class="line">| ACME        | Safe           |      50.00 |</span><br><span class="line">| ACME        | Sling          |       4.49 |</span><br><span class="line">| ACME        | TNT (1 stick)  |       2.50 |</span><br><span class="line">| ACME        | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Jet Set     | JetPack 1000   |      35.00 |</span><br><span class="line">| Jet Set     | JetPack 2000   |      55.00 |</span><br><span class="line">+-------------+----------------+------------+</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="联结多个表"><a href="#联结多个表" class="headerlink" title="联结多个表"></a>联结多个表</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, vend_name, prod_price, quantity from orderitems, products, vendors where products.vend_id &#x3D; vendors.vend_id and orderitems.prod_id &#x3D; products.prod_id and order_num &#x3D; 20005;</span><br><span class="line">+----------------+-------------+------------+----------+</span><br><span class="line">| prod_name      | vend_name   | prod_price | quantity |</span><br><span class="line">+----------------+-------------+------------+----------+</span><br><span class="line">| .5 ton anvil   | Anvils R Us |       5.99 |       10 |</span><br><span class="line">| 1 ton anvil    | Anvils R Us |       9.99 |        3 |</span><br><span class="line">| TNT (5 sticks) | ACME        |      10.00 |        5 |</span><br><span class="line">| Bird seed      | ACME        |      10.00 |        1 |</span><br><span class="line">+----------------+-------------+------------+----------+</span><br></pre></td></tr></table></figure>
+<p>但是尽量减少不必要的联结，影响性能。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E4%BD%BF%E7%94%A8%E5%AD%90%E6%9F%A5%E8%AF%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1009,85 +1094,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%8E%92%E5%BA%8F%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E6%8E%92%E5%BA%8F%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">排序检索数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 00:01:45" itemprop="dateCreated datePublished" datetime="2021-01-27T00:01:45+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="排序检索数据"><a href="#排序检索数据" class="headerlink" title="排序检索数据"></a>排序检索数据</h1><h2 id="排序数据"><a href="#排序数据" class="headerlink" title="排序数据"></a>排序数据</h2><p><strong>子句</strong> SQL语句由子句构成，有些子句是必需的，而有些是可选的。一个子句通常由一个关键字和所提供的数据组成。子句的例子有SELECT语句的FROM子句。为了明确地排序用SELECT语句检索的数据，可使用<code>ORDER BY</code>子句。<code>ORDER BY</code>子句取一个或多个列的名字，据此对输出进行排序。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name from products order by prod_name;</span><br><span class="line">+----------------+</span><br><span class="line">| prod_name      |</span><br><span class="line">+----------------+</span><br><span class="line">| .5 ton anvil   |</span><br><span class="line">| 1 ton anvil    |</span><br><span class="line">| 2 ton anvil    |</span><br><span class="line">| Bird seed      |</span><br><span class="line">| Carrots        |</span><br><span class="line">| Detonator      |</span><br><span class="line">| Fuses          |</span><br><span class="line">| JetPack 1000   |</span><br><span class="line">| JetPack 2000   |</span><br><span class="line">| Oil can        |</span><br><span class="line">| Safe           |</span><br><span class="line">| Sling          |</span><br><span class="line">| TNT (1 stick)  |</span><br><span class="line">| TNT (5 sticks) |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="按多个列排序和指定排序方向"><a href="#按多个列排序和指定排序方向" class="headerlink" title="按多个列排序和指定排序方向"></a>按多个列排序和指定排序方向</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, prod_price, prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; order by prod_price DESC, prod_name;</span><br><span class="line">+----------------+------------+----------------+</span><br><span class="line">| prod_name      | prod_price | prod_name      |</span><br><span class="line">+----------------+------------+----------------+</span><br><span class="line">| JetPack 2000   |      55.00 | JetPack 2000   |</span><br><span class="line">| Safe           |      50.00 | Safe           |</span><br><span class="line">| JetPack 1000   |      35.00 | JetPack 1000   |</span><br><span class="line">| 2 ton anvil    |      14.99 | 2 ton anvil    |</span><br><span class="line">| Detonator      |      13.00 | Detonator      |</span><br><span class="line">| Bird seed      |      10.00 | Bird seed      |</span><br><span class="line">| TNT (5 sticks) |      10.00 | TNT (5 sticks) |</span><br><span class="line">| 1 ton anvil    |       9.99 | 1 ton anvil    |</span><br><span class="line">| Oil can        |       8.99 | Oil can        |</span><br><span class="line">| .5 ton anvil   |       5.99 | .5 ton anvil   |</span><br><span class="line">| Sling          |       4.49 | Sling          |</span><br><span class="line">| Fuses          |       3.42 | Fuses          |</span><br><span class="line">| Carrots        |       2.50 | Carrots        |</span><br><span class="line">| TNT (1 stick)  |       2.50 | TNT (1 stick)  |</span><br><span class="line">+----------------+------------+----------------+</span><br></pre></td></tr></table></figure>
-<p>这里先按照<code>prod_price</code>排序，如果其值相同，再按照<code>prod_name</code>排序，<code>DESC</code>是控制排序方向为降序，只作用于其前面的<code>prod_price</code>，然后<code>ASC</code>用来控制升序，但是由于默认升序，所以一般不用。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1159,14 +1165,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">136</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
