@@ -3,7 +3,7 @@ author: 乡村程序员
 tags:
   - 分布式系统
 categories:
-  - 分布是系统
+  - 分布式系统
 date: 2021-06-03 10:27:00
 ---
 # OceanBase架构初探
