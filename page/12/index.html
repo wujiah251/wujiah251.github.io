@@ -191,422 +191,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%8E%92%E5%BA%8F%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/27/%E6%8E%92%E5%BA%8F%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">排序检索数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-27 00:01:45" itemprop="dateCreated datePublished" datetime="2021-01-27T00:01:45+08:00">2021-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="排序检索数据"><a href="#排序检索数据" class="headerlink" title="排序检索数据"></a>排序检索数据</h1><h2 id="排序数据"><a href="#排序数据" class="headerlink" title="排序数据"></a>排序数据</h2><p><strong>子句</strong> SQL语句由子句构成，有些子句是必需的，而有些是可选的。一个子句通常由一个关键字和所提供的数据组成。子句的例子有SELECT语句的FROM子句。为了明确地排序用SELECT语句检索的数据，可使用<code>ORDER BY</code>子句。<code>ORDER BY</code>子句取一个或多个列的名字，据此对输出进行排序。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name from products order by prod_name;</span><br><span class="line">+----------------+</span><br><span class="line">| prod_name      |</span><br><span class="line">+----------------+</span><br><span class="line">| .5 ton anvil   |</span><br><span class="line">| 1 ton anvil    |</span><br><span class="line">| 2 ton anvil    |</span><br><span class="line">| Bird seed      |</span><br><span class="line">| Carrots        |</span><br><span class="line">| Detonator      |</span><br><span class="line">| Fuses          |</span><br><span class="line">| JetPack 1000   |</span><br><span class="line">| JetPack 2000   |</span><br><span class="line">| Oil can        |</span><br><span class="line">| Safe           |</span><br><span class="line">| Sling          |</span><br><span class="line">| TNT (1 stick)  |</span><br><span class="line">| TNT (5 sticks) |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="按多个列排序和指定排序方向"><a href="#按多个列排序和指定排序方向" class="headerlink" title="按多个列排序和指定排序方向"></a>按多个列排序和指定排序方向</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, prod_price, prod_name</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; order by prod_price DESC, prod_name;</span><br><span class="line">+----------------+------------+----------------+</span><br><span class="line">| prod_name      | prod_price | prod_name      |</span><br><span class="line">+----------------+------------+----------------+</span><br><span class="line">| JetPack 2000   |      55.00 | JetPack 2000   |</span><br><span class="line">| Safe           |      50.00 | Safe           |</span><br><span class="line">| JetPack 1000   |      35.00 | JetPack 1000   |</span><br><span class="line">| 2 ton anvil    |      14.99 | 2 ton anvil    |</span><br><span class="line">| Detonator      |      13.00 | Detonator      |</span><br><span class="line">| Bird seed      |      10.00 | Bird seed      |</span><br><span class="line">| TNT (5 sticks) |      10.00 | TNT (5 sticks) |</span><br><span class="line">| 1 ton anvil    |       9.99 | 1 ton anvil    |</span><br><span class="line">| Oil can        |       8.99 | Oil can        |</span><br><span class="line">| .5 ton anvil   |       5.99 | .5 ton anvil   |</span><br><span class="line">| Sling          |       4.49 | Sling          |</span><br><span class="line">| Fuses          |       3.42 | Fuses          |</span><br><span class="line">| Carrots        |       2.50 | Carrots        |</span><br><span class="line">| TNT (1 stick)  |       2.50 | TNT (1 stick)  |</span><br><span class="line">+----------------+------------+----------------+</span><br></pre></td></tr></table></figure>
-<p>这里先按照<code>prod_price</code>排序，如果其值相同，再按照<code>prod_name</code>排序，<code>DESC</code>是控制排序方向为降序，只作用于其前面的<code>prod_price</code>，然后<code>ASC</code>用来控制升序，但是由于默认升序，所以一般不用。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/26/%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">检索数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-26 23:42:14" itemprop="dateCreated datePublished" datetime="2021-01-26T23:42:14+08:00">2021-01-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="检索数据"><a href="#检索数据" class="headerlink" title="检索数据"></a>检索数据</h1><h2 id="SELECT语句"><a href="#SELECT语句" class="headerlink" title="SELECT语句"></a>SELECT语句</h2><p>检索一列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name from products;</span><br><span class="line">+----------------+</span><br><span class="line">| prod_name      |</span><br><span class="line">+----------------+</span><br><span class="line">| .5 ton anvil   |</span><br><span class="line">| 1 ton anvil    |</span><br><span class="line">| 2 ton anvil    |</span><br><span class="line">| Detonator      |</span><br><span class="line">| Bird seed      |</span><br><span class="line">| Carrots        |</span><br><span class="line">| Fuses          |</span><br><span class="line">| JetPack 1000   |</span><br><span class="line">| JetPack 2000   |</span><br><span class="line">| Oil can        |</span><br><span class="line">| Safe           |</span><br><span class="line">| Sling          |</span><br><span class="line">| TNT (1 stick)  |</span><br><span class="line">| TNT (5 sticks) |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
-<p>注：多条sql语句必须以分号（；）分隔。SQL语句不区分大小写，所以SELECT和select是一样的。</p>
-<h2 id="检索多个列"><a href="#检索多个列" class="headerlink" title="检索多个列"></a>检索多个列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_id,prod_name,prod_price from products;</span><br><span class="line">+---------+----------------+------------+</span><br><span class="line">| prod_id | prod_name      | prod_price |</span><br><span class="line">+---------+----------------+------------+</span><br><span class="line">| ANV01   | .5 ton anvil   |       5.99 |</span><br><span class="line">| ANV02   | 1 ton anvil    |       9.99 |</span><br><span class="line">| ANV03   | 2 ton anvil    |      14.99 |</span><br><span class="line">| DTNTR   | Detonator      |      13.00 |</span><br><span class="line">| FB      | Bird seed      |      10.00 |</span><br><span class="line">| FC      | Carrots        |       2.50 |</span><br><span class="line">| FU1     | Fuses          |       3.42 |</span><br><span class="line">| JP1000  | JetPack 1000   |      35.00 |</span><br><span class="line">| JP2000  | JetPack 2000   |      55.00 |</span><br><span class="line">| OL1     | Oil can        |       8.99 |</span><br><span class="line">| SAFE    | Safe           |      50.00 |</span><br><span class="line">| SLING   | Sling          |       4.49 |</span><br><span class="line">| TNT1    | TNT (1 stick)  |       2.50 |</span><br><span class="line">| TNT2    | TNT (5 sticks) |      10.00 |</span><br><span class="line">+---------+----------------+------------+</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="检索所有列"><a href="#检索所有列" class="headerlink" title="检索所有列"></a>检索所有列</h2><p>使用通配符*</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from products;</span><br><span class="line">&#x2F;&#x2F;结果比较长不做展示</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="检索不同的行"><a href="#检索不同的行" class="headerlink" title="检索不同的行"></a>检索不同的行</h2><p>如果我们想保证输出是不通的怎么办呢，这是后就需要关键字<code>DISTINCT</code>了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id from products;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1005 |</span><br><span class="line">|    1005 |</span><br><span class="line">+---------+</span><br><span class="line">mysql&gt; select distinct vend_id from products;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1005 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
-<p>可以看出，再添加了<code>distinct</code>之后，输出保证了，<code>vend_id</code>每个取值不重复出现。<br>注：<code>distinct</code>不能部分使用，如果给出<code>select distinct vend_id, prod_price from products;</code>，除非指定的两个列都相同，否则所有行都将被检索出来。</p>
-<h2 id="限制结果"><a href="#限制结果" class="headerlink" title="限制结果"></a>限制结果</h2><p>可以使用<code>limit</code>语句来限制结果输出的行数，举个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id from products limit 5;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1001 |</span><br><span class="line">|    1002 |</span><br><span class="line">|    1002 |</span><br><span class="line">+---------+</span><br><span class="line">mysql&gt; select vend_id from products limit 5,3;</span><br><span class="line">+---------+</span><br><span class="line">| vend_id |</span><br><span class="line">+---------+</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">|    1003 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
-<p><code>limit 5</code>限制了只输出前五行，然后第二个sql语句中的<code>limit 5,3</code>是从第5行开始输出3行（前面输出了0-5行，行数从0开始计算）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/26/%E4%BD%BF%E7%94%A8MySQL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/26/%E4%BD%BF%E7%94%A8MySQL/" class="post-title-link" itemprop="url">使用MySQL</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-26 23:15:17" itemprop="dateCreated datePublished" datetime="2021-01-26T23:15:17+08:00">2021-01-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="使用MySQL"><a href="#使用MySQL" class="headerlink" title="使用MySQL"></a>使用MySQL</h1><h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Linux&gt; mysql -u xxx -p</span><br><span class="line">&#x2F;&#x2F;xxx是用户名</span><br></pre></td></tr></table></figure>
-<p>然后再输入密码，就可以连接上本地的MySQL服务器了。端口使用默认端口3306。  </p>
-<h2 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h2><p><strong>关键字（key word）</strong>作为MySQL语言组织的一个保留字。不要用关键字命名一个表或列。常见的关键字有<code>use</code>、<code>select</code>、<code>where</code>等等。<br>选择数据库：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use crashcource;</span><br><span class="line">Database changed</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="了解数据库和表"><a href="#了解数据库和表" class="headerlink" title="了解数据库和表"></a>了解数据库和表</h2><p>以下命令可以用来展示当前MySQL服务器中有哪些数据库：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mydb               |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| study              |</span><br><span class="line">| sys                |</span><br><span class="line">| webserver_database |</span><br><span class="line">+--------------------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>以下命令可以用来查询当前数据中有哪些表（前提是你已经连接上了数据库）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show tables;</span><br><span class="line">+-----------------+</span><br><span class="line">| Tables_in_study |</span><br><span class="line">+-----------------+</span><br><span class="line">| customers       |</span><br><span class="line">| orderitems      |</span><br><span class="line">| orders          |</span><br><span class="line">| productnotes    |</span><br><span class="line">| products        |</span><br><span class="line">| vendors         |</span><br><span class="line">+-----------------+</span><br></pre></td></tr></table></figure>
-<p>这个数据库内的表是用<a target="_blank" rel="noopener" href="https://forta.com/books/0672327120/">MySQL必知必会官方网站</a>上提供的sql脚本<code>create.sql</code>、<code>populate.sql</code>生成的。生成方式如下（你需要先将文件下载下来）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create database XXX;</span><br><span class="line">&#x2F;&#x2F; XXX是你创建的数据库，名字你可以任意定义</span><br><span class="line">mysql&gt; use XXX;</span><br><span class="line">mysql&gt; source create.sql;</span><br><span class="line">&#x2F;&#x2F; 此文件创建表</span><br><span class="line">mysql&gt; source populate.sql; </span><br><span class="line">&#x2F;&#x2F; 创建完成了</span><br></pre></td></tr></table></figure>
-<p>如下方法可以显示表中所有可用的列，以及相关参数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show columns from customers;</span><br><span class="line">+--------------+-----------+------+-----+---------+----------------+</span><br><span class="line">| Field        | Type      | Null | Key | Default | Extra          |</span><br><span class="line">+--------------+-----------+------+-----+---------+----------------+</span><br><span class="line">| cust_id      | int(11)   | NO   | PRI | NULL    | auto_increment |</span><br><span class="line">| cust_name    | char(50)  | NO   |     | NULL    |                |</span><br><span class="line">| cust_address | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_city    | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_state   | char(5)   | YES  |     | NULL    |                |</span><br><span class="line">| cust_zip     | char(10)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_country | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_contact | char(50)  | YES  |     | NULL    |                |</span><br><span class="line">| cust_email   | char(255) | YES  |     | NULL    |                |</span><br><span class="line">+--------------+-----------+------+-----+---------+----------------+</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/23/Makefile%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/23/Makefile%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Makefile学习</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-23 20:27:27" itemprop="dateCreated datePublished" datetime="2021-01-23T20:27:27+08:00">2021-01-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Linux编译过程"><a href="#Linux编译过程" class="headerlink" title="Linux编译过程"></a>Linux编译过程</h1><ol>
-<li>-E 预处理：把 .h、.c文件展开形成一个个文件。宏定义直接替换头文件、库文件。最后生成.i文件。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -E hello.c -o hello.i</span></span><br></pre></td></tr></table></figure></li>
-<li>-S 汇编： .i文件生成一个汇编代码文件 .s<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -S hello.i -o hello.s</span></span><br></pre></td></tr></table></figure></li>
-<li>-c 编译： .s文件生成一个.o文件<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc -C hello.s -o hello.o</span></span><br></pre></td></tr></table></figure></li>
-<li>-o 链接：生成可运行文件 hello<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc hello.o hello</span></span><br></pre></td></tr></table></figure></li>
-<li>也可以直接来<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash"> gcc hello.c -o hello</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<h1 id="脚本语言：Makefile"><a href="#脚本语言：Makefile" class="headerlink" title="脚本语言：Makefile"></a>脚本语言：Makefile</h1><p>Linux C/C++ 必须要使用的一个编译脚本。<br>Makefile 大型项目开发。</p>
-<ol>
-<li>第一层：显示规则<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#是注释</span></span><br><span class="line"><span class="comment">#第一层：显示规则</span></span><br><span class="line"><span class="comment">#目标文件：依赖文件</span></span><br><span class="line"><span class="comment">#[TAB]指令</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#第一个目标文件应该是我的最终文件！！！（递归思维）</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#rm -rf hello.o hello.S hello.i hello</span></span><br><span class="line"><span class="comment">#伪目标：.PHONY</span></span><br><span class="line"><span class="section">hello:hello.o</span></span><br><span class="line">	gcc hello.o -o hello</span><br><span class="line"><span class="section">hello.o:hello.S</span></span><br><span class="line">	gcc -c hello.S -o hello.o</span><br><span class="line"><span class="section">hello.S:hello.i</span></span><br><span class="line">	gcc -S hello.i -o hello.S</span><br><span class="line"><span class="section">hello.i:hello.c</span></span><br><span class="line">	gcc -E hello.c -o hello.i</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:</span></span><br><span class="line"><span class="section">clearall:</span></span><br><span class="line">	rm -rf hello.o hello.S hello.i hello</span><br><span class="line"><span class="section">clear:</span></span><br><span class="line">    rm -rf hello.o hello.S hello.i</span><br></pre></td></tr></table></figure></li>
-<li>第二层<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#变量 =(替换)  +=(追加)  :=(常量)</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">    <span class="variable">$(CC)</span> -o <span class="variable">$(TAR)</span></span><br><span class="line"></span><br><span class="line"><span class="section">circle.o:circle.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c circle.c -o circle.o</span><br><span class="line"><span class="section">cube.o:cube.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c cube.c -o cube.o</span><br><span class="line"><span class="section">main.o:main.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c main.c -o main.o</span><br></pre></td></tr></table></figure></li>
-<li>第三层：隐含规则<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># %.c $.o 任意的.c或者.o   *.c *.o所有的.c .o</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(OBJ)</span> -o <span class="variable">$(TAR)</span></span><br><span class="line"></span><br><span class="line"><span class="section">%.o:%.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c %.c -o %.o </span><br></pre></td></tr></table></figure></li>
-<li>第四层：通配符<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># $@所有的目标文件</span></span><br><span class="line"><span class="comment"># $^所有的依赖文件</span></span><br><span class="line"><span class="comment"># $&lt;所有的依赖文件的第一个文件</span></span><br><span class="line">TAR = test</span><br><span class="line">OBJ = circle.o cube.o main.o</span><br><span class="line">CC := gcc</span><br><span class="line">RMRF := rm -rf</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TAR)</span>:<span class="variable">$(OBJ)</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">%.o:%.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> -c <span class="variable">$^</span> -o <span class="variable">$@</span> </span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>:</span></span><br><span class="line"><span class="section">clearall:</span></span><br><span class="line">    <span class="variable">$(RMRF)</span> <span class="variable">$(OBJ)</span> <span class="variable">$(TAR)</span></span><br><span class="line"><span class="section">clear:</span></span><br><span class="line">    <span class="variable">$(RMRF)</span> <span class="variable">$(OBJ)</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/22/MySQL-API/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/22/MySQL-API/" class="post-title-link" itemprop="url">MySQL API</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-22 23:14:00" itemprop="dateCreated datePublished" datetime="2021-01-22T23:14:00+08:00">2021-01-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>常见的MySQL API函数如下所示：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">MYSQL *<span class="title">mysql_real_connect</span> <span class="params">(MYSQL *mysql,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *host,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *user, </span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *passwd, </span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *db, </span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">unsigned</span> <span class="keyword">int</span> port,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *unix_socket,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">unsigned</span> <span class="keyword">long</span> client_flag)</span></span>;</span><br><span class="line"><span class="comment">// 返回一个MYSQL指针，host未null或者localhost时链接本地的计算机</span></span><br><span class="line"><span class="comment">// user和passwd是账号和密码</span></span><br><span class="line"><span class="comment">// db是数据库名称，port是端口，MySQL服务器默认端口号是3306</span></span><br><span class="line"><span class="comment">// unix_socket为null标识不适用socket或管道机制，最后一个参数经常设置为0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mysql_select_db</span><span class="params">(MYSQL *mysql,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">const</span> <span class="keyword">char</span> *db)</span></span>;</span><br><span class="line"><span class="comment">// 选择一个数据库，db是数据库名，类似 USE</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mysql_query</span><span class="params">(MYSQL *mysql, <span class="keyword">const</span> <span class="keyword">char</span> *q)</span></span>;</span><br><span class="line"><span class="comment">// 建立一个查询，q是查询语句，C风格字符串，内容语法和MySQL一致</span></span><br><span class="line"></span><br><span class="line"><span class="function">MYSQL_RES *<span class="title">mysql_store_result</span><span class="params">(MYSQL *mysql)</span></span>;</span><br><span class="line"><span class="comment">// 将全部数据保存在本机</span></span><br><span class="line"><span class="comment">// 返回一个结果指针</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">mysql_num_fields</span><span class="params">(MYSQL_RES *res)</span></span>;</span><br><span class="line"><span class="comment">// 返回结果集的行数</span></span><br><span class="line"></span><br><span class="line"><span class="function">MYSQL_FIELD *<span class="title">mysql_fetch_fields</span><span class="params">(MYSQL_RES *res)</span></span>;</span><br><span class="line"><span class="comment">// 对于结果集，返回所有MYSQL_FIELD结构的数组。每个结构提供了结果集中1列的字段定义。</span></span><br><span class="line"></span><br><span class="line"><span class="function">MYSQL_ROW <span class="title">mysql_fetch_row</span><span class="params">(MYSQL_RES *result)</span></span>;</span><br><span class="line"><span class="comment">// 检索结果集的下一行。在mysql_store_result()之后使用时，如果没有要检索的行，mysql_fetch_row()返回NULL。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mysql_close</span><span class="params">(MYSQL *sock)</span></span>;</span><br><span class="line"><span class="comment">// 关闭一个数据库连接</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/19/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1284,6 +868,612 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH8%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH8%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" class="post-title-link" itemprop="url">CH8异常控制流</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:38:24" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:24+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="异常控制流"><a href="#异常控制流" class="headerlink" title="异常控制流"></a>异常控制流</h1><p>现代系统通过使控制流发生突变来应对这些情况（如程序向磁盘请求数据、子进程终止同制父进程等），一般而言我们把这些突变称为异常控制流（Exceptional Control Folw，ECF）。</p>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p>异常（Exception）就是控制流中的突变。<br>处理器检测到事件发生时，它会通过一张叫做异常表（exception table）<br>的跳转表，进行一个间接过程调用（异常），到一个专门设计用来处理这类事件得操作系统子程序（异常处理程序，exception handler）。当异常处理程序完成处理后，根据引起异常得事件类型，会发生以下3种情况中得一种：  </p>
+<ol>
+<li>处理程序将控制返回给当前指令$I_{curr}$，即当事件发生时正在执行得指令。  </li>
+<li>处理程序将控制返回给$I_{next}$，如果没有发生异常将会执行下一条指令。  </li>
+<li>处理程序终止被终端的程序。  </li>
+</ol>
+<h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p>系统中每种可能得异常都分配了唯一的非负整数的异常号（exception number）。其中一些号码是由处理器（CPU）的设计者分配的，其他号码是由操作系统内核的设计者分配的。前者的示例包括零除、缺页、内存访问为例、断点以及算术运算溢出。后者示例包括系统调用和来自外部I/O设备的信号。<br>异常-&gt;异常表基地址寄存器-&gt;异常表-&gt;相应的处理程序。</p>
+<h3 id="异常的类别"><a href="#异常的类别" class="headerlink" title="异常的类别"></a>异常的类别</h3><p>分为四类：中断（interrupt）、陷阱（trap）、故障（fault）和终止（abort）。</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th align="center">原因</th>
+<th>异步/同步</th>
+<th align="right">返回行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>中断</td>
+<td align="center">来自I/O设备的信号</td>
+<td>异步</td>
+<td align="right">总是返回到下一条指令</td>
+</tr>
+<tr>
+<td>陷阱</td>
+<td align="center">有意的异常</td>
+<td>同步</td>
+<td align="right">总是返回到下一条指令</td>
+</tr>
+<tr>
+<td>故障</td>
+<td align="center">潜在可恢复的错误</td>
+<td>同步</td>
+<td align="right">可能返回到当前指令</td>
+</tr>
+<tr>
+<td>终止</td>
+<td align="center">不可恢复的错误</td>
+<td>同步</td>
+<td align="right">不会返回</td>
+</tr>
+</tbody></table>
+<ol>
+<li>中断<br>中断是异步发生的，来自处理器外部的I/O设备信号的结果。硬件中断不是由任何一条专门的指令造成的，从这个意义上说它是异步的。  </li>
+<li>陷阱和系统调用<br>陷阱是有意的异常，陷阱最重要的用途是在用户程序和内核之间提供一个像过程一样的接口，叫做系统调用。为了允许用户程序对内核服务受控的访问，处理器提供了一条特殊的“syscall n”指令，当用户程序想要请求服务n时，可以执行这条指令，执行syscall指令会导致一个到异常处理程序的陷阱，这个处理程序解析参数，并调用适当的内核程序。  </li>
+<li>故障<br>故障时由错误情况引起的，它可能够被故障处理程序修正。当故障发生时，处理器将控制转移给故障处理程序。如果处理程序能够修正这个错误情况，它就将控制返回到引起故障的指令，从而重新执行它。<br>一个经典故障时缺页异常，当指令引用一个虚拟地址，而与地址相对应的物理页面不在内存中，因此必须从磁盘中取出来。  </li>
+<li>终止<br>终止是不可恢复的致命错误造成的结果，通常是一些硬件错误，比如DRAM或者SRAM位被损坏时发生了奇偶错误。终止处理程序从不将控制返回给应用程序。</li>
+</ol>
+<h3 id="Linux-x86-64系统中的异常"><a href="#Linux-x86-64系统中的异常" class="headerlink" title="Linux/x86-64系统中的异常"></a>Linux/x86-64系统中的异常</h3><p>在X86-64系统中，系统调用是通过一条称为syscall的陷阱指令来提供的。C程序用syscall函数可以直接调用任何系统调用，标准C库提供了一组方便的包装函数。这些包装函数将参数打包到一起，以适当的系统调用指令陷入内核，然后将系统调用的返回状态传递回调用程序。系统调用和它们相关的包装函数都成为系统级函数。</p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>经典定义：一个执行中程序的实例。系统中每个进程都运行在某个进程的上下文（context）中。上下文是由程序正确运行所需的状态组成的。这个状态包括存放在内存中的程序的代码和数据，它的栈、通用目的寄存器的内容、程序计数器、环境变量以及打开文件描述符的集合。</p>
+<h3 id="逻辑控制流"><a href="#逻辑控制流" class="headerlink" title="逻辑控制流"></a>逻辑控制流</h3><p>程序在执行过程中的一系列的程序计数器（PC）的值。</p>
+<h3 id="并发流"><a href="#并发流" class="headerlink" title="并发流"></a>并发流</h3><p>一个逻辑流在执行的时间上和另一个流重叠，称为并发流，这两个流称为并发地运行。<br>多任务：一个进程和其他进程轮流运行的概念称为多任务。<br>两个流并发地运行在不同处理器核或者计算机上，那么我们称它们为并行流，它们并行地运行并且并行地执行。</p>
+<h3 id="私有地址空间"><a href="#私有地址空间" class="headerlink" title="私有地址空间"></a>私有地址空间</h3><p>进程为每个程序提供它自己的私有地址空间，一般来说是不能被其他进程读或写的。</p>
+<h3 id="用户模式核内核模式"><a href="#用户模式核内核模式" class="headerlink" title="用户模式核内核模式"></a>用户模式核内核模式</h3><p>处理器通常是用某个控制寄存器中的一个模式位（mode bit）来限制应用可以执行的指令以及它可以访问的地址空间范围。<br>没有设置模式位时，进程就允许用户模式。<br>进程进入内核模式的唯一方法就算通过中断、故障或者陷入系统调用这样的异常。</p>
+<h3 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h3><p>内核使用一种称为上下文切换的较高层次的异常控制流来实现多任务。<br>内核为每个进程维持一个上下文，这就是内核重新启动一个被抢占的进程所需的状态。它由一些对象的值组成，这些对象包括通用目的寄存器、浮点寄存器、程序计数器、用户栈、状态寄存器、内核栈核各种内核数据结构。</p>
+<h2 id="系统调用错误处理"><a href="#系统调用错误处理" class="headerlink" title="系统调用错误处理"></a>系统调用错误处理</h2><p>当Unix系统级函数遇到错误时，它们通常回返回-1，并设置全局整数变量errno来表示什么出错了。程序员应该总是检查错误，但不信的时，许多人都忽略了错误检查，因为它时代码变得臃肿，而且难以读懂。</p>
+<h2 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h2><p>Unix提供了大量从C程序中操作进程的系统调用。</p>
+<h3 id="获取进程ID"><a href="#获取进程ID" class="headerlink" title="获取进程ID"></a>获取进程ID</h3><p>每个进程都有一个唯一正数进程ID（PID）。<code>getpid</code>函数返回调用进程的PID。<code>getppid</code>返回它的父进程的PID（创建调用进程的进程）。<br>返回类型为pid_t，在Linux系统上它在type.h里被定义为int。</p>
+<h3 id="创建和终止进程"><a href="#创建和终止进程" class="headerlink" title="创建和终止进程"></a>创建和终止进程</h3><p>进程总是处于下面三种状态之一：</p>
+<ul>
+<li>运行：进程要么在CPU上执行，要么在等待被执行且最终会被内核调度。</li>
+<li>停止：进程的执行被挂起（suspended），且不会被调度。</li>
+<li>终止：进程永远的停止了。三个原因：收到一个信号，该信号的默认行为是终止进程；从主程序返回，调用exit函数。<br>父进程通过<code>fork</code>函数创建新的子进程。<br>父进程和子进程有相同但是独立的地址空间，它们共享文件。</li>
+</ul>
+<h3 id="回收子进程"><a href="#回收子进程" class="headerlink" title="回收子进程"></a>回收子进程</h3><p>当一个子进程由于某种原因终止时，内核不是立即把它从系统中清除。相反，进程被保持在一种已终止的状态中，直到被它的父进程回收。当父进程回收已终止的子进程时，内核将子进程的退出状态传递给父进程，然后抛弃已终止的进程，从此时开始，该进程就不存在了。一个终止了但还未被回收的进程称为僵尸进程。如固父进程终止了，内核会安排init进程成为它的孤儿进程的养父。</p>
+<h3 id="让进程休眠"><a href="#让进程休眠" class="headerlink" title="让进程休眠"></a>让进程休眠</h3><p>sleep函数将一个进程挂起一段指定的时间。如固请求的时间量已经达到了，sleep返回0，否则返回还剩下的要休眠的秒数。</p>
+<h3 id="加载并运行程序"><a href="#加载并运行程序" class="headerlink" title="加载并运行程序"></a>加载并运行程序</h3><p>execve函数加载并运行可执行目标文件filename，只要但出现错误，如找不到filename，execve才会返回到调用程序。execve调用一次并从不返回。<br>在execve加载了filename之后，它调用启动代码，启动代码设置栈，并将控制传递给新程序的主函数，该主函数有如下形式的原型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv,<span class="keyword">char</span> **envp)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>或等价的</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[],<span class="keyword">char</span> *envp[])</span></span>;</span><br></pre></td></tr></table></figure>
+<p>argc是命令参数的个数，argv是命令参数数组，<code>argv[0]-&gt;argv[argc-1]</code>，<code>argv[argc]=NULL</code>，envp变量指向一个以null结尾的指针数组，其中每个指针指向一个环境变量字符串，每个串都是形如<code>name=value</code>的名字-值对。<br>Linux提供了几个函数来操作环境数组：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>getenv函数在环境数组中搜索字符串<code>&quot;name=value&quot;</code>。如果找到了就返回一个指向value的指针，否则就返回<code>NULL</code>。<br>还有：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">setenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name,<span class="keyword">const</span> <span class="keyword">char</span> *newvalue,<span class="keyword">int</span> overwrite)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unsetenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果环境数组中包含一个形如<code>&quot;name=oldvalue&quot;</code>的字符串，那么unsetenv就会删除它，而setenv就会用newvalue代替oldvalue，但是只有在overwrite非零时才会这样。如果name不存在，那么setenv就把<code>&quot;name=newvalue&quot;</code>添加到数组中。</p>
+<ul>
+<li>程序和进程<br>fork函数在新的子进程中运行相同的程序，而execve函数在当前进程的上下文加载并运行一个新的程序。它会覆盖当前进程的地址空间，但并没有创建一个新进程，新的程序仍然具有相同的PID，并且继承了execve函数时已打开的所有文件描述符。</li>
+</ul>
+<h3 id="利用fork和execve运行程序"><a href="#利用fork和execve运行程序" class="headerlink" title="利用fork和execve运行程序"></a>利用fork和execve运行程序</h3><p>跳过</p>
+<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><p>Linux信号：一种更高层的软件形式的异常，它允许进程和内核中断其他进程。<br>低层的硬件异常是由内核处理程序处理的，正常情况这些对用户程序来说都是不可见的。信号提供了一种机制，通知用户进程发生了这些异常。</p>
+<h2 id="信号术语"><a href="#信号术语" class="headerlink" title="信号术语"></a>信号术语</h2><p>传送一个目的信号到进程由两个不同步骤组成：  </p>
+<ul>
+<li>发送信号：内核通过更新目的进程的上下文中的某个状态，发送（递送）一个信号给目的进程。发生信号可能有两个原因：内核检测到一个系统事件；一个进程调用了kill函数，显示地要求内核发送信号给目的进程。  </li>
+<li>接收信号：目的进程被内核强迫以某种方式对信号的发送做出反应时，它就接收到了信号。进程可以忽略这个信号，终止或通过执行一个称为信号处理程序的应用层函数来捕获这个信号。<br>一个发错而没有被接收的信号叫做待处理信号，在任何时刻，一种类型至多只有一个待处理信号（如果有一个该类信号，其他会被丢弃）。</li>
+</ul>
+<h3 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h3><ol>
+<li>进程组<br>每个进程都只属于一个进程组，由正整数进程组ID来唯一标识。<code>pid_t getpgrp(void)</code>返回当前进程的进程组ID。<br>子进程和父进程默认情况下属于同一个进程组，一个进程可以通过使用<code>setpgid</code>函数来改变自己或者其他进程的进程组：  </li>
+<li>用/bin/kill程序发送信号    </li>
+<li>从键盘发送信号<br>Unix shell使用作业（job）这个抽象概念来表示对一条命令行求值而创建的进程。在任何时刻至多只有一个前台作业和0个或多个后台作业。在键盘上输入Ctrl+C会导致内核发送一个SIGINT信号到前台进程组中的每一个进程。<br>默认情况下是终止前台作业；Ctrl+Z默认情况下挂起前台作业。  </li>
+<li>用kill函数发送信号<br>进程调用kill函数发送信号给其他进程（包括它们自己）。  </li>
+<li>用alarm函数发送信号<br>进程调用alarm函数发送SIGALRM信号给它自己。  </li>
+</ol>
+<h3 id="接收信号"><a href="#接收信号" class="headerlink" title="接收信号"></a>接收信号</h3><h3 id="阻塞和解除阻塞信号"><a href="#阻塞和解除阻塞信号" class="headerlink" title="阻塞和解除阻塞信号"></a>阻塞和解除阻塞信号</h3><p>隐式阻塞机制（内核默认阻塞任何当前处理程序正在处理信号类型的待处理的信号）、显式阻塞机制</p>
+<h3 id="编写信号处理程序"><a href="#编写信号处理程序" class="headerlink" title="编写信号处理程序"></a>编写信号处理程序</h3><p>跳过</p>
+<h3 id="同步流以避免讨厌的并发错误"><a href="#同步流以避免讨厌的并发错误" class="headerlink" title="同步流以避免讨厌的并发错误"></a>同步流以避免讨厌的并发错误</h3><h3 id="显式等待信号"><a href="#显式等待信号" class="headerlink" title="显式等待信号"></a>显式等待信号</h3><p>有时候主程序必须要显示地等待某个信号处理程序运行。</p>
+<h2 id="非本地跳转"><a href="#非本地跳转" class="headerlink" title="非本地跳转"></a>非本地跳转</h2><p>非本地跳转（nonlocal jump），一种C语言提供的用户及异常控制流形式。它将控制直接由一个函数转移到另一个当前正在执行的函数，而不需要经过正常的调用-返回序列。nonlocal jump通过<code>setjump</code>和<code>longjump</code>来提供。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH7%E9%93%BE%E6%8E%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH7%E9%93%BE%E6%8E%A5/" class="post-title-link" itemprop="url">CH7链接</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:38:00" itemprop="dateCreated datePublished" datetime="2021-01-14T15:38:00+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a><strong>链接</strong></h1><p>链接（linking）是将各种代码和数据片段收集并组合成一个单一文件的过程，这个文件可被加载（复制）到内存并执行。链接可以执行于编译时（compile time），也就是在源代码被翻译成机器代码时；也可以执行于加载时（load time），也就是在程序被加载器（loader）加载到内存系统执行时；甚至执行于运行时（run time），也就是在程序被加载器（loader）加载到内存并执行时；甚至于运行时，也就是由应用程序来执行。在早期的计算机系统中，链接是手动执行的。在现代系统中，链接时由叫做连接器（linker）程序自动执行的。  </p>
+<h2 id="编译器驱动程序"><a href="#编译器驱动程序" class="headerlink" title="编译器驱动程序"></a><strong>编译器驱动程序</strong></h2><p>sum.c、main.c<br>预处理器将main.c翻译成一个ASCII码的中间文件main.i，然后编译器将main.i翻译成ASCII汇编语言文件main.s，然后驱动程序运行汇编器，将main.s翻译成一个可重定位目标文件main.o。<br>sum.c-&gt;sum.i-&gt;sum.s-&gt;sum.o<br>运行链接器程序ld将main.o、sum.o以及一些必要的系统目标文件组合起来，创建一个可执行目标文件prog。</p>
+<h2 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a><strong>静态链接</strong></h2><p>为了构造可执行文件，链接器必须完成两个主要任务：符号解析、重定位。  </p>
+<h2 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a><strong>目标文件</strong></h2><p>三种形式：可重定位目标文件（包含二进制代码和数据，其形式可以在编译时与其他可重定位目标文件合并起来，生成一个可执行目标文件）、可执行目标文件（包含二进制代码和数据，可以直接被复制到内存并执行）、共享目标文件（一种特殊类型的可重定位目标文件，可以在加载或者运行时加载进内存并链接）。</p>
+<h2 id="可重定位目标文件"><a href="#可重定位目标文件" class="headerlink" title="可重定位目标文件"></a><strong>可重定位目标文件</strong></h2><h2 id="符号和符号表"><a href="#符号和符号表" class="headerlink" title="符号和符号表"></a><strong>符号和符号表</strong></h2><p>每个可重定位目标模块m有一个符号表，包含：  </p>
+<ul>
+<li>由m模块定义并能被其他模块引用的全局符号。  </li>
+<li>由其他模块定义并能被模块m引用的全局符号。  </li>
+<li>只被模块m定义和引用的局部符号。  </li>
+</ul>
+<h2 id="符号解析"><a href="#符号解析" class="headerlink" title="符号解析"></a><strong>符号解析</strong></h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/14/CH6%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" class="post-title-link" itemprop="url">CH6存储器层次结构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-14 15:37:00" itemprop="dateCreated datePublished" datetime="2021-01-14T15:37:00+08:00">2021-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">深入理解计算机系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="存储器层次结构"><a href="#存储器层次结构" class="headerlink" title="存储器层次结构"></a><strong>存储器层次结构</strong></h1><h2 id="存储技术"><a href="#存储技术" class="headerlink" title="存储技术"></a><strong>存储技术</strong></h2><h3 id="随机访问存储器（Random-Access-Memory-RAM）"><a href="#随机访问存储器（Random-Access-Memory-RAM）" class="headerlink" title="随机访问存储器（Random-Access Memory,RAM）"></a><strong>随机访问存储器（Random-Access Memory,RAM）</strong></h3><p>分为静态和动态两类（SRAM、DRAM）。SRAM比DRAM更快但更贵。  </p>
+<ol>
+<li>SRAM：用作高速缓存存储器  </li>
+<li>DRAM：用于主存及图形系统的帧缓存区<br>内存系统必须周期性地通过读出，然后重写来刷新内存的每一位。有些系统会使用纠错码。  </li>
+<li>传统的DRAM<br>每个DRAM芯片被连接到某个称为内存控制器的电路，这个电路用来传送$\omega$位到每个DRAM芯片或者一次从每个DRAM芯片传出$\omega$位。  </li>
+<li>内存模块<br>DRAM芯片封装在内存模块中，可以多个DRAM芯片同时读取和写入一个字节（举例8个DRAM芯片），合并后即为一个64位字，然后返回给内存控制器。  </li>
+<li>增强的DRAM  </li>
+</ol>
+<ul>
+<li>快页模式DRAM（Fast Page Model DRAM,FPM DRAM）</li>
+<li>扩展数据输出DRAM（Extended Data Out DRAM，EDO DRAM）</li>
+<li>同步DRAM（Synchronous DRAM，SDRAM）</li>
+<li>双倍数据速率同步DRAM（Double Data-Rate Synchronous）</li>
+<li>视频RAM（Video RAM，VRAM）</li>
+</ul>
+<ol>
+<li>非易失性存储器（nonvolatile memory）<br>DRAM和SRAM在断电的情况都会丧失它们的信息。只读存储器（read-only Memory）中有的类型可以读也可以写，但整齐称为ROM。<br>PROM(Programmable ROM，可编程ROM)只能被编程一次，还有很多。。。<br>还有可擦写可编程ROM(Erasable Programmable ROM，EPROM)、闪存(flash memory)。存储在ROM设备中的程序通常被称为固件（firmware）。</li>
+<li>访问主存<br>总线(bus)，数据流通过总线在处理器和DRAM主存之间来来回回。</li>
+</ol>
+<h3 id="磁盘存储"><a href="#磁盘存储" class="headerlink" title="磁盘存储"></a><strong>磁盘存储</strong></h3><ol>
+<li>磁盘构造<br>主轴、盘片、磁道、扇区、柱面等概念。</li>
+<li>磁盘容量</li>
+<li>磁盘操作  </li>
+</ol>
+<ul>
+<li>寻道时间</li>
+<li>旋转时间</li>
+<li>传送时间</li>
+</ul>
+<ol>
+<li>逻辑磁盘块<br>为了对操作系统隐藏磁盘的复杂性，现代磁盘将为它们的构造呈现一个简单的视图，一个B个扇区大小的逻辑块的序列。磁盘块封装中有一个效得硬件/固件设备，称为磁盘控制器，维护着逻辑块号和实际（物理）磁盘山去之间的映射关系。</li>
+<li>连接I/O设备<br>慢于系统总线和内存总线。</li>
+<li>访问磁盘<br>I/O端口、直接内存访问（Direct Memory Access，DMA）、DMA传送（DMA transfer）</li>
+</ol>
+<h3 id="固态硬盘（Solid-State-Disk，SSD）"><a href="#固态硬盘（Solid-State-Disk，SSD）" class="headerlink" title="固态硬盘（Solid State Disk，SSD）"></a><strong>固态硬盘（Solid State Disk，SSD）</strong></h3><p>这是一种基于闪存的存储技术。</p>
+<h2 id="局部性"><a href="#局部性" class="headerlink" title="局部性"></a><strong>局部性</strong></h2><p>通常表现为时间局部性（在一个具有良好的时间局部性程序中，被引用过一次的内存位置很可能在不远的将来再被多次引用）和空间局部性（在一个具有良好空间局部性的程序中，如果一个内存位置被引用了一次，那么程序很可能在不远的将来引用附件的一个内存位置）。</p>
+<h2 id="存储器层次结构（memery-hierarchy）"><a href="#存储器层次结构（memery-hierarchy）" class="headerlink" title="存储器层次结构（memery hierarchy）"></a><strong>存储器层次结构（memery hierarchy）</strong></h2><ol>
+<li>寄存器（CPU寄存器保存着从高速缓存存储器去除的字）  </li>
+<li>L1高速缓存（SRAM）（L1&lt;-L2，保存取出的缓存行）  </li>
+<li>L2高速缓存（SRAM）（L2&lt;-L3，保存取出的缓存行）  </li>
+<li>L3高速缓存（SRAM）（L3&lt;-主存，保存取出的缓存行）  </li>
+<li>主存（DRAM）（主存&lt;-本地磁盘，保存着取出的磁盘块）  </li>
+<li>本地二级存储（本地磁盘）（保存从远程网络服务器取出的文件）  </li>
+<li>远程二级存储（分布式文件系统、Web服务器）  </li>
+</ol>
+<h3 id="存储器层次结构中的缓存"><a href="#存储器层次结构中的缓存" class="headerlink" title="存储器层次结构中的缓存"></a><strong>存储器层次结构中的缓存</strong></h3><p>高速缓存（cache）是一个小而快的存储设备，它作为存储在更大、也更慢的设备中的数据对象的缓冲区域。使用高速缓存的过程称为<strong>缓存（caching）</strong>。  </p>
+<ol>
+<li>缓存命中：当程序需要第$k+1$层的一个数据对象d时，优先在第$k$层查找d，如果d刚好存储在第$k$层，那么直接读取，这就是我们说的缓存命中。  </li>
+<li>缓存不命中：如果第$k$层没有缓存数据对象d，那么就是我们说的缓存不命中。当发生缓存不命中时，第$k$层的缓存从第k+1层缓存取出包含d的那个块，如果第k层缓存已经满了，可能就会覆盖现存的一个块（牺牲块）。  </li>
+<li>缓存不命中的种类：强制性不命中、冲突不命中、容量不命中。  </li>
+<li>缓存管理：编译器管理寄存器文件；L1、L2和L3层的缓存完全有内置在缓存中的硬件逻辑来管理；在一个有虚拟内存的系统中，DRAM主存作为存储在磁盘上的数据块的缓存，是由操作系统软件和CPU上的地址翻译硬件共同管理的。  </li>
+</ol>
+<h3 id="存储器层次结构概念小结"><a href="#存储器层次结构概念小结" class="headerlink" title="存储器层次结构概念小结"></a><strong>存储器层次结构概念小结</strong></h3><p>概括来说，基于缓存的存储器层次结构行之有效，是因为较慢的存储设备比较快的存储设备更便宜，还因为程序倾向于展示局部性（可以补偿不命中的代价）</p>
+<h2 id="高速缓存存储器"><a href="#高速缓存存储器" class="headerlink" title="高速缓存存储器"></a><strong>高速缓存存储器</strong></h2><p>原来存储器层次结构只有三层：寄存器、主存、磁盘；随着CPU和主存之间逐渐增大的差距，系统设<br>计者被迫在CPU寄存器文件和主存之间插入了一个小的SRAM高速缓存存储器，称为L1高速缓存，后来又插入了L2、L3。</p>
+<h3 id="通用的高速缓存存储器组织结构"><a href="#通用的高速缓存存储器组织结构" class="headerlink" title="通用的高速缓存存储器组织结构"></a><strong>通用的高速缓存存储器组织结构</strong></h3><p>高速缓存的结构可以用元组（S，E，B，m）来描述。S：$S=2^s$个高速缓存组；E：每个组包含E个高速缓存行；B：每个行由$B=2^b$字节的数据块组成的，一个有效位指明这个行是否包含有意义的信息，还有t个标记位来唯一的标识这个块。$t+s+b=m$，t位标记块，s位组索引，b位时块偏移。容量$C=S\times E\times B$。</p>
+<h3 id="直接映射高速缓存"><a href="#直接映射高速缓存" class="headerlink" title="直接映射高速缓存"></a><strong>直接映射高速缓存</strong></h3><p>每个组只有一行  </p>
+<ol>
+<li>直接映射高速缓存中的组选择  </li>
+<li>直接映射高速缓存中的行匹配  </li>
+<li>直接映射高速缓存中的字选择  </li>
+<li>直接映射高速缓存不命中时的行替换  </li>
+<li>综合：运行中的直接映射高速缓存  </li>
+</ol>
+<h3 id="组相联高速缓存"><a href="#组相联高速缓存" class="headerlink" title="组相联高速缓存"></a><strong>组相联高速缓存</strong></h3><ol>
+<li>组相联高速缓存中的组选择  </li>
+<li>组相联高速缓存中的行匹配和字选择：搜索组中的每一行来匹配标记，命中后块偏移从这个块中选择字  </li>
+<li>组相联高速缓存中的不命中的行替换：若无空行，则采用替换策略，有LFU（Least-Frequently-Used，最不常使用）、LRU（Least-Recently-USed，最近最少使用）等。  </li>
+</ol>
+<h3 id="全相联高速缓存"><a href="#全相联高速缓存" class="headerlink" title="全相联高速缓存"></a><strong>全相联高速缓存</strong></h3><p>$E=C/B$，S=1，仅有一个组。</p>
+<ol>
+<li>组选择  </li>
+<li>行匹配和字选择<br>因为高速缓存电路必须并行地搜索许多相匹配的标记，构造一个又大又快的相联高速缓存很困难，而且昂贵。因此全相联高速缓存只适合做小的高速缓存，例如虚拟内存系统中翻译备用缓冲器（TLB），它缓存页表项。</li>
+</ol>
+<h3 id="有关写的问题"><a href="#有关写的问题" class="headerlink" title="有关写的问题"></a><strong>有关写的问题</strong></h3><p>如果命中，更新了副本之后，如何更新在低一层中的副本。  </p>
+<ul>
+<li>直写：最简单的方法，立即写回到下一级。  </li>
+<li>写回：等待替换算法要驱逐这个更新过的块的时候，才把它紧接着写到低一层（需要在每个高速缓存行中额外保留一个修改位来标识该行是否被修改过）。<br>如果不命中：  </li>
+<li>写分配：加载相应的低一层中的块到高速缓存行中，然后更新这个高速缓存块  </li>
+<li>非写分配：避开高速缓存，直接写到低一层</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">网络编程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 22:29:00" itemprop="dateCreated datePublished" datetime="2021-01-13T22:29:00+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-C-C/" itemprop="url" rel="index"><span itemprop="name">Linux C/C++</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文主要总结C++网络编程中关于套接字编程的相关函数。  </p>
+<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="创建一个套接字：socket"><a href="#创建一个套接字：socket" class="headerlink" title="创建一个套接字：socket()"></a>创建一个套接字：<code>socket()</code></h2><p><code>int socket(int family, int type, int protocol);</code><br>其中family指明协议族，IPV4是<code>AF_INET</code>，IPv6<code>AF_INET6</code>；type指明套接字类型，TCP为<code>SOCK_STREAM</code>，UDP是<code>SOCK_DGRAM</code>。protocol参数设为某个协议的类型常值，或者设为0。</p>
+<h2 id="建立连接：connect"><a href="#建立连接：connect" class="headerlink" title="建立连接：connect()"></a>建立连接：<code>connect()</code></h2><p><code>int connect(int sockfd, const struct sockaddr *serveraddr, socklen_t addrlen);</code><br>sockfd是socket函数返回的套接字描述符，第二个参数是指向一个套接字地址的指针和该结构大小。连接成功返回0，否则-1。</p>
+<p>实际使用中，我们一般传入sockaddr_in指针，进行类型转换为sockaddr，sockaddr_in结构如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span>&#123;</span></span><br><span class="line">	<span class="keyword">short</span> <span class="keyword">int</span> sin_family;	<span class="comment">//协议族</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> <span class="keyword">int</span> sin_port;	<span class="comment">//存储端口号，只能用网络字顺序</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span> <span class="title">sin_addr</span>;</span>	<span class="comment">//存储IP地址</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="绑定端口：bind"><a href="#绑定端口：bind" class="headerlink" title="绑定端口：bind()"></a>绑定端口：<code>bind()</code></h2><p><code>int bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen);</code><br>将一个本地协议地址和套接字描述符绑定起来。  </p>
+<p>一般来说，端口我们可以自己指定或者使用0让内核自己选择一个临时端口；IP地址可以选择统配地址让内核等套接字已连接再选择一个本地地址。  </p>
+<h2 id="监听：listen"><a href="#监听：listen" class="headerlink" title="监听：listen()"></a>监听：<code>listen()</code></h2><p>一般来说，服务器会打开一个监听套接字，用来等待来自client的连接请求：<br><code>int listen(int sockfd,int backlog);</code><br>sockfd是socket函数创建的套接字，然后backlog是为这个监听套接字维护的队列长度，队列包括已连接队列（established状态）和未连接队列（syn_recv状态）。  </p>
+<h2 id="生成已连接套接字：accept"><a href="#生成已连接套接字：accept" class="headerlink" title="生成已连接套接字：accept()"></a>生成已连接套接字：<code>accept()</code></h2><p><code>int accept(int sockfd, struct sockaddr *cliaddr, socklen_t * addrlen);</code><br>该函数会从监听套接字sockfd的已连接队列中取出一个连接，返回一个已连接套接字描述符，并且返回另一方套接字地址和地址结字节数。  </p>
+<h2 id="关闭套接字：close"><a href="#关闭套接字：close" class="headerlink" title="关闭套接字：close()"></a>关闭套接字：<code>close()</code></h2><p><code>int close(int sockfd);</code><br>该函数可以关闭一个套接字描述符，不过如果该套接字使用引用计数，如果被多个进程拥有，则只会计数-1，当计数为0时候才会真正的关闭。  </p>
+<h2 id="设置套接字参数：getsockopt-和setsockopt"><a href="#设置套接字参数：getsockopt-和setsockopt" class="headerlink" title="设置套接字参数：getsockopt()和setsockopt()"></a>设置套接字参数：<code>getsockopt()</code>和<code>setsockopt()</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen);</span><br><span class="line">int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);</span><br></pre></td></tr></table></figure>
+<p>上述两个函数分别用来获得套接字的参数和设置参数，一般情况下先获得已有参数，然后将想要加入的参数和以后参数做或运算，然后再设置参数即可。函数的各个参数具体使用建议参考《UNIX网络编程 卷1：套接字联网API》。  </p>
+<h1 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h1><h2 id="创建套接字：socket"><a href="#创建套接字：socket" class="headerlink" title="创建套接字：socket()"></a>创建套接字：<code>socket()</code></h2><p>创建套接字的方法上一章已经说过了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> family, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>不加赘述了。  </p>
+<h2 id="接收数据：recvfrom"><a href="#接收数据：recvfrom" class="headerlink" title="接收数据：recvfrom()"></a>接收数据：<code>recvfrom()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recvfrom</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *from, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
+<p>参数sockfd是套接字描述符，buff是指向读缓冲区的指针，btybes是最大读入的字节数（避免缓冲区溢出）。 最后两个参数数数据发送方的套接字地址和结构字节数。  </p>
+<h2 id="发送数据：sendto"><a href="#发送数据：sendto" class="headerlink" title="发送数据：sendto()"></a>发送数据：<code>sendto()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">sendto</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags, struct sockaddr *to, <span class="keyword">socklen_t</span> *addrlen)</span></span>;</span><br><span class="line"><span class="comment">// 成功返回0，否则-1</span></span><br></pre></td></tr></table></figure>
+<p>发送数据，buff为写缓冲区，btybe是待写入的字节数，后面是发送的目的地套接字地址和地址结构的字节数。</p>
+<h1 id="读写函数"><a href="#读写函数" class="headerlink" title="读写函数"></a>读写函数</h1><h2 id="recv-和send"><a href="#recv-和send" class="headerlink" title="recv()和send()"></a><code>recv()</code>和<code>send()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">recv</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">send</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buff, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>前面3参数很好理解，flags是一个额外的参数，具体可看《UNIX网络编程 卷一：套接字联网API》。  </p>
+<h2 id="readv-和writev"><a href="#readv-和writev" class="headerlink" title="readv()和writev()"></a><code>readv()</code>和<code>writev()</code></h2><p>readv和writev允许单个系统调用读入到或写出自一个或多个缓冲区。这些操作被称为分散度和集中写。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readv</span><span class="params">(<span class="keyword">int</span> sockfd, cosnt struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">writev</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct iovec *iov, <span class="keyword">int</span> iovcnt)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这两个函数的第2个参数都是指向某个iovec结构数组的一个指针，其中iovec结构再头文件&lt;sys/uio.h&gt;中定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">iovec</span>&#123;</span></span><br><span class="line">	<span class="keyword">void</span> *iov_base;	<span class="comment">//内存起始地址</span></span><br><span class="line">   <span class="keyword">size_t</span> iov_len;	<span class="comment">//内存大小</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个函数可以用于任何描述符，而不仅仅限于套接字。另外writev是一个原子操作，意味着对于一个基于记录的协议而言，一次writev调用只产生单个UDP数据报。</p>
+<h1 id="获取地址"><a href="#获取地址" class="headerlink" title="获取地址"></a>获取地址</h1><h2 id="gethostbyname"><a href="#gethostbyname" class="headerlink" title="gethostbyname()"></a><code>gethostbyname()</code></h2><p>gethostbyname()函数主要作用：用域名或者主机名获取地址，操作系统提供的库函数。以下的讨论基于linux环境。<br>域名系统（Domain Name System, DNS）主要用于主机名字与IP地址之间的映射。每个组织机构往往运行一个或多个名字服务器（name server），我们编写的客户端和服务器等应用程序通过调用解析器（resolver）的函数库中的函数接触DNS服务器。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyname</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>如果成功则返回一个hostent指针，否则返回NULL。当发生错误时，它不设置errno变量，设置全局整数变量h_errno。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span> &#123;</span></span><br><span class="line">	<span class="keyword">char</span>  *h_name;            <span class="comment">/*主机规范名*/</span></span><br><span class="line">	<span class="keyword">char</span> **h_aliases;         <span class="comment">/*主机别名列表*/</span></span><br><span class="line">   <span class="keyword">int</span>	h_addrtype;        <span class="comment">/*地址类型，只能是IPv4，本函数无法解决IPv6*/</span></span><br><span class="line">   <span class="keyword">int</span> 	h_length;          <span class="comment">/*IP地址字节数*/</span></span><br><span class="line">   <span class="keyword">char</span> **h_addr_list;</span><br><span class="line">   <span class="comment">/*主机的IP地址，是网络字节序，需要通过inet_ntop函数转换*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="gethostbyaddr"><a href="#gethostbyaddr" class="headerlink" title="gethostbyaddr()"></a><code>gethostbyaddr()</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">struct hostent *<span class="title">gethostbyaddr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *addr, <span class="keyword">socklen_t</span> len, <span class="keyword">int</span> type)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>根据地址和地址类型来获得主机名。返回类型和gethostbyname一样。注意addr是网络字节序。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/13/%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/13/%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97/" class="post-title-link" itemprop="url">最长上升子序列</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-13 20:26:17" itemprop="dateCreated datePublished" datetime="2021-01-13T20:26:17+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h1><h2 id="题目300"><a href="#题目300" class="headerlink" title="题目300"></a>题目300</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-increasing-subsequence/">链接</a></p>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给定一个无序的整数数组，找到其中最长上升子序列的长度。</p>
+<h3 id="暴力方法"><a href="#暴力方法" class="headerlink" title="暴力方法"></a>暴力方法</h3><p>数组dp记录如下信息：<br>dp[i]：序列nums[0-&gt;i]中以nums[i]为末尾的最长子序列的长度<br>那么递推式如下：<br>$dp[i]=max_{0\leq j&lt;i,nums[j]&lt;nums[i]}dp[j]+1$。<br>code如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.<span class="built_in">size</span>()==<span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(nums.size())</span></span>;<span class="comment">//dp[i]表示前i+1个元素末尾为第i个元素的最长上升子序列长度，一定有性质：if i&lt;j then dp[i]&lt;dp[j]</span></span><br><span class="line">        <span class="comment">// dp[i]=max(dp[j])+1,七张0&lt;=j&lt;i，且num[j]&lt;num[i]</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums.<span class="built_in">size</span>();i++)&#123;</span><br><span class="line">            dp[i]=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;i;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(nums[j]&lt;nums[i])&#123;</span><br><span class="line">                    dp[i]=<span class="built_in">max</span>(dp[i],dp[j+<span class="number">1</span>]+<span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *<span class="built_in">max_element</span>(dp.<span class="built_in">begin</span>(),dp.<span class="built_in">end</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：$O(nlogn)$</p>
+<h3 id="贪心-二分查找"><a href="#贪心-二分查找" class="headerlink" title="贪心+二分查找"></a>贪心+二分查找</h3><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problemslongest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-by-leetcode-soluti/">该算法参考</a><br>考虑一个简单的贪心，如果我们需要让上升子序列近可能的长，则我们需要让序列上升得尽可能得慢，因此我们希望每次在上升子序列最后加上那个的数字尽可能小。<br>基于以上贪心策略，我们维护一个数组$dp[i]$，表示长度为i的最长上升子序列的末尾元素的最小值，用len记录目前最长上升子序列的长度，起始时$len$为1，$d[1]=nums[0]$。<br>同时我们可以很容易发现$dp[i]$是关于$i$单调递增的。<br>我们依次遍历数组$nums$中的每一个元素，并更新数组$dp$和$len$的值。如果$nums[i]&gt;dp[len]$则更新$len=len+1$，否则在$dp[1…len]$中找到满足$dp[i-1]&lt;nums[j]&lt;dp[i]$的下标$i$，并更新$dp[i]=nums[j]$。根据$dp$数组的单调性，我们可以使用二分查找优化时间复杂度。<br>以输入序列$[10,9,2,5,3,7,101,18]$为例:</p>
+<ul>
+<li>第一步插入10，$dp=[10]$；  </li>
+<li>第二步插入9，$dp=[9]$；  </li>
+<li>第三步插入2,$dp=[2]$；  </li>
+<li>第四步插入5，$dp=[2,5]$；  </li>
+<li>第五步插入3，$dp=[2,3]$；  </li>
+<li>第六步插入7，$dp=[2,3,7]$；  </li>
+<li>第七步插入101，$dp=[2,3,7,101]$；  </li>
+<li>第八步插入18，$dp=[2,3,7,18]$。<br>最终得到最大递增子序列长度为3。<br>代码如下：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">upper_bound</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt; &amp;dp,<span class="keyword">int</span> len,<span class="keyword">int</span> num)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l=<span class="number">1</span>,r=len,mid;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;=r)&#123;</span><br><span class="line">            <span class="keyword">if</span>(dp[l]&gt;=num)<span class="keyword">return</span> l<span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(dp[r]&lt;num)<span class="keyword">return</span> r;</span><br><span class="line">            mid=(r-l)/<span class="number">2</span>+l;</span><br><span class="line">            <span class="keyword">if</span>(dp[mid]&gt;=num)r=mid<span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">else</span> l=mid+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> r<span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.<span class="built_in">size</span>()==<span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(nums.size()+<span class="number">1</span>)</span></span>;</span><br><span class="line">        dp[<span class="number">1</span>]=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> len=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;nums.<span class="built_in">size</span>();i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(dp[len]&lt;nums[i])&#123;</span><br><span class="line">                dp[++len]=nums[i];</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">auto</span> index=<span class="built_in">upper_bound</span>(dp,len,nums[i]);</span><br><span class="line">            dp[index+<span class="number">1</span>]=nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> len;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="题目17-08"><a href="#题目17-08" class="headerlink" title="题目17.08"></a>题目17.08</h2><p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/circus-tower-lcci/">链接</a></p>
+<h3 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h3><p>有个马戏团正在设计叠罗汉的表演节目，一个人要站在另一人的肩膀上。出于实际和美观的考虑，在上面的人要比下面的人矮一点且轻一点。已知马戏团每个人的身高和体重，请编写代码计算叠罗汉最多能叠几个人。</p>
+<h3 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h3><p>考虑按照每个人的高度重新升序排列，那么实际上只需要找到排序后数组的满足体重升序的最长子序列即为结果。但是我们要注意到有如下例子（假如我们按照高度升序，高度相同体重升序排列）：<br>height：1 2 3 3 5 6 7<br>weight：1 2 3 4 5 6 7<br>对weight求最长子序列应该是，$[1,2,3,4,5,6,7]$，长度为7，而实际上长度应该是6，因为{3,3}和{3,4}的高度相同。所以我们可以说高度相同的人应该至多只有一人在最长升序子序列中，我们对高度相同的人按照体重做降序排列，即可避免此问题，因为排序后的序列中高度相同的人，按体重降序排列，如果有超过两个人同时在序列中，则于序列按照升序排列不符合。<br>代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(pair&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&amp;a,pair&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&amp;b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a.first==b.first? a.second&gt;b.second:a.first&lt;b.first;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">upper_bound</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt; &amp;dp,<span class="keyword">int</span> len,<span class="keyword">int</span> num)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l=<span class="number">1</span>,r=len,mid;</span><br><span class="line">        <span class="keyword">while</span>(l&lt;=r)&#123;</span><br><span class="line">            <span class="keyword">if</span>(dp[l]&gt;=num)<span class="keyword">return</span> l<span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(dp[r]&lt;num)<span class="keyword">return</span> r;</span><br><span class="line">            mid=(r-l)/<span class="number">2</span>+l;</span><br><span class="line">            <span class="keyword">if</span>(dp[mid]&gt;=num)r=mid<span class="number">-1</span>;</span><br><span class="line">            <span class="keyword">else</span> l=mid+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> r<span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.<span class="built_in">size</span>()==<span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(nums.size()+<span class="number">1</span>)</span></span>;</span><br><span class="line">        dp[<span class="number">1</span>]=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> len=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;nums.<span class="built_in">size</span>();i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(dp[len]&lt;nums[i])&#123;</span><br><span class="line">                dp[++len]=nums[i];</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">auto</span> index=<span class="built_in">upper_bound</span>(dp,len,nums[i]);</span><br><span class="line">            dp[index+<span class="number">1</span>]=nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> len;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">bestSeqAtIndex</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; height, vector&lt;<span class="keyword">int</span>&gt;&amp; weight)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(height.<span class="built_in">size</span>()==<span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        vector&lt;pair&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&gt; <span class="built_in">num</span>(height.<span class="built_in">size</span>());</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;height.<span class="built_in">size</span>();i++)num[i]=&#123;height[i],weight[i]&#125;;</span><br><span class="line">        <span class="built_in">sort</span>(num.<span class="built_in">begin</span>(),num.<span class="built_in">end</span>(),cmp);</span><br><span class="line">        <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">temp</span><span class="params">(num.size())</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;temp.<span class="built_in">size</span>();i++)temp[i]=num[i].second;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">lengthOfLIS</span>(temp);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1355,7 +1545,7 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-count">131</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1368,7 +1558,7 @@ sem_init函数将信号量sem初始化为value。每个信号量在使用前必�
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
