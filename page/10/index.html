@@ -191,516 +191,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E8%A7%A6%E5%8F%91%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/28/%E4%BD%BF%E7%94%A8%E8%A7%A6%E5%8F%91%E5%99%A8/" class="post-title-link" itemprop="url">使用触发器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-28 19:52:41" itemprop="dateCreated datePublished" datetime="2021-01-28T19:52:41+08:00">2021-01-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h1><p><strong>触发器</strong> 是MySQL响应以下任意语句而自动执行的一条MySQL语句。</p>
-<h1 id="创建触发器"><a href="#创建触发器" class="headerlink" title="创建触发器"></a>创建触发器</h1><p>创建触发器需要4条信息：  </p>
-<ol>
-<li>唯一的触发名；  </li>
-<li>触发器关联的表；  </li>
-<li>触发器应该相应的活动；  </li>
-<li>触发器何时执行。  </li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create trigger newproduct after insert on products </span><br><span class="line">    -&gt; for each row select &#39;Product added&#39; into @add;</span><br></pre></td></tr></table></figure>
-
-<p><code>create trigger</code>用来创建名为newproduct的新触发器。触发器可在一个操作发生之前或之后执行，这里给出了<code>AFTER INSERT</code>，所以此触发器将在insert语句成功执行后执行。</p>
-<h1 id="删除触发器"><a href="#删除触发器" class="headerlink" title="删除触发器"></a>删除触发器</h1><p>很简单，删除触发器的语法：<code>drop trigger newproduct;</code></p>
-<h1 id="使用触发器"><a href="#使用触发器" class="headerlink" title="使用触发器"></a>使用触发器</h1><h2 id="insert触发器"><a href="#insert触发器" class="headerlink" title="insert触发器"></a>insert触发器</h2><p>insert触发器在insert语句执行之前或之后执行：  </p>
-<ul>
-<li>在insert触发器代码内可以引用一个名为new的虚拟表，访问被插入的行；  </li>
-<li>在before insert触发器中，new中的值也可以被更新（允许修改被插入的值）；  </li>
-<li>对于AUTO_INCREMENT列，new在insert执行之前包含0，在insert执行之后包含新的自动生成值； </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create trigger neworder after insert on orders</span><br><span class="line">    -&gt; for each row select new.order_num into @new_order_num;</span><br><span class="line">Query OK, 0 rows affected (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into orders(order_date,cust_id)</span><br><span class="line">    -&gt; values(Now(),10001);</span><br><span class="line">Query OK, 1 row affected (0.02 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select @new_order_num;</span><br><span class="line">+----------------+</span><br><span class="line">| @new_order_num |</span><br><span class="line">+----------------+</span><br><span class="line">|          20010 |</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
-
-<h2 id="delete触发器"><a href="#delete触发器" class="headerlink" title="delete触发器"></a>delete触发器</h2><ul>
-<li>在delete触发器代码内，你可以引用一个名为OLD的虚拟表，访问被删除的行；  </li>
-<li>OLD中的值全都是只读，不能更新。  </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delimiter &#x2F;&#x2F;</span><br><span class="line">mysql&gt; create trigger deleteorder before delete on orders</span><br><span class="line">    -&gt; for each row</span><br><span class="line">    -&gt; begin</span><br><span class="line">    -&gt; insert into archive_orders(order_num,order_date,cust_id)</span><br><span class="line">    -&gt; values(OLD.order_num,OLD.order_date,OLD.cust_id);</span><br><span class="line">    -&gt; end &#x2F;&#x2F;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; delimiter ;</span><br></pre></td></tr></table></figure>
-
-<h2 id="update触发器"><a href="#update触发器" class="headerlink" title="update触发器"></a>update触发器</h2><ul>
-<li>在update触发器代码中，你可以引用一个名为OLD的虚拟表访问以前的值，引用一个名为new的虚拟表访问新更新的值；  </li>
-<li>在before update触发器中，new中的值可能也被更新；  </li>
-<li>OLD中的值全都是只读，不能更新。  </li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E6%B8%B8%E6%A0%87/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/28/%E4%BD%BF%E7%94%A8%E6%B8%B8%E6%A0%87/" class="post-title-link" itemprop="url">使用游标</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-28 19:22:10" itemprop="dateCreated datePublished" datetime="2021-01-28T19:22:10+08:00">2021-01-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h1><p>游标只能用于存储过程。</p>
-<h1 id="使用游标"><a href="#使用游标" class="headerlink" title="使用游标"></a>使用游标</h1><h2 id="创建游标"><a href="#创建游标" class="headerlink" title="创建游标"></a>创建游标</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create procedure processorders()</span><br><span class="line">	-&gt; begin declare ordernumbers cursor</span><br><span class="line">   -&gt; for</span><br><span class="line">   -&gt; select order_num from orders;</span><br><span class="line">   -&gt; end;</span><br></pre></td></tr></table></figure>
-
-<h2 id="打开和关闭游标"><a href="#打开和关闭游标" class="headerlink" title="打开和关闭游标"></a>打开和关闭游标</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; open ordernumbers;</span><br><span class="line">mysql&gt; close ordernumbers;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/28/%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">使用存储过程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-28 16:40:45" itemprop="dateCreated datePublished" datetime="2021-01-28T16:40:45+08:00">2021-01-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h1><p>实际使用MySQL经常会有一个完整得操作需要多条语句才能完成。可以创建存储过程来简化这个问题，存储过程可以视为批文件，虽然它们得作用不仅局限于批处理。</p>
-<h1 id="为什么要使用存储过程"><a href="#为什么要使用存储过程" class="headerlink" title="为什么要使用存储过程"></a>为什么要使用存储过程</h1><ol>
-<li>简化复杂操作。  </li>
-<li>保证数据的完整性。  </li>
-<li>简化对变动的管理。  </li>
-</ol>
-<h1 id="使用存储过程"><a href="#使用存储过程" class="headerlink" title="使用存储过程"></a>使用存储过程</h1><p>使用存储过程需要知道如何执行它们。存储过程的执行远比其定义更经常遇到，因此，我们将从执行存储过程开始介绍。然后再介绍创建和使用存储过程。</p>
-<h2 id="执行存储过程"><a href="#执行存储过程" class="headerlink" title="执行存储过程"></a>执行存储过程</h2><p>MySQL称存储过程的执行为调用，因此MySQL执行存储过程的语句为CALL。CALL接受存储过程的名字以及需要传递给它的任意参数。请看例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CALL productpricing(@pricelow,@pricehigh,@priceaverage);</span><br></pre></td></tr></table></figure>
-
-<h2 id="创建存储过程"><a href="#创建存储过程" class="headerlink" title="创建存储过程"></a>创建存储过程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE productpricing()</span><br><span class="line">BEGIN</span><br><span class="line">	SELECT Avg(prod_prices) as priceaverage</span><br><span class="line">   from products;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
-<p>注意：如果使用的是mysql命令行实用程序，应该修改默认的语句分隔符（原来是;）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER &#x2F;&#x2F;</span><br><span class="line">CREATE PROCEDURE productpricing()</span><br><span class="line">BEGIN</span><br><span class="line">	SELECT Avg(prod_prices) as priceaverage</span><br><span class="line">   from products;</span><br><span class="line">END &#x2F;&#x2F;</span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
-
-<h2 id="删除存储过程"><a href="#删除存储过程" class="headerlink" title="删除存储过程"></a>删除存储过程</h2><p>存储过程在创建之后被保存在服务器上以供使用。删除可以使用如下语句：<br><code>DROP PROCEDURE productpricing;</code></p>
-<h2 id="使用参数"><a href="#使用参数" class="headerlink" title="使用参数"></a>使用参数</h2><p>一般存储过程不显示结果，只是把结果返回到指定的变量。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delimiter &#x2F;&#x2F;</span><br><span class="line">mysql&gt; create procedure productpricing(</span><br><span class="line">    -&gt; out pl decimal(8,2),</span><br><span class="line">    -&gt; out ph decimal(8,2),</span><br><span class="line">    -&gt; out pa decimal(8,2))</span><br><span class="line">    -&gt; begin</span><br><span class="line">    -&gt; select min(prod_price)</span><br><span class="line">    -&gt; into pl</span><br><span class="line">    -&gt; from products;</span><br><span class="line">    -&gt; select max(prod_price)</span><br><span class="line">    -&gt; into ph</span><br><span class="line">    -&gt; from products;</span><br><span class="line">    -&gt; select avg(prod_price)</span><br><span class="line">    -&gt; into pa</span><br><span class="line">    -&gt; from products;</span><br><span class="line">    -&gt; end &#x2F;&#x2F;</span><br><span class="line">mysql&gt; delimiter ;</span><br></pre></td></tr></table></figure>
-<p><code>in</code>是输入，<code>out</code>是输出。</p>
-<p>执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; call productpricing(@pricelow,@pricehigh,@priceaverage);</span><br><span class="line">Query OK, 1 row affected, 1 warning (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select @pricehigh;</span><br><span class="line">+------------+</span><br><span class="line">| @pricehigh |</span><br><span class="line">+------------+</span><br><span class="line">|      55.00 |</span><br><span class="line">+------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
-
-<h2 id="建立智能存储过程"><a href="#建立智能存储过程" class="headerlink" title="建立智能存储过程"></a>建立智能存储过程</h2><h2 id="检查存储过程"><a href="#检查存储过程" class="headerlink" title="检查存储过程"></a>检查存储过程</h2><p>为了显示创建一个存储过程的CREATE语句，使用show create procedure语句。例如：<br><code>show create procedure ordertotal;</code></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/28/%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE/" class="post-title-link" itemprop="url">使用视图</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-28 11:51:24" itemprop="dateCreated datePublished" datetime="2021-01-28T11:51:24+08:00">2021-01-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h1><p>视图是虚拟的表，与包含数据的表不一样，视图只包含使用时动态检索数据的查询。  </p>
-<h2 id="为什么使用视图"><a href="#为什么使用视图" class="headerlink" title="为什么使用视图"></a>为什么使用视图</h2><p>在视图创建之后，可以用与相同的方式利用它们。可以对视图进行select操作，过滤和排序数据，将视图联结到其他试图或表，甚至能添加和更新数据。</p>
-<h2 id="视图的规则和限制"><a href="#视图的规则和限制" class="headerlink" title="视图的规则和限制"></a>视图的规则和限制</h2><ul>
-<li>与表一样，视图必须唯一命名。  </li>
-<li>对于可以创建的视图数目没有限制。  </li>
-<li>为了创建视图，必须有足够的访问权限。这些限制通常由数据库管理人员授予。  </li>
-<li>视图可以嵌套。  </li>
-<li>order by可以用在视图中。  </li>
-<li>视图不能索引。  </li>
-<li>视图可以和表一起使用。  </li>
-</ul>
-<h1 id="使用视图"><a href="#使用视图" class="headerlink" title="使用视图"></a>使用视图</h1><ul>
-<li><code>create view</code>：创建视图。  </li>
-<li><code>show create view viewname</code>：查看创建视图的语句。  </li>
-<li><code>drop view viewname</code>：删除视图。  </li>
-<li>更新视图可以先<code>DROP</code>原视图，在创建新的同名视图，或者直接创建新的同名视图。  </li>
-</ul>
-<h2 id="利用视图简化复杂联结"><a href="#利用视图简化复杂联结" class="headerlink" title="利用视图简化复杂联结"></a>利用视图简化复杂联结</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create view productcustomers as</span><br><span class="line">    -&gt; select cust_name, cust_contact, prod_id</span><br><span class="line">    -&gt; from customers, orders, orderitems</span><br><span class="line">    -&gt; where customers.cust_id &#x3D; orders.cust_id</span><br><span class="line">    -&gt; and orderitems.order_num &#x3D; orders.order_num;</span><br></pre></td></tr></table></figure>
-
-<p>然后如果我们要检索，订购了产品TNT2的客户，可以如下进行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_name,cust_contact</span><br><span class="line">    -&gt; from productcustomers</span><br><span class="line">    -&gt; where prod_id &#x3D; &#39;TNT2&#39;;</span><br><span class="line">+----------------+--------------+</span><br><span class="line">| cust_name      | cust_contact |</span><br><span class="line">+----------------+--------------+</span><br><span class="line">| Coyote Inc.    | Y Lee        |</span><br><span class="line">| Yosemite Place | Y Sam        |</span><br><span class="line">+----------------+--------------+</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="用视图重新格式化检索出的数据"><a href="#用视图重新格式化检索出的数据" class="headerlink" title="用视图重新格式化检索出的数据"></a>用视图重新格式化检索出的数据</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create view vendorlocations as</span><br><span class="line">    -&gt; select concat(RTrim(vend_name),&#39; (&#39;,RTrim(vend_country),&#39;)&#39;) as vend_title</span><br><span class="line">    -&gt; from vendors</span><br><span class="line">    -&gt; order by vend_name;</span><br><span class="line">mysql&gt; select * from vendorlocations;</span><br><span class="line">+-------------------------+</span><br><span class="line">| vend_title              |</span><br><span class="line">+-------------------------+</span><br><span class="line">| ACME (USA)              |</span><br><span class="line">| Anvils R Us (USA)       |</span><br><span class="line">| Furball Inc. (USA)      |</span><br><span class="line">| Jet Set (England)       |</span><br><span class="line">| Jouets Et Ours (France) |</span><br><span class="line">| LT Supplies (USA)       |</span><br><span class="line">+-------------------------+</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用视图过滤不想要的数据"><a href="#使用视图过滤不想要的数据" class="headerlink" title="使用视图过滤不想要的数据"></a>使用视图过滤不想要的数据</h2><h2 id="使用视图与计算字段"><a href="#使用视图与计算字段" class="headerlink" title="使用视图与计算字段"></a>使用视图与计算字段</h2><h2 id="更新视图"><a href="#更新视图" class="headerlink" title="更新视图"></a>更新视图</h2><p>通常，视图时刻更新的，更新一个视图将更新其基表，如果你对视图增加或删除行，实际上是对其基表增加或删除行，所以更新的首要条件就是MySQL能够定位到更新的基数据。如果视图定义有以下操作，则不能进行视图更新：  </p>
-<ul>
-<li>分组  </li>
-<li>联结  </li>
-<li>子查询  </li>
-<li>聚集函数  </li>
-<li>并  </li>
-<li>DISTINCT  </li>
-<li>导出列</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/28/%E5%88%9B%E5%BB%BA%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/28/%E5%88%9B%E5%BB%BA%E8%A1%A8/" class="post-title-link" itemprop="url">创建表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-28 11:14:44" itemprop="dateCreated datePublished" datetime="2021-01-28T11:14:44+08:00">2021-01-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h1><h2 id="创建表基础"><a href="#创建表基础" class="headerlink" title="创建表基础"></a>创建表基础</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table customers(</span><br><span class="line">   -&gt; cust_id		int			NOT NULL AUTO_INCREMENT,</span><br><span class="line">   -&gt; cust_name		char(50)	NOT NULL ,</span><br><span class="line">   -&gt; cust_address	char(50)	NULL,</span><br><span class="line">   -&gt; cust_city		char(50)	NULL,</span><br><span class="line">   -&gt; cust_state	char(5)		NULL,</span><br><span class="line">   -&gt; cust_zip		char(10)	NULL,</span><br><span class="line">   -&gt; cust_country	char(50)	NULL,</span><br><span class="line">   -&gt; cust_contact	char(50)	NULL,</span><br><span class="line">   -&gt; cust_email	char(255)	NULL,</span><br><span class="line">   -&gt; PRIMARY KEY (cust_id)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用NULL值"><a href="#使用NULL值" class="headerlink" title="使用NULL值"></a>使用NULL值</h2><p>NULL值就是没有值或缺值，运行NULL值得列也允许在插入行时，不给出该列得值。</p>
-<h2 id="主键介绍"><a href="#主键介绍" class="headerlink" title="主键介绍"></a>主键介绍</h2><p>表中每个行都必须具有唯一的主键值。主键用下列语句定义：<br><code>PRIMARY KEY (vend_id)</code><br>当然也可以用多个作为主键，举例：  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table orderitems(</span><br><span class="line">   -&gt; order_num		int		   NOT NULL ,</span><br><span class="line">   -&gt; order_item	   int		   NOT NULL ,</span><br><span class="line">   -&gt; prod_id		  char(10)      NOT NULL ,</span><br><span class="line">   -&gt; quantity		 int		   NOT NULL ,</span><br><span class="line">   -&gt; item_price	   decimal(8,2)  NOT NULL ,</span><br><span class="line">   -&gt; PRIMARY KEY (order_num, order_item)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
-
-<h2 id="使用AUTO-INCREMENT"><a href="#使用AUTO-INCREMENT" class="headerlink" title="使用AUTO_INCREMENT"></a>使用AUTO_INCREMENT</h2><p><code>AUTO_INCREMENT</code>告诉MySQL，本列每当增加一行时自动增量。每次执行一个INSERT操作时，MySQL自动对该列增量。</p>
-<h2 id="指定默认值"><a href="#指定默认值" class="headerlink" title="指定默认值"></a>指定默认值</h2><p>如果在插入行时没有给出值，MySQL允许使用默认值，默认值用CREATE TABLE语句得列定义中的DEFAULT关键字指定。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table orderitems(</span><br><span class="line">   -&gt; order_num		int		   NOT NULL ,</span><br><span class="line">   -&gt; order_item	   int		   NOT NULL ,</span><br><span class="line">   -&gt; prod_id		  char(10)      NOT NULL ,</span><br><span class="line">   -&gt; quantity		 int		   NOT NULL DEFAULT 1,</span><br><span class="line">   -&gt; item_price	   decimal(8,2)  NOT NULL ,</span><br><span class="line">   -&gt; PRIMARY KEY (order_num, order_item)</span><br><span class="line">   -&gt; )ENGINE&#x3D;InnoDB;</span><br></pre></td></tr></table></figure>
-
-<h2 id="引擎类型"><a href="#引擎类型" class="headerlink" title="引擎类型"></a>引擎类型</h2><p>MySQL（其他DBMS也一样）有一个具体管理和处理数据的内部引擎。在你使用<code>create table</code>语句时，该引擎具体创建表，而在你使用select或进行其他数据库处理时，该引擎在内部处理你的请求。以下几个是需要知道的引擎：  </p>
-<ul>
-<li>InnoDB是一个可靠的事务处理引擎，它不支持全文本搜索。  </li>
-<li>MEMORY在功能商等同于MyISAM，但由于数据存储在内存中，速度很快。  </li>
-<li>MyISAM是一个性能极高的引擎，它支持全文本搜索，但不支持事务处理。  </li>
-</ul>
-<h1 id="更新表"><a href="#更新表" class="headerlink" title="更新表"></a>更新表</h1><p>为更新表定义，可使用ALTER TABLE语句（理想情况下表一旦被创建就不应该被更新）。  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER TABLE vendors</span><br><span class="line">    -&gt; ADD vend_phone CHAR(20);</span><br></pre></td></tr></table></figure>
-
-<p>如果想删除刚刚添加的列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER TABLE vendors </span><br><span class="line">    -&gt; DROP column vend_phone;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>ALTER TABLE的一种常见用途是定义外键。具体细节不做展开。</p>
-<h1 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h1><p>非常简单：<br><code>DROP TABLE customers2;</code></p>
-<h1 id="重命名表"><a href="#重命名表" class="headerlink" title="重命名表"></a>重命名表</h1><p>使用<code>RENAME TABLE</code>语句可以重新命名一张表：<br><code>RENAME TABLE customers2 TO customers;</code></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1134,6 +624,463 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E8%81%94%E7%BB%93%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E8%81%94%E7%BB%93%E8%A1%A8/" class="post-title-link" itemprop="url">联结表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 16:05:30" itemprop="dateCreated datePublished" datetime="2021-01-27T16:05:30+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="联结表"><a href="#联结表" class="headerlink" title="联结表"></a>联结表</h1><h2 id="联结"><a href="#联结" class="headerlink" title="联结"></a>联结</h2><p><strong>外键</strong> 外键为某个表中的一列，它包含另一个表的主键值，定义了两个表之间的关系。<br><strong>可伸缩性</strong> 能够适应不断增加的工作量而不失败。设计良好的数据库或应用程序称之为可伸缩性好</p>
+<h2 id="创建联结"><a href="#创建联结" class="headerlink" title="创建联结"></a>创建联结</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_name, prod_name, prod_price </span><br><span class="line">    -&gt; from vendors,products</span><br><span class="line">    -&gt; where vendors.vend_id &#x3D; products.vend_id</span><br><span class="line">    -&gt; order by vend_name, prod_name;</span><br><span class="line">+-------------+----------------+------------+</span><br><span class="line">| vend_name   | prod_name      | prod_price |</span><br><span class="line">+-------------+----------------+------------+</span><br><span class="line">| ACME        | Bird seed      |      10.00 |</span><br><span class="line">| ACME        | Carrots        |       2.50 |</span><br><span class="line">| ACME        | Detonator      |      13.00 |</span><br><span class="line">| ACME        | Safe           |      50.00 |</span><br><span class="line">| ACME        | Sling          |       4.49 |</span><br><span class="line">| ACME        | TNT (1 stick)  |       2.50 |</span><br><span class="line">| ACME        | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Anvils R Us | .5 ton anvil   |       5.99 |</span><br><span class="line">| Anvils R Us | 1 ton anvil    |       9.99 |</span><br><span class="line">| Anvils R Us | 2 ton anvil    |      14.99 |</span><br><span class="line">| Jet Set     | JetPack 1000   |      35.00 |</span><br><span class="line">| Jet Set     | JetPack 2000   |      55.00 |</span><br><span class="line">| LT Supplies | Fuses          |       3.42 |</span><br><span class="line">| LT Supplies | Oil can        |       8.99 |</span><br><span class="line">+-------------+----------------+------------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>笛卡尔积</strong> 由没有联解条件的表关系返回的结果为笛卡尔积。检索出来的行的数目将是第一个表中的行数乘以第二个表中的行数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_name, prod_name, prod_price </span><br><span class="line">    -&gt; from vendors,products</span><br><span class="line">    -&gt; order by vend_name, prod_price;</span><br><span class="line">+----------------+----------------+------------+</span><br><span class="line">| vend_name      | prod_name      | prod_price |</span><br><span class="line">+----------------+----------------+------------+</span><br><span class="line">| ACME           | Carrots        |       2.50 |</span><br><span class="line">| ACME           | TNT (1 stick)  |       2.50 |</span><br><span class="line">| ACME           | Fuses          |       3.42 |</span><br><span class="line">| ACME           | Sling          |       4.49 |</span><br><span class="line">| ACME           | .5 ton anvil   |       5.99 |</span><br><span class="line">| ACME           | Oil can        |       8.99 |</span><br><span class="line">| ACME           | 1 ton anvil    |       9.99 |</span><br><span class="line">| ACME           | TNT (5 sticks) |      10.00 |</span><br><span class="line">| ACME           | Bird seed      |      10.00 |</span><br><span class="line">| ACME           | Detonator      |      13.00 |</span><br><span class="line">| ACME           | 2 ton anvil    |      14.99 |</span><br><span class="line">| ACME           | JetPack 1000   |      35.00 |</span><br><span class="line">| ACME           | Safe           |      50.00 |</span><br><span class="line">| ACME           | JetPack 2000   |      55.00 |</span><br><span class="line">| Anvils R Us    | Carrots        |       2.50 |</span><br><span class="line">| Anvils R Us    | TNT (1 stick)  |       2.50 |</span><br><span class="line">| Anvils R Us    | Fuses          |       3.42 |</span><br><span class="line">| Anvils R Us    | Sling          |       4.49 |</span><br><span class="line">| Anvils R Us    | .5 ton anvil   |       5.99 |</span><br><span class="line">| Anvils R Us    | Oil can        |       8.99 |</span><br><span class="line">| Anvils R Us    | 1 ton anvil    |       9.99 |</span><br><span class="line">| Anvils R Us    | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Anvils R Us    | Bird seed      |      10.00 |</span><br><span class="line">| Anvils R Us    | Detonator      |      13.00 |</span><br><span class="line">| Anvils R Us    | 2 ton anvil    |      14.99 |</span><br><span class="line">| Anvils R Us    | JetPack 1000   |      35.00 |</span><br><span class="line">| Anvils R Us    | Safe           |      50.00 |</span><br><span class="line">| Anvils R Us    | JetPack 2000   |      55.00 |</span><br><span class="line">| Furball Inc.   | Carrots        |       2.50 |</span><br><span class="line">| Furball Inc.   | TNT (1 stick)  |       2.50 |</span><br><span class="line">| Furball Inc.   | Fuses          |       3.42 |</span><br><span class="line">| Furball Inc.   | Sling          |       4.49 |</span><br><span class="line">| Furball Inc.   | .5 ton anvil   |       5.99 |</span><br><span class="line">| Furball Inc.   | Oil can        |       8.99 |</span><br><span class="line">| Furball Inc.   | 1 ton anvil    |       9.99 |</span><br><span class="line">| Furball Inc.   | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Furball Inc.   | Bird seed      |      10.00 |</span><br><span class="line">| Furball Inc.   | Detonator      |      13.00 |</span><br><span class="line">| Furball Inc.   | 2 ton anvil    |      14.99 |</span><br><span class="line">| Furball Inc.   | JetPack 1000   |      35.00 |</span><br><span class="line">| Furball Inc.   | Safe           |      50.00 |</span><br><span class="line">| Furball Inc.   | JetPack 2000   |      55.00 |</span><br><span class="line">| Jet Set        | TNT (1 stick)  |       2.50 |</span><br><span class="line">| Jet Set        | Carrots        |       2.50 |</span><br><span class="line">| Jet Set        | Fuses          |       3.42 |</span><br><span class="line">| Jet Set        | Sling          |       4.49 |</span><br><span class="line">| Jet Set        | .5 ton anvil   |       5.99 |</span><br><span class="line">| Jet Set        | Oil can        |       8.99 |</span><br><span class="line">| Jet Set        | 1 ton anvil    |       9.99 |</span><br><span class="line">| Jet Set        | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Jet Set        | Bird seed      |      10.00 |</span><br><span class="line">| Jet Set        | Detonator      |      13.00 |</span><br><span class="line">| Jet Set        | 2 ton anvil    |      14.99 |</span><br><span class="line">| Jet Set        | JetPack 1000   |      35.00 |</span><br><span class="line">| Jet Set        | Safe           |      50.00 |</span><br><span class="line">| Jet Set        | JetPack 2000   |      55.00 |</span><br><span class="line">| Jouets Et Ours | Carrots        |       2.50 |</span><br><span class="line">| Jouets Et Ours | TNT (1 stick)  |       2.50 |</span><br><span class="line">| Jouets Et Ours | Fuses          |       3.42 |</span><br><span class="line">| Jouets Et Ours | Sling          |       4.49 |</span><br><span class="line">| Jouets Et Ours | .5 ton anvil   |       5.99 |</span><br><span class="line">| Jouets Et Ours | Oil can        |       8.99 |</span><br><span class="line">| Jouets Et Ours | 1 ton anvil    |       9.99 |</span><br><span class="line">| Jouets Et Ours | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Jouets Et Ours | Bird seed      |      10.00 |</span><br><span class="line">| Jouets Et Ours | Detonator      |      13.00 |</span><br><span class="line">| Jouets Et Ours | 2 ton anvil    |      14.99 |</span><br><span class="line">| Jouets Et Ours | JetPack 1000   |      35.00 |</span><br><span class="line">| Jouets Et Ours | Safe           |      50.00 |</span><br><span class="line">| Jouets Et Ours | JetPack 2000   |      55.00 |</span><br><span class="line">| LT Supplies    | Carrots        |       2.50 |</span><br><span class="line">| LT Supplies    | TNT (1 stick)  |       2.50 |</span><br><span class="line">| LT Supplies    | Fuses          |       3.42 |</span><br><span class="line">| LT Supplies    | Sling          |       4.49 |</span><br><span class="line">| LT Supplies    | .5 ton anvil   |       5.99 |</span><br><span class="line">| LT Supplies    | Oil can        |       8.99 |</span><br><span class="line">| LT Supplies    | 1 ton anvil    |       9.99 |</span><br><span class="line">| LT Supplies    | TNT (5 sticks) |      10.00 |</span><br><span class="line">| LT Supplies    | Bird seed      |      10.00 |</span><br><span class="line">| LT Supplies    | Detonator      |      13.00 |</span><br><span class="line">| LT Supplies    | 2 ton anvil    |      14.99 |</span><br><span class="line">| LT Supplies    | JetPack 1000   |      35.00 |</span><br><span class="line">| LT Supplies    | Safe           |      50.00 |</span><br><span class="line">| LT Supplies    | JetPack 2000   |      55.00 |</span><br><span class="line">+----------------+----------------+------------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="内部联结"><a href="#内部联结" class="headerlink" title="内部联结"></a>内部联结</h3><p>目前为止所用的联结称为等值联结，它基于两个表之间的相等测试。其实，对于这种联结可以使用稍微不通的语法来明确指定联结的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_name,prod_name,prod_price </span><br><span class="line">    -&gt; from vendors inner join products on vendors.vend_id &#x3D; products.vend_id;</span><br><span class="line">+-------------+----------------+------------+</span><br><span class="line">| vend_name   | prod_name      | prod_price |</span><br><span class="line">+-------------+----------------+------------+</span><br><span class="line">| Anvils R Us | .5 ton anvil   |       5.99 |</span><br><span class="line">| Anvils R Us | 1 ton anvil    |       9.99 |</span><br><span class="line">| Anvils R Us | 2 ton anvil    |      14.99 |</span><br><span class="line">| LT Supplies | Fuses          |       3.42 |</span><br><span class="line">| LT Supplies | Oil can        |       8.99 |</span><br><span class="line">| ACME        | Detonator      |      13.00 |</span><br><span class="line">| ACME        | Bird seed      |      10.00 |</span><br><span class="line">| ACME        | Carrots        |       2.50 |</span><br><span class="line">| ACME        | Safe           |      50.00 |</span><br><span class="line">| ACME        | Sling          |       4.49 |</span><br><span class="line">| ACME        | TNT (1 stick)  |       2.50 |</span><br><span class="line">| ACME        | TNT (5 sticks) |      10.00 |</span><br><span class="line">| Jet Set     | JetPack 1000   |      35.00 |</span><br><span class="line">| Jet Set     | JetPack 2000   |      55.00 |</span><br><span class="line">+-------------+----------------+------------+</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="联结多个表"><a href="#联结多个表" class="headerlink" title="联结多个表"></a>联结多个表</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select prod_name, vend_name, prod_price, quantity from orderitems, products, vendors where products.vend_id &#x3D; vendors.vend_id and orderitems.prod_id &#x3D; products.prod_id and order_num &#x3D; 20005;</span><br><span class="line">+----------------+-------------+------------+----------+</span><br><span class="line">| prod_name      | vend_name   | prod_price | quantity |</span><br><span class="line">+----------------+-------------+------------+----------+</span><br><span class="line">| .5 ton anvil   | Anvils R Us |       5.99 |       10 |</span><br><span class="line">| 1 ton anvil    | Anvils R Us |       9.99 |        3 |</span><br><span class="line">| TNT (5 sticks) | ACME        |      10.00 |        5 |</span><br><span class="line">| Bird seed      | ACME        |      10.00 |        1 |</span><br><span class="line">+----------------+-------------+------------+----------+</span><br></pre></td></tr></table></figure>
+<p>但是尽量减少不必要的联结，影响性能。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E4%BD%BF%E7%94%A8%E5%AD%90%E6%9F%A5%E8%AF%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E4%BD%BF%E7%94%A8%E5%AD%90%E6%9F%A5%E8%AF%A2/" class="post-title-link" itemprop="url">使用子查询</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 15:50:31" itemprop="dateCreated datePublished" datetime="2021-01-27T15:50:31+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用子查询"><a href="#使用子查询" class="headerlink" title="使用子查询"></a>使用子查询</h1><h2 id="利用子查询进行过滤"><a href="#利用子查询进行过滤" class="headerlink" title="利用子查询进行过滤"></a>利用子查询进行过滤</h2><p>数据库表常常是关系表，所有数据不会存储在一个数据表中，比如订单存储在两个表中，对于包含订单号、客户ID、订单日期的每个订单，orders表存储一行。各订单的物品存储在相关的orderitems表中，如果我们要查找包含物品TNT2的客户如何做？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_id from orders </span><br><span class="line">    -&gt; where order_num in (select order_num</span><br><span class="line">    -&gt; from orderitems</span><br><span class="line">    -&gt; where prod_id &#x3D; &#39;TNT2&#39;</span><br><span class="line">    -&gt; );</span><br><span class="line">+---------+</span><br><span class="line">| cust_id |</span><br><span class="line">+---------+</span><br><span class="line">|   10001 |</span><br><span class="line">|   10004 |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
+<p>括号内的内容就是一个子查询，从orderitems表中查找包含了TNT2的订单，并返回订单号列，然后再从orders表中找到满足订单号的行，并返回客户ID列。<br>子查询可以多层嵌套。</p>
+<h2 id="作为计算字段使用子查询"><a href="#作为计算字段使用子查询" class="headerlink" title="作为计算字段使用子查询"></a>作为计算字段使用子查询</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_name,cust_state,</span><br><span class="line">    -&gt; (select count(*)</span><br><span class="line">    -&gt; from orders </span><br><span class="line">    -&gt; where orders.cust_id &#x3D; customers.cust_id) as orders</span><br><span class="line">    -&gt; from customers</span><br><span class="line">    -&gt; order by cust_name;</span><br><span class="line">+----------------+------------+--------+</span><br><span class="line">| cust_name      | cust_state | orders |</span><br><span class="line">+----------------+------------+--------+</span><br><span class="line">| Coyote Inc.    | MI         |      2 |</span><br><span class="line">| E Fudd         | IL         |      1 |</span><br><span class="line">| Mouse House    | OH         |      0 |</span><br><span class="line">| Wascals        | IN         |      1 |</span><br><span class="line">| Yosemite Place | AZ         |      1 |</span><br><span class="line">+----------------+------------+--------+</span><br></pre></td></tr></table></figure>
+<p>这条<code>SELECT</code>语句对customers表中的每个客户返回3列：cust_name、cust_state、orders。orders是一个计算字段，它是由圆括号中的子查询建立的。该子查询对检索出的每个客户执行一次，再此历次中执行了5次，因为检索出来5各客户。注意我们应该使用完全限定列名，而不应该这样使用：<br><code>cust_id = cust_id</code>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">分组数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 15:21:35" itemprop="dateCreated datePublished" datetime="2021-01-27T15:21:35+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="分组数据"><a href="#分组数据" class="headerlink" title="分组数据"></a>分组数据</h1><h2 id="创建分组"><a href="#创建分组" class="headerlink" title="创建分组"></a>创建分组</h2><p>分组是在<code>SELECT</code>语句的GROUP BY子句中创建的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, count(*) as num_prods</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; group by vend_id;</span><br><span class="line">+---------+-----------+</span><br><span class="line">| vend_id | num_prods |</span><br><span class="line">+---------+-----------+</span><br><span class="line">|    1001 |         3 |</span><br><span class="line">|    1002 |         2 |</span><br><span class="line">|    1003 |         7 |</span><br><span class="line">|    1005 |         2 |</span><br><span class="line">+---------+-----------+</span><br></pre></td></tr></table></figure>
+<p><code>GROUP BY</code>按照<code>vend_id</code>排序并分组数据。这导致对每个vend_id而不是整个表计算<code>num_prods</code>计算一次。</p>
+<h2 id="过滤分组"><a href="#过滤分组" class="headerlink" title="过滤分组"></a>过滤分组</h2><p>这里不能使用<code>WHERE</code>来过滤分组（where过滤的是行）。而实使用<code>HAVING</code>来过滤分组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select cust_id,count(*) as orders</span><br><span class="line">    -&gt; from orders</span><br><span class="line">    -&gt; group by cust_id</span><br><span class="line">    -&gt; having count(*)&gt;&#x3D;2;</span><br><span class="line">+---------+--------+</span><br><span class="line">| cust_id | orders |</span><br><span class="line">+---------+--------+</span><br><span class="line">|   10001 |      2 |</span><br><span class="line">+---------+--------+</span><br></pre></td></tr></table></figure>
+<p>同时使用<code>WHERE</code>和<code>HAVING</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_id, count(*) as num_prods</span><br><span class="line">    -&gt; from products</span><br><span class="line">    -&gt; where prod_price &gt;&#x3D; 10</span><br><span class="line">    -&gt; group by vend_id</span><br><span class="line">    -&gt; having count(*)&gt;&#x3D;2;</span><br><span class="line">+---------+-----------+</span><br><span class="line">| vend_id | num_prods |</span><br><span class="line">+---------+-----------+</span><br><span class="line">|    1003 |         4 |</span><br><span class="line">|    1005 |         2 |</span><br><span class="line">+---------+-----------+</span><br></pre></td></tr></table></figure>
+<p>这条语句中，第一行使用了聚集函数的基本<code>SELECT</code>。<code>WHERE</code>先过滤所有prod_price至少为10的行。然后按照vend_id分组数据，<code>having</code>子句过滤计数为2或2以上的分组。</p>
+<h2 id="分组和排序"><a href="#分组和排序" class="headerlink" title="分组和排序"></a>分组和排序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select order_num, SUM(quantity*item_price) as ordertotal</span><br><span class="line">    -&gt; from orderitems</span><br><span class="line">    -&gt; group by order_num</span><br><span class="line">    -&gt; having sum(quantity*item_price) &gt;&#x3D; 50</span><br><span class="line">    -&gt; order by ordertotal;</span><br><span class="line">+-----------+------------+</span><br><span class="line">| order_num | ordertotal |</span><br><span class="line">+-----------+------------+</span><br><span class="line">|     20006 |      55.00 |</span><br><span class="line">|     20008 |     125.00 |</span><br><span class="line">|     20005 |     149.87 |</span><br><span class="line">|     20007 |    1000.00 |</span><br><span class="line">+-----------+------------+</span><br></pre></td></tr></table></figure>
+
+<h2 id="SELECT子句顺序"><a href="#SELECT子句顺序" class="headerlink" title="SELECT子句顺序"></a>SELECT子句顺序</h2><table>
+  <tr>
+    <td>子句</td>
+    <td>说明</td>
+    <td>是否必须使用</td>
+  </tr>
+  <tr>
+    <td>SELECT</td>
+    <td>要返回的列或表达式</td>
+    <td>是</td>
+  </tr>
+  <tr>
+    <td>FROM</td>
+    <td>从中检索数据的表</td>
+    <td>仅在从表选择数据时候用到</td>
+  </tr>
+  <tr>
+    <td>WHERE</td>
+    <td>行级过滤</td>
+    <td>否</td>
+  </tr>
+  <tr>
+    <td>GROUP BY</td>
+    <td>大分组说明</td>
+    <td>仅在按组计算聚集时使用</td>
+  </tr>
+  <tr>
+    <td>HAVING</td>
+    <td>组级过滤</td>
+    <td>否</td>
+  </tr>
+  <tr>
+    <td>ORDER BY</td>
+    <td>输出排序顺序</td>
+    <td>否</td>
+  </tr>
+  <tr>
+    <td>LIMIT</td>
+    <td>要检索的行数</td>
+    <td>否</td>
+  </tr>
+</table>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E6%B1%87%E6%80%BB%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E6%B1%87%E6%80%BB%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">汇总数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 15:04:42" itemprop="dateCreated datePublished" datetime="2021-01-27T15:04:42+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="汇总数据"><a href="#汇总数据" class="headerlink" title="汇总数据"></a>汇总数据</h1><h2 id="聚集函数"><a href="#聚集函数" class="headerlink" title="聚集函数"></a>聚集函数</h2><p>我们经常需要汇总数据而不用把他们实际检索出来，为此，MySQL提供了专门的函数。<br><strong>聚集函数</strong> 运行在行组上，计算和返回单个值的函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AVG():返回某个列的平均值</span><br><span class="line">COUNT():返回某个列的行数</span><br><span class="line">MAX():返回某个列的最大值</span><br><span class="line">MIN():返回某个列的最小值</span><br><span class="line">SUM():返回某个列值之后</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="AVG-函数"><a href="#AVG-函数" class="headerlink" title="AVG()函数"></a>AVG()函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select avg(prod_price) as avg_price</span><br><span class="line">    -&gt; from products;</span><br><span class="line">+-----------+</span><br><span class="line">| avg_price |</span><br><span class="line">+-----------+</span><br><span class="line">| 16.133571 |</span><br><span class="line">+-----------+</span><br></pre></td></tr></table></figure>
+<p>默认忽略列值为NULL的行。</p>
+<h3 id="COUNT-函数"><a href="#COUNT-函数" class="headerlink" title="COUNT()函数"></a>COUNT()函数</h3><p><code>COUNT()</code>函数用来计数。可利用<code>COUNT()</code>确定表中的行的数目或符合特定条件的行的数目。<br>COUNT()函数有两种使用的方式：</p>
+<ul>
+<li>使用<code>COUNT(*)</code>对表中所有行进行计数。  </li>
+<li>使用<code>COUNT(column)</code>忽略值为NULL的行。  </li>
+</ul>
+<p>剩下的函数使用和AVG()类似，不做多讲。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/27/%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/27/%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">使用数据处理函数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-27 14:56:30" itemprop="dateCreated datePublished" datetime="2021-01-27T14:56:30+08:00">2021-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-22 16:40:39" itemprop="dateModified" datetime="2021-04-22T16:40:39+08:00">2021-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">MySQL学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用数据处理函数"><a href="#使用数据处理函数" class="headerlink" title="使用数据处理函数"></a>使用数据处理函数</h1><h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p>大多数SQL实现支持以下类型的函数。</p>
+<ul>
+<li>用于处理文本串  </li>
+<li>用于在数值数据上进行算术操作  </li>
+<li>用于处理日期和时间并从这些值中提取特定成分的日期和时间函数  </li>
+<li>返回DBMS正在使用的特殊信息的系统函数</li>
+</ul>
+<h3 id="文本处理函数"><a href="#文本处理函数" class="headerlink" title="文本处理函数"></a>文本处理函数</h3><p>使用Upper()将文本转换为大写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select vend_name, upper(vend_name) as vend_name_upcase</span><br><span class="line">    -&gt; from vendors order by vend_name;</span><br><span class="line">+----------------+------------------+</span><br><span class="line">| vend_name      | vend_name_upcase |</span><br><span class="line">+----------------+------------------+</span><br><span class="line">| ACME           | ACME             |</span><br><span class="line">| Anvils R Us    | ANVILS R US      |</span><br><span class="line">| Furball Inc.   | FURBALL INC.     |</span><br><span class="line">| Jet Set        | JET SET          |</span><br><span class="line">| Jouets Et Ours | JOUETS ET OURS   |</span><br><span class="line">| LT Supplies    | LT SUPPLIES      |</span><br><span class="line">+----------------+------------------+</span><br></pre></td></tr></table></figure>
+<p>常用的文本处理函数有<code>Left()</code>、<code>Length()</code>等等，具体使用查阅相关资料。</p>
+<h3 id="日期和时间处理函数"><a href="#日期和时间处理函数" class="headerlink" title="日期和时间处理函数"></a>日期和时间处理函数</h3><p>函数较多，具体查阅相关资料。</p>
+<h3 id="数值处理函数"><a href="#数值处理函数" class="headerlink" title="数值处理函数"></a>数值处理函数</h3><p>有<code>Abs()</code>、<code>Cos()</code>、<code>Exp()</code>等许多数值处理函数。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1205,7 +1152,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-count">131</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1218,7 +1165,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

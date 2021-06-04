@@ -191,485 +191,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/10/%E6%96%87%E4%BB%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/10/%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">文件</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-10 23:05:56" itemprop="dateCreated datePublished" datetime="2021-05-10T23:05:56+08:00">2021-05-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-31 08:19:38" itemprop="dateModified" datetime="2021-05-31T08:19:38+08:00">2021-05-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h1><p>几种类型：</p>
-<ul>
-<li>参数文件</li>
-<li>日志文件</li>
-<li>socket文件</li>
-<li>pid文件</li>
-<li>MySQL表结构文件</li>
-<li>存储引擎文件</li>
-</ul>
-<h2 id="日志文件"><a href="#日志文件" class="headerlink" title="日志文件"></a>日志文件</h2><p>常见日志文件：</p>
-<ul>
-<li>错误日志（error log）</li>
-<li>二进制日志（binlog）</li>
-<li>慢查询日志（slow query log）</li>
-<li>查询日志（log）</li>
-</ul>
-<h3 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h3><p>错误日志记录了MySQL的启动、运行、关闭过程中的错误信息，甚至包含一些警告和正确信息，一旦出现问题，我们最先应该查看的就是这个文件。</p>
-<h3 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h3><p>慢查询日志可以帮助DBA定位可能存在问题的SQL语句，从而进行SQL语句层面的优化。例如，可以在MySQL启动时设置一个阈值，将运行时间超过该值的所有SQL语句都记录到慢查询日志中。然后定期检查慢查询日志，确认是否有SQL语句需要优化。</p>
-<h2 id="套接字文件"><a href="#套接字文件" class="headerlink" title="套接字文件"></a>套接字文件</h2><p>在UNIX系统下本地连接mysql可以采用unix域套接字方式。这种方式需要一个套接字文件。套接字文件可由参数socket控制。一般在/tmp目录下，名为mysql.sock。</p>
-<h2 id="pid文件"><a href="#pid文件" class="headerlink" title="pid文件"></a>pid文件</h2><p>当MySQL实例启动时，会将自己的进程ID写入一个文件中——该文件即为pid文件。</p>
-<h2 id="表结构定义文件"><a href="#表结构定义文件" class="headerlink" title="表结构定义文件"></a>表结构定义文件</h2><p>frm为后缀名的文件，这个文件记录了该表的表结构定义。frm文件还用来记录视图的定义。</p>
-<h2 id="InnoDB存储引擎文件"><a href="#InnoDB存储引擎文件" class="headerlink" title="InnoDB存储引擎文件"></a>InnoDB存储引擎文件</h2><h3 id="表空间文件"><a href="#表空间文件" class="headerlink" title="表空间文件"></a>表空间文件</h3><p>InnoDB采用将存储的数据按表空间进行存放的设计。在默认配置下会有一个初始大小的10MB，名为idbata1的文件，该文件是默认的表空间文件。用户可以通过多个文件组成也给表空间。若这些文件属于不同的磁盘，磁盘的负载可能被平均，因此可以提高数据库的整体性能。</p>
-<p>所有基于InnoDB存储引擎的表的数据都会记录到该共享表空间中。若设置了参数innodb_file_per_table，则用户可以将每个基于InnoDB存储引擎的表产生一个独立的表空间。</p>
-<p>独立表空间的命名规则为：表名.ibd。通过这样的方式，用户不用将所有数据存放于默认的表空间中。</p>
-<p>要注意的是：单独的表空间文件仅存储该表的数据、索引和插入缓冲BITMAP等信息，其余信息还是存放在默认表空间中。</p>
-<h3 id="重做日志文件"><a href="#重做日志文件" class="headerlink" title="重做日志文件"></a>重做日志文件</h3><p>当实例或者介质失败时，重做日志就能派上用场。例如，数据库由于所在主机掉电导致实例失败，InnoDB存储引擎会使用重做日志恢复到掉电前的时刻。</p>
-<p>每个InnoDB存储引擎至少有一个重做日志文件组，每个文件组下至少有2个重做日志文件。为了得到更高的可靠性，用户可以设置多个镜像日志组，将不同的文件组放在不同的磁盘上，以此提高重做日志的高可用性。</p>
-<p>每个日志组的每个重做日志文件的大小一致，并以循环写入的方式运行。InnoDB存储引擎先写重做日志文件1，当到达文件的最后，再切换到重做日志文件2，依此类推。</p>
-<p>重做文件日志不能太小，否则会导致频繁地发生async checkpoint，导致性能的抖动。</p>
-<p>和二进制日志的区别：</p>
-<p>binlog会记录所有与MySQL有关的日志记录，而InnoDb存储引擎只记录有关该存储引擎本身的事务日志。</p>
-<p>二进制日志仅在事务提交前进行提交，即只写磁盘一次。</p>
-<p>不论事务有多大，在事务进行过程中，却不断有重做日志条目被写入到重做日志文件中。</p>
-<p>重做日志条目结构：</p>
-<p>|redo_log_type|space|page_no|redo_log_body</p>
-<ul>
-<li><p>redo_log_type占用一个字节，表示重做日志的类型。</p>
-</li>
-<li><p>space表示表空间的ID，但采用压缩的方式，因此占用的空间可能小于4字节。</p>
-</li>
-<li>page_no表示页的偏移量，同样采用压缩的方式。</li>
-<li>redo_log_body表示每个重做日志的数据部分，恢复时需要调用相应的函数进行解析。</li>
-</ul>
-<p>写入重做日志文件的操作不是直接写，而是先写入一个重做日志缓冲中，然后按照一定的条件顺序地写入日志文件。从重做日志缓冲往磁盘写入时，是按512字节，也就是一个扇区的大小进行写入。</p>
-<p>从日志缓冲写入重做日志文件是按照一定条件进行的，比如主线程每秒写入一次。或者通过innodb_flush_log_at_trx_commit，如果该值设置为1，表示在执行commit时，将重做日志缓冲同步到磁盘，即伴有fsync的调用。2表示将重做日志异步写道磁盘，即写道文件系统的缓存中。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/09/InnoDB%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/09/InnoDB%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7/" class="post-title-link" itemprop="url">InnoDB关键特性</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-09 22:35:48" itemprop="dateCreated datePublished" datetime="2021-05-09T22:35:48+08:00">2021-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-31 08:19:38" itemprop="dateModified" datetime="2021-05-31T08:19:38+08:00">2021-05-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="InnoDB关键特性"><a href="#InnoDB关键特性" class="headerlink" title="InnoDB关键特性"></a>InnoDB关键特性</h1><ul>
-<li>插入缓冲（Insert Buffer）</li>
-<li>两次写（Double Write）</li>
-<li>自适应哈希索引（Adaptive Hash Index）</li>
-<li>异步IO（Async IO）</li>
-<li>刷新邻接页（Flush Neighbor Page）</li>
-</ul>
-<h2 id="插入缓冲"><a href="#插入缓冲" class="headerlink" title="插入缓冲"></a>插入缓冲</h2><h3 id="Insert-Buffer"><a href="#Insert-Buffer" class="headerlink" title="Insert Buffer"></a>Insert Buffer</h3><p>Insert Buffer并不是缓冲池的一部分，而是物理页的一个组成部分（不过缓冲池中有Insert Buffer的信息）。</p>
-<p>对于非聚集索引的插入或者更新操作，不是每一次直接插入到索引页中，而是先判断插入的非聚集索引页是否在缓冲池中。若在，则直接插入；若不在，则先放入到一个Insert Buffer对象中，好似欺骗。数据库这个非聚集的索引已经插到了叶子节点，而实际并没有，只是存放在另一个位置。然后以一定频率合并到一个操作中。</p>
-<p>使用Insert Buffer的使用需要同时满足以下两种情况：</p>
-<ul>
-<li>索引是辅助索引；</li>
-<li>索引不是唯一；</li>
-</ul>
-<p>问题：如果服务器宕机了，可能会有大量的Insert Buffer并没有合并到实际的非聚集索引中去。</p>
-<h3 id="Change-Buffer"><a href="#Change-Buffer" class="headerlink" title="Change Buffer"></a>Change Buffer</h3><p>Insert Buffer是一颗B+树，因此其也由叶节点和非叶节点组成。非叶节点存放的是查询search key，构造如下：</p>
-<p>|space|marker|offset|。</p>
-<p>space占用4字节，标识待插入记录所在表的表空间id。</p>
-<p>marker占一个字节，用来兼容老版本的Insert Buffer。</p>
-<p>offset标识页所在的偏移量，占用4字节。</p>
-<p>当一个辅助索引要插入到页时，如果这个页不再缓冲池中，那么InnoDB存储引擎首先根据上述规则构造一个search key，接下来查询Insert Buffer这棵B+树，然后将这条记录插入到Insert Buffer B+树的叶子节点（所有表共享一个insert buffer）。</p>
-<h3 id="Merge-Insert-Buffer"><a href="#Merge-Insert-Buffer" class="headerlink" title="Merge Insert Buffer"></a>Merge Insert Buffer</h3><p>若需要实现插入记录的辅助索引在缓冲池中，那么需要将辅助索引记录首先插入到这棵B+树中。但是Insert Buffer中记录何时合并到真正的辅助索引中呢？这是本小节需要关注的重点。</p>
-<p>Merge可能会发生在以下三种情况：</p>
-<ul>
-<li>辅助索引页被读取到缓冲池时；</li>
-<li>Insert Buffer Bitmap页追踪到该辅助索引页已无可用空间时；</li>
-<li>Master Thread。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/09/Master-Thread%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/09/Master-Thread%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">Master Thread工作方式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-09 22:11:20" itemprop="dateCreated datePublished" datetime="2021-05-09T22:11:20+08:00">2021-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-31 08:19:38" itemprop="dateModified" datetime="2021-05-31T08:19:38+08:00">2021-05-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Master-Thread工作方式"><a href="#Master-Thread工作方式" class="headerlink" title="Master Thread工作方式"></a>Master Thread工作方式</h1><p>Master Thread具有最高级别的线程优先级。其内部又多个循环组成：</p>
-<ul>
-<li><p>主循环（loop）</p>
-</li>
-<li><p>后台循环（backgroup loop）</p>
-</li>
-<li>刷新循环（flush loop）</li>
-<li>暂停循环（suspend loop）</li>
-</ul>
-<p>Loop被称为主循环是因为大部分操作是在这个循环中完成的。包括每秒钟的操作和每十秒钟的操作：</p>
-<p>每秒一次的操作：</p>
-<ul>
-<li>日志刷新到磁盘（即使这个事务还没有提交）；</li>
-<li>合并插入缓冲（可能）；</li>
-<li>至多刷新100个InnoDB的缓冲池中脏页到磁盘；</li>
-<li>如果当前没有用户活动，则切换到backgroud loop、</li>
-</ul>
-<p>每十秒的操作：</p>
-<ul>
-<li>刷新100个脏页到磁盘；</li>
-<li>合并至多5个插入缓冲；</li>
-<li>将日志缓冲刷新到磁盘；</li>
-<li>删除无用的Undo页；</li>
-<li>刷新100个或者10个脏页到磁盘；</li>
-</ul>
-<p>若当前没有用户活动或者数据库关闭，就会切换到backgroud loop：</p>
-<ul>
-<li>删除无用的undo 页面；</li>
-<li>合并20个插入缓冲；</li>
-<li>跳回到主循环；</li>
-<li>不断刷新100个页直到符合条件（可能，跳转到flush loop中完成）。</li>
-</ul>
-<p>若flush loop 中也没有什么事情可以做，InnoDB会切换到suspend loop，将Master Thread挂起，等待时间发生。</p>
-<h2 id="InnoDB-1-2-x版本的Master-Thread"><a href="#InnoDB-1-2-x版本的Master-Thread" class="headerlink" title="InnoDB 1.2.x版本的Master Thread"></a>InnoDB 1.2.x版本的Master Thread</h2><p>在InnoDB 1.2.x版本中对Master Thread进行了优化，将对于刷新脏页的操作从Master线程分离到了一个单独的Page Cleaner Thread中，减轻了Master Thread的工作。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/09/checkpoint%E6%8A%80%E6%9C%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/09/checkpoint%E6%8A%80%E6%9C%AF/" class="post-title-link" itemprop="url">checkpoint技术</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-09 21:37:30" itemprop="dateCreated datePublished" datetime="2021-05-09T21:37:30+08:00">2021-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-31 08:19:38" itemprop="dateModified" datetime="2021-05-31T08:19:38+08:00">2021-05-31</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Checkpoint技术"><a href="#Checkpoint技术" class="headerlink" title="Checkpoint技术"></a>Checkpoint技术</h1><p>缓冲池的设计目的是为了协调CPU速度于磁盘速度的鸿沟。因此页的操作首先都是在缓冲池中完成的。</p>
-<p>当前事务数据库系统普遍采用Write Ahead Log策略，即当事务提交时，先写日志，再修改页。当由于发生宕机而导致数据丢失时，通过重做日志来完成数据恢复。</p>
-<p>Checkpoint（检查点）技术的目的是解决以下几个问题：</p>
-<ul>
-<li><p>缩短数据库的恢复时间；</p>
-</li>
-<li><p>缓冲池不够用时，将脏页刷新道磁盘；</p>
-</li>
-<li>重做日志不可用时，刷新脏页；</li>
-</ul>
-<p>当数据库发生宕机时，数据库不需要重做所有日志，因为Checkpoint之前的页已经刷新回磁盘。故数据库只需对Checkpoint后的重做日志进行恢复。</p>
-<p>缓冲池不够用时，根据LRU算法回溢出最近最少使用的页，若此页为脏页则需要强制执行Checkpoint。</p>
-<p>当数据库宕机后恢复操作会有一部分不需要的重做日志，这部分就可以被覆盖使用了，若此时重做日志还需要使用，那么必须强制产生Checkpoint，将缓冲区中的页至少刷新道当前重做日志的位置（重做日志中在最后一次checkpoint之后的内容是没有刷新到磁盘的，所以不可被覆盖）。</p>
-<p>InnoDB是通过LSN来标记版本的，每个页有LSN，重做日志也有LSN，Checkpoint也有LSN。</p>
-<p>两种Checkpoint，分别是：</p>
-<ul>
-<li>Sharp Checkpoint</li>
-<li>Fuzzy Checkpoint</li>
-</ul>
-<p>Sharp Checkpoint发生的数据库关闭时将所有的脏页都刷新回磁盘。但是我们不能在运行时使用sharp checkpoint，这样数据库的可用性就会下降。</p>
-<p>在InnoDB存储引擎内部使用Fuzzy Checkpoint进行页的刷新，即只刷新一部分脏页，而不是刷新所有的脏页回磁盘。</p>
-<h2 id="InnoDB中可能的几种Checkpoint"><a href="#InnoDB中可能的几种Checkpoint" class="headerlink" title="InnoDB中可能的几种Checkpoint"></a>InnoDB中可能的几种Checkpoint</h2><ul>
-<li>Master Thread Checkpoint</li>
-<li>FLUSH_LRU_LIST Checkpoint</li>
-<li>Async/Sync FLush Checkpoint</li>
-<li>Dirty Page too much Checkpoint</li>
-</ul>
-<p>Master Thread是在主线程中发生的Checkpoint，差不多每秒或每十秒从缓冲区的<strong>脏页列表</strong>中刷新一定比例的页回磁盘。这个过程是异步的，即此时InnoDB存储引擎可以进行其他的操作，用户查询线程不会阻塞。</p>
-<p>FLUSH_LRU_LIST Checkpoint是因为InnoDB存储引擎需要保证LRU列表中需要有差不多100各空闲页可供使用。检查是否有可用LRU的时候，如果发现用完，会将LRU列表的尾端的页溢出，如果是脏页，那么需要进行Checkpoint。</p>
-<p>Async/Sync Flush Checkpoint指的是重做日志不可用的情况，这时需要强制将一些页刷新回磁盘最新页的LSN记为checkpoint_lsn。</p>
-<p>最后一种就是Dirty Page too much，即脏页太多了，导致InnoDB存储引擎强制进行Checkpoint。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/01/%E5%AE%A2%E6%88%B7%E7%AB%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="乡村程序员">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="码码更健康">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/01/%E5%AE%A2%E6%88%B7%E7%AB%AF/" class="post-title-link" itemprop="url">客户端</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-01 23:09:00" itemprop="dateCreated datePublished" datetime="2021-05-01T23:09:00+08:00">2021-05-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/%E5%8D%95%E6%9C%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%AE%9E%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">单机数据库的实现</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文是《Redis设计与实现》中关于客户端的内容的笔记。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/05/01/%E5%AE%A2%E6%88%B7%E7%AB%AF/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/01/%E6%9C%8D%E5%8A%A1%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1130,6 +651,506 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/24/%E5%AF%B9%E8%B1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/24/%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">对象</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-24 00:41:00" itemprop="dateCreated datePublished" datetime="2021-04-24T00:41:00+08:00">2021-04-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AF%B9%E8%B1%A1/" itemprop="url" rel="index"><span itemprop="name">数据结构与对象</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文是《Redis设计与实现》中关于对象的内容的笔记。<br>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/04/24/%E5%AF%B9%E8%B1%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/23/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/23/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/" class="post-title-link" itemprop="url">压缩列表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-23 23:24:00" itemprop="dateCreated datePublished" datetime="2021-04-23T23:24:00+08:00">2021-04-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-22 21:36:34" itemprop="dateModified" datetime="2021-05-22T21:36:34+08:00">2021-05-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AF%B9%E8%B1%A1/" itemprop="url" rel="index"><span itemprop="name">数据结构与对象</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="压缩列表"><a href="#压缩列表" class="headerlink" title="压缩列表"></a>压缩列表</h1><h2 id="压缩列表的构成"><a href="#压缩列表的构成" class="headerlink" title="压缩列表的构成"></a>压缩列表的构成</h2><p><img src="../images/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/压缩列表的各个组成部分.png" alt="压缩列表的各个组成部分"></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">属性</th>
+<th>类型</th>
+<th>长度</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">zlbytes</td>
+<td>uint32_t</td>
+<td>4字节</td>
+<td>记录整个压缩列表占用的内存字节数：在对压缩列表进行内存重分配，或者计算zlend的位置时使用</td>
+</tr>
+<tr>
+<td style="text-align:left">zltail</td>
+<td>uint32_t</td>
+<td>4字节</td>
+<td>记录压缩列表距离列表尾节点的起始地址有多少字节</td>
+</tr>
+<tr>
+<td style="text-align:left">zllen</td>
+<td>uint32_t</td>
+<td>2字节</td>
+<td>记录压缩列表包含的节点数量，当这个属性的值下于UINT16_MAX（65535）时，则个值才是正确的，超过时候需要遍历整个列表才能计算得出</td>
+</tr>
+<tr>
+<td style="text-align:left">entryX</td>
+<td>列表节点</td>
+<td>不定</td>
+<td>压缩列表包含的各个节点长度并不一定相同，长度由节点保存的内容决定</td>
+</tr>
+<tr>
+<td style="text-align:left">zlend</td>
+<td>uint8_t</td>
+<td>1字节</td>
+<td>特殊值0xFF，用于标记压缩列表的末端</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="压缩列表的节点构成"><a href="#压缩列表的节点构成" class="headerlink" title="压缩列表的节点构成"></a>压缩列表的节点构成</h2><p>每个压缩列表节点都可以保存一个字节数组或者一个整数值，其中字节数组可以是以下三种长度之一：</p>
+<ul>
+<li>长度小于等于63（$2^6-1$）字节的字节数组；  </li>
+<li>长度小于等于16383（$2^{14}-1$）字节的字节数组；  </li>
+<li>长度小于等于4294967295（$2^{32}-1$）字节的字节数组；  </li>
+</ul>
+<p>而整数可以是4位、1字节、3字节、int16_t、int32_t、int64_t。</p>
+<p>每个压缩列表节点都有previous_entry_length、encoding、content三个部分组成。如图所示：</p>
+<p><img src="../images/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/image-20210424000604329.png" alt="压缩列表节点的各个组成部分"></p>
+<h3 id="previous-entry-length"><a href="#previous-entry-length" class="headerlink" title="previous_entry_length"></a>previous_entry_length</h3><p>节点的previous_entry_length属性以字节为单位，记录了压缩列表中前一个节点的长度。该属性可以说1字节或者5字节，如果前一个结点长度小于254，则用一个字节；如果大于等于254字节，则用5个字节，并且第一个字节置为0xFE（十进制的254）。后面四个字节用于保存长度信息。  </p>
+<h3 id="encoding"><a href="#encoding" class="headerlink" title="encoding"></a>encoding</h3><p>节点的encoding属性记录了节点的content属性所保存的数据的类型以及长度：  </p>
+<p>一字节、两字节或者五字节长，值得最高位为00、01或者10是字节数组编码：这种编码表示节点得content属性保存着字节数组，数组的长度由编码除去最高两位之后的其他位记录；  </p>
+<p><img src="../images/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/image-20210424002245234.png" alt="字节数组编码"></p>
+<p>一字节长，值的最高位以11开头的是整数编码：这种编码表示节点的content属性保存着整数值，整数值的类型和长度由编码出去最高两位之后的其他位记录；  </p>
+<p><img src="../images/%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8/image-20210424002304775.png" alt="整数编码"></p>
+<h3 id="content"><a href="#content" class="headerlink" title="content"></a>content</h3><p>节点的content属性负责保存节点的值，节点值可以是一个字节数组或者整数，值得类型和长度由节点得encoding属性决定。</p>
+<h2 id="连锁更新"><a href="#连锁更新" class="headerlink" title="连锁更新"></a>连锁更新</h2><p>连锁更新是指多个连续节点的长度是250-253，而在它们的前面插入了一个大于等于254字节节点，导致后面的节点需要将previous_entry_length从原来的1字节长扩展为5字节长，然后产生连锁反应，后续的节点都需要重新进行空间分配，这种特殊情况称为连锁更新，但是由于这种情况较少出现，我们可以方向地使用压缩列表，ziplistPush等命令的平均复杂度仅为O(N)。</p>
+<h2 id="重点回顾"><a href="#重点回顾" class="headerlink" title="重点回顾"></a>重点回顾</h2><ol>
+<li>压缩列表是一种为节约内存而开发的顺序型数据结构。  </li>
+<li>压缩列表被用作列表键和哈希键的底层实现之一。</li>
+<li>压缩列表可以包含多个节点，每个节点可以保存一个字节数组或者整数值。  </li>
+<li>添加新节点到压缩列表，或者从压缩列表中删除节点，可能会引起连锁更新操作，但这种操作出现的机率并不高。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/22/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/22/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">大话设计模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-22 18:33:00" itemprop="dateCreated datePublished" datetime="2021-04-22T18:33:00+08:00">2021-04-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-30 00:05:55" itemprop="dateModified" datetime="2021-04-30T00:05:55+08:00">2021-04-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>大话设计模式学习笔记。<br>这篇文章是本人学习《大话设计模式》所做的读书笔记。<br>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/04/22/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/%E5%AD%97%E5%85%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/21/%E5%AD%97%E5%85%B8/" class="post-title-link" itemprop="url">字典</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-21 23:10:00" itemprop="dateCreated datePublished" datetime="2021-04-21T23:10:00+08:00">2021-04-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-05 00:35:45" itemprop="dateModified" datetime="2021-05-05T00:35:45+08:00">2021-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AF%B9%E8%B1%A1/" itemprop="url" rel="index"><span itemprop="name">数据结构与对象</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h1><h2 id="字典的实现"><a href="#字典的实现" class="headerlink" title="字典的实现"></a>字典的实现</h2><p>Redis的字典使用哈希表作为底层实现，一个哈希表里面可以有多个哈希表节点，而每个哈希表节点就保存了字典中的一个键值对。</p>
+<h3 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h3><p>字典中使用的哈希表节点和哈希表定义：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span></span><br><span class="line">    <span class="comment">// 键</span></span><br><span class="line">    <span class="keyword">void</span> *key;</span><br><span class="line">    <span class="comment">// 值</span></span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        <span class="keyword">void</span> *val;</span><br><span class="line">        <span class="keyword">uint64_t</span> u64;</span><br><span class="line">        <span class="keyword">int64_t</span> s64;</span><br><span class="line">    &#125; v;</span><br><span class="line">    <span class="comment">// 指向下个哈希表节点，形成链表</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; dictEntry;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span></span><br><span class="line">    <span class="comment">// 哈希表数组</span></span><br><span class="line">    dictEntry **table;</span><br><span class="line">    <span class="comment">// 哈希表大小</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> size;</span><br><span class="line">    <span class="comment">// 哈希表大小掩码，用于计算索引值</span></span><br><span class="line">    <span class="comment">// 总是等于 size - 1</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> sizemask;</span><br><span class="line">    <span class="comment">// 该哈希表已有节点的数量</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> used;</span><br><span class="line">&#125; dictht;</span><br></pre></td></tr></table></figure></p>
+<h3 id="字典-1"><a href="#字典-1" class="headerlink" title="字典"></a>字典</h3><p>Redis中的字典有dict.h/结构表示：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    <span class="comment">// 类型特定函数</span></span><br><span class="line">    dictType *type;</span><br><span class="line">    <span class="comment">// 私有数据</span></span><br><span class="line">    <span class="keyword">void</span> *privdata;</span><br><span class="line">    <span class="comment">// 哈希表</span></span><br><span class="line">    dictht ht[<span class="number">2</span>];</span><br><span class="line">    <span class="comment">// rehash 索引</span></span><br><span class="line">    <span class="comment">// 当 rehash 不在进行时，值为 -1</span></span><br><span class="line">    <span class="keyword">int</span> rehashidx; <span class="comment">/* rehashing not in progress if rehashidx == -1 */</span></span><br><span class="line">    <span class="comment">// 目前正在运行的安全迭代器的数量</span></span><br><span class="line">    <span class="keyword">int</span> iterators; <span class="comment">/* number of iterators currently running */</span></span><br><span class="line">&#125; dict;</span><br></pre></td></tr></table></figure></p>
+<p>type和privdata属性是针对不同类型的键值对，为创建多态字典而设置的：  </p>
+<ol>
+<li>type属性是指向dictType结构的指针，每个dictType结构保存了一簇用于操作特定类型键值对的函数，Redis会为用途不同的字典设置不同的类型特定函数。  </li>
+<li>privdata属性则保存了需要传给那些特定函数的可选参数。  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictType</span> &#123;</span></span><br><span class="line">    <span class="comment">// 计算哈希值的函数</span></span><br><span class="line">    <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span> <span class="params">(*hashFunction)</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *key)</span></span>;</span><br><span class="line">    <span class="comment">// 复制键的函数</span></span><br><span class="line">    <span class="keyword">void</span> *(*keyDup)(<span class="keyword">void</span> *privdata, <span class="keyword">const</span> <span class="keyword">void</span> *key);</span><br><span class="line">    <span class="comment">// 复制值的函数</span></span><br><span class="line">    <span class="keyword">void</span> *(*valDup)(<span class="keyword">void</span> *privdata, <span class="keyword">const</span> <span class="keyword">void</span> *obj);</span><br><span class="line">    <span class="comment">// 对比键的函数</span></span><br><span class="line">    <span class="keyword">int</span> (*keyCompare)(<span class="keyword">void</span> *privdata, <span class="keyword">const</span> <span class="keyword">void</span> *key1, <span class="keyword">const</span> <span class="keyword">void</span> *key2);</span><br><span class="line">    <span class="comment">// 销毁键的函数</span></span><br><span class="line">    <span class="keyword">void</span> (*keyDestructor)(<span class="keyword">void</span> *privdata, <span class="keyword">void</span> *key);</span><br><span class="line">    <span class="comment">// 销毁值的函数</span></span><br><span class="line">    <span class="keyword">void</span> (*valDestructor)(<span class="keyword">void</span> *privdata, <span class="keyword">void</span> *obj);</span><br><span class="line">&#125; dictType;</span><br></pre></td></tr></table></figure></li>
+<li>属性是一个包含两个哈希表的数组，一般只是用第一个，第二个只会在对ht[0]rehash时使用。  <h2 id="哈希算法"><a href="#哈希算法" class="headerlink" title="哈希算法"></a>哈希算法</h2></li>
+</ol>
+<p>Redis计算哈希值和索引的方法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 使用字典设置的哈希函数，计算键key的hash值：</span><br><span class="line">hash &#x3D; dict-&gt;type-&gt;hashFunction(key);</span><br><span class="line"># 根据哈希表的sizemask计算出索引值：</span><br><span class="line">index &#x3D; hash &amp; dict-&gt;ht[x].sizemask;</span><br><span class="line"># 根据情况ht[x]可以是ht[0]或者ht[1]。</span><br></pre></td></tr></table></figure></p>
+<p>Redis使用MurmurHash2算法来计算哈希值。  </p>
+<h2 id="rehash"><a href="#rehash" class="headerlink" title="rehash"></a>rehash</h2><p>随着操作不断执行，哈希表保存的键值对会逐渐低增多或者减少，为了让哈希表的负载因子维持在一个合理的范围之内，当哈希表保存的键值对数量太多或者太少时，程序需要对哈希表的大小进行相应的扩展或者收缩。<br>rehash的步骤：  </p>
+<ol>
+<li>为字典的ht[1]哈希表分配空间，这个哈希表的空间大小取决于要执行的操作，以及ht[0]当前包含的键值对数量（ht[0].used的值）。  <ul>
+<li>如果执行的是扩展操作，那么ht[1]的大小为第一个大于等于ht[0].used*2的$2^n$；  </li>
+<li>如果执行的是收缩操作，那么ht[1]的大小为第一个大于等于ht[0].used的$2^n$；  </li>
+</ul>
+</li>
+<li>将保存在ht[0]中的所有键值对rehash到ht[1]上面：rehash指的是，重新计算键的哈希值和索引值，然后将键值对放置到ht[1]哈希表的指定位置上。  </li>
+<li>当ht[0]包含的所有键值对放置到ht[1]之后，释放ht[0]，将ht[1]设置为ht[0]，并在ht[1]新创建一个空白哈希表，为下一次hash做准备。  </li>
+</ol>
+<h2 id="渐进式rehash"><a href="#渐进式rehash" class="headerlink" title="渐进式rehash"></a>渐进式rehash</h2><p>上一节说过，扩展或者收缩哈希表需要将ht[0]里面的所有键值对rehash到ht[1]里面。但是，这个rehash动作并不是一次性、集中式地完成的，而是分多次、渐进式地完成的。<br>以下是哈希表渐进式rehash的详细步骤：  </p>
+<ol>
+<li>为ht[1]分配空间，让字典同时持有有ht[0]和ht[1]两个哈希表。  </li>
+<li>在字典中维持一个索引计数器变量rehashidx，并将它的值设置为0，表示rehash工作正式开始。  </li>
+<li>在rehash进行期间，每次对字典执行添加、删除、查找或者更新操作时，程序除了执行指定的操作以外，还会顺带ht[0]哈希表在rehashidx索引上的所有键值对rehash到ht[1]，当rehash工作完成之后，程序将rehashidx属性的值增一。  </li>
+<li>随着字典操作的不断执行，最终在某个时间点上，将rehash键值对所需要的计算工作均摊到对字典的每个添加、删除、查找和更新操作上，从而避免了集中式rehash而带来的庞大计算量。  </li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/%E9%93%BE%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/20/%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">链表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-20 22:55:00" itemprop="dateCreated datePublished" datetime="2021-04-20T22:55:00+08:00">2021-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-05 00:35:45" itemprop="dateModified" datetime="2021-05-05T00:35:45+08:00">2021-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AF%B9%E8%B1%A1/" itemprop="url" rel="index"><span itemprop="name">数据结构与对象</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h1><h2 id="链表和链表结点实现"><a href="#链表和链表结点实现" class="headerlink" title="链表和链表结点实现"></a>链表和链表结点实现</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> &#123;</span></span><br><span class="line">    <span class="comment">// 前置节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="comment">// 后置节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="comment">// 节点的值</span></span><br><span class="line">    <span class="keyword">void</span> *value;</span><br><span class="line">&#125; listNode;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span> &#123;</span></span><br><span class="line">    <span class="comment">// 表头节点</span></span><br><span class="line">    listNode *head;</span><br><span class="line">    <span class="comment">// 表尾节点</span></span><br><span class="line">    listNode *tail;</span><br><span class="line">    <span class="comment">// 节点值复制函数</span></span><br><span class="line">    <span class="keyword">void</span> *(*dup)(<span class="keyword">void</span> *ptr);</span><br><span class="line">    <span class="comment">// 节点值释放函数</span></span><br><span class="line">    <span class="keyword">void</span> (*<span class="built_in">free</span>)(<span class="keyword">void</span> *ptr);</span><br><span class="line">    <span class="comment">// 节点值对比函数</span></span><br><span class="line">    <span class="keyword">int</span> (*match)(<span class="keyword">void</span> *ptr, <span class="keyword">void</span> *key);</span><br><span class="line">    <span class="comment">// 链表所包含的节点数量</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> len;</span><br><span class="line"></span><br><span class="line">&#125; <span class="built_in">list</span>;</span><br></pre></td></tr></table></figure>
+<p>Redis的链表实现的特性可以总结如下：  </p>
+<ol>
+<li>双端：链表节点带有prev、next指针。  </li>
+<li>无环：表头节点的prev指针和表尾节点的next指针都指向NULL。  </li>
+<li>多态：链表节点使用void*指针来保存节点的值，并且可以通过list结构的dup、free、match三个属性为节点值设置类型特定函数，所以链表可以用于保存各种不同类型的值。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -1201,7 +1222,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-count">131</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1214,7 +1235,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1316,6 +1337,61 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
