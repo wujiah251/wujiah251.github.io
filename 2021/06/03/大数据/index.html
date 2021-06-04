@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/leaf-favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/leaf-favicon-16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="大数据大数据的特点：  Volume，传统的数据仓库计数处理GB到TB级别的数据，大数据技术处理的数据量往往超过PB。数据容量增长速度大大超过了硬件计数的发展速度，以至于引发了数据存储和处理的危机。 Variety：数据类型多。原来的数据都可以用二维表结构存储在数据库中,如常用的Excel软件所处理的数据，称为结构化数据。但是现在更多互联网多媒体应用的出现，使诸如图片、声音和视频等非结构化数据占到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据">
+<meta property="og:url" content="http://example.com/2021/06/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/index.html">
+<meta property="og:site_name" content="码码更健康">
+<meta property="og:description" content="大数据大数据的特点：  Volume，传统的数据仓库计数处理GB到TB级别的数据，大数据技术处理的数据量往往超过PB。数据容量增长速度大大超过了硬件计数的发展速度，以至于引发了数据存储和处理的危机。 Variety：数据类型多。原来的数据都可以用二维表结构存储在数据库中,如常用的Excel软件所处理的数据，称为结构化数据。但是现在更多互联网多媒体应用的出现，使诸如图片、声音和视频等非结构化数据占到">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-03T12:06:00.000Z">
+<meta property="article:modified_time" content="2021-06-04T11:08:57.508Z">
+<meta property="article:author" content="乡村程序员">
+<meta property="article:tag" content="分布式系统">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/06/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>大数据 | 码码更健康</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">码码更健康</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">对代码永远保持敬畏</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/03/%E5%A4%A7%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乡村程序员">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="码码更健康">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大数据
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-06-03 20:06:00" itemprop="dateCreated datePublished" datetime="2021-06-03T20:06:00+08:00">2021-06-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-04 19:08:57" itemprop="dateModified" datetime="2021-06-04T19:08:57+08:00">2021-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">分布式系统</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h1><p>大数据的特点：</p>
+<ul>
+<li>Volume，传统的数据仓库计数处理GB到TB级别的数据，大数据技术处理的数据量往往超过PB。数据容量增长速度大大超过了硬件计数的发展速度，以至于引发了数据存储和处理的危机。</li>
+<li>Variety：数据类型多。原来的数据都可以用二维表结构存储在数据库中,如常用的Excel软件所处理的数据，称为结构化数据。但是现在更多互联网多媒体应用的出现，使诸如图片、声音和视频等非结构化数据占到了很大比重。</li>
+<li>Velocity，数据增长迅速。如果说大数据的特点是海量和非结构化，那也是不全面的。大数据带来的挑战还在于它的实时处理。</li>
+<li>Value，价值密度低。以连续不间断的监控视频为例，可能有用的数据仅仅有一两秒钟。</li>
+</ul>
+<h2 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h2><p>Mapreduce使得普通程序员可以在不了解分布式底层细节的前提下开发分布式程序。使用者只需要编写两个称为MapReduce的函数即可，MapReduce框架会自动处理数据划分、多机并行执行、任务之间的协调，并且能够处理某个任务执行失败或者机器出现故障的情况。</p>
+<p>MapReduce框架 包含三种角色：</p>
+<p>主控进程（Master）：执行任务划分、调度、任务之间的协调等等；</p>
+<p>Map工作进程（Map）、Reduce工作进程（Reduce）。</p>
+<p>工作流程如下：</p>
+<p>1）首先从用户提交的程序fork出主控进程，主控进程启动后将切分任务并根据输入文件所在的位置和集群信息选择机器fork出Map或者Reduce进程。用户提交的程序可以根据不同的命令行参数执行不同的行为。</p>
+<p>2）主控进程将切分好的任务分配给Map进程和Reduce进程执行，任务切分和任务分配可以并行执行。</p>
+<p>3）Map进程执行Map任务：读取相应的输入文件，根据指定的输入格式不断地读取<Key,Value>对并对每个<key,value>对执行用户自定义的Map函数。</p>
+<p>4）Map进程执行用户定义的Map函数：不断地往本地内存缓冲区输出中间<key,value>对结果，等到缓冲区超过一定大小时写入到本地缓存中。Map进程根据分割函数将中间结果组织成R份，便于后续Reduce进程获取。</p>
+<p>5）Map任务执行完成时，Map进程通过心跳向主控进程汇报，主控进程进一步将该消息通知Reduce进程。Reduce进程向Map进程通过心跳向主控进程汇报，主控进程进一步将该消息通知Reduce进程。Reduce进程向Map进程请求传输生成的中间结果数据。这个过程称为Shuffle。当Reduce进程获取完所有的Map任务生成的中间结果时，需要进行排序操作。</p>
+<p>6）Reduce进程执行Reduce任务：对中间结果的每一个相同的key及value集合，执行用户自定义的Reduce函数。Reduce函数的输出结果被写入到最终的输出结果，例如分布式文件系统或者分布式表格。</p>
+<p>该框架实现时主要做了两点优化：</p>
+<ul>
+<li>本地化：尽量将任务分配给离输入文件最近的Map进程，如同一台机器或者同一个机架。通过本地化策略，能够大大减少传输的数据量。</li>
+<li>备份任务：如果某个Map或者Reduce任务执行的时间较长，主控进程会生成一个该任务的备份并分配给另外一个空闲的Map或者Reduce进程。在大集群环境下，即使所有机器的配置相同，机器的负载不同也会导致处理能力相差很大，通过备份任务减少“拖后腿”的任务，从而降低整个作业的总体执行时间。</li>
+</ul>
+<h2 id="流式计算"><a href="#流式计算" class="headerlink" title="流式计算"></a>流式计算</h2><p>MapReduce及其扩展解决了离线批处理问题，但是无法保证实时性。对于实时性要求高的场景，可以采用流式计算或者实时分析系统进行处理。</p>
+<p>流式计算解决在线聚合、在线过滤等问题，流氏计算同时具有存储系统和计算系统的特点，经常应用在一些类似反作弊、交易异常监控等场景。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>MapReduce系统主要解决的是对静态数据的批量处理，当MapReduce作业启动时，已经准备好了输入数据，比如保存在分布式文件系统上。而流式计算系统在启动时，输入数据一般并没有完全到位，而是经由外部数据流源源不断地流入。另外，流式计算并不像批处理系统那样，重视数据处理的总吞吐量，而是更加重视对数据处理的延迟。</p>
+<p>源数据写入到流处理节点，流处理节点内部运行用户自定义的钩子函数对输入流进行处理，处理完后根据一定的规则转发给下游的流处理节点继续处理。另外，系统中往往还有管理节点，用来管理流处理节点的状态以及节点之间的路由规则。</p>
+<p>典型钩子函数包括：</p>
+<ul>
+<li>聚合函数：计算最近一段时间窗口内的数据的聚合值。</li>
+<li>过滤函数：过滤最近一段时间窗口内满足某些特性的数据。</li>
+</ul>
+<p>如果考虑机器故障，问题变得复杂。上游的处理节点出席那故障时，下游有两种选择：第一种选择是等待上游恢复服务，保证数据一致性；第二种选择是继续处理，优先保证可用性，等到上游恢复后再修复错误的计算结果。</p>
+<p>流处理节点可以通过主备同步的方式容错，即将数据强同步到备机，如果主机出现故障，备机自动切换为主机继续提供服务。然而，这种方式的代价很高，且流式处理系统往往对错误有一定的容忍度，实际应用时经常选择其他代价更低的容错方式。</p>
+<h2 id="实时分析"><a href="#实时分析" class="headerlink" title="实时分析"></a>实时分析</h2><p>海量数据离线分析对于MapReduce这样的批处理系统挑战并不大，如果要求实时，又分为两种情况：如果查询模式单一，那么，可以通过MapReduce预处理后将最终结果导入到在线系统提供实时查询；如果查询模式复杂，例如涉及多个列任意组合查询，那么，只能通过实时分析系统解决。实时分析系统融合了并行数据库和云计算这类技术，能够从海量数据中快速分析出汇总结果。</p>
+<h3 id="MPP架构"><a href="#MPP架构" class="headerlink" title="MPP架构"></a>MPP架构</h3><p>并行数据库往往采用MPP（Massively Parallel Processing，大规模并行处理）架构。MPP架构是一种不共享的结构，每个节点可以运行自己的操作系统、数据库等。每个节点内的CPU不能访问一个节点的内存，节点之间的信息交互是通过节点互联网络实现的。</p>
+<p>将数据分布到多个节点，每个节点扫描本地数据，并由Merge操作符执行结果汇总。</p>
+<p>常见的数据分布算法有两种：</p>
+<ul>
+<li>范围分区（Range partitioning）：按照范围划分数据。</li>
+<li>哈希分区（Hashing）：根据哈希函数计算结果将每个元组分配给相应的节点。</li>
+</ul>
+<p>Merge操作符：系统中存在一个或者多个合并节点，它会发送命令给各个数据分片请求相应的数据。每个数据片所在节点扫描本地数据，排序后回复合并节点，由合并节点通过merge操作符执行数据汇总。</p>
+<p>如果Merge节点处理的数据特别大、可以通过Split操作符将数据划分到多个节点，每个节点对一部分数据执行group by、join等操作后再合并最终结果。</p>
+<p>并行数据库的SQL查询和MapReduce计算有些类似，可以认为MapReduce模型是一种更高层次的抽象。由于考虑问题的角度不同，并行数据库处理的SQL查询执行时间通常很短，出现异常时整个操作重做即可。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" rel="tag"># 分布式系统</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/06/03/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" rel="prev" title="分布式存储引擎">
+      <i class="fa fa-chevron-left"></i> 分布式存储引擎
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/06/04/%E4%B8%80%E6%9D%A1SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/" rel="next" title="一条SQL是如何执行的">
+      一条SQL是如何执行的 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE"><span class="nav-number">1.</span> <span class="nav-text">大数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce"><span class="nav-number">1.1.</span> <span class="nav-text">MapReduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="nav-number">1.2.</span> <span class="nav-text">流式计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%97%B6%E5%88%86%E6%9E%90"><span class="nav-number">1.3.</span> <span class="nav-text">实时分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MPP%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.1.</span> <span class="nav-text">MPP架构</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乡村程序员"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乡村程序员</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wujiah251" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wujiah251" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/wujiahao.mail@gmail.com" title="E-Mail → wujiahao.mail@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">乡村程序员</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='45,45,200' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
